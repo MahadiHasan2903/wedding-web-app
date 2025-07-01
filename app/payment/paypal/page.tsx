@@ -20,7 +20,7 @@ const Page = () => {
     setError(null);
     try {
       const payload = {
-        membershipPurchaseId: 9,
+        membershipPurchaseId: 10,
         currency: "usd",
         gateway: "paypal",
       };
@@ -55,7 +55,7 @@ const Page = () => {
     setError(null);
     try {
       const confirmRes = await fetch(
-        `http://localhost:8080/v1/payment/paypal-payment-callback?token=${data.orderID}`,
+        `http://localhost:8080/v1/payment/paypal-payment-callback?orderId=${data.orderID}`,
         { method: "POST" }
       );
 

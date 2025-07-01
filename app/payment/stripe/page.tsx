@@ -12,7 +12,7 @@ const stripePromise = loadStripe(
 const page = () => {
   const fetchClientSecret = async (): Promise<string> => {
     const payload = {
-      membershipPurchaseId: 8,
+      membershipPurchaseId: 11,
       currency: "usd",
       gateway: "stripe",
     };

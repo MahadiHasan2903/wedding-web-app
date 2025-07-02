@@ -20,7 +20,7 @@ const Page = () => {
     setError(null);
     try {
       const payload = {
-        membershipPurchaseId: 10,
+        membershipPurchaseId: "053a5eb9-c9a2-4c8a-a178-56275f6c2332",
         currency: "usd",
         gateway: "paypal",
       };

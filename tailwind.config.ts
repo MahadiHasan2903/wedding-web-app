@@ -23,6 +23,11 @@ const config: Config = {
         vipHeavy: "#FF9F05",
       },
     },
+    backgroundImage: {
+      landingHero: "url('/images/landing-page/epic-hero-background.jpg')",
+      weddingCoupleScene:
+        "url('/images/landing-page/wedding-couple-background.jpg')",
+    },
   },
   plugins: [],
 };

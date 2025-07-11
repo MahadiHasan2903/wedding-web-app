@@ -1,8 +1,13 @@
 import type { Config } from "tailwindcss";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 const config: Config = {
   content: ["./app/**/*.{js,ts,jsx,tsx,mdx}", "./lib/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
+    screens: {
+      xsm: "360px",
+      ...defaultTheme.screens,
+    },
     extend: {
       colors: {
         primary: "#002F6C",

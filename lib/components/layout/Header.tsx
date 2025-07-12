@@ -1,13 +1,14 @@
 "use client";
 
 import React from "react";
-import { ImageWithFallback } from "../image";
-import logo from "@/public/images/logo/logo.svg";
-import vipRig from "@/public/images/common/vip-ring.png";
-import user from "@/public/images/common/user.png";
 import Link from "next/link";
 import { navItems } from "@/lib/utils/data";
-import { avatar, crown } from "../image/icons";
+import logo from "@/public/images/logo/logo.svg";
+import user from "@/public/images/common/user.png";
+import vipRig from "@/public/images/common/vip-ring.png";
+import { CommonButton } from "@/lib/components/buttons";
+import { ImageWithFallback } from "@/lib/components/image";
+import { avatar, crown } from "@/lib/components/image/icons";
 
 const Header = () => {
   let accessToken = null;
@@ -33,20 +34,19 @@ const Header = () => {
       <div className="flex justify-end">
         {accessToken ? (
           <div className="w-full flex items-center gap-[25px]">
-            <Link
+            <CommonButton
+              label=" Manage Plan"
               href="/pricing"
-              type="button"
-              className="w-fit flex items-center gap-[8px] bg-transparent border border-vipHeavy text-vipLight font-medium px-[20px] py-[12px] rounded-lg cursor-pointer"
-            >
-              <ImageWithFallback
-                src={crown}
-                width={15}
-                height={15}
-                alt="crown"
-                className="cursor-pointer"
-              />
-              Manage Plan
-            </Link>
+              className="w-fit flex items-center gap-[8px] bg-transparent border border-vipHeavy text-vipLight font-medium px-[20px] py-[12px] rounded-lg"
+              startIcon={
+                <ImageWithFallback
+                  src={crown}
+                  width={15}
+                  height={15}
+                  alt="crown"
+                />
+              }
+            />
             <div className="w-[48px] h-[48px] relative flex items-center justify-center">
               <ImageWithFallback
                 src={user}
@@ -67,20 +67,16 @@ const Header = () => {
           </div>
         ) : (
           <div className="w-full flex items-center gap-[25px]">
-            <Link
+            <CommonButton
+              label="Join Now"
               href="/registration"
-              type="button"
-              className="w-fit bg-vipHeavy text-vipLight font-bold px-[20px] py-[10px] rounded-lg cursor-pointer"
-            >
-              Join Now
-            </Link>
-            <Link
+              className="w-fit bg-vipHeavy text-vipLight font-bold px-[20px] py-[10px] rounded-lg"
+            />
+            <CommonButton
               href="/login"
-              type="button"
-              className="w-fit bg-transparent border border-vipHeavy text-vipLight font-bold px-[20px] py-[10px] rounded-lg cursor-pointer"
-            >
-              Sign In
-            </Link>
+              label="Sign In"
+              className="w-fit bg-transparent border border-vipHeavy text-vipLight font-bold px-[20px] py-[10px] rounded-lg"
+            />
             <ImageWithFallback
               src={avatar}
               width={25}

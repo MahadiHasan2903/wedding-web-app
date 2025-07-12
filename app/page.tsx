@@ -1,6 +1,6 @@
 import React from "react";
 import { Header, Footer } from "@/lib/components/layout";
-import { Hero } from "@/lib/features/home";
+import { Hero, WhyChooseUs, MatchMakingStories } from "@/lib/features/home";
 
 const HomePage = () => {
   return (
@@ -8,6 +8,8 @@ const HomePage = () => {
       <Header />
       <div>
         <Hero />
+        <WhyChooseUs />
+        <MatchMakingStories />
       </div>
       <Footer />
     </div>

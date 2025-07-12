@@ -1,6 +1,9 @@
 import { FaFacebookF } from "react-icons/fa";
 import { TfiLinkedin } from "react-icons/tfi";
 import { RiInstagramFill } from "react-icons/ri";
+import { crown, star, heart } from "@/lib/components/image/icons";
+import story1 from "@/public/images/landing-page/story-1.jpg";
+import story2 from "@/public/images/landing-page/story-2.jpg";
 
 export const navItems = [
   {
@@ -70,5 +73,56 @@ export const socialLinks = [
   {
     href: "https://www.linkedin.com",
     Icon: TfiLinkedin,
+  },
+];
+
+export const whyChooseUsData = [
+  {
+    icon: star,
+    alt: "featured",
+    titleLine1: "Featured Profiles for",
+    titleLine2: "Faster Matching",
+    description:
+      "Get noticed first. As a featured member, your profile appears at the top — increasing your chances of matching with serious users faster.",
+  },
+  {
+    icon: crown,
+    alt: "verified",
+    titleLine1: "Verified Profiles that",
+    titleLine2: "You Can Trust",
+    description:
+      "We value safety and authenticity. Verified badges help you connect confidently with real people who are here for the right reasons.",
+  },
+  {
+    icon: heart,
+    alt: "serious",
+    titleLine1: "Focused on",
+    titleLine2: "Serious Relationships",
+    description:
+      "No distractions. No games. FrenchCubaWedding is built for those who are ready to commit and looking for genuine, lasting connections.",
+  },
+];
+
+export const stories = [
+  {
+    id: 1,
+    thumbnail: story1,
+    name: "Élodie & Javier",
+    description:
+      "A French artist meets a Cuban entrepreneur — now building a life full of passion and poetry.",
+  },
+  {
+    id: 2,
+    thumbnail: story2,
+    name: "Camille & Diego",
+    description:
+      "What began with a message became a marriage — across borders, hearts aligned.",
+  },
+  {
+    id: 1,
+    thumbnail: story1,
+    name: "Élodie & Javier",
+    description:
+      "A French artist meets a Cuban entrepreneur — now building a life full of passion and poetry.",
   },
 ];

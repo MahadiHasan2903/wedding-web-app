@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-inter",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased bg-light`}>
+      <body className={`${inter.className} antialiased bg-light`}>
         <main>
           <div className="w-full">{children}</div>
           <ToastContainer

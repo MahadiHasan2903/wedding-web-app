@@ -1,7 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
-const AuthLayout = () => {
-  return <div>AuthLayout</div>;
+const ApplicationLayout = ({
+  children,
+}: Readonly<{
+  children: ReactNode;
+}>) => {
+  return <div className="w-full mx-auto overflow-hidden">{children}</div>;
 };
 
-export default AuthLayout;
+export default ApplicationLayout;

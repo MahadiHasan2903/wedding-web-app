@@ -22,8 +22,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased `}>
-        <main className="max-w-[1440px] mx-auto overflow-hidden">
+      <body className={`${inter.variable} antialiased bg-light`}>
+        <main>
           <div className="w-full">{children}</div>
           <ToastContainer
             position="top-center"

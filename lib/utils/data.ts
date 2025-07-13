@@ -119,10 +119,31 @@ export const stories = [
       "What began with a message became a marriage — across borders, hearts aligned.",
   },
   {
-    id: 1,
+    id: 3,
     thumbnail: story1,
     name: "Élodie & Javier",
     description:
       "A French artist meets a Cuban entrepreneur — now building a life full of passion and poetry.",
+  },
+  {
+    id: 4,
+    thumbnail: story2,
+    name: "Lina & Ahmed",
+    description:
+      "From Cairo to Copenhagen, their love defied distance, language, and time zones.",
+  },
+  {
+    id: 5,
+    thumbnail: story1,
+    name: "Sofia & Mateo",
+    description:
+      "A shared playlist turned into shared dreams — music was just the beginning.",
+  },
+  {
+    id: 6,
+    thumbnail: story2,
+    name: "Aisha & Mahmud",
+    description:
+      "They crossed continents for each other — and found home in each other’s hearts.",
   },
 ];

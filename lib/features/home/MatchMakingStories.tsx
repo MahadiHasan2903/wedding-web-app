@@ -20,12 +20,10 @@ const MatchMakingStories = () => {
     slidesToScroll: 1,
     responsive: [
       {
-        breakpoint: 1200,
-        settings: { slidesToShow: 2 },
-      },
-      {
         breakpoint: 768,
-        settings: { slidesToShow: 1 },
+        settings: {
+          slidesToShow: 1,
+        },
       },
     ],
   };
@@ -33,21 +31,16 @@ const MatchMakingStories = () => {
   return (
     <div className="w-full px-[120px] py-[80px] bg-primary">
       <div className="w-full flex items-start gap-[60px]">
-        <div className="w-2/3 flex items-start gap-[24px]">
-          {/* <Slider ref={sliderRef} {...settings}> */}
-          {stories.map((story, index) => (
-            <div key={index}>
-              <StoryCard
-                thumbnail={story.thumbnail}
-                name={story.name}
-                description={story.description}
-                alt={`story-${story.id}`}
-              />
-            </div>
-          ))}
-          {/* </Slider> */}
+        <div className="w-full max-w-[820px]">
+          <Slider ref={sliderRef} {...settings}>
+            {stories.map((story, index) => (
+              <div key={index}>
+                <StoryCard story={story} />
+              </div>
+            ))}
+          </Slider>
         </div>
-        <div className="w-1/3">
+        <div className="w-full">
           <div className="w-full h-full flex flex-col items-end justify-between">
             <div className="max-w-[341px] mb-[70px] flex flex-col gap-[25px] items-end justify-start text-white text-end">
               <ImageWithFallback

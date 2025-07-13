@@ -24,9 +24,9 @@ const config: Config = {
         vipHeavy: "#FF9F05",
       },
       backgroundImage: {
-        landingHero: "url('/images/landing-page/epic-hero-background.jpg')",
+        landingHero: "url('/images/landing-page/epic-hero-background.png')",
         weddingCoupleScene:
-          "url('/images/landing-page/wedding-couple-background.jpg')",
+          "url('/images/landing-page/wedding-couple-background.png')",
       },
     },
   },

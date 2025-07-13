@@ -9,7 +9,7 @@ const ApplicationLayout = ({
   return (
     <div className="w-full min-h-screen flex flex-col justify-between">
       <Header />
-      <div className="max-w-[1440px] mx-auto overflow-hidden">{children}</div>
+      <div>{children}</div>
       <Footer />
     </div>
   );

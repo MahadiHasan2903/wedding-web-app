@@ -147,3 +147,36 @@ export const stories = [
       "They crossed continents for each other — and found home in each other’s hearts.",
   },
 ];
+
+export const faqData = [
+  {
+    question: "Is FrenchCubaWedding only for French or Cuban users?",
+    answer:
+      "No, FrenchCubaWedding is open to everyone, regardless of nationality. While the platform celebrates French and Cuban cultural values, we welcome users from all backgrounds who are seeking meaningful, committed relationships.",
+  },
+  {
+    question: "What is a Featured Profile?",
+    answer:
+      "A Featured Profile is highlighted across the platform to gain extra visibility. This feature increases your chances of connecting by showcasing your profile more prominently in search results and suggestions.",
+  },
+  {
+    question: "What is a Verified Profile?",
+    answer:
+      "A Verified Profile means the user's identity has been confirmed through our verification process. It adds trust and credibility, helping you feel more confident about who you're interacting with.",
+  },
+  {
+    question: "Is FrenchCubaWedding free to use?",
+    answer:
+      "Yes, you can join and use FrenchCubaWedding for free. We also offer premium features that enhance your experience, such as boosting your profile visibility and accessing advanced filters.",
+  },
+  {
+    question: "What’s the difference between Featured and Verified Profiles?",
+    answer:
+      "A Verified Profile confirms the user's identity for safety and trust, while a Featured Profile is promoted on the platform for more visibility. They serve different purposes but can be used together for better results.",
+  },
+  {
+    question: "How do I verify my profile?",
+    answer:
+      "To verify your profile, go to your account settings and follow the verification steps. This may involve submitting a government-issued ID or taking a live photo. Our team will review and approve your request.",
+  },
+];

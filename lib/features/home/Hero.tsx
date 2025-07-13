@@ -1,17 +1,15 @@
 import React from "react";
 import { FiArrowRight } from "react-icons/fi";
-import Button from "@/lib/components/buttons/CommonButton";
+import CommonButton from "@/lib/components/buttons/CommonButton";
 import { ImageWithFallback } from "@/lib/components/image";
 import girlsGroups from "@/public/images/landing-page/group-of-girls-cartoon.png";
 
 const Hero = () => {
   return (
     <div className="w-full">
-      <div className="w-full relative h-[800px]">
-        <div className="w-full h-full bg-landingHero bg-no-repeat bg-center bg-cover relative">
-          <div className="absolute inset-0 pointer-events-none z-10 bg-[linear-gradient(360deg,_#482F06_0%,_rgba(138,_99,_36,_0)_100%)]" />
-
-          <div className="w-full h-full flex flex-col gap-[75px] items-center justify-center text-white text-center relative z-20">
+      <div className="w-full h-[800px]">
+        <div className="w-full h-full bg-landingHero bg-no-repeat bg-center bg-cover">
+          <div className="w-full h-full flex flex-col gap-[75px] items-center justify-center text-white text-center z-20">
             <div className="flex flex-col items-center mt-[450px]">
               <h1 className="text-[64px] font-bold">
                 Love Feels Different Here
@@ -19,7 +17,7 @@ const Hero = () => {
               <p className="text-[24px] font-semibold">
                 We help you find the one who’s meant to stay
               </p>
-              <Button
+              <CommonButton
                 href="/search"
                 label="Find Your Match"
                 className="w-fit mt-[30px] flex items-center gap-[10px] px-[30px] py-[10px] bg-red text-[24px] font-semibold rounded-full"
@@ -58,7 +56,7 @@ const Hero = () => {
               Get Verified and Access VIP Benefits.
             </p>
           </div>
-          <Button
+          <CommonButton
             href="/pricing"
             label="Know More"
             className="w-fit flex items-center gap-[10px] px-[30px] py-[10px] bg-vipHeavy text-[24px] font-semibold rounded-full"

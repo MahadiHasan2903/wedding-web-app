@@ -1,5 +1,4 @@
 import React from "react";
-import { Header, Footer } from "@/lib/components/layout";
 import {
   FAQ,
   Hero,

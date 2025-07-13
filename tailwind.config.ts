@@ -25,6 +25,7 @@ const config: Config = {
       },
       backgroundImage: {
         landingHero: "url('/images/landing-page/epic-hero-background.png')",
+        heroBanner: "url('/images/about/hero-banner.png')",
         weddingCoupleScene:
           "url('/images/landing-page/wedding-couple-background.png')",
       },

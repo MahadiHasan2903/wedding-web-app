@@ -1,9 +1,7 @@
 import React from "react";
-import { Header, Footer } from "@/lib/components/layout";
+import { FAQ, FindMatch } from "@/lib/features/common";
 import {
-  FAQ,
-  Hero,
-  FindMatch,
+  HeroSection,
   WhyChooseUs,
   MatchMakingStories,
 } from "@/lib/features/home";
@@ -11,7 +9,7 @@ import {
 const HomePage = () => {
   return (
     <div className="w-full bg-white flex flex-col justify-between">
-      <Hero />
+      <HeroSection />
       <WhyChooseUs />
       <MatchMakingStories />
       <FindMatch />

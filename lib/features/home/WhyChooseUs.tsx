@@ -1,21 +1,23 @@
 import React from "react";
 import { whyChooseUsData } from "@/lib/utils/data";
 import { WhyChooseUsCard } from "@/lib/components/card";
+import { SectionTitle } from "@/lib/components/heading";
 
 const WhyChooseUs = () => {
   return (
-    <div className="w-full px-[120px] pt-[75px] pb-[85px] flex flex-col items-start gap-[45px] bg-white">
-      <h2 className="text-[36px] font-semibold max-w-[400px]">
-        Why Choose FrenchCubaWedding?
-      </h2>
+    <div className="w-full px-[120px] py-[80px] flex flex-col items-start gap-[45px]">
+      <SectionTitle
+        title="Why Choose FrenchCubaWedding?"
+        className="max-w-[400px]"
+      />
       <div className="flex items-start gap-[24px] flex-wrap">
         {whyChooseUsData.map((card, index) => (
           <WhyChooseUsCard
             key={index}
             icon={card.icon}
             alt={card.alt}
-            titleLine1={card.titleLine1}
-            titleLine2={card.titleLine2}
+            primaryLine={card.primaryLine}
+            secondaryLine={card.secondaryLine}
             description={card.description}
           />
         ))}

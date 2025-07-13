@@ -1,18 +1,19 @@
 import React from "react";
+import { HeadingLine } from "@/lib/components/heading";
 import { ImageWithFallback } from "@/lib/components/image";
 
 interface PropsType {
   icon: string;
-  titleLine1: string;
-  titleLine2: string;
+  secondaryLine: string;
+  primaryLine: string;
   description: string;
   alt?: string;
 }
 
 const WhyChooseUsCard = ({
   icon,
-  titleLine1,
-  titleLine2,
+  secondaryLine,
+  primaryLine,
   description,
   alt = "icon",
 }: PropsType) => {
@@ -23,10 +24,13 @@ const WhyChooseUsCard = ({
       </div>
       <div className="flex flex-col items-start gap-[15px]">
         <div>
-          <p className="text-[24px] font-normal">{titleLine1}</p>
-          <p className="text-[24px] font-semibold">{titleLine2}</p>
+          {secondaryLine && (
+            <p className="text-[24px] font-normal">{secondaryLine}</p>
+          )}
+          <p className="text-[24px] font-semibold">{primaryLine}</p>
         </div>
-        <div className="w-[26px] h-[5px] bg-primary" />
+        <HeadingLine color="primary" />
+
         <p className="text-[14px] leading-[21px] font-normal">{description}</p>
       </div>
     </div>

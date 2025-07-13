@@ -14,7 +14,7 @@ interface PropsType {
   disabled?: boolean;
 }
 
-const Button = ({
+const CommonButton = ({
   label,
   href,
   onClick,
@@ -59,4 +59,4 @@ const Button = ({
   );
 };
 
-export default Button;
+export default CommonButton;

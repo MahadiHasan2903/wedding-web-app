@@ -1,6 +1,9 @@
 import { FaFacebookF } from "react-icons/fa";
 import { TfiLinkedin } from "react-icons/tfi";
 import { RiInstagramFill } from "react-icons/ri";
+import { crown, star, heart } from "@/lib/components/image/icons";
+import story1 from "@/public/images/landing-page/story-1.jpg";
+import story2 from "@/public/images/landing-page/story-2.jpg";
 
 export const navItems = [
   {
@@ -70,5 +73,110 @@ export const socialLinks = [
   {
     href: "https://www.linkedin.com",
     Icon: TfiLinkedin,
+  },
+];
+
+export const whyChooseUsData = [
+  {
+    icon: star,
+    alt: "featured",
+    titleLine1: "Featured Profiles for",
+    titleLine2: "Faster Matching",
+    description:
+      "Get noticed first. As a featured member, your profile appears at the top — increasing your chances of matching with serious users faster.",
+  },
+  {
+    icon: crown,
+    alt: "verified",
+    titleLine1: "Verified Profiles that",
+    titleLine2: "You Can Trust",
+    description:
+      "We value safety and authenticity. Verified badges help you connect confidently with real people who are here for the right reasons.",
+  },
+  {
+    icon: heart,
+    alt: "serious",
+    titleLine1: "Focused on",
+    titleLine2: "Serious Relationships",
+    description:
+      "No distractions. No games. FrenchCubaWedding is built for those who are ready to commit and looking for genuine, lasting connections.",
+  },
+];
+
+export const stories = [
+  {
+    id: 1,
+    thumbnail: story1,
+    name: "Élodie & Javier",
+    description:
+      "A French artist meets a Cuban entrepreneur — now building a life full of passion and poetry.",
+  },
+  {
+    id: 2,
+    thumbnail: story2,
+    name: "Camille & Diego",
+    description:
+      "What began with a message became a marriage — across borders, hearts aligned.",
+  },
+  {
+    id: 3,
+    thumbnail: story1,
+    name: "Élodie & Javier",
+    description:
+      "A French artist meets a Cuban entrepreneur — now building a life full of passion and poetry.",
+  },
+  {
+    id: 4,
+    thumbnail: story2,
+    name: "Lina & Ahmed",
+    description:
+      "From Cairo to Copenhagen, their love defied distance, language, and time zones.",
+  },
+  {
+    id: 5,
+    thumbnail: story1,
+    name: "Sofia & Mateo",
+    description:
+      "A shared playlist turned into shared dreams — music was just the beginning.",
+  },
+  {
+    id: 6,
+    thumbnail: story2,
+    name: "Aisha & Mahmud",
+    description:
+      "They crossed continents for each other — and found home in each other’s hearts.",
+  },
+];
+
+export const faqData = [
+  {
+    question: "Is FrenchCubaWedding only for French or Cuban users?",
+    answer:
+      "No, FrenchCubaWedding is open to everyone, regardless of nationality. While the platform celebrates French and Cuban cultural values, we welcome users from all backgrounds who are seeking meaningful, committed relationships.",
+  },
+  {
+    question: "What is a Featured Profile?",
+    answer:
+      "A Featured Profile is highlighted across the platform to gain extra visibility. This feature increases your chances of connecting by showcasing your profile more prominently in search results and suggestions.",
+  },
+  {
+    question: "What is a Verified Profile?",
+    answer:
+      "A Verified Profile means the user's identity has been confirmed through our verification process. It adds trust and credibility, helping you feel more confident about who you're interacting with.",
+  },
+  {
+    question: "Is FrenchCubaWedding free to use?",
+    answer:
+      "Yes, you can join and use FrenchCubaWedding for free. We also offer premium features that enhance your experience, such as boosting your profile visibility and accessing advanced filters.",
+  },
+  {
+    question: "What’s the difference between Featured and Verified Profiles?",
+    answer:
+      "A Verified Profile confirms the user's identity for safety and trust, while a Featured Profile is promoted on the platform for more visibility. They serve different purposes but can be used together for better results.",
+  },
+  {
+    question: "How do I verify my profile?",
+    answer:
+      "To verify your profile, go to your account settings and follow the verification steps. This may involve submitting a government-issued ID or taking a live photo. Our team will review and approve your request.",
   },
 ];

@@ -1,4 +1,5 @@
-import HeroBanner from "./HeroBanner";
-import OurStory from "./OurStory";
+import CompanyStorySection from "./CompanyStorySection";
+import UniqueSellingPoints from "./UniqueSellingPoints";
+import LookingAheadSection from "./LookingAheadSection";
 
-export { HeroBanner, OurStory };
+export { CompanyStorySection, UniqueSellingPoints, LookingAheadSection };

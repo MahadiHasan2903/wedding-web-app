@@ -4,16 +4,14 @@ import { ImageWithFallback } from "@/lib/components/image";
 
 interface PropsType {
   icon: string;
-  secondaryLine: string;
-  primaryLine: string;
+  title: string;
   description: string;
   alt?: string;
 }
 
-const WhyChooseUsCard = ({
+const SellingPointCard = ({
   icon,
-  secondaryLine,
-  primaryLine,
+  title,
   description,
   alt = "icon",
 }: PropsType) => {
@@ -22,19 +20,13 @@ const WhyChooseUsCard = ({
       <div className="bg-primary flex items-center justify-center w-[36px] h-[36px] rounded-full p-[8px] mb-[24px]">
         <ImageWithFallback src={icon} width={18} height={18} alt={alt} />
       </div>
-      <div className="flex flex-col items-start gap-[15px]">
-        <div>
-          {secondaryLine && (
-            <p className="text-[24px] font-normal">{secondaryLine}</p>
-          )}
-          <p className="text-[24px] font-semibold">{primaryLine}</p>
-        </div>
+      <div className="flex flex-col items-start gap-[30px]">
+        <p className="text-[24px] font-semibold">{title}</p>
         <HeadingLine color="primary" />
-
-        <p className="text-[14px] leading-[21px] font-normal">{description}</p>
+        <p className="text-[24px] font-normal">{description}</p>
       </div>
     </div>
   );
 };
 
-export default WhyChooseUsCard;
+export default SellingPointCard;

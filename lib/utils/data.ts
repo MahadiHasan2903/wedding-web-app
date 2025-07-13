@@ -80,24 +80,24 @@ export const whyChooseUsData = [
   {
     icon: star,
     alt: "featured",
-    titleLine1: "Featured Profiles for",
-    titleLine2: "Faster Matching",
+    secondaryLine: "Featured Profiles for",
+    primaryLine: "Faster Matching",
     description:
       "Get noticed first. As a featured member, your profile appears at the top — increasing your chances of matching with serious users faster.",
   },
   {
     icon: crown,
     alt: "verified",
-    titleLine1: "Verified Profiles that",
-    titleLine2: "You Can Trust",
+    secondaryLine: "Verified Profiles that",
+    primaryLine: "You Can Trust",
     description:
       "We value safety and authenticity. Verified badges help you connect confidently with real people who are here for the right reasons.",
   },
   {
     icon: heart,
     alt: "serious",
-    titleLine1: "Focused on",
-    titleLine2: "Serious Relationships",
+    secondaryLine: "Focused on",
+    primaryLine: "Serious Relationships",
     description:
       "No distractions. No games. FrenchCubaWedding is built for those who are ready to commit and looking for genuine, lasting connections.",
   },
@@ -178,5 +178,27 @@ export const faqData = [
     question: "How do I verify my profile?",
     answer:
       "To verify your profile, go to your account settings and follow the verification steps. This may involve submitting a government-issued ID or taking a live photo. Our team will review and approve your request.",
+  },
+];
+
+export const uniqueSellingPointsData = [
+  {
+    icon: star,
+    alt: "featured",
+    title: "Featured Profiles",
+    description: "One-time featured boosts help you get noticed quickly.",
+  },
+  {
+    icon: crown,
+    alt: "verified",
+    title: "Verified Profiles",
+    description: "Serious members can verify their profiles to stand out.",
+  },
+  {
+    icon: heart,
+    alt: "serious",
+    title: "Focus on Commitment",
+    description:
+      "No swiping, no games — just people looking for real, lasting love.",
   },
 ];

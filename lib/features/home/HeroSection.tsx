@@ -1,10 +1,11 @@
 import React from "react";
 import { FiArrowRight } from "react-icons/fi";
-import CommonButton from "@/lib/components/buttons/CommonButton";
+import { SectionTitle } from "@/lib/components/heading";
 import { ImageWithFallback } from "@/lib/components/image";
+import CommonButton from "@/lib/components/buttons/CommonButton";
 import girlsGroups from "@/public/images/landing-page/group-of-girls-cartoon.png";
 
-const Hero = () => {
+const HeroSection = () => {
   return (
     <div className="w-full">
       <div className="w-full h-[800px]">
@@ -49,12 +50,11 @@ const Hero = () => {
         </div>
         <div className="w-full flex items-center justify-end gap-[40px] mr-[120px]">
           <div>
-            <h1 className="text-[36px] font-semibold">
-              Stand Out from the Crowd.
-            </h1>
-            <p className="text-[36px] font-light mt-[-15px]">
-              Get Verified and Access VIP Benefits.
-            </p>
+            <SectionTitle title="Stand Out from the Crowd." />
+            <SectionTitle
+              title="Get Verified and Access VIP Benefits."
+              className="!font-light mt-[-15px]"
+            />
           </div>
           <CommonButton
             href="/pricing"
@@ -68,4 +68,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default HeroSection;

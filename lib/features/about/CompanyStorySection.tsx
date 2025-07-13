@@ -1,14 +1,15 @@
 import React from "react";
+import { HeadingLine, SectionTitle } from "@/lib/components/heading";
 import storyImage from "@/public/images/about/story.jpg";
 import { ImageWithFallback } from "@/lib/components/image";
 
-const OurStory = () => {
+const CompanyStorySection = () => {
   return (
     <div className="w-full relative">
-      <div className="w-full px-[120px] pt-[75px] pb-[85px]">
+      <div className="w-full px-[120px] py-[80px]">
         <div className="max-w-[560px] flex flex-col items-start gap-[48px]">
-          <h2 className="text-[36px] font-semibold">Our Story</h2>
-          <div className="w-[26px] h-[5px] bg-primary" />
+          <SectionTitle title="Our Story" />
+          <HeadingLine color="primary" />
           <p className="text-[14px]">
             At FrenchCubaWedding, we believe that love has no borders. Born from
             a passion for cultural connection and meaningful relationships, we
@@ -33,10 +34,10 @@ const OurStory = () => {
           />
         </div>
       </div>
-      <div className="w-full px-[120px] pt-[75px] pb-[85px] bg-red text-white">
+      <div className="w-full px-[120px] py-[80px] bg-red text-white">
         <div className="w-full flex flex-col items-start gap-[48px]">
-          <h2 className="text-[36px] font-semibold">Our Mission</h2>
-          <div className="w-[26px] h-[5px] bg-white" />
+          <SectionTitle title="Our Mission" />
+          <HeadingLine color="white" />
           <p className="text-[24px]">
             To connect sincere individuals from all backgrounds in a safe,
             respectful, and culturally rich environment helping them find
@@ -48,4 +49,4 @@ const OurStory = () => {
   );
 };
 
-export default OurStory;
+export default CompanyStorySection;

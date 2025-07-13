@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { faqData } from "@/lib/utils/data";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { SectionTitle } from "@/lib/components/heading";
 
 const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -12,10 +13,12 @@ const FAQ = () => {
   };
 
   return (
-    <div className="w-full px-[120px] pt-[75px] pb-[85px] flex flex-col items-start gap-[50px] bg-white">
-      <h2 className="text-[36px] font-semibold max-w-[400px]">
-        Frequently Asked Questions
-      </h2>
+    <div className="w-full px-[120px] py-[80px] flex flex-col items-start gap-[50px] bg-white">
+      <SectionTitle
+        title="Frequently Asked Questions"
+        className="max-w-[400px]"
+      />
+
       <div className="w-full flex flex-col gap-[24px]">
         {faqData.map((faq, index) => (
           <div

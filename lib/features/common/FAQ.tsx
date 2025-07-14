@@ -29,7 +29,9 @@ const FAQ = () => {
           >
             <div
               onClick={() => handleToggleFaq(index)}
-              className="w-full flex items-center justify-between px-[40px] py-[30px] border border-[#B0B1B3]"
+              className={`${
+                openIndex === index ? "rounded-t-[10px]" : "rounded-[10px]"
+              } overflow-hidden w-full flex items-center justify-between px-[40px] py-[30px] border border-[#B0B1B3]`}
             >
               <p className="text-[24px] font-normal">{faq.question}</p>
               <div
@@ -41,7 +43,7 @@ const FAQ = () => {
               </div>
             </div>
             {openIndex === index && (
-              <div className="w-full flex items-center justify-between px-[40px] py-[30px] border-x border-b border-[#B0B1B3]">
+              <div className="w-full flex items-center justify-between px-[40px] py-[30px] border-x border-b border-[#B0B1B3] rounded-b-[10px]">
                 <p className="text-[20px] font-normal">{faq.answer}</p>
               </div>
             )}

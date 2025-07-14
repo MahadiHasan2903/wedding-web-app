@@ -31,7 +31,7 @@ const FAQ = () => {
               onClick={() => handleToggleFaq(index)}
               className={`${
                 openIndex === index ? "rounded-t-[10px]" : "rounded-[10px]"
-              } overflow-hidden w-full flex items-center justify-between px-[40px] py-[30px] border border-[#B0B1B3]`}
+              }  w-full flex items-center justify-between px-[40px] py-[30px] border border-[#B0B1B3]`}
             >
               <p className="text-[24px] font-normal">{faq.question}</p>
               <div

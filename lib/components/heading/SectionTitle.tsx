@@ -7,7 +7,11 @@ interface PropsType {
 
 const SectionTitle = ({ title, className }: PropsType) => {
   return (
-    <div className={`text-[36px] font-semibold ${className && className}`}>
+    <div
+      className={`text-[14px] sm:text-[24px] xl:text-[36px] font-semibold ${
+        className && className
+      }`}
+    >
       {title}
     </div>
   );

@@ -6,5 +6,6 @@ import heart from "@/public/icons/heart.svg";
 import quote from "@/public/icons/quote.svg";
 import avatar from "@/public/icons/avatar.svg";
 import tickCircle from "@/public/icons/tick-circle.svg";
+import hamburger from "@/public/icons/hamburger.svg";
 
-export { avatar, crown, star, heart, send, quote, mail, tickCircle };
+export { avatar, crown, star, heart, send, quote, mail, tickCircle, hamburger };

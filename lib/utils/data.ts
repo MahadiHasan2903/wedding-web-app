@@ -109,7 +109,7 @@ export const stories = [
     thumbnail: story1,
     name: "Élodie & Javier",
     description:
-      "A French artist meets a Cuban entrepreneur — now building a life full of passion and poetry.",
+      "A French artist meets a Cuban entrepreneur — now building a life full of passion.",
   },
   {
     id: 2,
@@ -123,7 +123,7 @@ export const stories = [
     thumbnail: story1,
     name: "Élodie & Javier",
     description:
-      "A French artist meets a Cuban entrepreneur — now building a life full of passion and poetry.",
+      "A French artist meets a Cuban entrepreneur — now building a life full of passion.",
   },
   {
     id: 4,

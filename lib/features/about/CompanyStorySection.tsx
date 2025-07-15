@@ -25,7 +25,7 @@ const CompanyStorySection = () => {
         </div>
       </div>
       <div className="absolute top-[23%] right-0">
-        <div className="w-[712px] h-[470px] relative overflow-hidden rounded-[10px]">
+        <div className="w-[712px] h-[470px] relative overflow-hidden">
           <ImageWithFallback
             src={storyImage}
             layout="fill"

@@ -8,7 +8,7 @@ import { HeadingLine, SectionTitle } from "@/lib/components/heading";
 const LookingAheadSection = () => {
   return (
     <div className="w-full px-[120px] pb-[70px] flex items-center justify-between gap-[65px]">
-      <div className="w-1/2 h-[330px] relative overflow-hidden rounded-[10px]">
+      <div className="w-1/2 h-[330px] relative overflow-hidden">
         <ImageWithFallback
           src={community}
           layout="fill"

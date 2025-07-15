@@ -27,8 +27,10 @@ const PricingCard = ({
   color = "primary",
   badge,
 }: PropsType) => {
+  console.log(color);
+
   return (
-    <div className="w-[385px] min-h-[650px] relative flex flex-col items-start p-[30px] gap-[25px] border border-[#B0B1B3] my-[50px] rounded-[10px] overflow-hidden">
+    <div className="w-[385px] min-h-[650px] relative flex flex-col items-start p-[30px] gap-[25px] border border-[#B0B1B3] rounded-[10px] overflow-hidden">
       {badge && (
         <div className="absolute right-0 top-[-10px] bg-rectangle bg-no-repeat bg-center bg-contain text-white pl-[56px] pr-[21px] py-[16px]">
           {badge}
@@ -36,7 +38,9 @@ const PricingCard = ({
       )}
 
       <div
-        className={`bg-${color} flex items-center justify-center w-[36px] h-[36px] rounded-full p-[8px]`}
+        className={`${
+          frequency ? `bg-${color}` : "bg-black"
+        } flex items-center justify-center w-[36px] h-[36px] rounded-full p-[8px]`}
       >
         <ImageWithFallback src={icon} width={18} height={18} alt={title} />
       </div>
@@ -57,8 +61,15 @@ const PricingCard = ({
         label={isCurrent ? "Current Plan" : "Choose Plan"}
         type="button"
         className={`${
-          isCurrent ? "bg-transparent" : `bg-${color} text-white`
-        } w-full rounded-[5px] overflow-hidden border border-[#A1A1A1] p-[12px]`}
+          isCurrent
+            ? "bg-transparent text-black"
+            : color === "black"
+            ? "!bg-black text-white"
+            : `bg-${color} text-white`
+        }
+
+
+        w-full rounded-[5px] overflow-hidden border border-[#A1A1A1] p-[12px] text-[14px] font-semibold`}
       />
 
       <div className="w-full flex flex-col items-start gap-[13px]">

@@ -4,10 +4,10 @@ import { PricingCard } from "@/lib/components/card";
 import { SectionTitle, HeadingLine } from "@/lib/components/heading";
 
 const MembershipPlans = () => {
-  const currentPlan = null;
+  const currentPlan = "Free Forever";
 
   return (
-    <div className="w-full px-[120px] py-[80px]">
+    <div className="w-full px-[120px] pt-[80px]">
       <div className="w-full flex flex-col items-start gap-[48px]">
         <SectionTitle title="Membership Plans" />
         <HeadingLine color="primary" />
@@ -25,7 +25,7 @@ const MembershipPlans = () => {
         </div>
       </div>
 
-      <div className="flex items-start gap-[24px] flex-wrap">
+      <div className="flex items-start gap-[24px] flex-wrap my-[50px] ">
         {membershipPlans.map((plan, idx) => (
           <PricingCard
             key={idx}

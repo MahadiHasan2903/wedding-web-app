@@ -9,6 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import { AuthSectionTitle } from "@/lib/components/heading";
 import { loginSchema, LoginType } from "@/lib/schema/auth.schema";
 import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,7 @@ const LoginForm = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
+  // Setup react-hook-form with zod validation
   const {
     reset,
     control,
@@ -26,10 +28,12 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  // Function to handle login request
+  // Handle login form submission
   const handleLoginSubmit = async (data: LoginType) => {
     try {
       setLoading(true);
+
+      // Call next-auth signIn with credentials provider (no redirect)
       const response = await signIn("credentials", {
         ...data,
         redirect: false,
@@ -41,7 +45,7 @@ const LoginForm = () => {
         toast.success("Logged in successfully");
         router.push("/");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred during login.");
     } finally {
       setLoading(false);
@@ -54,9 +58,7 @@ const LoginForm = () => {
       onSubmit={handleSubmit(handleLoginSubmit)}
     >
       <div className="w-full flex flex-col items-center gap-[40px]">
-        <h2 className="text-[24px] font-medium text-primary">
-          Sign in to Your Account
-        </h2>
+        <AuthSectionTitle title="Sign in to Your Account" />
         <div className="w-full flex items-center gap-2 border border-[#A1A1A1 px-[20px] py-[12px] rounded-[10px]">
           <ImageWithFallback src={google} width={16} height={16} alt="google" />
           <h3 className="w-full text-[14px] text-center font-normal">
@@ -67,6 +69,7 @@ const LoginForm = () => {
       </div>
 
       <div className="w-full flex flex-col items-center gap-[24px]">
+        {/* Email input field */}
         <Controller
           name="email"
           control={control}
@@ -82,6 +85,7 @@ const LoginForm = () => {
         />
 
         <div className="w-full flex flex-col items-start gap-2">
+          {/* Password input field */}
           <Controller
             name="password"
             control={control}
@@ -95,18 +99,22 @@ const LoginForm = () => {
               />
             )}
           />
+          {/* Forgot password link */}
           <button type="button" className="text-[12px] font-normal underline">
             Forgot your password?
           </button>
         </div>
       </div>
 
+      {/* Submit button, disabled while loading */}
       <CommonButton
         label={loading ? "Loading..." : "Sign In"}
         disabled={loading}
         type="submit"
         className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"
       />
+
+      {/* Terms of service and sign up links */}
       <div className="w-full flex flex-col items-center gap-[30px]">
         <div className="text-[12px] font-normal flex items-center gap-1">
           By joining, you agree to our

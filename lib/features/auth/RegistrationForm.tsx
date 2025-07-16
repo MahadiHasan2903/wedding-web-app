@@ -3,22 +3,33 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
+import OtpVerificationModal from "./OtpVerificationModal";
 import { ImageWithFallback } from "@/lib/components/image";
+import { AuthSectionTitle } from "@/lib/components/heading";
 import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
 import {
   registrationRequestSchema,
   RegistrationRequestType,
 } from "@/lib/schema/auth.schema";
-import { accountRegistrationRequestAction } from "@/lib/action/auth/auth.action";
+import {
+  accountRegistrationConfirmationAction,
+  accountRegistrationRequestAction,
+} from "@/lib/action/auth/auth.action";
 
 const RegistrationForm = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [email, setEmail] = useState<string>("");
   const [passwordError, setPasswordError] = useState<string>("");
+  const [openVerificationModal, setOpenVerificationModal] = useState(false);
 
+  // Initialize react-hook-form with zod validation schema
   const {
     reset,
     control,
@@ -28,23 +39,20 @@ const RegistrationForm = () => {
     resolver: zodResolver(registrationRequestSchema),
   });
 
-  // function to handle registration request
+  // Handle submission of registration form
   const handleRegistrationRequestSubmit = async (
     data: RegistrationRequestType
   ) => {
-    // Clear previous password error
-    setPasswordError("");
+    setPasswordError(""); // Clear previous password error
 
-    // Check if passwords match
     if (data.password !== data.retypePassword) {
       setPasswordError("Passwords do not match");
       return;
     }
 
-    // Set loading state
     setLoading(true);
 
-    // Construct the payload to send (omit retypePassword)
+    // Prepare payload (exclude retypePassword)
     const requestPayload: RegistrationRequestType = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -57,16 +65,42 @@ const RegistrationForm = () => {
       requestPayload
     );
 
-    // Show toast notification with result message
+    // Show toast notification with server response message
     toast(registrationRequestResponse.message, {
       type: registrationRequestResponse.status ? "success" : "error",
     });
 
-    // On success, reset form and navigate to login
+    // If registration successful, store email and open OTP modal
     if (registrationRequestResponse.status) {
-      reset();
+      setEmail(requestPayload.email);
+      setOpenVerificationModal(true);
     }
+
     setLoading(false);
+  };
+
+  // Handle OTP verification submission
+  const handleConfirmRegistrationSubmit = async () => {
+    // Prepare payload (join otp together before sending)
+    const payload = {
+      email: email,
+      otp: otp.join(""),
+    };
+
+    // Send OTP confirmation request
+    const registrationConfirmationResponse =
+      await accountRegistrationConfirmationAction(payload);
+
+    // Show toast notification with confirmation result
+    toast(registrationConfirmationResponse.message, {
+      type: registrationConfirmationResponse.status ? "success" : "error",
+    });
+
+    // On successful OTP verification, reset form and navigate to login page
+    if (registrationConfirmationResponse.status) {
+      reset();
+      router.push("/login");
+    }
   };
 
   return (
@@ -75,9 +109,7 @@ const RegistrationForm = () => {
       onSubmit={handleSubmit(handleRegistrationRequestSubmit)}
     >
       <div className="w-full flex flex-col items-center gap-[40px]">
-        <h2 className="text-[24px] font-medium text-primary">
-          Create a New Account
-        </h2>
+        <AuthSectionTitle title="Create a New Account" />
         <div className="w-full flex items-center gap-2 border border-[#A1A1A1 px-[20px] py-[12px] rounded-[10px]">
           <ImageWithFallback src={google} width={16} height={16} alt="google" />
           <h3 className="w-full text-[14px] text-center font-normal">
@@ -89,6 +121,7 @@ const RegistrationForm = () => {
 
       <div className="w-full flex flex-col items-center gap-[24px]">
         <div className="w-full flex items-start gap-[30px]">
+          {/* First Name input */}
           <Controller
             name="firstName"
             control={control}
@@ -102,6 +135,7 @@ const RegistrationForm = () => {
               />
             )}
           />
+          {/* Last Name input */}
           <Controller
             name="lastName"
             control={control}
@@ -117,6 +151,7 @@ const RegistrationForm = () => {
           />
         </div>
 
+        {/* Email input */}
         <Controller
           name="email"
           control={control}
@@ -131,6 +166,7 @@ const RegistrationForm = () => {
           )}
         />
 
+        {/* Password and Retype Password inputs */}
         <div className="w-full flex flex-col gap-3">
           <div className="w-full flex items-start gap-[30px]">
             <Controller
@@ -160,16 +196,20 @@ const RegistrationForm = () => {
               )}
             />
           </div>
+          {/* Display password mismatch error */}
           {passwordError && <p className="text-red text-sm">{passwordError}</p>}
         </div>
       </div>
 
+      {/* Submit button disabled during loading or OTP verification */}
       <CommonButton
-        label={loading ? "Loading..." : "Sign Up"}
-        disabled={loading}
+        label={loading && !openVerificationModal ? "Loading..." : "Sign Up"}
+        disabled={loading || openVerificationModal}
         type="submit"
         className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"
       />
+
+      {/* Terms of service and sign-in links */}
       <div className="w-full flex flex-col items-center gap-[30px]">
         <div className="text-[12px] font-normal flex items-center gap-1">
           By joining, you agree to our
@@ -188,6 +228,17 @@ const RegistrationForm = () => {
           </Link>
         </div>
       </div>
+
+      {/* OTP verification modal shown after registration request */}
+      {openVerificationModal && (
+        <OtpVerificationModal
+          otp={otp}
+          setOtp={setOtp}
+          open={openVerificationModal}
+          loading={loading}
+          onConfirm={handleConfirmRegistrationSubmit}
+        />
+      )}
     </form>
   );
 };

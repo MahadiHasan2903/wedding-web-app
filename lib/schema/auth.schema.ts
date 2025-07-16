@@ -44,6 +44,38 @@ export type RegistrationRequestResponseType = z.infer<
   typeof registrationRequestResponseSchema.shape.data
 >;
 
+// Define a schema for validating user registration confirmation payload
+export const registrationConfirmationSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  otp: z.string().min(6, "OTP is required"),
+});
+
+// Infer TypeScript type from schema
+export type RegistrationConfirmationType = z.infer<
+  typeof registrationConfirmationSchema
+>;
+
+// Define a schema for validating user registration Confirmation response schema
+export const registrationConfirmationResponseSchema = z.object({
+  status: z.number(),
+  success: z.boolean(),
+  message: z.string(),
+  data: z.object({
+    id: z.string(),
+    firstName: z.string(),
+    lastName: z.string(),
+    email: z.string().email(),
+    phoneNumber: z.string().nullable(),
+    userRole: z.string(),
+    accountStatus: z.string(),
+  }),
+});
+
+// Infer TypeScript type from schema
+export type RegistrationConfirmationResponseType = z.infer<
+  typeof registrationConfirmationResponseSchema.shape.data
+>;
+
 // Define a schema for validating user login payload
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),

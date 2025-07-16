@@ -12,6 +12,10 @@ import {
   registrationRequestSchema,
   RegistrationRequestResponseType,
   registrationRequestResponseSchema,
+  registrationConfirmationSchema,
+  RegistrationConfirmationType,
+  registrationConfirmationResponseSchema,
+  RegistrationConfirmationResponseType,
 } from "@/lib/schema/auth.schema";
 
 /**
@@ -69,6 +73,75 @@ const accountRegistrationRequestAction = async (
       message: isTimeout
         ? "The request timed out. Please try again."
         : "Failed to complete registration request. Please try again later.",
+      data: null,
+    };
+
+    return result;
+  }
+};
+
+/**
+ * Verifies the user's registration by confirming the OTP sent to their email.
+ * Validates the input, sends the OTP confirmation to the server,
+ * and returns the result with user info or error messages.
+ *
+ * @param requestPayload - The OTP confirmation data including user info and OTP code.
+ * @returns A result object indicating success or failure, including user data and messages.
+ */
+const accountRegistrationConfirmationAction = async (
+  requestPayload: RegistrationConfirmationType
+) => {
+  // Validate the OTP confirmation input against the schema
+  const safeParse = registrationConfirmationSchema.safeParse(requestPayload);
+
+  if (!safeParse.success) {
+    throw new Error("Invalid OTP confirmation data provided.");
+  }
+
+  try {
+    // Send POST request to verify the OTP and confirm registration
+    const response = await fetchZodTyped(
+      `${BASE_URL}/account/registration-confirmation`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestPayload),
+      },
+      registrationConfirmationResponseSchema
+    );
+
+    // Extract user details from the response
+    const registrationConfirmationData: RegistrationConfirmationResponseType = {
+      id: response.data.id,
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
+      email: response.data.email,
+      phoneNumber: response.data.phoneNumber,
+      userRole: response.data.userRole,
+      accountStatus: response.data.accountStatus,
+    };
+
+    // Return success result with confirmation message
+    const result: Result<RegistrationConfirmationResponseType> = {
+      status: true,
+      data: registrationConfirmationData,
+      message: "OTP verified successfully. Your account is now activated.",
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error("OTP verification failed:", error);
+
+    const isTimeout = error.message?.includes("timed out");
+
+    // Return failure result with appropriate message
+    const result: Result<RegistrationConfirmationResponseType> = {
+      status: false,
+      message: isTimeout
+        ? "The request timed out. Please check your connection and try again."
+        : "Failed to verify OTP. Please ensure your code is correct and try again.",
       data: null,
     };
 
@@ -144,4 +217,8 @@ const accountLoginAction = async (requestPayload: LoginType) => {
   }
 };
 
-export { accountRegistrationRequestAction, accountLoginAction };
+export {
+  accountLoginAction,
+  accountRegistrationRequestAction,
+  accountRegistrationConfirmationAction,
+};

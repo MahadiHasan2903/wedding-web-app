@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
@@ -13,8 +14,6 @@ import {
   RegistrationRequestType,
 } from "@/lib/schema/auth.schema";
 import { accountRegistrationRequestAction } from "@/lib/action/auth/auth.action";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 
 const RegistrationForm = () => {
   const [loading, setLoading] = useState(false);
@@ -67,6 +66,7 @@ const RegistrationForm = () => {
     if (registrationRequestResponse.status) {
       reset();
     }
+    setLoading(false);
   };
 
   return (

@@ -43,3 +43,37 @@ export const registrationRequestResponseSchema = z.object({
 export type RegistrationRequestResponseType = z.infer<
   typeof registrationRequestResponseSchema.shape.data
 >;
+
+// Define a schema for validating user login payload
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .refine((value) => value.trim().length > 0, "Password is required"),
+});
+
+// Infer TypeScript type from schema
+export type LoginType = z.infer<typeof loginSchema>;
+
+// Login response schema
+export const loginResponseSchema = z.object({
+  status: z.number(),
+  success: z.boolean(),
+  message: z.string(),
+  data: z.object({
+    user: z.object({
+      id: z.string(),
+      firstName: z.string(),
+      lastName: z.string(),
+      email: z.string(),
+      phoneNumber: z.string(),
+      userRole: z.string(),
+      accountStatus: z.string(),
+    }),
+    accessToken: z.string(),
+  }),
+});
+
+// Inferred type
+export type LoginResponseType = z.infer<typeof loginResponseSchema.shape.data>;

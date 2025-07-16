@@ -10,7 +10,7 @@ const ApplicationLayout = ({
   return (
     <div className="w-full bg-white min-h-screen">
       <div className="w-full h-full flex items-center ">
-        <div className="w-1/2 h-full">
+        <div className="hidden md:block w-1/2 h-full">
           <div className="w-full h-screen relative overflow-hidden">
             <ImageWithFallback
               src={authBanner}
@@ -20,7 +20,7 @@ const ApplicationLayout = ({
             />
           </div>
         </div>
-        <div className="w-1/2">{children}</div>
+        <div className="w-full lg:w-1/2">{children}</div>
       </div>
     </div>
   );

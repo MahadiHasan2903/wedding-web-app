@@ -67,7 +67,7 @@ export const loginResponseSchema = z.object({
       firstName: z.string(),
       lastName: z.string(),
       email: z.string(),
-      phoneNumber: z.string(),
+      phoneNumber: z.string().nullable(),
       userRole: z.string(),
       accountStatus: z.string(),
     }),

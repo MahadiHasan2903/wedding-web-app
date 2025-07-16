@@ -30,7 +30,7 @@ const RegistrationForm = () => {
 
   // function to handle registration request
   const handleRegistrationRequestSubmit = async (
-    data: RegistrationRequestType & { retypePassword?: string }
+    data: RegistrationRequestType
   ) => {
     // Clear previous password error
     setPasswordError("");

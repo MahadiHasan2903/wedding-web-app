@@ -3,16 +3,18 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { signIn } from "next-auth/react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { loginSchema, LoginType } from "@/lib/schema/auth.schema";
-import { accountLoginAction } from "@/lib/action/auth/auth.action";
 import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const {
@@ -24,32 +26,26 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  // function to handle registration request
-  const handleLoginSubmit = async (
-    data: LoginType & { retypePassword?: string }
-  ) => {
-    // Set loading state
-    setLoading(true);
+  // Function to handle login request
+  const handleLoginSubmit = async (data: LoginType) => {
+    try {
+      setLoading(true);
+      const response = await signIn("credentials", {
+        ...data,
+        redirect: false,
+      });
 
-    // Construct the payload to send
-    const requestPayload: LoginType = {
-      email: data.email,
-      password: data.password,
-    };
-
-    // Send registration request to server
-    const loginRequestResponse = await accountLoginAction(requestPayload);
-
-    // Show toast notification with result message
-    toast(loginRequestResponse.message, {
-      type: loginRequestResponse.status ? "success" : "error",
-    });
-
-    // On success, reset form and navigate to login
-    if (loginRequestResponse.status) {
-      reset();
+      if (response && !response.ok) {
+        toast.error("Login failed. Please check your credentials");
+      } else {
+        toast.success("Logged in successfully");
+        router.push("/");
+      }
+    } catch (error) {
+      toast.error("An error occurred during login.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (

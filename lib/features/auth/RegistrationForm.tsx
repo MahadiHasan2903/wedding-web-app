@@ -4,11 +4,11 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import VerificationModal from "./VerificationModal";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
-import OtpVerificationModal from "./OtpVerificationModal";
 import { ImageWithFallback } from "@/lib/components/image";
 import { AuthSectionTitle } from "@/lib/components/heading";
 import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
@@ -231,7 +231,7 @@ const RegistrationForm = () => {
 
       {/* OTP verification modal shown after registration request */}
       {openVerificationModal && (
-        <OtpVerificationModal
+        <VerificationModal
           otp={otp}
           setOtp={setOtp}
           open={openVerificationModal}

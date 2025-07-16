@@ -20,7 +20,7 @@ interface PropsType {
   onConfirm: () => void;
 }
 
-const OtpVerificationModal = ({
+const VerificationModal = ({
   otp,
   setOtp,
   open,
@@ -115,4 +115,4 @@ const OtpVerificationModal = ({
   );
 };
 
-export default OtpVerificationModal;
+export default VerificationModal;

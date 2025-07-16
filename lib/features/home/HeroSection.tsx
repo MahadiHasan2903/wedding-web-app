@@ -1,6 +1,6 @@
 import React from "react";
 import { FiArrowRight } from "react-icons/fi";
-import { SectionTitle } from "@/lib/components/heading";
+import { SectionTitle, PageTitle } from "@/lib/components/heading";
 import { ImageWithFallback } from "@/lib/components/image";
 import CommonButton from "@/lib/components/buttons/CommonButton";
 import girlsGroups from "@/public/images/landing-page/group-of-girls-cartoon.png";
@@ -12,9 +12,7 @@ const HeroSection = () => {
         <div className="w-full h-full bg-landingHero bg-no-repeat bg-center bg-cover">
           <div className="w-full h-full flex flex-col gap-[18px] xl:gap-[75px] items-center justify-center text-white text-center z-10">
             <div className="flex flex-col items-center mt-[200px] sm:mt-[150px] md:mt-[200px] xl:mt-[450px]">
-              <h1 className="text-[24px] sm:text-[36px] xl:text-[64px] font-bold">
-                Love Feels Different Here
-              </h1>
+              <PageTitle title="Love Feels Different Here" />
               <p className="text-[12px] sm:text-[16px] lg-text-[24px] font-semibold mt-2 mb-[16px] xl:mb-[30px]">
                 We help you find the one who’s meant to stay
               </p>

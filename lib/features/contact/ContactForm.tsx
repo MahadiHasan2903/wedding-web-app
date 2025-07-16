@@ -26,16 +26,16 @@ const ContactForm = () => {
     console.log("Form Submitted:", JSON.stringify(data, null, 2));
   };
   return (
-    <div className="w-full px-[120px] py-[80px]">
-      <div className="flex flex-col gap-[55px]">
-        <div className="flex flex-col gap-[80px] justify-between">
-          <div className="flex items-center gap-[7px]">
+    <div className="w-full p-[18px] sm:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px]">
+      <div className="flex flex-col gap-[25px] lg:gap-[55px]">
+        <div className="flex flex-col gap-[30px] lg:gap-[80px] justify-between">
+          <div className="flex flex-col lg:flex-row items-center gap-[16px]">
             <SectionTitle
               title="We Are Here To Help"
               className="max-w-[240px]"
             />
 
-            <div className="flex items-center gap-[20px] border border-[#B0B1B3] px-[24px] py-[18px] rounded-[10px]">
+            <div className="flex items-center gap-[20px] border border-[#B0B1B3] px-[24px] py-[8px] lg:py-[18px] rounded-[10px]">
               <div className="bg-primary flex items-center justify-center w-[36px] h-[36px] rounded-full">
                 <ImageWithFallback
                   src={mail}
@@ -49,7 +49,7 @@ const ContactForm = () => {
               </p>
             </div>
           </div>
-          <div className="w-full flex justify-end">
+          <div className="w-full flex justify-center lg:justify-end">
             <SectionTitle
               title="Do You Have Any Questions?"
               className="max-w-[350px] text-end"
@@ -58,9 +58,9 @@ const ContactForm = () => {
         </div>
         <form
           onSubmit={handleSubmit(handleContactFormSubmit)}
-          className="w-full flex flex-col gap-[24px]"
+          className="w-full flex flex-col gap-[16px] lg:gap-[24px]"
         >
-          <div className="flex items-center gap-[24px]">
+          <div className="flex items-center gap-[14px] lg:gap-[24px]">
             <Controller
               name="firstName"
               defaultValue=""
@@ -112,6 +112,7 @@ const ContactForm = () => {
                   {...field}
                   type="text"
                   placeholder="Phone Number"
+                  required={false}
                   error={errors.phoneNumber && errors.phoneNumber.message}
                 />
               )}
@@ -148,7 +149,7 @@ const ContactForm = () => {
           <CommonButton
             type="submit"
             label="Submit"
-            className="w-full p-[20px] bg-red text-white text-[16px] font-semibold rounded-full"
+            className="w-full p-[12px] lg:p-[20px] bg-red text-white text-[16px] font-semibold rounded-full"
           />
         </form>
       </div>

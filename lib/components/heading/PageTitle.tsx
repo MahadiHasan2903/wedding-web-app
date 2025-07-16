@@ -5,10 +5,10 @@ interface PropsType {
   className?: string;
 }
 
-const SectionTitle = ({ title, className }: PropsType) => {
+const PageTitle = ({ title, className }: PropsType) => {
   return (
     <div
-      className={`text-[14px] sm:text-[24px] xl:text-[36px] font-semibold ${
+      className={`text-[24px] sm:text-[36px] xl:text-[64px] font-bold ${
         className || ""
       }`}
     >
@@ -17,4 +17,4 @@ const SectionTitle = ({ title, className }: PropsType) => {
   );
 };
 
-export default SectionTitle;
+export default PageTitle;

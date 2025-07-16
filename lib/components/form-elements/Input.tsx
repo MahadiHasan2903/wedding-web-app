@@ -30,7 +30,7 @@ const Input = ({
       {label && (
         <label htmlFor={name} className="text-md font-medium">
           {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+          {required && <span className="text-red ml-1">*</span>}
         </label>
       )}
       <input
@@ -42,7 +42,7 @@ const Input = ({
         onChange={onChange}
         required={required}
         readOnly={readOnly}
-        className={`p-[24px] border rounded-[10px] outline-none transition-all duration-200 ${
+        className={`w-full text-[12px] lg:text-[14px] px-[16px] py-[12px] lg:p-[24px] border rounded-[10px] outline-none transition-all duration-200 ${
           error ? "border-red" : "border-[#A0A0A0] focus:border-primary"
         }`}
       />

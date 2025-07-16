@@ -1,6 +1,7 @@
-import CommonButton from "@/lib/components/buttons/CommonButton";
 import React from "react";
 import { FiArrowRight } from "react-icons/fi";
+import { PageTitle } from "@/lib/components/heading";
+import CommonButton from "@/lib/components/buttons/CommonButton";
 
 const FindMatch = () => {
   return (
@@ -8,9 +9,7 @@ const FindMatch = () => {
       <div className="w-full h-full bg-weddingCoupleScene bg-no-repeat bg-center bg-cover">
         <div className="w-full h-full flex flex-col gap-[75px] items-center justify-center text-white text-center relative z-20">
           <div className="max-w-[500px] xl:max-w-[900px] flex flex-col items-center mt-[150px] sm:mt-[120px] md:mt-[180px] xl:mt-[350px] px-[32px] gap-[8px]">
-            <h1 className="text-[24px] sm:text-[36px] xl:text-[64px] font-bold">
-              Ready to Meet Someone Who Matters?
-            </h1>
+            <PageTitle title=" Ready to Meet Someone Who Matters?" />
             <p className="text-[12px] sm:text-[14px] xl:text-[24px] font-semibold">
               Thousands have found meaningful connections through
               FrenchCubaWedding. Now it’s your turn.

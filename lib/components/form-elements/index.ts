@@ -1,4 +1,4 @@
-import Input from "./Input";
+import OutlinedInput from "./OutlinedInput";
 import Textarea from "./Textarea";
 
-export { Input, Textarea };
+export { OutlinedInput, Textarea };

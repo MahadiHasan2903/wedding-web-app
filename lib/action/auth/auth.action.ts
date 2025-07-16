@@ -7,16 +7,206 @@ import {
   LoginType,
   loginSchema,
   LoginResponseType,
+  ResetPasswordType,
+  resetPasswordSchema,
   loginResponseSchema,
   RegistrationRequestType,
   registrationRequestSchema,
+  ResetPasswordResponseType,
+  ForgetPasswordRequestType,
+  forgetPasswordRequestSchema,
+  resetPasswordResponseSchema,
+  RegistrationConfirmationType,
+  registrationConfirmationSchema,
   RegistrationRequestResponseType,
   registrationRequestResponseSchema,
-  registrationConfirmationSchema,
-  RegistrationConfirmationType,
-  registrationConfirmationResponseSchema,
+  ForgetPasswordRequestResponseType,
+  forgetPasswordRequestResponseSchema,
   RegistrationConfirmationResponseType,
+  registrationConfirmationResponseSchema,
 } from "@/lib/schema/auth.schema";
+
+/**
+ * Handles user login by validating credentials, sending them to the server,
+ * and returning the structured login result including access token and user info.
+ *
+ * @param requestPayload - The login credentials (email and password)
+ * @returns A Result containing user info and access token or error message
+ */
+const accountLoginAction = async (requestPayload: LoginType) => {
+  // Validate the login payload using Zod
+  const safeParse = loginSchema.safeParse(requestPayload);
+  if (!safeParse.success) {
+    throw new Error("Invalid login data.");
+  }
+
+  try {
+    // Make POST request to the login endpoint
+    const response = await fetchZodTyped(
+      `${BASE_URL}/account/signin`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestPayload),
+      },
+      loginResponseSchema
+    );
+
+    // Structure the response data
+    const loginResponseData: LoginResponseType = {
+      user: {
+        id: response.data.user.id,
+        firstName: response.data.user.firstName,
+        lastName: response.data.user.lastName,
+        email: response.data.user.email,
+        phoneNumber: response.data.user.phoneNumber,
+        userRole: response.data.user.userRole,
+        accountStatus: response.data.user.accountStatus,
+      },
+      accessToken: response.data.accessToken,
+    };
+
+    // Successful result
+    const result: Result<LoginResponseType> = {
+      status: true,
+      data: loginResponseData,
+      message: "Login successful. Welcome back!",
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error("Login request failed:", error);
+
+    const isTimeout = error.message?.includes("timed out");
+
+    // Failed result
+    const result: Result<LoginResponseType> = {
+      status: false,
+      data: null,
+      message: isTimeout
+        ? "Login request timed out. Please try again."
+        : "Login failed. Please check your credentials.",
+    };
+
+    return result;
+  }
+};
+
+/**
+ * Resets the user's password by validating the payload and sending a POST request.
+ *
+ * @param requestPayload - The new password data to be validated and sent to the backend.
+ * @returns A result object indicating success or failure, with relevant messages.
+ */
+const resetPasswordAction = async (requestPayload: ResetPasswordType) => {
+  // Validate the reset password payload using Zod schema
+  const safeParse = resetPasswordSchema.safeParse(requestPayload);
+  if (!safeParse.success) {
+    throw new Error(
+      "The provided password data is invalid. Please check the form inputs."
+    );
+  }
+
+  try {
+    // Make a POST request to the reset password endpoint
+    const response = await fetchZodTyped(
+      `${BASE_URL}/account/reset-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestPayload),
+      },
+      resetPasswordResponseSchema
+    );
+
+    // Return success result
+    const result: Result<ResetPasswordResponseType> = {
+      status: true,
+      data: response.data,
+      message: "Your password has been successfully reset.",
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error("Failed to reset password:", error);
+
+    const isTimeout = error.message?.includes("timed out");
+
+    // Return failure result with more user-friendly messages
+    const result: Result<ResetPasswordResponseType> = {
+      status: false,
+      data: null,
+      message: isTimeout
+        ? "The request timed out. Please check your internet connection and try again."
+        : "We couldn't reset your password at this time. Please try again later.",
+    };
+
+    return result;
+  }
+};
+
+/**
+ * Sends a forgot password request to the backend with the user's email address.
+ *
+ * @param requestPayload - An object containing the user's email.
+ * @returns A result object indicating success or failure, with relevant data and message.
+ */
+const forgetPasswordRequestAction = async (
+  requestPayload: ForgetPasswordRequestType
+) => {
+  // Validate the input using Zod schema
+  const safeParse = forgetPasswordRequestSchema.safeParse(requestPayload);
+  if (!safeParse.success) {
+    throw new Error("Invalid input. Please enter a valid email address.");
+  }
+
+  try {
+    // Send POST request to the "forget password" endpoint
+    const response = await fetchZodTyped(
+      `${BASE_URL}/account/forget-password-request`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestPayload),
+      },
+      forgetPasswordRequestResponseSchema // Validate the response shape
+    );
+
+    const forgetPasswordResponseData = {
+      otp: response.data.otp,
+    };
+
+    // Return success result
+    const result: Result<ForgetPasswordRequestResponseType> = {
+      status: true,
+      data: forgetPasswordResponseData,
+      message: "A verification code has been sent to your email address.",
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error("Failed to send forgot password request:", error);
+
+    const isTimeout = error.message?.includes("timed out");
+
+    // Return failure result with user-friendly error message
+    const result: Result<ForgetPasswordRequestResponseType> = {
+      status: false,
+      data: null,
+      message: isTimeout
+        ? "The request timed out. Please check your internet connection and try again."
+        : "Unable to process your request at the moment. Please try again later.",
+    };
+
+    return result;
+  }
+};
 
 /**
  * Sends a registration request to the server with validated user data,
@@ -149,76 +339,10 @@ const accountRegistrationConfirmationAction = async (
   }
 };
 
-/**
- * Handles user login by validating credentials, sending them to the server,
- * and returning the structured login result including access token and user info.
- *
- * @param requestPayload - The login credentials (email and password)
- * @returns A Result containing user info and access token or error message
- */
-const accountLoginAction = async (requestPayload: LoginType) => {
-  // Validate the login payload using Zod
-  const safeParse = loginSchema.safeParse(requestPayload);
-  if (!safeParse.success) {
-    throw new Error("Invalid login data.");
-  }
-
-  try {
-    // Make POST request to the login endpoint
-    const response = await fetchZodTyped(
-      `${BASE_URL}/account/signin`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestPayload),
-      },
-      loginResponseSchema
-    );
-
-    // Structure the response data
-    const loginResponseData: LoginResponseType = {
-      user: {
-        id: response.data.user.id,
-        firstName: response.data.user.firstName,
-        lastName: response.data.user.lastName,
-        email: response.data.user.email,
-        phoneNumber: response.data.user.phoneNumber,
-        userRole: response.data.user.userRole,
-        accountStatus: response.data.user.accountStatus,
-      },
-      accessToken: response.data.accessToken,
-    };
-
-    // Successful result
-    const result: Result<LoginResponseType> = {
-      status: true,
-      data: loginResponseData,
-      message: "Login successful. Welcome back!",
-    };
-
-    return result;
-  } catch (error: any) {
-    console.error("Login request failed:", error);
-
-    const isTimeout = error.message?.includes("timed out");
-
-    // Failed result
-    const result: Result<LoginResponseType> = {
-      status: false,
-      data: null,
-      message: isTimeout
-        ? "Login request timed out. Please try again."
-        : "Login failed. Please check your credentials.",
-    };
-
-    return result;
-  }
-};
-
 export {
   accountLoginAction,
+  resetPasswordAction,
+  forgetPasswordRequestAction,
   accountRegistrationRequestAction,
   accountRegistrationConfirmationAction,
 };

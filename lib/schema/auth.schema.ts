@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-// Define a schema for validating user registration payload
+/**
+ * Registration Request Schema
+ */
+
+// Schema to validate user registration input
 export const registrationRequestSchema = z.object({
   firstName: z
     .string()
@@ -26,10 +30,14 @@ export const registrationRequestSchema = z.object({
     .optional(),
 });
 
-// Infer TypeScript type from schema
+// Type inferred from registrationRequestSchema
 export type RegistrationRequestType = z.infer<typeof registrationRequestSchema>;
 
-// Define a schema for validating user registration request response schema
+/**
+ * Registration Request Response Schema
+ */
+
+// Schema to validate backend response after registration request
 export const registrationRequestResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
@@ -39,23 +47,31 @@ export const registrationRequestResponseSchema = z.object({
   }),
 });
 
-// Infer TypeScript type from schema
+// Type inferred from `data` shape of registrationRequestResponseSchema
 export type RegistrationRequestResponseType = z.infer<
   typeof registrationRequestResponseSchema.shape.data
 >;
 
-// Define a schema for validating user registration confirmation payload
+/**
+ * Registration Confirmation Schema
+ */
+
+// Schema to validate OTP-based registration confirmation input
 export const registrationConfirmationSchema = z.object({
   email: z.string().email("Invalid email address"),
   otp: z.string().min(6, "OTP is required"),
 });
 
-// Infer TypeScript type from schema
+// Type inferred from registrationConfirmationSchema
 export type RegistrationConfirmationType = z.infer<
   typeof registrationConfirmationSchema
 >;
 
-// Define a schema for validating user registration Confirmation response schema
+//
+// 🔓 Registration Confirmation Response Schema
+//
+
+// Schema to validate backend response after confirming registration
 export const registrationConfirmationResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
@@ -71,12 +87,16 @@ export const registrationConfirmationResponseSchema = z.object({
   }),
 });
 
-// Infer TypeScript type from schema
+// Type inferred from `data` shape of registrationConfirmationResponseSchema
 export type RegistrationConfirmationResponseType = z.infer<
   typeof registrationConfirmationResponseSchema.shape.data
 >;
 
-// Define a schema for validating user login payload
+//
+// 🔑 Login Schema
+//
+
+// Schema to validate login form input
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z
@@ -85,10 +105,14 @@ export const loginSchema = z.object({
     .refine((value) => value.trim().length > 0, "Password is required"),
 });
 
-// Infer TypeScript type from schema
+// Type inferred from loginSchema
 export type LoginType = z.infer<typeof loginSchema>;
 
-// Login response schema
+/**
+ * Login Response Schema
+ */
+
+// Schema to validate backend response after login
 export const loginResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
@@ -107,5 +131,77 @@ export const loginResponseSchema = z.object({
   }),
 });
 
-// Inferred type
+// Type inferred from `data` shape of loginResponseSchema
 export type LoginResponseType = z.infer<typeof loginResponseSchema.shape.data>;
+
+/**
+ * Forgot Password Request Schema
+ */
+
+// Schema to validate forgot password form input
+export const forgetPasswordRequestSchema = z.object({
+  email: z.string().email("Invalid email address"),
+});
+
+// Type inferred from forgetPasswordRequestSchema
+export type ForgetPasswordRequestType = z.infer<
+  typeof forgetPasswordRequestSchema
+>;
+
+/**
+ * Forgot Password Request Response Schema
+ */
+
+// Schema to validate backend response after requesting password reset
+export const forgetPasswordRequestResponseSchema = z.object({
+  status: z.number(),
+  success: z.boolean(),
+  message: z.string(),
+  data: z.object({
+    otp: z.string().optional(),
+  }),
+});
+
+// Type inferred from `data` shape of forgetPasswordRequestResponseSchema
+export type ForgetPasswordRequestResponseType = z.infer<
+  typeof forgetPasswordRequestResponseSchema.shape.data
+>;
+
+/**
+ * Reset Password Schema
+ */
+
+// Schema to validate reset password form input
+export const resetPasswordSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  otp: z.string().min(6, "OTP is required"),
+  newPassword: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .refine((value) => value.trim().length > 0, "Password is required"),
+  retypePassword: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .refine((value) => value.trim().length > 0, "Password is required")
+    .optional(),
+});
+
+// Type inferred from resetPasswordSchema
+export type ResetPasswordType = z.infer<typeof resetPasswordSchema>;
+
+/**
+ * Reset Password Response Schema
+ */
+
+// Schema to validate backend response after resetting password
+export const resetPasswordResponseSchema = z.object({
+  status: z.literal(200),
+  success: z.literal(true),
+  message: z.literal("Password updated successfully"),
+  data: z.object({}).strict(),
+});
+
+// Type inferred from `data` shape of resetPasswordResponseSchema
+export type ResetPasswordResponseType = z.infer<
+  typeof resetPasswordResponseSchema.shape.data
+>;

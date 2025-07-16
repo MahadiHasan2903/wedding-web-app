@@ -222,7 +222,7 @@ const RegistrationForm = () => {
           </Link>
         </div>
         <div className="text-[14px] font-normal flex items-center gap-1">
-          Already have an account?
+          Don't have an account?
           <Link href="/login" className="underline">
             Sign in
           </Link>

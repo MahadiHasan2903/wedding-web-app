@@ -17,13 +17,17 @@ import {
   forgetPasswordRequestSchema,
   resetPasswordResponseSchema,
   RegistrationConfirmationType,
+  ForgetPasswordConfirmationType,
   registrationConfirmationSchema,
   RegistrationRequestResponseType,
+  forgetPasswordConfirmationSchema,
   registrationRequestResponseSchema,
   ForgetPasswordRequestResponseType,
   forgetPasswordRequestResponseSchema,
   RegistrationConfirmationResponseType,
   registrationConfirmationResponseSchema,
+  forgetPasswordConfirmationResponseSchema,
+  ForgetPasswordConfirmationResponseType,
 } from "@/lib/schema/auth.schema";
 
 /**
@@ -209,6 +213,65 @@ const forgetPasswordRequestAction = async (
 };
 
 /**
+ * Verifies the OTP code sent during the "Forgot Password" process.
+ *
+ * This function first validates the input using a Zod schema. If valid, it sends a POST request
+ * to the backend to confirm the OTP. The response indicates whether the user can proceed to reset the password.
+ *
+ * @param requestPayload - The payload containing the user's email and OTP code.
+ * @returns A Result object indicating the outcome, including a message and optional data.
+ */
+const forgetPasswordConfirmationAction = async (
+  requestPayload: ForgetPasswordConfirmationType
+) => {
+  // Validate input against the schema
+  const safeParse = forgetPasswordConfirmationSchema.safeParse(requestPayload);
+
+  if (!safeParse.success) {
+    throw new Error("Invalid OTP confirmation data provided.");
+  }
+
+  try {
+    // Send POST request to backend to verify OTP
+    const response = await fetchZodTyped(
+      `${BASE_URL}/account/verify-forget-password-otp`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestPayload),
+      },
+      forgetPasswordConfirmationResponseSchema
+    );
+
+    // Return success result
+    const result: Result<ForgetPasswordConfirmationResponseType> = {
+      status: true,
+      data: response.data,
+      message: "OTP verified successfully. You may now reset your password.",
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error("OTP verification failed:", error);
+
+    const isTimeout = error.message?.includes("timed out");
+
+    // Return failure result with appropriate error message
+    const result: Result<ForgetPasswordConfirmationResponseType> = {
+      status: false,
+      data: null,
+      message: isTimeout
+        ? "The request timed out. Please check your internet connection and try again."
+        : "Failed to verify OTP. Please make sure the code is correct and try again.",
+    };
+
+    return result;
+  }
+};
+
+/**
  * Sends a registration request to the server with validated user data,
  * and returns the result including the OTP if successful.
  *
@@ -343,6 +406,7 @@ export {
   accountLoginAction,
   resetPasswordAction,
   forgetPasswordRequestAction,
+  forgetPasswordConfirmationAction,
   accountRegistrationRequestAction,
   accountRegistrationConfirmationAction,
 };

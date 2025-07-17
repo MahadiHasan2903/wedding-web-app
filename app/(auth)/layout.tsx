@@ -1,8 +1,8 @@
 import React, { ReactNode } from "react";
 import { ImageWithFallback } from "@/lib/components/image";
-import authBanner from "@/public/images/auth/auth-banner.svg";
+import authBanner from "@/public/images/auth/auth-banner-1.svg";
 
-const ApplicationLayout = ({
+const AuthLayout = ({
   children,
 }: Readonly<{
   children: ReactNode;
@@ -26,4 +26,4 @@ const ApplicationLayout = ({
   );
 };
 
-export default ApplicationLayout;
+export default AuthLayout;

@@ -24,8 +24,8 @@ import {
 const RegistrationForm = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [email, setEmail] = useState<string>("");
+  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [passwordError, setPasswordError] = useState<string>("");
   const [openVerificationModal, setOpenVerificationModal] = useState(false);
 
@@ -110,7 +110,7 @@ const RegistrationForm = () => {
     >
       <div className="w-full flex flex-col items-center gap-[40px]">
         <AuthSectionTitle title="Create a New Account" />
-        <div className="w-full flex items-center gap-2 border border-[#A1A1A1 px-[20px] py-[12px] rounded-[10px]">
+        <div className="w-full flex items-center gap-2 border border-[#A1A1A1] px-[20px] py-[12px] rounded-[10px]">
           <ImageWithFallback src={google} width={16} height={16} alt="google" />
           <h3 className="w-full text-[14px] text-center font-normal">
             Continue with Google
@@ -125,6 +125,7 @@ const RegistrationForm = () => {
           <Controller
             name="firstName"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <UnderlineInput
                 {...field}
@@ -139,6 +140,7 @@ const RegistrationForm = () => {
           <Controller
             name="lastName"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <UnderlineInput
                 {...field}
@@ -155,6 +157,7 @@ const RegistrationForm = () => {
         <Controller
           name="email"
           control={control}
+          defaultValue=""
           render={({ field }) => (
             <UnderlineInput
               {...field}
@@ -172,6 +175,7 @@ const RegistrationForm = () => {
             <Controller
               name="password"
               control={control}
+              defaultValue=""
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
@@ -185,6 +189,7 @@ const RegistrationForm = () => {
             <Controller
               name="retypePassword"
               control={control}
+              defaultValue=""
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
@@ -222,7 +227,7 @@ const RegistrationForm = () => {
           </Link>
         </div>
         <div className="text-[14px] font-normal flex items-center gap-1">
-          Don't have an account?
+          Already have an account?
           <Link href="/login" className="underline">
             Sign in
           </Link>

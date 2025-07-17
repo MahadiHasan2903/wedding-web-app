@@ -6,7 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SectionTitle } from "@/lib/components/heading";
 import { ImageWithFallback } from "@/lib/components/image";
-import { Input, Textarea } from "@/lib/components/form-elements";
+import { OutlinedInput, Textarea } from "@/lib/components/form-elements";
 import {
   contactSubmissionFormSchema,
   ContactSubmissionFormType,
@@ -25,6 +25,7 @@ const ContactForm = () => {
   const handleContactFormSubmit = (data: ContactSubmissionFormType) => {
     console.log("Form Submitted:", JSON.stringify(data, null, 2));
   };
+
   return (
     <div className="w-full p-[18px] sm:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px]">
       <div className="flex flex-col gap-[25px] lg:gap-[55px]">
@@ -66,7 +67,7 @@ const ContactForm = () => {
               defaultValue=""
               control={control}
               render={({ field }) => (
-                <Input
+                <OutlinedInput
                   {...field}
                   type="text"
                   placeholder="First Name *"
@@ -79,7 +80,7 @@ const ContactForm = () => {
               defaultValue=""
               control={control}
               render={({ field }) => (
-                <Input
+                <OutlinedInput
                   {...field}
                   type="text"
                   placeholder="Last Name *"
@@ -95,7 +96,7 @@ const ContactForm = () => {
               defaultValue=""
               control={control}
               render={({ field }) => (
-                <Input
+                <OutlinedInput
                   {...field}
                   type="email"
                   placeholder="Email Address *"
@@ -108,7 +109,7 @@ const ContactForm = () => {
               defaultValue=""
               control={control}
               render={({ field }) => (
-                <Input
+                <OutlinedInput
                   {...field}
                   type="text"
                   placeholder="Phone Number"
@@ -124,7 +125,7 @@ const ContactForm = () => {
             defaultValue=""
             control={control}
             render={({ field }) => (
-              <Input
+              <OutlinedInput
                 {...field}
                 type="text"
                 placeholder="Subject *"

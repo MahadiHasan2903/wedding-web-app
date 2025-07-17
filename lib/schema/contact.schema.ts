@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// Define a schema for validating contact submission request input
 export const contactSubmissionFormSchema = z.object({
   firstName: z
     .string()
@@ -21,6 +22,7 @@ export const contactSubmissionFormSchema = z.object({
     .refine((value) => value.trim().length > 0, "Message is required"),
 });
 
+// Infer TypeScript type from schema
 export type ContactSubmissionFormType = z.infer<
   typeof contactSubmissionFormSchema
 >;

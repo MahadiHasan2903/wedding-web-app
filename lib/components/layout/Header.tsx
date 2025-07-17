@@ -11,7 +11,7 @@ import { ImageWithFallback } from "@/lib/components/image";
 import { avatar, crown, hamburger } from "@/lib/components/image/icons";
 
 const Header = () => {
-  let accessToken = "accessToken";
+  let accessToken = null;
 
   return (
     <div className="w-full bg-primary text-vipLight">

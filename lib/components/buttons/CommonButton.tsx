@@ -37,7 +37,9 @@ const CommonButton = ({
       <Link
         href={href}
         className={`${
-          disabled ? "cursor-not-allowed" : "cursor-pointer"
+          disabled
+            ? "cursor-not-allowed bg-opacity-50"
+            : "cursor-pointer bg-opacity-100"
         } ${className}`}
       >
         {content}
@@ -51,7 +53,9 @@ const CommonButton = ({
       onClick={onClick}
       disabled={disabled}
       className={`${
-        disabled ? "cursor-not-allowed" : "cursor-pointer"
+        disabled
+          ? "cursor-not-allowed bg-opacity-50"
+          : "cursor-pointer bg-opacity-100"
       } ${className}`}
     >
       {content}

@@ -9,7 +9,7 @@ import React, {
   ClipboardEvent,
   SetStateAction,
 } from "react";
-import { AuthSectionTitle } from "@/lib/components/heading";
+import { SubHeading } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 
 interface PropsType {
@@ -76,7 +76,7 @@ const VerificationModal = ({
       {open && (
         <div className="fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/80 px-4 py-5">
           <div className="w-full max-w-[600px] rounded-[10px] bg-white px-[36px] py-[24px] flex flex-col gap-[30px]">
-            <AuthSectionTitle title="Verify Email" />
+            <SubHeading title="Verify Email" />
             <div className="flex flex-col items-start gap-[10px]">
               <p className="text-[14px] font-semibold">
                 Enter the OTP sent to your email

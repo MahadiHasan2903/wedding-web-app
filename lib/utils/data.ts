@@ -16,7 +16,7 @@ export const navItems = [
   },
   {
     label: "Search",
-    href: "/search",
+    href: "/match-finder",
   },
   {
     label: "About",

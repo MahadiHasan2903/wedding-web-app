@@ -5,7 +5,7 @@ interface PropsType {
   className?: string;
 }
 
-const AuthSectionTitle = ({ title, className }: PropsType) => {
+const SubHeading = ({ title, className }: PropsType) => {
   return (
     <div className={`text-[24px] font-medium text-primary ${className || ""}`}>
       {title}
@@ -13,4 +13,4 @@ const AuthSectionTitle = ({ title, className }: PropsType) => {
   );
 };
 
-export default AuthSectionTitle;
+export default SubHeading;

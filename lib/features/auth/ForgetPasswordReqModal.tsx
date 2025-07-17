@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
-import { AuthSectionTitle } from "@/lib/components/heading";
+import { SubHeading } from "@/lib/components/heading";
 import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
 import { forgetPasswordRequestAction } from "@/lib/action/auth/auth.action";
 import {
@@ -85,7 +85,7 @@ const ForgetPasswordReqModal = ({
             onClick={(e) => e.stopPropagation()}
             className="w-full max-w-[600px] rounded-[10px] bg-white px-[36px] py-[24px] flex flex-col gap-[30px]"
           >
-            <AuthSectionTitle title="Forget Password" />
+            <SubHeading title="Forget Password" />
 
             <Controller
               name="email"

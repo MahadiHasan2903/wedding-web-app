@@ -1,10 +1,11 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "slick-carousel/slick/slick.css";
+import { Inter } from "next/font/google";
 import "slick-carousel/slick/slick-theme.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import AuthProvider from "@/lib/providers/AuthProvider";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,22 +26,24 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased bg-light`}>
-        <main>
-          <div className="w-full">{children}</div>
-          <ToastContainer
-            position="top-right"
-            autoClose={2000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            draggable
-            theme="light"
-            style={{
-              zIndex: 9999999,
-            }}
-          />
-        </main>
+        <AuthProvider>
+          <main>
+            <div className="w-full">{children}</div>
+            <ToastContainer
+              position="top-right"
+              autoClose={2000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              draggable
+              theme="light"
+              style={{
+                zIndex: 9999999,
+              }}
+            />
+          </main>
+        </AuthProvider>
       </body>
     </html>
   );

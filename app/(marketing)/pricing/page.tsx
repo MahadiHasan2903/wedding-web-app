@@ -1,6 +1,6 @@
 import React from "react";
-import { FAQ, HeroBanner } from "@/lib/features/common";
-import { MembershipPlans } from "@/lib/features/pricing";
+import { FAQ, HeroBanner } from "@/lib/features/marketing/common";
+import { MembershipPlans } from "@/lib/features/marketing/pricing";
 
 const PricingPage = () => {
   return (

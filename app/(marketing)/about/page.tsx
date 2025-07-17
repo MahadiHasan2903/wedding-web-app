@@ -1,10 +1,10 @@
 import React from "react";
-import { FAQ, FindMatch, HeroBanner } from "@/lib/features/common";
+import { FAQ, FindMatch, HeroBanner } from "@/lib/features/marketing/common";
 import {
   CompanyStorySection,
   UniqueSellingPoints,
   LookingAheadSection,
-} from "@/lib/features/about";
+} from "@/lib/features/marketing/about";
 
 const AboutPage = () => {
   return (

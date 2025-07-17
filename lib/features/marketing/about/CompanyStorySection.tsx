@@ -1,7 +1,7 @@
 import React from "react";
-import { HeadingLine, SectionTitle } from "@/lib/components/heading";
 import storyImage from "@/public/images/about/story.jpg";
 import { ImageWithFallback } from "@/lib/components/image";
+import { HeadingLine, SectionTitle } from "@/lib/components/heading";
 
 const CompanyStorySection = () => {
   return (

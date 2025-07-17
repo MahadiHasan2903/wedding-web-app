@@ -1,10 +1,10 @@
 import React from "react";
-import { FAQ, FindMatch } from "@/lib/features/common";
+import { FAQ, FindMatch } from "@/lib/features/marketing/common";
 import {
   HeroSection,
   WhyChooseUs,
   MatchMakingStories,
-} from "@/lib/features/home";
+} from "@/lib/features/marketing/home";
 
 const HomePage = () => {
   return (

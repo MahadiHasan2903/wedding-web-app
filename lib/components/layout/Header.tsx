@@ -9,9 +9,11 @@ import vipRig from "@/public/images/common/vip-ring.png";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { avatar, crown, hamburger } from "@/lib/components/image/icons";
+import { useSession } from "next-auth/react";
 
 const Header = () => {
-  let accessToken = null;
+  const { data: session } = useSession();
+  const accessToken = session?.user.accessToken;
 
   return (
     <div className="w-full bg-primary text-vipLight">

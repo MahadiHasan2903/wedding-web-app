@@ -1,7 +1,7 @@
 import React from "react";
 import dynamic from "next/dynamic";
+import { getQueryParam } from "@/lib/utils/helpers";
 
-// Dynamically import components (disable SSR if needed for client-only behavior)
 const AdvanceSearch = dynamic(
   () =>
     import("@/lib/features/marketing/match-finder").then(
@@ -18,7 +18,63 @@ const MatchedProfilesList = dynamic(
   { ssr: false }
 );
 
-const MatchFinderPage = () => {
+interface PropsType {
+  searchParams: { [key: string]: string | string[] | undefined };
+}
+
+const MatchFinderPage = ({ searchParams }: PropsType) => {
+  // Get the current page number as string, then parse to number with fallback
+  const pageStr = getQueryParam(searchParams, "page");
+  const page = Number(pageStr) > 0 ? Number(pageStr) : 1;
+
+  //filter options
+  const lookingFor = getQueryParam(searchParams, "lookingFor");
+  const ageRange = getQueryParam(searchParams, "age");
+  const heightRange = getQueryParam(searchParams, "height");
+  const weightRange = getQueryParam(searchParams, "weight");
+  const maritalStatus = getQueryParam(searchParams, "maritalStatus");
+  const haveChildren = getQueryParam(searchParams, "haveChildren");
+  const religion = getQueryParam(searchParams, "religion");
+  const politicalView = getQueryParam(searchParams, "politicalView");
+  const countryLiving = getQueryParam(searchParams, "country");
+  const spokenLanguage = getQueryParam(searchParams, "languageSpoken");
+  const education = getQueryParam(searchParams, "education");
+  const profession = getQueryParam(searchParams, "profession");
+  const monthlyIncome = getQueryParam(searchParams, "monthlyIncome");
+  const livingArrangement = getQueryParam(searchParams, "livingArrangement");
+  const familyMembers = getQueryParam(searchParams, "familyMember");
+  const havePet = getQueryParam(searchParams, "hasPet");
+  const dietaryPreference = getQueryParam(searchParams, "dietaryPreference");
+  const smokingHabit = getQueryParam(searchParams, "smokingHabit");
+  const drinkingHabit = getQueryParam(searchParams, "drinkingHabit");
+  const healthCondition = getQueryParam(searchParams, "healthCondition");
+
+  // Combine into an object to pass as props
+  const filterValues = {
+    lookingFor,
+    age: ageRange,
+    height: heightRange,
+    weight: weightRange,
+    maritalStatus,
+    haveChildren,
+    religion,
+    politicalView,
+    country: countryLiving,
+    languageSpoken: spokenLanguage,
+    education,
+    profession,
+    monthlyIncome,
+    livingArrangement,
+    familyMember: familyMembers,
+    hasPet: havePet,
+    dietaryPreference,
+    smokingHabit,
+    drinkingHabit,
+    healthCondition,
+  };
+
+  console.log("Filter Values:", JSON.stringify(filterValues, null, 2));
+
   return (
     <div className="w-full p-[18px] sm:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[50px]">
       <AdvanceSearch />

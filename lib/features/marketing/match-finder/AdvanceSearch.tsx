@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { enumToOptions } from "@/lib/utils/helpers";
+import { useRouter } from "next/navigation";
+import { enumToOptions, rangeToString } from "@/lib/utils/helpers";
 import { SubHeading } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { findMatch } from "@/lib/components/image/icons";
@@ -18,7 +19,6 @@ import {
   PoliticalView,
   SpokenLanguage,
   HealthCondition,
-  FamilyBackground,
   HighestEducation,
   LivingArrangement,
   DietaryPreference,
@@ -30,6 +30,8 @@ import {
 } from "@/lib/components/form-elements/advance-search";
 
 const AdvanceSearch = () => {
+  const router = useRouter();
+
   const [religion, setReligion] = useState("");
   const [education, setEducation] = useState("");
   const [profession, setProfession] = useState("");
@@ -39,7 +41,6 @@ const AdvanceSearch = () => {
   const [countryLiving, setCountryLiving] = useState("");
   const [spokenLanguage, setSpokenLanguage] = useState("");
   const [healthCondition, setHealthCondition] = useState("");
-  const [familyBackground, setFamilyBackground] = useState("");
   const [livingArrangement, setLivingArrangement] = useState("");
   const [ageRange, setAgeRange] = useState({ start: 0, end: 0 });
   const [dietaryPreference, setDietaryPreference] = useState("");
@@ -48,34 +49,46 @@ const AdvanceSearch = () => {
   const [weightRange, setWeightRange] = useState({ start: 0, end: 0 });
   const [heightRange, setHeightRange] = useState({ start: 0, end: 0 });
   const [monthlyIncome, setMonthlyIncome] = useState({ start: 0, end: 0 });
+  const [familyMembers, setFamilyMembers] = useState({ start: 0, end: 0 });
   const [haveChildren, setHaveChildren] = useState<BooleanStatus | string>("");
   const [maritalStatus, setMaritalStatus] = useState<MaritalStatus | string>(
     ""
   );
 
   const handleSearch = () => {
-    console.log("Advance Search Filters:", {
+    const filters = {
       lookingFor,
-      ageRange,
-      heightRange,
-      weightRange,
+      age: rangeToString(ageRange),
+      height: rangeToString(heightRange),
+      weight: rangeToString(weightRange),
       maritalStatus,
       haveChildren,
       religion,
       politicalView,
-      countryLiving,
-      spokenLanguage,
+      country: countryLiving,
+      languageSpoken: spokenLanguage,
       education,
       profession,
-      monthlyIncome,
+      monthlyIncome: rangeToString(monthlyIncome),
       livingArrangement,
-      familyBackground,
-      havePet,
+      familyMember: rangeToString(familyMembers),
+      hasPet: havePet,
       dietaryPreference,
       smokingHabit,
       drinkingHabit,
       healthCondition,
+    };
+
+    const searchParams = new URLSearchParams();
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== "" && value !== undefined) {
+        searchParams.set(key, value);
+      }
     });
+
+    // Push the URL with query params
+    router.replace(`/match-finder?${searchParams.toString()}`);
   };
 
   return (
@@ -221,13 +234,12 @@ const AdvanceSearch = () => {
             onChange={setLivingArrangement}
             placeholder="Doesn't Matter"
           />
-          <SelectField
-            label="Family Background"
-            name="familyBackground"
-            options={enumToOptions(FamilyBackground)}
-            value={familyBackground}
-            onChange={setFamilyBackground}
-            placeholder="Doesn't Matter"
+
+          <NumberRangeField
+            label="Family Members"
+            startValue={familyMembers.start}
+            endValue={familyMembers.end}
+            onChange={(start, end) => setFamilyMembers({ start, end })}
           />
           <RadioGroupField
             label="Have Pet"

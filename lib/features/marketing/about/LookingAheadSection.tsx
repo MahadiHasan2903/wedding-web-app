@@ -11,8 +11,8 @@ const LookingAheadSection = () => {
       <div className="w-1/2 h-[330px] relative overflow-hidden">
         <ImageWithFallback
           src={community}
-          layout="fill"
-          objectFit="cover"
+          fill
+          className="object-cover"
           alt="community"
         />
       </div>

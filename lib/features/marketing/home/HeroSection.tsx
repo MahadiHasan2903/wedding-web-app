@@ -44,8 +44,8 @@ const HeroSection = () => {
           <div className="w-[80px] h-[80px] sm:w-[130px] sm:h-[120px] md:w-[180px] md:h-[150px] xl:w-[275px] xl:h-[250px] relative">
             <ImageWithFallback
               src={girlsGroups}
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="object-cover"
               alt="girlsGroups"
             />
           </div>

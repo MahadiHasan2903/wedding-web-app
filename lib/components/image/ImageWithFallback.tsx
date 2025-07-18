@@ -8,11 +8,10 @@ interface ImageWithFallbackProps {
   src: string | StaticImageData;
   alt: string;
   fallBackImage?: string | StaticImageData;
-  layout?: string;
-  objectFit?: string;
   className?: string;
   width?: number;
   height?: number;
+  fill?: boolean;
   onError?: (e: any) => void;
   onClick?: (e: any) => void;
 }
@@ -20,12 +19,11 @@ interface ImageWithFallbackProps {
 const ImageWithFallback = ({
   src,
   alt,
-  layout,
   fallBackImage = fallbackImage,
   className,
-  objectFit,
   width,
   height,
+  fill,
   onError,
   onClick,
 }: ImageWithFallbackProps) => {
@@ -36,25 +34,22 @@ const ImageWithFallback = ({
   }, [src]);
 
   const handleError = (e: any) => {
-    if (onError) {
-      onError(e);
-    }
+    if (onError) onError(e);
     setImageSrc(fallBackImage);
   };
 
-  const imageProps = {
-    src: imageSrc,
-    objectFit,
-    className,
-    onError: handleError,
-    onClick,
-  };
-
-  if (width && height) {
-    return <Image {...imageProps} width={width} height={height} alt={alt} />;
-  }
-
-  return <Image {...imageProps} layout={layout} alt={alt} />;
+  return (
+    <Image
+      src={imageSrc}
+      alt={alt}
+      width={width}
+      height={height}
+      fill={fill}
+      className={className}
+      onError={handleError}
+      onClick={onClick}
+    />
+  );
 };
 
 export default ImageWithFallback;

@@ -17,8 +17,8 @@ const StoryCard = ({ story }: PropsType) => {
       <div className="w-[225px] sm:w-full h-[175px] sm:h-[300px] relative overflow-hidden rounded-[10px]">
         <ImageWithFallback
           src={story.thumbnail}
-          layout="fill"
-          objectFit="cover"
+          fill
+          className="object-cover"
           alt={story.name}
         />
       </div>

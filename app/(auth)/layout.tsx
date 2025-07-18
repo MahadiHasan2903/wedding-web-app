@@ -14,8 +14,8 @@ const AuthLayout = ({
           <div className="w-full h-screen relative overflow-hidden">
             <ImageWithFallback
               src={authBanner}
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="object-cover"
               alt="authBanner"
             />
           </div>

@@ -68,6 +68,8 @@ const accountLoginAction = async (requestPayload: LoginType) => {
         phoneNumber: response.data.user.phoneNumber,
         userRole: response.data.user.userRole,
         accountStatus: response.data.user.accountStatus,
+        profilePicture: response.data.user.profilePicture,
+        purchasedMembership: response.data.user.purchasedMembership,
       },
       accessToken: response.data.accessToken,
     };

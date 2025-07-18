@@ -13,7 +13,13 @@ import { useSession } from "next-auth/react";
 
 const Header = () => {
   const { data: session } = useSession();
-  const accessToken = session?.user.accessToken;
+
+  const accessToken = session?.user.accessToken ?? null;
+
+  const profileImageUrl = session?.user.data.profilePicture?.url ?? avatar;
+
+  const isVipUser =
+    session?.user.data.purchasedMembership?.membershipPackageInfo?.id === 2;
 
   return (
     <div className="w-full bg-primary text-vipLight">
@@ -53,20 +59,21 @@ const Header = () => {
               />
               <div className="w-[48px] h-[48px] relative flex items-center justify-center">
                 <ImageWithFallback
-                  src={user}
+                  src={profileImageUrl}
                   width={45}
                   height={45}
                   alt="user"
                   className="absolute cursor-pointer rounded-full overflow-hidden"
                 />
-
-                <ImageWithFallback
-                  src={vipRig}
-                  width={48}
-                  height={48}
-                  alt="ring"
-                  className="cursor-pointer z-10"
-                />
+                {isVipUser && (
+                  <ImageWithFallback
+                    src={vipRig}
+                    width={48}
+                    height={48}
+                    alt="ring"
+                    className="cursor-pointer z-10"
+                  />
+                )}
               </div>
             </div>
           ) : (
@@ -117,10 +124,12 @@ const Header = () => {
               className="absolute cursor-pointer rounded-full overflow-hidden"
             />
 
+            {}
+
             <ImageWithFallback
               src={vipRig}
-              width={42}
-              height={42}
+              width={40}
+              height={40}
               alt="ring"
               className="cursor-pointer z-10"
             />

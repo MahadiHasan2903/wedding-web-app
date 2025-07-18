@@ -1,4 +1,6 @@
 import "next-auth";
+import { Media } from "./common.types";
+import { PurchasedMembership } from "../membership/ms-purchase.types";
 
 interface BaseUser {
   data: {
@@ -10,6 +12,8 @@ interface BaseUser {
     phoneNumber: string | null;
     userRole: string;
     accountStatus: string;
+    profilePicture: Media | null;
+    purchasedMembership: PurchasedMembership;
   };
   accessToken: string;
 }

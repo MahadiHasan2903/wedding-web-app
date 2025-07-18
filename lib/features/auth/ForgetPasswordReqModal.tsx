@@ -48,8 +48,6 @@ const ForgetPasswordReqModal = ({
       email: data.email,
     };
 
-    console.log("Payload:", requestPayload);
-
     // Send forget password request to server
     const forgetPasswordResponse = await forgetPasswordRequestAction(
       requestPayload

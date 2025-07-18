@@ -27,8 +27,6 @@ const PricingCard = ({
   color = "primary",
   badge,
 }: PropsType) => {
-  console.log(color);
-
   return (
     <div className="w-[385px] min-h-[650px] relative flex flex-col items-start p-[30px] gap-[25px] border border-[#B0B1B3] rounded-[10px] overflow-hidden">
       {badge && (

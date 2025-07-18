@@ -45,15 +45,24 @@ export const rangeToString = (range: { start: number; end: number }) => {
 /**
  * Safely retrieve a query parameter from a searchParams object.
  * Trims whitespace and ensures the return value is always a string.
+ * If the parameter is not a valid string, returns the provided fallback value (converted to string),
+ * or an empty string if no fallback is specified.
  *
- * @param searchParams - An object representing URL query parameters
- * @param key - The key to extract from searchParams
- * @returns The query value as a trimmed string, or an empty string if not present or invalid
+ * @param searchParams - An object representing URL query parameters.
+ * @param key - The key to extract from searchParams.
+ * @param fallback - Optional fallback value (string, number, or boolean) to return if the key is missing or invalid.
+ * @returns The query value as a trimmed string, or the fallback value as a string.
  */
+
 export const getQueryParam = (
   searchParams: { [key: string]: string | string[] | undefined },
-  key: string
+  key: string,
+  fallback: string | number | boolean = ""
 ): string => {
   const value = searchParams[key];
-  return typeof value === "string" ? value.trim() : "";
+  if (typeof value === "string") {
+    return value.trim();
+  }
+
+  return String(fallback);
 };

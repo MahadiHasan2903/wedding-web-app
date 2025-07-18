@@ -7,6 +7,7 @@ import quote from "@/public/icons/quote.svg";
 import avatar from "@/public/icons/avatar.svg";
 import google from "@/public/icons/google.svg";
 import polygon from "@/public/icons/polygon.svg";
+import redHeart from "@/public/icons/red-heart.svg";
 import hamburger from "@/public/icons/hamburger.svg";
 import findMatch from "@/public/icons/find-match.svg";
 import tickCircle from "@/public/icons/tick-circle.svg";
@@ -21,6 +22,7 @@ export {
   mail,
   google,
   polygon,
+  redHeart,
   hamburger,
   findMatch,
   tickCircle,

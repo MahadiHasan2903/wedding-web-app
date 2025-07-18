@@ -4,8 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { navItems } from "@/lib/utils/data";
 import logo from "@/public/images/logo/logo.svg";
-import user from "@/public/images/common/user.png";
-import vipRig from "@/public/images/common/vip-ring.png";
+import vipRing from "@/public/images/common/vip-ring.png";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { avatar, crown, hamburger } from "@/lib/components/image/icons";
@@ -67,7 +66,7 @@ const Header = () => {
                 />
                 {isVipUser && (
                   <ImageWithFallback
-                    src={vipRig}
+                    src={vipRing}
                     width={48}
                     height={48}
                     alt="ring"
@@ -117,17 +116,15 @@ const Header = () => {
         {accessToken ? (
           <div className="w-[42px] h-[42px] relative flex items-center justify-center">
             <ImageWithFallback
-              src={user}
+              src={profileImageUrl}
               width={45}
               height={45}
               alt="user"
               className="absolute cursor-pointer rounded-full overflow-hidden"
             />
 
-            {}
-
             <ImageWithFallback
-              src={vipRig}
+              src={vipRing}
               width={40}
               height={40}
               alt="ring"

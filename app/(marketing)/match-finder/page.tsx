@@ -23,10 +23,10 @@ interface PropsType {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-const MatchFinderPage = ({ searchParams }: PropsType) => {
+const MatchFinderPage = async ({ searchParams }: PropsType) => {
   // Get the current page number as string, then parse to number with fallback
-  const pageStr = getQueryParam(searchParams, "page");
-  const page = Number(pageStr) > 0 ? Number(pageStr) : 1;
+  const page = Number(getQueryParam(searchParams, "page", 1));
+  const pageSize = Number(getQueryParam(searchParams, "pageSize", 50));
 
   //filter options
   const lookingFor = getQueryParam(searchParams, "lookingFor");
@@ -74,12 +74,12 @@ const MatchFinderPage = ({ searchParams }: PropsType) => {
     healthCondition,
   };
 
-  const getAllUsersData = api.users.getAllUsers();
+  const getAllUsersData = await api.users.getAllUsers();
 
   return (
     <div className="w-full p-[18px] sm:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[50px]">
       <AdvanceSearch />
-      <MatchedProfilesList />
+      <MatchedProfilesList getAllUsersData={getAllUsersData} />
     </div>
   );
 };

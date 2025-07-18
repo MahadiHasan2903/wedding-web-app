@@ -93,7 +93,7 @@ const AdvanceSearch = () => {
 
   return (
     <div className="w-full bg-white rounded-[10px]">
-      <div className="flex items-center justify-between pb-[16px] px-[20px] py-[27px] ">
+      <div className="flex items-center justify-between pb-[16px] px-[20px] py-[27px]">
         <SubHeading title="Refine Your Search" />
         <CommonButton
           onClick={handleSearch}
@@ -104,7 +104,7 @@ const AdvanceSearch = () => {
               src={findMatch}
               width={15}
               height={15}
-              alt="crown"
+              alt="findMatch"
             />
           }
         />

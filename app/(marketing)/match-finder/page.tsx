@@ -1,4 +1,5 @@
 import React from "react";
+import api from "@/lib/api";
 import dynamic from "next/dynamic";
 import { getQueryParam } from "@/lib/utils/helpers";
 
@@ -73,7 +74,7 @@ const MatchFinderPage = ({ searchParams }: PropsType) => {
     healthCondition,
   };
 
-  console.log("Filter Values:", JSON.stringify(filterValues, null, 2));
+  const getAllUsersData = api.users.getAllUsers();
 
   return (
     <div className="w-full p-[18px] sm:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[50px]">

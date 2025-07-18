@@ -2,7 +2,7 @@
 
 import { BASE_URL } from "@/lib/config/constants";
 import { fetchZodTyped } from "../client";
-import { Result } from "@/lib/types/common/result.types";
+import { Result } from "@/lib/types/common/common.types";
 import {
   LoginType,
   loginSchema,

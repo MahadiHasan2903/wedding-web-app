@@ -16,12 +16,12 @@ const UserCard = ({ user }: UserCardProps) => {
   const isVipUser = user.purchasedMembership?.membershipPackageInfo.id === 2;
   return (
     <div
-      className={`w-[240px] h-[350px] flex flex-col items-center rounded-[10px] py-[25px] ${
+      className={`w-[150px] sm:w-[180px] lg:w-[240px] h-auto sm:h-[250px] lg:h-[350px] mx-auto flex flex-col items-center rounded-[10px] py-[8px] lg:py-[25px] ${
         isVipUser ? "bg-vip-gradient" : "bg-white"
       }`}
     >
-      <div className="w-[150px] h-[160px] relative flex items-center justify-center">
-        <div className="w-[145px] h-[145px] relative overflow-hidden">
+      <div className="w-[90px] lg:w-[150px] h-[90px] lg:h-[160px] relative flex items-center justify-center">
+        <div className="w-[80px] lg:w-[145px] h-[80px] lg:h-[145px] relative overflow-hidden">
           <ImageWithFallback
             fill
             alt="user"
@@ -32,7 +32,7 @@ const UserCard = ({ user }: UserCardProps) => {
         </div>
 
         {isVipUser && (
-          <div className="absolute w-[150px] h-[160px] top-[-3px] z-10">
+          <div className="absolute w-[90px] lg:w-[150px] h-[90px] lg:h-[160px] top-[2px] lg:top-[-3px] z-10">
             <ImageWithFallback
               src={vipRing2}
               fill
@@ -46,12 +46,12 @@ const UserCard = ({ user }: UserCardProps) => {
       <div
         className={`${
           isVipUser ? "bg-gold-gradient" : "bg-transparent"
-        } w-full flex flex-col py-1 items-center gap-[5px] my-[25px]`}
+        } w-full flex flex-col py-1 items-center gap-[8px] my-[8px] lg:my-[25px]`}
       >
-        <h2 className="text-[20px] font-medium">
+        <h2 className="text-[14px] lg:text-[20px] font-medium">
           {user.firstName} {user.lastName}
         </h2>
-        <p className="text-[14px] font-medium">
+        <p className="text-[12px] lg:text-[14px] font-medium">
           {user.dateOfBirth
             ? `${calculateAgeFromDOB(user.dateOfBirth)} Years Old`
             : "Age Unknown"}
@@ -66,7 +66,7 @@ const UserCard = ({ user }: UserCardProps) => {
           isVipUser
             ? "btn-gold-gradient border-none"
             : "bg-transparent border border-[#A1A1A1]"
-        } w-fit flex items-center gap-[5px] text-[14px] font-normal p-[10px] rounded-full`}
+        } w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal p-[10px] rounded-full`}
         startIcon={
           <ImageWithFallback
             src={redHeart}

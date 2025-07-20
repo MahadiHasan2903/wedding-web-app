@@ -7,7 +7,7 @@ interface PropsType {
 
 const SubHeading = ({ title, className }: PropsType) => {
   return (
-    <div className={`text-[24px] font-medium text-primary ${className || ""}`}>
+    <div className={`text-[14px] sm:text-[24px] font-medium text-primary ${className || ""}`}>
       {title}
     </div>
   );

@@ -100,7 +100,7 @@ const AdvanceSearch = () => {
         <CommonButton
           onClick={handleSearch}
           label="Search For Matches"
-          className="w-fit flex items-center gap-2 px-[24px] py-[12px] bg-primary text-white text-[14px] font-normal rounded-full"
+          className="w-fit hidden lg:flex items-center gap-2 px-[24px] py-[12px] bg-primary text-white text-[14px] font-normal rounded-full"
           startIcon={
             <ImageWithFallback
               src={findMatch}
@@ -114,7 +114,7 @@ const AdvanceSearch = () => {
 
       <div className="w-full flex flex-col items-start text-black">
         {/* Section 1 */}
-        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <RadioGroupField
             label="Looking For"
             name="lookingFor"
@@ -146,8 +146,8 @@ const AdvanceSearch = () => {
         </div>
 
         {/* Section 2 */}
-        <div className="w-full grid grid-cols-2 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
-          <div className="w-full grid grid-cols-2 gap-[30px]">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-[20px] xl:gap-[30px]">
             <RadioGroupField
               label="Have Children"
               name="haveChildren"
@@ -173,7 +173,7 @@ const AdvanceSearch = () => {
         </div>
 
         {/* Section 3 */}
-        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <SelectField
             label="Religion"
             name="religion"
@@ -209,7 +209,7 @@ const AdvanceSearch = () => {
         </div>
 
         {/* Section 4 */}
-        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <SelectField
             label="Education"
             name="education"
@@ -236,7 +236,7 @@ const AdvanceSearch = () => {
         </div>
 
         {/* Section 5 */}
-        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <SelectField
             label="Dietary Preference"
             name="dietaryPreference"
@@ -272,7 +272,7 @@ const AdvanceSearch = () => {
         </div>
 
         {/* Section 6 */}
-        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <SelectField
             label="Living Arrangement"
             name="livingArrangement"
@@ -297,6 +297,21 @@ const AdvanceSearch = () => {
             onChange={setAccountType}
           />
         </div>
+      </div>
+      <div className="max-w-[300px] mx-auto my-5  sm:my-8">
+        <CommonButton
+          onClick={handleSearch}
+          label="Search For Matches"
+          className="w-full lg:hidden flex items-center justify-center gap-2 px-[24px] py-[12px] bg-primary text-white text-[14px] font-normal rounded-full"
+          startIcon={
+            <ImageWithFallback
+              src={findMatch}
+              width={15}
+              height={15}
+              alt="findMatch"
+            />
+          }
+        />
       </div>
     </div>
   );

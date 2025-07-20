@@ -77,7 +77,7 @@ const MatchFinderPage = async ({ searchParams }: PropsType) => {
   const getAllUsersData = await api.users.getAllUsers();
 
   return (
-    <div className="w-full p-[18px] sm:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[50px]">
+    <div className="w-full p-[18px] sm:px-[30px] lg:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[30px] lg:gap-[50px]">
       <AdvanceSearch />
       <MatchedProfilesList getAllUsersData={getAllUsersData} />
     </div>

@@ -27,17 +27,20 @@ const SelectField: React.FC<SelectFieldProps> = ({
   className = "",
 }) => {
   return (
-    <div className="flex items-center gap-[30px]">
-      <label htmlFor={name} className="shrink-0 text-[14px] font-semibold">
+    <div className="flex items-center justify-between gap-[30px]">
+      <label
+        htmlFor={name}
+        className="shrink-0 text-[12px] lg:text-[14px] font-semibold"
+      >
         {label}
       </label>
-      <div className="relative w-full">
+      <div className="relative max-w-[130px] lg:max-w-[180px] w-full">
         <select
           id={name}
           name={name}
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
-          className={`w-full appearance-none bg-transparent px-[16px] pr-[36px] py-2 border border-[#A1A1A1] outline-none rounded-[5px] cursor-pointer text-[14px] ${className}`}
+          className={`w-full appearance-none bg-transparent px-[16px] pr-[20px] lg:pr-[36px] py-2 border border-[#A1A1A1] outline-none rounded-[5px] cursor-pointer text-[12px] lg:text-[14px] ${className}`}
         >
           <option value="" disabled>
             {placeholder}

@@ -20,9 +20,9 @@ const RadioGroupField = ({
   onChange,
 }: PropsType) => {
   return (
-    <div className="flex items-center gap-[30px]">
-      <p className="text-[14px] font-semibold">{label}</p>
-      <div className="flex items-center gap-[18px]">
+    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-[12px] lg:gap-[30px]">
+      <p className="text-[12px] lg:text-[14px] font-semibold">{label}</p>
+      <div className="flex flex-wrap items-center gap-[18px]">
         {options.map((option) => {
           const isChecked =
             value !== undefined
@@ -42,7 +42,7 @@ const RadioGroupField = ({
               />
               <label
                 htmlFor={`${name}-${option.value}`}
-                className="text-sm cursor-pointer pl-2"
+                className="text-[12px] lg:text-[14px] cursor-pointer pl-2"
               >
                 {option.label}
               </label>

@@ -1,6 +1,12 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import { FAQ, FindMatch, HeroBanner } from "@/lib/features/marketing/common";
-import { ContactForm } from "@/lib/features/marketing/contact";
+
+const ContactForm = dynamic(
+  () =>
+    import("@/lib/features/marketing/contact").then((mod) => mod.ContactForm),
+  { ssr: false }
+);
 
 const ContactPage = () => {
   return (

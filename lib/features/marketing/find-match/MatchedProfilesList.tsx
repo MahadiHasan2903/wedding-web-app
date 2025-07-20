@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import { UserCard } from "@/lib/components/card";
 import { User } from "@/lib/types/user/user.types";
-import { SubHeading } from "@/lib/components/heading";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getPaginationPages } from "@/lib/utils/helpers";
 
@@ -69,17 +68,14 @@ const MatchedProfilesList = ({ getAllUsersData }: PropsType) => {
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-full bg-[#EDEDED] rounded-[10px]">
-        <div className="w-full px-[30px] py-[20px] border-b-[3px] border-white">
-          <SubHeading title="Matched Users" />
-        </div>
-        <div className="w-full grid grid-cols-5 justify-between gap-[25px] px-[30px] py-[20px]">
+        <div className="w-full grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-between gap-[8px] md:gap-[25px] p-2 lg:px-[30px] lg:py-[20px]">
           {getAllUsersData.users.map((user) => (
             <UserCard key={user.id} user={user} />
           ))}
         </div>
       </div>
 
-      <div className="flex items-center gap-[10px] mt-[130px] mb-[80px] text-[#A1A1A1] mx-auto">
+      <div className="flex items-center gap-[10px] my-[50px] lg:mt-[130px] lg:mb-[80px] text-[#A1A1A1] mx-auto">
         {/* Prev button */}
         <button
           onClick={onPrevClick}

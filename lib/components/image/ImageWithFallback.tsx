@@ -5,8 +5,8 @@ import Image, { StaticImageData } from "next/image";
 import fallbackImage from "@/public/images/common/image-placeholder.png";
 
 interface ImageWithFallbackProps {
-  src: string | StaticImageData;
-  alt: string;
+  src?: string | StaticImageData;
+  alt?: string;
   fallBackImage?: string | StaticImageData;
   className?: string;
   width?: number;
@@ -27,11 +27,14 @@ const ImageWithFallback = ({
   onError,
   onClick,
 }: ImageWithFallbackProps) => {
-  const [imageSrc, setImageSrc] = useState<string | StaticImageData>(src);
+  // Use fallback if src is falsy initially
+  const [imageSrc, setImageSrc] = useState<string | StaticImageData>(
+    src || fallBackImage
+  );
 
   useEffect(() => {
-    setImageSrc(src);
-  }, [src]);
+    setImageSrc(src || fallBackImage);
+  }, [src, fallBackImage]);
 
   const handleError = (e: any) => {
     if (onError) onError(e);
@@ -41,7 +44,7 @@ const ImageWithFallback = ({
   return (
     <Image
       src={imageSrc}
-      alt={alt}
+      alt={alt || "image"}
       width={width}
       height={height}
       fill={fill}

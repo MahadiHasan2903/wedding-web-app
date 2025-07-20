@@ -28,6 +28,7 @@ import {
   RadioGroupField,
   NumberRangeField,
 } from "@/lib/components/form-elements/advance-search";
+import { AccountType } from "@/lib/enums/ms-package";
 
 const AdvanceSearch = () => {
   const router = useRouter();
@@ -46,6 +47,7 @@ const AdvanceSearch = () => {
   const [dietaryPreference, setDietaryPreference] = useState("");
   const [lookingFor, setLookingFor] = useState<Gender | string>("");
   const [havePet, setHavePet] = useState<BooleanStatus | string>("");
+  const [accountType, setAccountType] = useState<Gender | string>("");
   const [weightRange, setWeightRange] = useState({ start: 0, end: 0 });
   const [heightRange, setHeightRange] = useState({ start: 0, end: 0 });
   const [monthlyIncome, setMonthlyIncome] = useState({ start: 0, end: 0 });
@@ -88,7 +90,7 @@ const AdvanceSearch = () => {
     });
 
     // Push the URL with query params
-    router.replace(`/match-finder?${searchParams.toString()}`);
+    router.replace(`/find-match?${searchParams.toString()}`);
   };
 
   return (
@@ -112,7 +114,7 @@ const AdvanceSearch = () => {
 
       <div className="w-full flex flex-col items-start text-black">
         {/* Section 1 */}
-        <div className="w-full flex flex-wrap items-center justify-between gap-[30px] border-t-[3px] border-light py-[16px] px-[20px] ">
+        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
           <RadioGroupField
             label="Looking For"
             name="lookingFor"
@@ -144,7 +146,23 @@ const AdvanceSearch = () => {
         </div>
 
         {/* Section 2 */}
-        <div className="w-full flex flex-wrap items-center gap-[150px] border-t-[3px] border-light py-[16px] px-[20px]">
+        <div className="w-full grid grid-cols-2 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
+          <div className="w-full grid grid-cols-2 gap-[30px]">
+            <RadioGroupField
+              label="Have Children"
+              name="haveChildren"
+              options={enumToOptions(BooleanStatus)}
+              value={haveChildren}
+              onChange={setHaveChildren}
+            />
+            <RadioGroupField
+              label="Have Pet"
+              name="havePet"
+              options={enumToOptions(BooleanStatus)}
+              value={havePet}
+              onChange={setHavePet}
+            />
+          </div>
           <RadioGroupField
             label="Marital Status"
             name="maritalStatus"
@@ -152,17 +170,10 @@ const AdvanceSearch = () => {
             value={maritalStatus}
             onChange={setMaritalStatus}
           />
-          <RadioGroupField
-            label="Have Children"
-            name="haveChildren"
-            options={enumToOptions(BooleanStatus)}
-            value={haveChildren}
-            onChange={setHaveChildren}
-          />
         </div>
 
         {/* Section 3 */}
-        <div className="w-full flex flex-wrap items-center gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
+        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
           <SelectField
             label="Religion"
             name="religion"
@@ -198,7 +209,7 @@ const AdvanceSearch = () => {
         </div>
 
         {/* Section 4 */}
-        <div className="w-full flex flex-wrap items-center gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
+        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
           <SelectField
             label="Education"
             name="education"
@@ -225,33 +236,7 @@ const AdvanceSearch = () => {
         </div>
 
         {/* Section 5 */}
-        <div className="w-full flex flex-wrap items-center gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
-          <SelectField
-            label="Living Arrangement"
-            name="livingArrangement"
-            options={enumToOptions(LivingArrangement)}
-            value={livingArrangement}
-            onChange={setLivingArrangement}
-            placeholder="Doesn't Matter"
-          />
-
-          <NumberRangeField
-            label="Family Members"
-            startValue={familyMembers.start}
-            endValue={familyMembers.end}
-            onChange={(start, end) => setFamilyMembers({ start, end })}
-          />
-          <RadioGroupField
-            label="Have Pet"
-            name="havePet"
-            options={enumToOptions(BooleanStatus)}
-            value={havePet}
-            onChange={setHavePet}
-          />
-        </div>
-
-        {/* Section 6 */}
-        <div className="w-full flex flex-wrap items-center gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
+        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
           <SelectField
             label="Dietary Preference"
             name="dietaryPreference"
@@ -283,6 +268,33 @@ const AdvanceSearch = () => {
             value={healthCondition}
             onChange={setHealthCondition}
             placeholder="Doesn't Matter"
+          />
+        </div>
+
+        {/* Section 6 */}
+        <div className="w-full grid grid-cols-4 gap-[60px] border-t-[3px] border-light py-[16px] px-[20px] ">
+          <SelectField
+            label="Living Arrangement"
+            name="livingArrangement"
+            options={enumToOptions(LivingArrangement)}
+            value={livingArrangement}
+            onChange={setLivingArrangement}
+            placeholder="Doesn't Matter"
+          />
+
+          <NumberRangeField
+            label="Family Members"
+            startValue={familyMembers.start}
+            endValue={familyMembers.end}
+            onChange={(start, end) => setFamilyMembers({ start, end })}
+          />
+
+          <RadioGroupField
+            label="Account Type"
+            name="accountType"
+            options={enumToOptions(AccountType)}
+            value={accountType}
+            onChange={setAccountType}
           />
         </div>
       </div>

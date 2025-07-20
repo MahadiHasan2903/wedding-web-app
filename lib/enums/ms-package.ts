@@ -20,3 +20,8 @@ export enum PackageStatus {
   ACTIVE = "active",
   INACTIVE = "inactive",
 }
+
+export enum AccountType {
+  ALL = "all",
+  PREMIUM = "premium",
+}

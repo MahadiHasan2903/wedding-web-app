@@ -13,25 +13,26 @@ interface UserCardProps {
 }
 
 const UserCard = ({ user }: UserCardProps) => {
-  let isVipUser = false;
+  const isVipUser = user.purchasedMembership?.membershipPackageInfo.id === 2;
   return (
     <div
-      className={`w-[235px] h-[350px] flex flex-col items-center rounded-[10px] py-[25px] ${
+      className={`w-[240px] h-[350px] flex flex-col items-center rounded-[10px] py-[25px] ${
         isVipUser ? "bg-vip-gradient" : "bg-white"
       }`}
     >
       <div className="w-[150px] h-[160px] relative flex items-center justify-center">
         <div className="w-[145px] h-[145px] relative overflow-hidden">
           <ImageWithFallback
-            src={user.profilePicture?.url || userPlaceholder}
             fill
             alt="user"
+            src={user.profilePicture?.url}
+            fallBackImage={userPlaceholder}
             className="rounded-full object-cover"
           />
         </div>
 
         {isVipUser && (
-          <div className="absolute w-[150px] h-[160px] top-0 z-10">
+          <div className="absolute w-[150px] h-[160px] top-[-3px] z-10">
             <ImageWithFallback
               src={vipRing2}
               fill
@@ -45,7 +46,7 @@ const UserCard = ({ user }: UserCardProps) => {
       <div
         className={`${
           isVipUser ? "bg-gold-gradient" : "bg-transparent"
-        } w-full flex flex-col items-center gap-[5px] my-[25px]`}
+        } w-full flex flex-col py-1 items-center gap-[5px] my-[25px]`}
       >
         <h2 className="text-[20px] font-medium">
           {user.firstName} {user.lastName}
@@ -60,6 +61,7 @@ const UserCard = ({ user }: UserCardProps) => {
 
       <CommonButton
         label="Like Profile"
+        href="#"
         className={`${
           isVipUser
             ? "btn-gold-gradient border-none"

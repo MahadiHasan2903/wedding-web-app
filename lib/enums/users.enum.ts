@@ -1,9 +1,7 @@
 export enum Gender {
   MALE = "male",
   FEMALE = "female",
-  NON_BINARY = "non_binary",
   OTHER = "other",
-  NOT_SHARED = "not_shared",
 }
 
 export enum MaritalStatus {
@@ -11,8 +9,6 @@ export enum MaritalStatus {
   MARRIED = "married",
   DIVORCED = "divorced",
   WIDOWED = "widowed",
-  SEPARATED = "separated",
-  COMPLICATED = "complicated",
 }
 
 export enum UserRole {

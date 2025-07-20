@@ -5,7 +5,7 @@ import { getQueryParam } from "@/lib/utils/helpers";
 
 const AdvanceSearch = dynamic(
   () =>
-    import("@/lib/features/marketing/match-finder").then(
+    import("@/lib/features/marketing/find-match").then(
       (mod) => mod.AdvanceSearch
     ),
   { ssr: false }
@@ -13,7 +13,7 @@ const AdvanceSearch = dynamic(
 
 const MatchedProfilesList = dynamic(
   () =>
-    import("@/lib/features/marketing/match-finder").then(
+    import("@/lib/features/marketing/find-match").then(
       (mod) => mod.MatchedProfilesList
     ),
   { ssr: false }

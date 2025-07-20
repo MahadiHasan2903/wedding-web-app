@@ -66,3 +66,60 @@ export const getQueryParam = (
 
   return String(fallback);
 };
+
+/**
+ * Generates pagination buttons with ellipses, always showing current page.
+ *
+ * @param currentPage - Current active page
+ * @param totalPages - Total number of pages
+ * @param maxButtons - Maximum buttons visible (not strictly enforced here)
+ * @returns Array of page numbers and ellipsis strings
+ */
+export const getPaginationPages = (
+  currentPage: number,
+  totalPages: number,
+  maxButtons = 7
+): (number | string)[] => {
+  const pages: (number | string)[] = [];
+
+  if (totalPages <= maxButtons) {
+    // Show all pages if few pages
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  const leftSibling = Math.max(currentPage - 1, 2);
+  const rightSibling = Math.min(currentPage + 1, totalPages - 1);
+
+  // Always show first page
+  pages.push(1);
+
+  // Left ellipsis if gap between first page and left sibling
+  if (leftSibling > 2) {
+    pages.push("left-ellipsis");
+  } else {
+    // No gap, show all pages from 2 to leftSibling - 1
+    for (let i = 2; i < leftSibling; i++) {
+      pages.push(i);
+    }
+  }
+
+  // Pages around current page
+  for (let i = leftSibling; i <= rightSibling; i++) {
+    pages.push(i);
+  }
+
+  // Right ellipsis if gap between right sibling and last page
+  if (rightSibling < totalPages - 1) {
+    pages.push("right-ellipsis");
+  } else {
+    // No gap, show pages from rightSibling + 1 to totalPages - 1
+    for (let i = rightSibling + 1; i < totalPages; i++) {
+      pages.push(i);
+    }
+  }
+
+  // Always show last page
+  pages.push(totalPages);
+
+  return pages;
+};

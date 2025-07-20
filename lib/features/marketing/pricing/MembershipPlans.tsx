@@ -7,15 +7,16 @@ const MembershipPlans = () => {
   const currentPlan = "Free Forever";
 
   return (
-    <div className="w-full px-[120px] pt-[80px]">
-      <div className="w-full flex flex-col items-start gap-[48px]">
+    <div className="w-full p-[18px] sm:px-[60px] sm:pt-[32px] xl:px-[120px] xl:pt-[80px]">
+      <div className="w-full flex flex-col items-center lg:items-start gap-[14px] lg:gap-[48px]">
         <SectionTitle title="Membership Plans" />
-        <HeadingLine color="primary" />
-        <div className="text-[14px] flex flex-col gap-[5px]">
+        <div className="hidden lg:block">
+          <HeadingLine color="primary" />
+        </div>
+        <div className="text-[12px] md:text-[14px] flex flex-col gap-[5px]">
           <p className="font-bold">
             Find real connections. Stand out with confidence.
           </p>
-          <br />
           <p>
             At FrenchCubaWedding, we believe in meaningful, long-term
             relationships. Our Premium Membership is designed to help serious
@@ -25,7 +26,7 @@ const MembershipPlans = () => {
         </div>
       </div>
 
-      <div className="flex items-start gap-[24px] flex-wrap my-[50px] ">
+      <div className="w-full flex flex-wrap gap-[18px] lg:gap-[24px] my-[30px] lg:my-[50px] mx-auto">
         {membershipPlans.map((plan, idx) => (
           <PricingCard
             key={idx}

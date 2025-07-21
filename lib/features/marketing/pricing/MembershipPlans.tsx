@@ -1,11 +1,13 @@
 import React from "react";
-import { membershipPlans } from "@/lib/utils/data";
 import { PricingCard } from "@/lib/components/card";
 import { SectionTitle, HeadingLine } from "@/lib/components/heading";
+import { MembershipPackage } from "@/lib/types/membership/ms-package.types";
 
-const MembershipPlans = () => {
-  const currentPlan = "Free Forever";
+interface PropsType {
+  allMsPackages: MembershipPackage[];
+}
 
+const MembershipPlans = ({ allMsPackages }: PropsType) => {
   return (
     <div className="w-full p-[18px] sm:px-[60px] sm:pt-[32px] xl:px-[120px] xl:pt-[80px]">
       <div className="w-full flex flex-col items-center lg:items-start gap-[14px] lg:gap-[48px]">
@@ -27,11 +29,13 @@ const MembershipPlans = () => {
       </div>
 
       <div className="w-full flex flex-wrap gap-[18px] lg:gap-[24px] my-[30px] lg:my-[50px] mx-auto">
-        {membershipPlans.map((plan, idx) => (
+        {allMsPackages.map((plan, idx) => (
           <PricingCard
             key={idx}
-            {...plan}
-            isCurrent={currentPlan === plan.title}
+            id={plan.id}
+            title={plan.title}
+            description={plan.description}
+            categoryInfo={plan.categoryInfo}
           />
         ))}
       </div>

@@ -155,8 +155,8 @@ export const loginResponseSchema = z.object({
         membershipPackageInfo: z.object({
           id: z.number(),
           title: z.string(),
-          description: z.string(),
-          priceOption: z.object({
+          description: z.array(z.string()),
+          categoryInfo: z.object({
             category: z.string(),
             originalPrice: z.number(),
             sellPrice: z.number(),

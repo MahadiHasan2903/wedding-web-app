@@ -28,8 +28,6 @@ const PricingCard = ({ id, title, description, categoryInfo }: PropsType) => {
   const packageColor = id === 1 ? "black" : id === 2 ? "primary" : "red";
   const iconSrc = id === 1 ? star : id === 2 ? heart : crown;
   const formattedPrice = categoryInfo.sellPrice.toFixed(2);
-  const monthlyPrice =
-    categoryInfo.category === "monthly" && categoryInfo.sellPrice;
 
   return (
     <div className="w-[300px] xl:w-[380px] h-auto lg:min-h-[650px] relative flex flex-col items-start px-4 pt-4 pb-[50px] lg:pb-0 lg:p-[30px] gap-[25px] border border-[#B0B1B3] rounded-[10px] overflow-hidden">

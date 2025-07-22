@@ -53,8 +53,8 @@ export const footerLinks = [
   {
     title: "Privacy & You",
     links: [
-      { label: "Terms of Use", href: "#" },
-      { label: "Privacy Policy", href: "#" },
+      { label: "Terms of Use", href: "/terms-of-use" },
+      { label: "Privacy Policy", href: "/privacy-policy" },
       { label: "Be Safe Online", href: "#" },
       { label: "Report Misuse", href: "#" },
     ],

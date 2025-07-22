@@ -74,7 +74,7 @@ const VerificationModal = ({
   return (
     <>
       {open && (
-        <div className="fixed left-0 top-0 z-999999 flex h-full min-h-screen w-full items-center justify-center bg-black/80 px-4 py-5">
+        <div className="fixed left-0 top-0 z-999 flex h-full min-h-screen w-full items-center justify-center bg-black/80 px-4 py-5">
           <div className="w-full max-w-[600px] rounded-[10px] bg-white px-[36px] py-[24px] flex flex-col gap-[30px]">
             <SubHeading title="Verify Email" />
             <div className="flex flex-col items-start gap-[10px]">

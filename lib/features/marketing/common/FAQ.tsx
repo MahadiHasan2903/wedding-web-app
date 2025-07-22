@@ -24,8 +24,8 @@ const FAQ = () => {
           <div
             key={index}
             className={`${
-              openIndex === index && "bg-[#F4F4F4]"
-            } cursor-pointer w-full hover:bg-[#F4F4F4]`}
+              openIndex === index && "bg-light"
+            } cursor-pointer w-full hover:bg-light`}
           >
             <div
               onClick={() => handleToggleFaq(index)}

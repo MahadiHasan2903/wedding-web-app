@@ -40,12 +40,12 @@ const HeroSection = () => {
       </div>
 
       <div className="relative bg-red text-white py-[10px] xl:py-[56px] pl-[100px] sm:pl-[140px] xl:pl-0">
-        <div className="absolute z-[99] left-2 sm:left-10 md:left-20 top-[-15%] sm:top-[-20%] xl:top-[-30%]">
+        <div className="absolute z-[30] left-2 sm:left-10 md:left-20 top-[-15%] sm:top-[-20%] xl:top-[-30%]">
           <div className="w-[80px] h-[80px] sm:w-[130px] sm:h-[120px] md:w-[180px] md:h-[150px] xl:w-[275px] xl:h-[250px] relative">
             <ImageWithFallback
               src={girlsGroups}
-              layout="fill"
-              objectFit="cover"
+              fill
+              className="object-cover"
               alt="girlsGroups"
             />
           </div>

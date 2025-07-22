@@ -48,6 +48,8 @@ export const authOptions: NextAuthOptions = {
               phoneNumber: loginData.data.user.phoneNumber,
               userRole: loginData.data.user.userRole,
               accountStatus: loginData.data.user.accountStatus,
+              profilePicture: loginData.data.user.profilePicture,
+              purchasedMembership: loginData.data.user.purchasedMembership,
             },
 
             accessToken: loginData.data.accessToken,

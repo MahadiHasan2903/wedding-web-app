@@ -2,7 +2,7 @@
 
 import { BASE_URL } from "@/lib/config/constants";
 import { fetchZodTyped } from "../client";
-import { Result } from "@/lib/types/common/result.types";
+import { Result } from "@/lib/types/common/common.types";
 import {
   LoginType,
   loginSchema,
@@ -68,6 +68,8 @@ const accountLoginAction = async (requestPayload: LoginType) => {
         phoneNumber: response.data.user.phoneNumber,
         userRole: response.data.user.userRole,
         accountStatus: response.data.user.accountStatus,
+        profilePicture: response.data.user.profilePicture,
+        purchasedMembership: response.data.user.purchasedMembership,
       },
       accessToken: response.data.accessToken,
     };

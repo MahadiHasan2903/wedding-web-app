@@ -26,9 +26,24 @@ const config: Config = {
       backgroundImage: {
         landingHero: "url('/images/landing-page/epic-hero-background.png')",
         heroBanner: "url('/images/about/hero-banner.png')",
-        rectangle: "url('/images/common/rectangle.png')",
+        topRectangle: "url('/images/common/top-rectangle.png')",
+        bottomRectangle: "url('/images/common/bottom-rectangle.png')",
         weddingCoupleScene:
           "url('/images/landing-page/wedding-couple-background.png')",
+      },
+      animation: {
+        "slide-in-left": "slideInLeft 0.3s ease-out forwards",
+        "slide-out-left": "slideOutLeft 0.3s ease-in forwards",
+      },
+      keyframes: {
+        slideInLeft: {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        slideOutLeft: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-100%)" },
+        },
       },
     },
   },

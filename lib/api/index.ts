@@ -1,7 +1,9 @@
-import auth from "./auth";
+import users from "./users";
+import msPackage from "./ms-package";
 
 const api = {
-  auth,
+  users,
+  msPackage,
 };
 
 export default api;

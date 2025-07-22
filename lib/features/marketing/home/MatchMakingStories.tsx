@@ -63,8 +63,8 @@ const MatchMakingStories = () => {
             <div className="w-[50px] xl:w-[100px] h-[50px] xl:h-[100px] relative overflow-hidden">
               <ImageWithFallback
                 src={quote}
-                layout="fill"
-                objectFit="contain"
+                fill
+                className="object-contain"
                 alt="quote"
               />
             </div>

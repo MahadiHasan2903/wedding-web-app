@@ -20,12 +20,11 @@ module.exports = class CacheHandler {
   }
 
   async revalidateTag(tag) {
-    // Iterate over all entries in the cache
     for (let [key, value] of cache) {
-      // If the value's tags include the specified tag, delete this entry
-      if (value.tags.includes(tag)) {
+      if (value.tags && value.tags.includes(tag)) {
         cache.delete(key);
       }
     }
   }
+  
 };

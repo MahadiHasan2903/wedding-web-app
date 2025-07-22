@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* styles.css or global.css */
+.bg-vip-gradient {
+  background: linear-gradient(
+    139.53deg,
+    #d0b446 -93.56%,
+    #ffdc55 -53.41%,
+    #d3b749 -6.72%,
+    #ecde6f 20.36%,
+    #f9f182 35.31%,
+    #bd9d2c 100.67%
+  );
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(92.86deg, #fef5b1 8.97%, #fbf0c0 100.17%);
+}
+
+.btn-gold-gradient {
+  background: linear-gradient(180deg, #fefdbd 0%, #f0d67d 100%);
+}
+
+/* Hide spinners in Chrome, Safari, Edge */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide spinners in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

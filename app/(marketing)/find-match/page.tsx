@@ -74,11 +74,11 @@ const MatchFinderPage = async ({ searchParams }: PropsType) => {
     healthCondition,
   };
 
-  const getAllUsersData = await api.users.getAllUsers();
+  const getAllUsersData = await api.users.getAllUsers(page, pageSize);
 
   return (
     <div className="w-full p-[18px] sm:px-[30px] lg:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[30px] lg:gap-[50px]">
-      <AdvanceSearch />
+      <AdvanceSearch page={page} />
       <MatchedProfilesList getAllUsersData={getAllUsersData} />
     </div>
   );

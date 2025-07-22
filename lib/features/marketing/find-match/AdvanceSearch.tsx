@@ -31,7 +31,11 @@ import { findMatch } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { enumToOptions, rangeToString } from "@/lib/utils/helpers";
 
-const AdvanceSearch = () => {
+interface PropsType {
+  page: number;
+}
+
+const AdvanceSearch = ({ page }: PropsType) => {
   const router = useRouter();
 
   const countryOptions = Country.getAllCountries().map((country) => ({
@@ -117,7 +121,7 @@ const AdvanceSearch = () => {
     });
 
     // Push the URL with query params
-    router.replace(`/find-match?${searchParams.toString()}`);
+    router.replace(`/find-match?page=${page}&${searchParams.toString()}`);
   };
 
   return (

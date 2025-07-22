@@ -3,12 +3,14 @@
 import React from "react";
 
 interface PropsType {
-  label: string;
   name: string;
-  options: Array<{ label: string; value: string }>;
-  defaultValue?: string;
+  label: string;
   value?: string;
+  readOnly?: boolean;
+  disabled?: boolean;
+  defaultValue?: string;
   onChange?: (value: string) => void;
+  options: Array<{ label: string; value: string }>;
 }
 
 const RadioGroupField = ({
@@ -18,6 +20,8 @@ const RadioGroupField = ({
   defaultValue,
   value,
   onChange,
+  readOnly = false,
+  disabled = false,
 }: PropsType) => {
   return (
     <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-[12px] lg:gap-[30px]">
@@ -36,13 +40,23 @@ const RadioGroupField = ({
                 id={`${name}-${option.value}`}
                 name={name}
                 value={option.value}
-                className="cursor-pointer"
+                className={`cursor-pointer ${
+                  disabled || readOnly ? "cursor-not-allowed" : ""
+                }`}
                 checked={isChecked}
-                onChange={() => onChange?.(option.value)}
+                onChange={() => {
+                  if (readOnly || disabled) {
+                    return;
+                  }
+                  onChange?.(option.value);
+                }}
+                disabled={disabled}
               />
               <label
                 htmlFor={`${name}-${option.value}`}
-                className="text-[12px] lg:text-[14px] cursor-pointer pl-2"
+                className={`text-[12px] lg:text-[14px] pl-2 cursor-pointer ${
+                  disabled || readOnly ? "text-gray cursor-not-allowed" : ""
+                }`}
               >
                 {option.label}
               </label>

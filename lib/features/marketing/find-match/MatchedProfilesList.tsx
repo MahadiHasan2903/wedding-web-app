@@ -3,8 +3,8 @@
 import React, { useEffect } from "react";
 import { UserCard } from "@/lib/components/card";
 import { User } from "@/lib/types/user/user.types";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getPaginationPages } from "@/lib/utils/helpers";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface PropsType {
   getAllUsersData: {

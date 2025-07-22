@@ -1,21 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { enumToOptions, rangeToString } from "@/lib/utils/helpers";
-import { SubHeading } from "@/lib/components/heading";
-import { CommonButton } from "@/lib/components/buttons";
-import { findMatch } from "@/lib/components/image/icons";
-import { ImageWithFallback } from "@/lib/components/image";
+import React, { useEffect, useState } from "react";
 import {
   Gender,
   Religion,
   Profession,
   SmokingHabit,
-  DrinkingHabit,
   BooleanStatus,
-  CountryLiving,
   MaritalStatus,
+  DrinkingHabit,
   PoliticalView,
   SpokenLanguage,
   HealthCondition,
@@ -23,30 +16,48 @@ import {
   LivingArrangement,
   DietaryPreference,
 } from "@/lib/enums/users.enum";
+import { useRouter } from "next/navigation";
+import { Country, State } from "country-state-city";
+import { AccountType } from "@/lib/enums/ms-package";
+import { SubHeading } from "@/lib/components/heading";
+
 import {
   SelectField,
   RadioGroupField,
   NumberRangeField,
 } from "@/lib/components/form-elements/advance-search";
-import { AccountType } from "@/lib/enums/ms-package";
+import { CommonButton } from "@/lib/components/buttons";
+import { findMatch } from "@/lib/components/image/icons";
+import { ImageWithFallback } from "@/lib/components/image";
+import { enumToOptions, rangeToString } from "@/lib/utils/helpers";
 
 const AdvanceSearch = () => {
   const router = useRouter();
 
+  const countryOptions = Country.getAllCountries().map((country) => ({
+    label: country.name,
+    value: country.isoCode,
+  }));
+
+  const [statesOptions, setStatesOptions] = useState<
+    { label: string; value: string }[]
+  >([]);
+
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
   const [religion, setReligion] = useState("");
   const [education, setEducation] = useState("");
   const [profession, setProfession] = useState("");
   const [smokingHabit, setSmokingHabit] = useState("");
   const [drinkingHabit, setDrinkingHabit] = useState("");
   const [politicalView, setPoliticalView] = useState("");
-  const [countryLiving, setCountryLiving] = useState("");
-  const [spokenLanguage, setSpokenLanguage] = useState("");
+  const [languageSpoken, setLanguageSpoken] = useState("");
   const [healthCondition, setHealthCondition] = useState("");
   const [livingArrangement, setLivingArrangement] = useState("");
   const [ageRange, setAgeRange] = useState({ start: 0, end: 0 });
   const [dietaryPreference, setDietaryPreference] = useState("");
   const [lookingFor, setLookingFor] = useState<Gender | string>("");
-  const [havePet, setHavePet] = useState<BooleanStatus | string>("");
+  const [hasPet, setHasPet] = useState<BooleanStatus | string>("");
   const [accountType, setAccountType] = useState<Gender | string>("");
   const [weightRange, setWeightRange] = useState({ start: 0, end: 0 });
   const [heightRange, setHeightRange] = useState({ start: 0, end: 0 });
@@ -56,6 +67,21 @@ const AdvanceSearch = () => {
   const [maritalStatus, setMaritalStatus] = useState<MaritalStatus | string>(
     ""
   );
+
+  // Load states when country changes
+  useEffect(() => {
+    if (country) {
+      const states = State.getStatesOfCountry(country).map((state) => ({
+        label: state.name,
+        value: state.isoCode,
+      }));
+      setStatesOptions(states);
+      setCity("");
+    } else {
+      setStatesOptions([]);
+      setCity("");
+    }
+  }, [country]);
 
   const handleSearch = () => {
     const filters = {
@@ -67,14 +93,15 @@ const AdvanceSearch = () => {
       haveChildren,
       religion,
       politicalView,
-      country: countryLiving,
-      languageSpoken: spokenLanguage,
+      country,
+      city,
+      languageSpoken,
       education,
       profession,
       monthlyIncome: rangeToString(monthlyIncome),
       livingArrangement,
       familyMember: rangeToString(familyMembers),
-      hasPet: havePet,
+      hasPet,
       dietaryPreference,
       smokingHabit,
       drinkingHabit,
@@ -157,10 +184,10 @@ const AdvanceSearch = () => {
             />
             <RadioGroupField
               label="Have Pet"
-              name="havePet"
+              name="has"
               options={enumToOptions(BooleanStatus)}
-              value={havePet}
-              onChange={setHavePet}
+              value={hasPet}
+              onChange={setHasPet}
             />
           </div>
           <RadioGroupField
@@ -191,20 +218,22 @@ const AdvanceSearch = () => {
             placeholder="Doesn't Matter"
           />
           <SelectField
-            label="Country Living in"
-            name="countryLiving"
-            options={enumToOptions(CountryLiving)}
-            value={countryLiving}
-            onChange={setCountryLiving}
+            label="Country"
+            name="country"
+            options={countryOptions}
+            value={country}
+            onChange={setCountry}
             placeholder="Doesn't Matter"
           />
+
           <SelectField
-            label="Language Spoken"
-            name="spokenLanguage"
-            options={enumToOptions(SpokenLanguage)}
-            value={spokenLanguage}
-            onChange={setSpokenLanguage}
+            label="City"
+            name="city"
+            options={statesOptions}
+            value={city}
+            onChange={setCity}
             placeholder="Doesn't Matter"
+            disabled={!country}
           />
         </div>
 
@@ -224,6 +253,14 @@ const AdvanceSearch = () => {
             options={enumToOptions(Profession)}
             value={profession}
             onChange={setProfession}
+            placeholder="Doesn't Matter"
+          />
+          <SelectField
+            label="Language Spoken"
+            name="languageSpoken"
+            options={enumToOptions(SpokenLanguage)}
+            value={languageSpoken}
+            onChange={setLanguageSpoken}
             placeholder="Doesn't Matter"
           />
           <NumberRangeField

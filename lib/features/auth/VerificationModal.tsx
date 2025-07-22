@@ -88,7 +88,7 @@ const VerificationModal = ({
                     type="text"
                     inputMode="numeric"
                     maxLength={1}
-                    className="w-[40px] h-[40px] text-center text-2xl border-b border-gray-300 focus:border-primary outline-none"
+                    className="w-[40px] h-[40px] text-center text-2xl border-b border-[#A1A1A1] focus:border-primary outline-none"
                     value={digit}
                     onChange={(e) => handleChange(e, idx)}
                     onKeyDown={(e) => handleKeyDown(e, idx)}

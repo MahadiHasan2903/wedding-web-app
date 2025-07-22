@@ -1,31 +1,43 @@
 "use client";
 
-import React from "react";
-import { ImageWithFallback } from "@/lib/components/image";
+import React, { ChangeEvent } from "react";
 import { polygon } from "@/lib/components/image/icons";
+import { ImageWithFallback } from "@/lib/components/image";
 
 interface SelectFieldProps {
   label: string;
   name: string;
+  value?: string;
   options: Array<{
     label: string;
     value: string;
   }>;
-  value?: string;
-  onChange?: (value: string) => void;
-  placeholder?: string;
   className?: string;
+  disabled?: boolean;
+  readOnly?: boolean;
+  placeholder?: string;
+  defaultValue?: string;
+  onChange?: (value: string) => void;
 }
 
-const SelectField: React.FC<SelectFieldProps> = ({
+const SelectField = ({
   label,
   name,
   options,
   value,
+  defaultValue,
   onChange,
   placeholder = "Select an option",
   className = "",
-}) => {
+  disabled = false,
+  readOnly = false,
+}: SelectFieldProps) => {
+  // Function to handle change of the selected option
+  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (readOnly) return;
+    onChange?.(e.target.value);
+  };
+
   return (
     <div className="flex items-center justify-between gap-[30px]">
       <label
@@ -39,8 +51,13 @@ const SelectField: React.FC<SelectFieldProps> = ({
           id={name}
           name={name}
           value={value}
-          onChange={(e) => onChange?.(e.target.value)}
-          className={`w-full appearance-none bg-transparent px-[16px] pr-[20px] lg:pr-[36px] py-2 border border-[#A1A1A1] outline-none rounded-[5px] cursor-pointer text-[12px] lg:text-[14px] ${className}`}
+          defaultValue={value === undefined ? defaultValue : undefined}
+          disabled={disabled}
+          onChange={handleChange}
+          aria-readonly={readOnly || undefined}
+          className={`w-full appearance-none bg-transparent px-[16px] pr-[20px] lg:pr-[36px] py-2 border border-[#A1A1A1] outline-none rounded-[5px] cursor-pointer text-[12px] lg:text-[14px] ${
+            disabled || readOnly ? "bg-gray cursor-not-allowed" : ""
+          } ${className}`}
         >
           <option value="" disabled>
             {placeholder}

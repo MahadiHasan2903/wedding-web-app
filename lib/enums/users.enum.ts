@@ -159,12 +159,6 @@ export enum BlockStatus {
   UNBLOCK = "unblock",
 }
 
-export enum CountryLiving {
-  FRANC = "france",
-  CUBA = "cuba",
-  OTHER = "other",
-}
-
 export enum BooleanStatus {
   YES = "true",
   NO = "false",

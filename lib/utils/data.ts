@@ -1,7 +1,23 @@
+import {
+  star,
+  heart,
+  crown,
+  report,
+  message,
+  settings,
+  overview,
+  myProfile,
+  manageAdmin,
+  subscription,
+  blockedUsers,
+  likedProfiles,
+  managePricing,
+  userManagement,
+  recommendedMatches,
+} from "@/lib/components/image/icons";
 import { FaFacebookF } from "react-icons/fa";
 import { TfiLinkedin } from "react-icons/tfi";
 import { RiInstagramFill } from "react-icons/ri";
-import { crown, star, heart } from "@/lib/components/image/icons";
 import story1 from "@/public/images/landing-page/story-1.jpg";
 import story2 from "@/public/images/landing-page/story-2.jpg";
 
@@ -58,6 +74,72 @@ export const footerLinks = [
       { label: "Be Safe Online", href: "#" },
       { label: "Report Misuse", href: "#" },
     ],
+  },
+];
+
+export const userSidebarItems = [
+  {
+    label: "My Profile",
+    href: "/my-profile",
+    icon: myProfile,
+  },
+  {
+    label: "Recommended Matches",
+    href: "/recommended-matches",
+    icon: recommendedMatches,
+  },
+  {
+    label: "Liked Profiles",
+    href: "/liked-profiles",
+    icon: likedProfiles,
+  },
+  {
+    label: "Messages",
+    href: "/messages",
+    icon: message,
+  },
+  {
+    label: "Blocked Users",
+    href: "/blocked-users",
+    icon: blockedUsers,
+  },
+  {
+    label: "Settings",
+    href: "/my-profile/settings",
+    icon: settings,
+  },
+];
+
+export const adminSidebarItems = [
+  {
+    label: "Overview",
+    href: "/overview",
+    icon: overview,
+  },
+  {
+    label: "User Management",
+    href: "/user-management",
+    icon: userManagement,
+  },
+  {
+    label: "Subscription & Payment",
+    href: "/subscription-payment",
+    icon: subscription,
+  },
+  {
+    label: "Report & Abuse Handing",
+    href: "/report-management",
+    icon: report,
+  },
+  {
+    label: "Manage Pricing",
+    href: "/pricing-management",
+    icon: managePricing,
+  },
+  {
+    label: "Manage Admin",
+    href: "/admin-management",
+    icon: manageAdmin,
   },
 ];
 

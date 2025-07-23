@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
-import { Header, Footer } from "@/lib/components/layout";
+import { Header, Footer } from "@/lib/components/layout/marketing";
 
-const ApplicationLayout = ({
+const MarketingLayout = ({
   children,
 }: Readonly<{
   children: ReactNode;
@@ -15,4 +15,4 @@ const ApplicationLayout = ({
   );
 };
 
-export default ApplicationLayout;
+export default MarketingLayout;

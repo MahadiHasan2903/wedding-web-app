@@ -6,7 +6,7 @@ import { RxCross1 } from "react-icons/rx";
 import { navItems } from "@/lib/utils/data";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
-import logo from "@/public/images/logo/logo.svg";
+import { LIGHT_LOGO } from "@/lib/config/constants";
 import { CommonButton } from "@/lib/components/buttons";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
@@ -26,6 +26,7 @@ const Header = () => {
   const membershipId =
     session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
   const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
+  const isAdmin = session?.user.data.userRole === "admin" ? true : false;
 
   // Closes the mobile drawer with animation
   const closeDrawer = () => {
@@ -62,7 +63,12 @@ const Header = () => {
       <div className="w-full hidden lg:flex items-center justify-between px-[36px] py-[16px]">
         <div className="w-2/3 flex items-center gap-[60px] xl:gap-[100px]">
           <Link href="/" className="cursor-pointer">
-            <ImageWithFallback src={logo} width={100} height={50} alt="logo" />
+            <ImageWithFallback
+              src={LIGHT_LOGO}
+              width={100}
+              height={50}
+              alt="logo"
+            />
           </Link>
           <div className="w-full flex items-center gap-[50px]">
             {navItems.map((item) => (
@@ -94,7 +100,10 @@ const Header = () => {
                   />
                 }
               />
-              <div className="w-[48px] h-[48px] relative flex items-center justify-center">
+              <Link
+                href={`${isAdmin ? "overview" : "/my-profile"}`}
+                className="w-[48px] h-[48px] relative flex items-center justify-center"
+              >
                 <ImageWithFallback
                   src={profileImageUrl}
                   width={45}
@@ -111,7 +120,7 @@ const Header = () => {
                     className="cursor-pointer z-10"
                   />
                 )}
-              </div>
+              </Link>
             </div>
           ) : (
             <div className="w-full flex items-center gap-[25px]">
@@ -141,7 +150,12 @@ const Header = () => {
           onClick={() => setIsDrawerOpen(true)}
         />
         <Link href="/" className="cursor-pointer">
-          <ImageWithFallback src={logo} width={100} height={50} alt="logo" />
+          <ImageWithFallback
+            src={LIGHT_LOGO}
+            width={100}
+            height={50}
+            alt="logo"
+          />
         </Link>
 
         {accessToken ? (

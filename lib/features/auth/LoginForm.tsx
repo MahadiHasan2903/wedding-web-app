@@ -110,7 +110,7 @@ const LoginForm = () => {
             <UnderlineInput
               {...field}
               label="Email"
-              type="number"
+              type="email"
               placeholder="Enter your email"
               error={errors.email?.message}
             />

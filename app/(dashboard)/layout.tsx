@@ -1,5 +1,10 @@
 import React, { ReactNode } from "react";
-import { Sidebar, Navbar } from "@/lib/components/layout/dashboard";
+import {
+  Sidebar,
+  Navbar,
+  BottomNavigation,
+} from "@/lib/components/layout/dashboard";
+import { Header } from "@/lib/components/layout/marketing";
 
 const DashboardLayout = ({
   children,
@@ -7,13 +12,17 @@ const DashboardLayout = ({
   children: ReactNode;
 }>) => {
   return (
-    <div className="w-full h-screen flex items-start gap-[24px] overflow-hidden p-2">
-      <div className="w-full max-w-[275px] hidden lg:block">
-        <Sidebar />
-      </div>
+    <div className="w-full h-screen flex items-start gap-[24px] overflow-hidden lg:p-2">
+      <Sidebar />
       <div className="w-full flex flex-col items-start overflow-hidden">
         <Navbar />
-        <div className="overflow-y-auto px-6 py-4">{children}</div>
+        <div className="w-full block lg:hidden">
+          <Header />
+        </div>
+        <div className="overflow-y-auto px-[18px] lg:px-[26px] py-4">
+          {children}
+        </div>
+        <BottomNavigation />
       </div>
     </div>
   );

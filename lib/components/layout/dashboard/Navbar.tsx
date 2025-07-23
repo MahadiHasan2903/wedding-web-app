@@ -63,7 +63,7 @@ const Navbar = () => {
             </div>
           </Link>
         ) : (
-          <div className="w-full flex items-center gap-[25px] justify-end">
+          <div className="w-full flex items-center gap-[16px] justify-end">
             <CommonButton
               label="Join Now"
               href="/registration"

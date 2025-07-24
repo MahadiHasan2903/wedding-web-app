@@ -3,7 +3,7 @@ interface PropsType {
   width?: number;
 }
 
-const Loader = ({ height = 16, width = 16 }: PropsType) => {
+const Loader = ({ height = 40, width = 40 }: PropsType) => {
   return (
     <div className="flex h-auto items-center justify-center bg-transparent">
       <div

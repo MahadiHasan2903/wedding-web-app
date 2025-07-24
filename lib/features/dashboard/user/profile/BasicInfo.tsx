@@ -51,7 +51,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
               alt="user"
               src={userProfile.profilePicture?.url}
               fallBackImage={userPlaceholder}
-              className="rounded-full object-cover"
+              className="rounded-full object-cover border border-black"
             />
           </div>
 
@@ -104,7 +104,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
       </div>
       <div className="w-full flex flex-col items-start gap-[20px]">
         <p className="text-[12px] sm:text-[14px] font-normal text-justify">
-          {userProfile.bio || "bio goes here ..."}
+          {userProfile.bio || "My bio ..."}
         </p>
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center gap-[10px]">

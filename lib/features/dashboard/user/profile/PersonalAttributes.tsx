@@ -107,8 +107,8 @@ const PersonalAttributes = ({ userProfile }: PropsType) => {
           </div>
           <div className="flex flex-col items-start gap-1">
             <p className="text-[10px] lg:text-[14px] font-semibold">Children</p>
-            <p className="text-[10px] lg:text-[14px] font-normal capitalize">
-              {userProfile.children}
+            <p className="text-[10px] lg:text-[14px] font-normal">
+              {userProfile.children || 0}
             </p>
           </div>
         </div>

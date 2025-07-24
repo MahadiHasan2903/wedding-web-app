@@ -47,7 +47,7 @@ const Navbar = () => {
             width={45}
             height={45}
             alt="user"
-            className="absolute cursor-pointer rounded-full overflow-hidden"
+            className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
           />
           {isVipUser && (
             <ImageWithFallback

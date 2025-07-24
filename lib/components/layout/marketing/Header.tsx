@@ -109,7 +109,8 @@ const Header = () => {
                   width={45}
                   height={45}
                   alt="user"
-                  className="absolute cursor-pointer rounded-full overflow-hidden"
+                  fallBackImage={avatar}
+                  className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
                 />
                 {isVipUser && (
                   <ImageWithFallback
@@ -165,7 +166,8 @@ const Header = () => {
               width={45}
               height={45}
               alt="user"
-              className="absolute cursor-pointer rounded-full overflow-hidden"
+              fallBackImage={avatar}
+              className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
             />
             {isVipUser && (
               <ImageWithFallback

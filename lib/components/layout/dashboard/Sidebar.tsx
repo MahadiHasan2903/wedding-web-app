@@ -12,10 +12,8 @@ import { useSession } from "next-auth/react";
 const Sidebar = () => {
   const { data: session } = useSession();
   const pathname = usePathname();
-  const sidebarItems =
-    session?.user.data.userRole === "admin"
-      ? adminSidebarItems
-      : userSidebarItems;
+  const isAdmin = session?.user.data.userRole === "admin";
+  const sidebarItems = isAdmin ? adminSidebarItems : userSidebarItems;
 
   return (
     <div className="w-full min-h-screen h-full max-w-[270px] bg-white text-[#292D32] hidden lg:flex flex-col items-center justify-between rounded-[10px]">
@@ -64,21 +62,23 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      <div className="w-fit flex items-start gap-[8px] rounded-[10px] border border-[#A1A1A1] py-[20px] pl-[10px] pr-[20px] mx-[26px] my-[20px]">
-        <ImageWithFallback
-          src={crown}
-          width={18}
-          height={18}
-          alt="crown"
-          className="mt-1"
-        />
-        <div className="flex flex-col items-start gap-[9px]">
-          <h3 className="text-[14px] font-medium">Manage Plan</h3>
-          <p className="text-[10px] font-light">
-            Subscription will be ended in 120 days
-          </p>
+      {!isAdmin && (
+        <div className="w-fit flex items-start gap-[8px] rounded-[10px] border border-[#A1A1A1] py-[20px] pl-[10px] pr-[20px] mx-[26px] my-[20px]">
+          <ImageWithFallback
+            src={crown}
+            width={18}
+            height={18}
+            alt="crown"
+            className="mt-1"
+          />
+          <div className="flex flex-col items-start gap-[9px]">
+            <h3 className="text-[14px] font-medium">Manage Plan</h3>
+            <p className="text-[10px] font-light">
+              Subscription will be ended in 120 days
+            </p>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

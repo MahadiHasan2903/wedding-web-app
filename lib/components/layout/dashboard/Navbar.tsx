@@ -37,46 +37,29 @@ const Navbar = () => {
           </Link>
         ))}
       </div>
-      <div className="w-auto xl:w-1/2">
-        {accessToken ? (
-          <Link
-            href={`${isAdmin ? "overview" : "/my-profile"}`}
-            className="w-full flex items-center justify-end"
-          >
-            <div className="w-[48px] h-[48px] relative flex items-center justify-center">
-              <ImageWithFallback
-                src={profileImageUrl}
-                width={45}
-                height={45}
-                alt="user"
-                className="absolute cursor-pointer rounded-full overflow-hidden"
-              />
-              {isVipUser && (
-                <ImageWithFallback
-                  src={vipRing}
-                  width={48}
-                  height={48}
-                  alt="ring"
-                  className="cursor-pointer z-10"
-                />
-              )}
-            </div>
-          </Link>
-        ) : (
-          <div className="w-full flex items-center gap-[16px] justify-end">
-            <CommonButton
-              label="Join Now"
-              href="/registration"
-              className="w-fit bg-vipHeavy text-vipLight font-bold px-[20px] py-[10px] rounded-lg"
+      <Link
+        href={`${isAdmin ? "overview" : "/my-profile"}`}
+        className="w-auto flex items-center justify-end"
+      >
+        <div className="w-[48px] h-[48px] relative flex items-center justify-center">
+          <ImageWithFallback
+            src={profileImageUrl}
+            width={45}
+            height={45}
+            alt="user"
+            className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
+          />
+          {isVipUser && (
+            <ImageWithFallback
+              src={vipRing}
+              width={48}
+              height={48}
+              alt="ring"
+              className="cursor-pointer z-10"
             />
-            <CommonButton
-              href="/login"
-              label="Sign In"
-              className="w-fit bg-transparent border border-vipHeavy text-vipLight font-bold px-[20px] py-[10px] rounded-lg"
-            />
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </Link>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import PageTitle from "./PageTitle";
+import CardTitle from "./CardTitle";
+import SubHeading from "./SubHeading";
 import HeadingLine from "./HeadingLine";
 import SectionTitle from "./SectionTitle";
-import SubHeading from "./SubHeading";
 
-export { PageTitle, HeadingLine, SectionTitle, SubHeading };
+export { PageTitle, HeadingLine, SectionTitle, SubHeading, CardTitle };

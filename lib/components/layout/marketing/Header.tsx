@@ -22,7 +22,7 @@ const Header = () => {
 
   // Extract access info and user state
   const accessToken = session?.user.accessToken ?? null;
-  const profileImageUrl = session?.user.data.profilePicture?.url ?? avatar;
+  const profileImageUrl = session?.user.data.profilePicture?.url;
   const membershipId =
     session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
   const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
@@ -109,7 +109,8 @@ const Header = () => {
                   width={45}
                   height={45}
                   alt="user"
-                  className="absolute cursor-pointer rounded-full overflow-hidden"
+                  fallBackImage={avatar}
+                  className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
                 />
                 {isVipUser && (
                   <ImageWithFallback
@@ -165,7 +166,8 @@ const Header = () => {
               width={45}
               height={45}
               alt="user"
-              className="absolute cursor-pointer rounded-full overflow-hidden"
+              fallBackImage={avatar}
+              className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
             />
             {isVipUser && (
               <ImageWithFallback

@@ -123,3 +123,29 @@ export const getPaginationPages = (
 
   return pages;
 };
+
+/**
+ * Converts a snake_case string into a more readable format.
+ * Capitalizes the first word and lowercases the rest.
+ * @param input - The snake_case string to format.
+ * @returns The formatted string.
+ */
+/**
+ * Converts a snake_case string into a readable format.
+ * @param input - The snake_case string to format.
+ * @returns The formatted string or "N/A".
+ */
+export const formatLabel = (input: string | null | undefined): string => {
+  if (!input || typeof input !== "string" || input.trim() === "") {
+    return "N/A";
+  }
+
+  return input
+    .split("_")
+    .map((word, index) =>
+      index === 0
+        ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+        : word.toLowerCase()
+    )
+    .join(" ");
+};

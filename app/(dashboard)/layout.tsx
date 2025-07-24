@@ -12,16 +12,19 @@ const DashboardLayout = ({
   children: ReactNode;
 }>) => {
   return (
-    <div className="w-full h-screen flex items-start gap-[24px] overflow-hidden lg:p-2">
+    <div className="w-full h-screen flex overflow-hidden gap-[24px] lg:p-[20px] relative">
       <Sidebar />
-      <div className="w-full flex flex-col items-start overflow-hidden">
+      <div className="flex flex-col flex-1 min-h-0">
         <Navbar />
         <div className="w-full block lg:hidden">
           <Header />
         </div>
-        <div className="overflow-y-auto px-[18px] lg:px-[26px] py-4">
+        <div className="flex-1 overflow-y-auto mb-[50px] lg:mb-0">
           {children}
         </div>
+      </div>
+
+      <div className="block lg:hidden fixed bottom-0 left-0 right-0 z-50">
         <BottomNavigation />
       </div>
     </div>

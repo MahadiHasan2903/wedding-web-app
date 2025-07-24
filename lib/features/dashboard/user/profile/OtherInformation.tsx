@@ -7,12 +7,13 @@ import { CardTitle } from "@/lib/components/heading";
 import { editIcon } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import { formatLabel } from "@/lib/utils/helpers";
 
 interface PropsType {
   userProfile: User;
 }
 
-const ContactInfo = ({ userProfile }: PropsType) => {
+const OtherInformation = ({ userProfile }: PropsType) => {
   const { data: session } = useSession();
   const isLoggedInUser = session?.user.data.id === userProfile.id;
 
@@ -20,7 +21,7 @@ const ContactInfo = ({ userProfile }: PropsType) => {
     <div className="w-full bg-white rounded-[10px]">
       <div className="w-full py-[17px] lg:py-[25px] border-light border-b-0 lg:border-b-[3px]">
         <div className="w-full px-[17px] lg:px-[36px] flex items-center justify-between">
-          <CardTitle title="Contact & Accessibility" />
+          <CardTitle title="Other Information" />
           {isLoggedInUser && (
             <CommonButton
               label="Edit Info"
@@ -39,33 +40,29 @@ const ContactInfo = ({ userProfile }: PropsType) => {
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 px-[17px] lg:px-[36px] pb-[17px] lg:py-[25px] gap-[16px] lg:gap-[25px]">
+      <div className="w-full grid grid-cols-2 lg:grid-cols-3 px-[17px] lg:px-[36px] pb-[17px] lg:py-[25px]">
         <div className="flex flex-col items-start gap-1">
           <p className="text-[10px] lg:text-[14px] font-semibold">
-            Preferred Language
+            Astrological Sign
           </p>
-          <p className="text-[10px] lg:text-[14px] font-normal">
-            {userProfile.preferredLanguages?.length
-              ? userProfile.preferredLanguages.join(", ")
-              : "N/A"}
+          <p className="text-[10px] lg:text-[14px] font-normal capitalize">
+            {userProfile.astrologicalSign || "N/A"}
           </p>
         </div>
         <div className="flex flex-col items-start gap-1">
-          <p className="text-[10px] lg:text-[14px] font-semibold">Phone</p>
+          <p className="text-[10px] lg:text-[14px] font-semibold">
+            Love Language
+          </p>
           <p className="text-[10px] lg:text-[14px] font-normal">
-            {userProfile.phoneNumber || "N/A"}
+            {formatLabel(userProfile.loveLanguage) || "N/A"}
           </p>
         </div>
         <div className="flex flex-col items-start gap-1">
-          <p className="text-[10px] lg:text-[14px] font-semibold">Email</p>
-          <p className="text-[10px] lg:text-[14px] font-normal">
-            {userProfile.email || "N/A"}
+          <p className="text-[10px] lg:text-[14px] font-semibold">
+            Favorite Quote
           </p>
-        </div>
-        <div className="flex flex-col items-start gap-1">
-          <p className="text-[10px] lg:text-[14px] font-semibold">Timezone</p>
           <p className="text-[10px] lg:text-[14px] font-normal">
-            {userProfile.timeZone || "N/A"}
+            {userProfile.favoriteQuote || "N/A"}
           </p>
         </div>
       </div>
@@ -73,4 +70,4 @@ const ContactInfo = ({ userProfile }: PropsType) => {
   );
 };
 
-export default ContactInfo;
+export default OtherInformation;

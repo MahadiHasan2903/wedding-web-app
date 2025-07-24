@@ -37,13 +37,15 @@ interface PropsType {
 const BasicInfo = ({ userProfile }: PropsType) => {
   const { data: session } = useSession();
   const isLoggedInUser = session?.user.data.id === userProfile.id;
-  let isVipUser = true;
+  const membershipId =
+    session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
+  const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
 
   return (
-    <div className="w-full h-full flex items-center gap-[100px] bg-white rounded-[10px] px-[18px] py-[12px] lg:px-[36px] lg:py-[20px]">
+    <div className="w-full h-full flex flex-col xl:flex-row items-start xl:items-center gap-[20px] lg:gap-[40px] xl:gap-[100px] bg-white rounded-[10px] px-[18px] py-[12px] lg:px-[36px] lg:py-[20px]">
       <div className="w-auto shrink-0 flex items-center gap-[16px]">
         <div className="w-[90px] lg:w-[150px] h-[90px] lg:h-[160px] relative flex items-center justify-center">
-          <div className="w-[80px] lg:w-[145px] h-[80px] lg:h-[145px] relative overflow-hidden">
+          <div className="w-[85px] lg:w-[145px] h-[85px] lg:h-[145px] relative overflow-hidden">
             <ImageWithFallback
               fill
               alt="user"
@@ -54,7 +56,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
           </div>
 
           {isVipUser && (
-            <div className="absolute w-[90px] lg:w-[150px] h-[90px] lg:h-[160px] top-[2px] z-10">
+            <div className="absolute w-[95px] lg:w-[150px] h-[95px] lg:h-[160px] top-[2px] z-10">
               <ImageWithFallback
                 src={vipRing}
                 fill
@@ -64,19 +66,18 @@ const BasicInfo = ({ userProfile }: PropsType) => {
             </div>
           )}
         </div>
-        <div className="flex flex-col items-start gap-[15px]">
+        <div className="flex flex-col items-start gap-1 lg:gap-[15px]">
           <div>
             <h2 className="text-[14px] lg:text-[20px] font-medium text-primary">
               <CardTitle
                 title={`${userProfile.firstName} ${userProfile.lastName}`}
               />
             </h2>
-            <p className="text-[12px] lg:text-[14px] font-medium ">
+            <p className="text-[12px] lg:text-[14px] font-medium">
               {userProfile.dateOfBirth
                 ? `${calculateAgeFromDOB(userProfile.dateOfBirth)} Years Old`
                 : "Age Unknown"}
-              ,
-              <span className="capitalize"> {userProfile.gender ?? "N/A"}</span>
+              {userProfile.gender && `, ${userProfile.gender}`}
             </p>
           </div>
           <div>
@@ -102,7 +103,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
         </div>
       </div>
       <div className="w-full flex flex-col items-start gap-[20px]">
-        <p className="text-[12px] sm:text-[14px] font-regular text-justify">
+        <p className="text-[12px] sm:text-[14px] font-normal text-justify">
           {userProfile.bio || "bio goes here ..."}
         </p>
         <div className="w-full flex items-center justify-between">
@@ -134,7 +135,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
             <CommonButton
               label="Edit Info"
               // onClick={() => console.log("Triggered")}
-              className="w-fit flex items-center gap-[8px] bg-transparent border border-[#A1A1A1] text-black text-[10px] font-normal rounded-full p-[10px]"
+              className="w-fit flex items-center gap-[8px] bg-transparent border border-[#A1A1A1] text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
               startIcon={
                 <ImageWithFallback
                   src={editIcon}

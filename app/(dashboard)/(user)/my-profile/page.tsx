@@ -4,6 +4,8 @@ import { getServerSessionData } from "@/lib/config/auth";
 import BasicInfo from "@/lib/features/dashboard/user/profile/BasicInfo";
 import ContactInfo from "@/lib/features/dashboard/user/profile/ContactInfo";
 import BackgroundInfo from "@/lib/features/dashboard/user/profile/BackgroundInfo";
+import CulturalIdentity from "@/lib/features/dashboard/user/profile/CulturalIdentity";
+import OtherInformation from "@/lib/features/dashboard/user/profile/OtherInformation";
 import PersonalAttributes from "@/lib/features/dashboard/user/profile/PersonalAttributes";
 import RelationshipPreferences from "@/lib/features/dashboard/user/profile/RelationshipPreferences";
 
@@ -15,12 +17,14 @@ const page = async () => {
   );
 
   return (
-    <div className="w-full h-full flex flex-col gap-[30px] items-start py-0 lg:py-[30px]">
+    <div className="w-full h-full flex flex-col gap-[2px] lg:gap-[30px] items-start py-0 lg:py-[30px]">
       <BasicInfo userProfile={loggedInUserProfile} />
       <ContactInfo userProfile={loggedInUserProfile} />
       <BackgroundInfo userProfile={loggedInUserProfile} />
       <RelationshipPreferences userProfile={loggedInUserProfile} />
       <PersonalAttributes userProfile={loggedInUserProfile} />
+      <CulturalIdentity userProfile={loggedInUserProfile} />
+      <OtherInformation userProfile={loggedInUserProfile} />
     </div>
   );
 };

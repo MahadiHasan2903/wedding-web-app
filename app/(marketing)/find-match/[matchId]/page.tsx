@@ -1,13 +1,13 @@
 import React from "react";
 import api from "@/lib/api";
 import { getServerSessionData } from "@/lib/config/auth";
-import BasicInfo from "@/lib/features/dashboard/user/profile/BasicInfo";
-import ContactInfo from "@/lib/features/dashboard/user/profile/ContactInfo";
-import BackgroundInfo from "@/lib/features/dashboard/user/profile/BackgroundInfo";
-import CulturalIdentity from "@/lib/features/dashboard/user/profile/CulturalIdentity";
-import OtherInformation from "@/lib/features/dashboard/user/profile/OtherInformation";
-import PersonalAttributes from "@/lib/features/dashboard/user/profile/PersonalAttributes";
-import RelationshipPreferences from "@/lib/features/dashboard/user/profile/RelationshipPreferences";
+import BasicInfo from "@/lib/features/dashboard/user/profile/basic-info/BasicInfo";
+import ContactInfo from "@/lib/features/dashboard/user/profile/contact-info/ContactInfo";
+import OtherInformation from "@/lib/features/dashboard/user/profile/other-info/OtherInformation";
+import BackgroundInfo from "@/lib/features/dashboard/user/profile/background-info/BackgroundInfo";
+import CulturalIdentity from "@/lib/features/dashboard/user/profile/cultural-identity/CulturalIdentity";
+import PersonalAttributes from "@/lib/features/dashboard/user/profile/personal-attributes/PersonalAttributes";
+import RelationshipPreferences from "@/lib/features/dashboard/user/profile/relationship-preferences/RelationshipPreferences";
 
 interface PropsType {
   params: {

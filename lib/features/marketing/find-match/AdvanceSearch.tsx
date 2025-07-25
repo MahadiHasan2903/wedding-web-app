@@ -40,7 +40,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
 
   const countryOptions = Country.getAllCountries().map((country) => ({
     label: country.name,
-    value: country.isoCode,
+    value: country.name,
   }));
 
   const [statesOptions, setStatesOptions] = useState<
@@ -49,6 +49,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
 
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
+  const [countryIsoCode, setCountryIsoCode] = useState("");
   const [religion, setReligion] = useState("");
   const [education, setEducation] = useState("");
   const [profession, setProfession] = useState("");
@@ -74,10 +75,10 @@ const AdvanceSearch = ({ page }: PropsType) => {
 
   // Load states when country changes
   useEffect(() => {
-    if (country) {
-      const states = State.getStatesOfCountry(country).map((state) => ({
+    if (countryIsoCode) {
+      const states = State.getStatesOfCountry(countryIsoCode).map((state) => ({
         label: state.name,
-        value: state.isoCode,
+        value: state.name,
       }));
       setStatesOptions(states);
       setCity("");
@@ -85,7 +86,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
       setStatesOptions([]);
       setCity("");
     }
-  }, [country]);
+  }, [countryIsoCode]);
 
   const handleSearch = () => {
     const filters = {
@@ -222,12 +223,19 @@ const AdvanceSearch = ({ page }: PropsType) => {
             placeholder="Doesn't Matter"
           />
           <SelectField
-            label="Country"
             name="country"
-            options={countryOptions}
+            label="Country"
             value={country}
-            onChange={setCountry}
-            placeholder="Doesn't Matter"
+            options={countryOptions}
+            onChange={(selectedCountryName) => {
+              setCountry(selectedCountryName);
+
+              const matchedCountry = Country.getAllCountries().find(
+                (c) => c.name === selectedCountryName
+              );
+
+              setCountryIsoCode(matchedCountry?.isoCode ?? "");
+            }}
           />
 
           <SelectField

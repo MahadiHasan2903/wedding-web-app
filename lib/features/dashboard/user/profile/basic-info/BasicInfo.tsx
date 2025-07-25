@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   editIcon,
@@ -20,6 +20,7 @@ import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
 import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
+import BasicInfoUpdateForm from "./BasicInfoUpdateForm";
 
 const iconMap: Record<string, StaticImageData> = {
   facebook,
@@ -35,6 +36,7 @@ interface PropsType {
 }
 
 const BasicInfo = ({ userProfile }: PropsType) => {
+  const [open, setOpen] = useState(false);
   const { data: session } = useSession();
   const isLoggedInUser = session?.user.data.id === userProfile.id;
   const membershipId =
@@ -134,7 +136,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
           {isLoggedInUser && (
             <CommonButton
               label="Edit Info"
-              // onClick={() => console.log("Triggered")}
+              onClick={() => setOpen(true)}
               className="w-fit flex items-center gap-[8px] bg-transparent border border-[#A1A1A1] text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
               startIcon={
                 <ImageWithFallback
@@ -148,6 +150,13 @@ const BasicInfo = ({ userProfile }: PropsType) => {
           )}
         </div>
       </div>
+      {open && (
+        <BasicInfoUpdateForm
+          open={open}
+          setOpen={setOpen}
+          userProfile={userProfile}
+        />
+      )}
     </div>
   );
 };

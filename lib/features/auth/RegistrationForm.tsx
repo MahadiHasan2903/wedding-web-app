@@ -15,7 +15,7 @@ import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
 import {
   registrationRequestSchema,
   RegistrationRequestType,
-} from "@/lib/schema/auth.schema";
+} from "@/lib/schema/auth/auth.schema";
 import {
   accountRegistrationConfirmationAction,
   accountRegistrationRequestAction,

@@ -18,6 +18,7 @@ export interface User {
   profilePicture: Media | null;
   additionalPhotos: Media[];
   blockedUsers: string[] | null;
+  likedUsers: string[] | null;
   socialMediaLinks: Array<{
     name: string;
     link: string;

@@ -12,7 +12,7 @@ import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { SubHeading } from "@/lib/components/heading";
 import ForgetPasswordReqModal from "./ForgetPasswordReqModal";
-import { loginSchema, LoginType } from "@/lib/schema/auth.schema";
+import { loginSchema, LoginType } from "@/lib/schema/auth/auth.schema";
 import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
 import VerificationModal from "./VerificationModal";
 import { forgetPasswordConfirmationAction } from "@/lib/action/auth/auth.action";

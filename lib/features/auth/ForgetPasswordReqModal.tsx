@@ -11,7 +11,7 @@ import { forgetPasswordRequestAction } from "@/lib/action/auth/auth.action";
 import {
   forgetPasswordRequestSchema,
   ForgetPasswordRequestType,
-} from "@/lib/schema/auth.schema";
+} from "@/lib/schema/auth/auth.schema";
 
 interface PropsType {
   open: boolean;

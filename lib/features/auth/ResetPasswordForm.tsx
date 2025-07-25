@@ -15,7 +15,7 @@ import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
 import {
   resetPasswordSchema,
   ResetPasswordType,
-} from "@/lib/schema/auth.schema";
+} from "@/lib/schema/auth/auth.schema";
 
 interface PropsType {
   email: string;

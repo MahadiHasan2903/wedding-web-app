@@ -404,11 +404,14 @@ const getAllBlockedUsers = async (
  * @returns The complete `User` object.
  * @throws Error if the user is not found or the response is invalid.
  */
-const getUserDetails = async (userId: string) => {
+const getUserDetails = async (userId: string, accessToken?: string) => {
   const response = await fetchTyped<GetUserDetailsResponse>(
     `${BASE_URL}/users/${userId}`,
     {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     }
   );
 

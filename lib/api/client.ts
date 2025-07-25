@@ -28,9 +28,9 @@ export function fetchTyped<TResponse>(
   };
 
   return fetch(url, uConfig).then(async (response) => {
-    if (response.status === 401) {
-      redirect("/login");
-    }
+    // if (response.status === 401) {
+    //   redirect("/login");
+    // }
 
     const data = await response.json();
 

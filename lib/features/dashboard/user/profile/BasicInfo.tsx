@@ -42,7 +42,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
   const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
 
   return (
-    <div className="w-full h-full flex flex-col xl:flex-row items-start xl:items-center gap-[20px] lg:gap-[40px] xl:gap-[100px] bg-white rounded-[10px] px-[18px] py-[12px] lg:px-[36px] lg:py-[20px]">
+    <div className="w-full h-full flex flex-col xl:flex-row items-start xl:items-center gap-[20px] lg:gap-[40px] xl:gap-[100px] bg-white rounded-none lg:rounded-[10px] px-[18px] py-[12px] lg:px-[36px] lg:py-[20px]">
       <div className="w-auto shrink-0 flex items-center gap-[16px]">
         <div className="w-[90px] lg:w-[150px] h-[90px] lg:h-[160px] relative flex items-center justify-center">
           <div className="w-[85px] lg:w-[145px] h-[85px] lg:h-[145px] relative overflow-hidden">

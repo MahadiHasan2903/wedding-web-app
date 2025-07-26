@@ -13,7 +13,7 @@ const LookingAheadSection = () => {
           <Link
             key={index}
             href={href}
-            className="p-[4px] border border-[#A1A1A1] rounded-full"
+            className="p-[4px] border border-primaryBorder rounded-full"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -46,7 +46,7 @@ const LookingAheadSection = () => {
             <Link
               key={index}
               href={href}
-              className="p-[6px] border border-[#A1A1A1] rounded-lg"
+              className="p-[6px] border border-primaryBorder rounded-lg"
               target="_blank"
               rel="noopener noreferrer"
             >

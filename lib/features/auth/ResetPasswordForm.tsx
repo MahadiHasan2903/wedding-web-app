@@ -7,11 +7,11 @@ import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
+import { SubHeading } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
-import { SubHeading } from "@/lib/components/heading";
+import { UnderlineInput } from "@/lib/components/form-elements";
 import { resetPasswordAction } from "@/lib/action/auth/auth.action";
-import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
 import {
   resetPasswordSchema,
   ResetPasswordType,

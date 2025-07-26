@@ -14,6 +14,7 @@ export interface PropsType {
   value?: string | number;
   defaultValue?: string | number;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
 }
 
 const UnderlineInput = ({
@@ -25,8 +26,9 @@ const UnderlineInput = ({
   defaultValue,
   onChange,
   error,
-  required = true,
+  required = false,
   readOnly = false,
+  className = "",
 }: PropsType) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -46,8 +48,11 @@ const UnderlineInput = ({
   return (
     <div className="flex flex-col w-full">
       {label && (
-        <label htmlFor={name} className="text-md font-medium">
-          {label}
+        <label
+          htmlFor={name}
+          className="text-[12px] lg:text-[14px] font-medium"
+        >
+          {label} {required && <span className="text-red">*</span>}
         </label>
       )}
 
@@ -65,7 +70,7 @@ const UnderlineInput = ({
           readOnly={readOnly}
           className={`w-full text-[12px] lg:text-[14px] py-[10px] pr-10 border-b outline-none transition-all duration-200 ${
             error ? "border-red" : "border-[#A0A0A0] focus:border-primary"
-          }`}
+          } ${className}`}
         />
 
         {type === "password" && (

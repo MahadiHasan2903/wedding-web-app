@@ -88,7 +88,7 @@ const UserCard = ({ user }: UserCardProps) => {
         className={`${
           isVipUser
             ? "btn-gold-gradient border-none"
-            : "bg-transparent border border-[#A1A1A1]"
+            : "bg-transparent border border-primaryBorder"
         } w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal p-[10px] rounded-full`}
         startIcon={
           <ImageWithFallback

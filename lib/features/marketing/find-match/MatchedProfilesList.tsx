@@ -81,7 +81,7 @@ const MatchedProfilesList = ({ getAllUsersData }: PropsType) => {
         )}
       </div>
 
-      <div className="flex items-center gap-[10px] my-[50px] lg:mt-[130px] lg:mb-[80px] text-[#A1A1A1] mx-auto">
+      <div className="flex items-center gap-[10px] my-[50px] lg:mt-[130px] lg:mb-[80px] text-primaryBorder mx-auto">
         {/* Prev button */}
         <button
           onClick={onPrevClick}
@@ -103,7 +103,7 @@ const MatchedProfilesList = ({ getAllUsersData }: PropsType) => {
               className={`w-[30px] h-[30px] flex items-center justify-center border ${
                 page === currentPage
                   ? "border-primary bg-primary text-white font-bold"
-                  : "border-[#A1A1A1]"
+                  : "border-primaryBorder"
               }`}
             >
               {page}

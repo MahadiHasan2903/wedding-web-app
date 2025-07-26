@@ -21,6 +21,10 @@ import { ImageWithFallback } from "@/lib/components/image";
 import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
 import BasicInfoUpdateForm from "./BasicInfoUpdateForm";
+import {
+  getCountryNameFromIso,
+  getStateNameFromIso,
+} from "@/lib/utils/helpers";
 
 const iconMap: Record<string, StaticImageData> = {
   facebook,
@@ -86,7 +90,9 @@ const BasicInfo = ({ userProfile }: PropsType) => {
             <p className="text-[12px] lg:text-[14px] font-normal text-justify">
               <span className="font-medium">Location:</span>{" "}
               <span className="capitalize">
-                {userProfile.city || "N/A"}, {userProfile.country || "N/A"}
+                {getStateNameFromIso(userProfile.country, userProfile.city) ||
+                  "N/A"}
+                , {getCountryNameFromIso(userProfile.country) || "N/A"},
               </span>
             </p>
             <p className="text-[12px] lg:text-[14px] font-normal capitalize">
@@ -137,7 +143,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
             <CommonButton
               label="Edit Info"
               onClick={() => setOpen(true)}
-              className="w-fit flex items-center gap-[8px] bg-transparent border border-[#A1A1A1] text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
+              className="w-fit flex items-center gap-[8px] bg-transparent border border-primaryBorder text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
               startIcon={
                 <ImageWithFallback
                   src={editIcon}

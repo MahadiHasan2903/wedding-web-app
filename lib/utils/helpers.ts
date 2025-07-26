@@ -1,3 +1,5 @@
+import { Country, State } from "country-state-city";
+
 /**
  * Truncate a string to a specified maximum length and add ellipsis if needed.
  * @param {string} value - The string to truncate.
@@ -148,4 +150,42 @@ export const formatLabel = (input: string | null | undefined): string => {
         : word.toLowerCase()
     )
     .join(" ");
+};
+
+/**
+ * Returns the full country name from a given ISO code.
+ *
+ * @param isoCode - The ISO 3166-1 alpha-2 country code (e.g., "US", "BD").
+ * @returns The corresponding country name, or an empty string if not found.
+ */
+export const getCountryNameFromIso = (
+  isoCode: string | null | undefined
+): string => {
+  if (!isoCode) {
+    return "";
+  }
+  return (
+    Country.getAllCountries().find((c) => c.isoCode === isoCode)?.name ?? ""
+  );
+};
+
+/**
+ * Returns the full state/province name from a given ISO code and its country code.
+ *
+ * @param countryIsoCode - The ISO 3166-1 alpha-2 country code (e.g., "US").
+ * @param stateIsoCode - The ISO 3166-2 state/province code within the given country (e.g., "CA" for California).
+ * @returns The corresponding state name, or an empty string if not found.
+ */
+export const getStateNameFromIso = (
+  countryIsoCode: string | null | undefined,
+  stateIsoCode: string | null | undefined
+): string => {
+  if (!countryIsoCode || !stateIsoCode) {
+    return "";
+  }
+  return (
+    State.getStatesOfCountry(countryIsoCode).find(
+      (s) => s.isoCode === stateIsoCode
+    )?.name ?? ""
+  );
 };

@@ -4,7 +4,7 @@ import React, { ChangeEvent } from "react";
 import { polygon } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
 
-interface SelectFieldProps {
+interface OutlinedSelectFieldProps {
   label: string;
   name: string;
   value?: string;
@@ -20,7 +20,7 @@ interface SelectFieldProps {
   onChange?: (value: string) => void;
 }
 
-const SelectField = ({
+const OutlinedSelectField = ({
   label,
   name,
   options,
@@ -31,7 +31,7 @@ const SelectField = ({
   className = "",
   disabled = false,
   readOnly = false,
-}: SelectFieldProps) => {
+}: OutlinedSelectFieldProps) => {
   // Function to handle change of the selected option
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
     if (readOnly) return;
@@ -55,7 +55,7 @@ const SelectField = ({
           disabled={disabled}
           onChange={handleChange}
           aria-readonly={readOnly || undefined}
-          className={`w-full appearance-none bg-transparent px-[16px] pr-[20px] lg:pr-[36px] py-2 border border-[#A1A1A1] outline-none rounded-[5px] cursor-pointer text-[12px] lg:text-[14px] ${
+          className={`w-full appearance-none bg-transparent px-[16px] pr-[20px] lg:pr-[36px] py-2 border border-primaryBorder outline-none rounded-[5px] cursor-pointer text-[12px] lg:text-[14px] ${
             disabled || readOnly ? "bg-gray cursor-not-allowed" : ""
           } ${className}`}
         >
@@ -78,4 +78,4 @@ const SelectField = ({
   );
 };
 
-export default SelectField;
+export default OutlinedSelectField;

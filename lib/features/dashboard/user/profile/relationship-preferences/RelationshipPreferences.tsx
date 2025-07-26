@@ -25,7 +25,7 @@ const RelationshipPreferences = ({ userProfile }: PropsType) => {
             <CommonButton
               label="Edit Info"
               // onClick={() => console.log("Triggered")}
-              className="w-fit flex items-center gap-[8px] bg-transparent border border-[#A1A1A1] text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
+              className="w-fit flex items-center gap-[8px] bg-transparent border border-primaryBorder text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
               startIcon={
                 <ImageWithFallback
                   src={editIcon}

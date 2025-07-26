@@ -22,9 +22,9 @@ import { AccountType } from "@/lib/enums/ms-package";
 import { SubHeading } from "@/lib/components/heading";
 
 import {
-  SelectField,
   RadioGroupField,
   NumberRangeField,
+  OutlinedSelectField,
 } from "@/lib/components/form-elements/advance-search";
 import { CommonButton } from "@/lib/components/buttons";
 import { findMatch } from "@/lib/components/image/icons";
@@ -206,7 +206,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
 
         {/* Section 3 */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
-          <SelectField
+          <OutlinedSelectField
             label="Religion"
             name="religion"
             options={enumToOptions(Religion)}
@@ -214,7 +214,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
             onChange={setReligion}
             placeholder="Doesn't Matter"
           />
-          <SelectField
+          <OutlinedSelectField
             label="Political View"
             name="politicalView"
             options={enumToOptions(PoliticalView)}
@@ -222,7 +222,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
             onChange={setPoliticalView}
             placeholder="Doesn't Matter"
           />
-          <SelectField
+          <OutlinedSelectField
             name="country"
             label="Country"
             value={country}
@@ -238,7 +238,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
             }}
           />
 
-          <SelectField
+          <OutlinedSelectField
             label="City"
             name="city"
             options={statesOptions}
@@ -251,7 +251,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
 
         {/* Section 4 */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
-          <SelectField
+          <OutlinedSelectField
             label="Education"
             name="education"
             options={enumToOptions(HighestEducation)}
@@ -259,7 +259,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
             onChange={setEducation}
             placeholder="Doesn't Matter"
           />
-          <SelectField
+          <OutlinedSelectField
             label="Profession"
             name="profession"
             options={enumToOptions(Profession)}
@@ -267,7 +267,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
             onChange={setProfession}
             placeholder="Doesn't Matter"
           />
-          <SelectField
+          <OutlinedSelectField
             label="Language Spoken"
             name="languageSpoken"
             options={enumToOptions(SpokenLanguage)}
@@ -286,7 +286,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
 
         {/* Section 5 */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
-          <SelectField
+          <OutlinedSelectField
             label="Dietary Preference"
             name="dietaryPreference"
             options={enumToOptions(DietaryPreference)}
@@ -294,7 +294,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
             onChange={setDietaryPreference}
             placeholder="Doesn't Matter"
           />
-          <SelectField
+          <OutlinedSelectField
             label="Smoking Habit"
             name="smokingHabit"
             options={enumToOptions(SmokingHabit)}
@@ -302,7 +302,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
             onChange={setSmokingHabit}
             placeholder="Doesn't Matter"
           />
-          <SelectField
+          <OutlinedSelectField
             label="Drinking Habit"
             name="drinkingHabit"
             options={enumToOptions(DrinkingHabit)}
@@ -310,7 +310,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
             onChange={setDrinkingHabit}
             placeholder="Doesn't Matter"
           />
-          <SelectField
+          <OutlinedSelectField
             label="Health Condition"
             name="healthCondition"
             options={enumToOptions(HealthCondition)}
@@ -322,7 +322,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
 
         {/* Section 6 */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
-          <SelectField
+          <OutlinedSelectField
             label="Living Arrangement"
             name="livingArrangement"
             options={enumToOptions(LivingArrangement)}

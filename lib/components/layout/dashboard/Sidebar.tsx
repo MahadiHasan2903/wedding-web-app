@@ -63,7 +63,7 @@ const Sidebar = () => {
         </div>
       </div>
       {!isAdmin && (
-        <div className="w-fit flex items-start gap-[8px] rounded-[10px] border border-[#A1A1A1] py-[20px] pl-[10px] pr-[20px] mx-[26px] my-[20px]">
+        <div className="w-fit flex items-start gap-[8px] rounded-[10px] border border-primaryBorder py-[20px] pl-[10px] pr-[20px] mx-[26px] my-[20px]">
           <ImageWithFallback
             src={crown}
             width={18}

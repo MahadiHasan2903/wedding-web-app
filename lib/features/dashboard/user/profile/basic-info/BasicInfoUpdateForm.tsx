@@ -4,16 +4,22 @@ import {
   facebook,
   instagram,
   linkedin,
-  tikTok,
+  tiktok,
   twitter,
   whatsapp,
 } from "@/lib/components/image/icons";
+import {
+  UpdateUserType,
+  updateUserSchema,
+} from "@/lib/schema/user/user.schema";
+import { toast } from "react-toastify";
 import {
   Datepicker,
   Textarea,
   UnderlineInput,
   UnderlineSelectField,
 } from "@/lib/components/form-elements";
+import { useRouter } from "next/navigation";
 import { User } from "@/lib/types/user/user.types";
 import { enumToOptions } from "@/lib/utils/helpers";
 import { Country, State } from "country-state-city";
@@ -21,21 +27,19 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
+import { formatDateString1 } from "@/lib/utils/dateUtils";
 import { ImageWithFallback } from "@/lib/components/image";
 import { Gender, MaritalStatus } from "@/lib/enums/users.enum";
-import {
-  UpdateUserType,
-  updateUserSchema,
-} from "@/lib/schema/user/user.schema";
+import { updateUserProfileAction } from "@/lib/action/user/user.action";
 
-// Props type for modal component
+// Props type for the BasicInfoUpdateForm component
 interface PropsType {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  userProfile: User;
+  open: boolean; // Whether the modal is open
+  setOpen: Dispatch<SetStateAction<boolean>>; // Setter to control modal open state
+  userProfile: User; // The current user profile data to populate the form
 }
 
-// Fixed list of supported social platforms
+// List of supported social platforms with their icons and input placeholders
 const socialPlatforms = [
   { name: "facebook", icon: facebook, placeholder: "Enter your Facebook link" },
   {
@@ -46,20 +50,25 @@ const socialPlatforms = [
   { name: "linkedin", icon: linkedin, placeholder: "Enter your LinkedIn link" },
   { name: "whatsapp", icon: whatsapp, placeholder: "Enter your WhatsApp link" },
   { name: "twitter", icon: twitter, placeholder: "Enter your Twitter link" },
-  { name: "tikTok", icon: tikTok, placeholder: "Enter your TikTok link" },
+  { name: "tiktok", icon: tiktok, placeholder: "Enter your TikTok link" }, // fixed "tikTok" => "tiktok"
 ];
 
 const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
-  // Country and state options for select fields
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  // Get all countries for country select options
   const countryOptions = Country.getAllCountries().map((country) => ({
     label: country.name,
     value: country.isoCode,
   }));
+
+  // States options depend on the selected country
   const [statesOptions, setStatesOptions] = useState<
     { label: string; value: string }[]
   >([]);
 
-  // Prepare default values for social links
+  // Prepare default values for social media links from userProfile
   const defaultSocialLinks = socialPlatforms.map((platform) => {
     const existing = userProfile.socialMediaLinks?.find(
       (l) => l.name === platform.name
@@ -70,7 +79,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
     };
   });
 
-  // Setup react-hook-form with zod schema
+  // Initialize react-hook-form with Zod validation schema and default form values
   const {
     watch,
     control,
@@ -93,23 +102,28 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
     },
   });
 
+  // Watch the current values of socialMediaLinks and country to update form dynamically
   const socialLinks = watch("socialMediaLinks");
   const countryField = watch("country");
 
-  // Load states based on selected country
+  // Effect to load states when country changes
   useEffect(() => {
     if (!countryField) {
+      setStatesOptions([]); // Reset states if no country selected
       return;
     }
 
+    // Find the selected country from the full country list
     const selectedCountry = Country.getAllCountries().find(
       (country) => country.isoCode === countryField
     );
 
     if (!selectedCountry) {
+      setStatesOptions([]); // Reset if country not found
       return;
     }
 
+    // Get states for the selected country and map to select options
     const states = State.getStatesOfCountry(selectedCountry.isoCode).map(
       (state) => ({
         label: state.name,
@@ -122,7 +136,53 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
 
   // Form submission handler
   const handleUpdateProfile = async (data: UpdateUserType) => {
+    setLoading(true);
+
+    const formData = new FormData();
+
+    // Logging form data for debugging
     console.log(JSON.stringify(data, null, 2));
+
+    // Append all form fields to FormData (handling empty values)
+    formData.append("firstName", data.firstName ?? "");
+    formData.append("lastName", data.lastName ?? "");
+    formData.append("gender", data.gender ?? "");
+
+    // Format dateOfBirth; fallback to original if empty after formatting
+    formData.append(
+      "dateOfBirth",
+      formatDateString1(data.dateOfBirth) === ""
+        ? userProfile.dateOfBirth ?? ""
+        : formatDateString1(data.dateOfBirth)
+    );
+
+    formData.append("country", data.country ?? "");
+    formData.append("city", data.city ?? "");
+    formData.append("nationality", data.nationality ?? "");
+    formData.append("maritalStatus", data.maritalStatus ?? "");
+    formData.append("bio", data.bio ?? "");
+
+    // Filter out empty social links and append as JSON string
+    const filteredSocialLinks = (data.socialMediaLinks ?? []).filter(
+      (link) => link.name && link.link
+    );
+    formData.append("socialMediaLinks", JSON.stringify(filteredSocialLinks));
+
+    // Call update profile API action
+    const updateProfileResponse = await updateUserProfileAction(formData);
+
+    // Show toast notification based on API response
+    toast(updateProfileResponse.message, {
+      type: updateProfileResponse.status ? "success" : "error",
+    });
+
+    // Close modal and refresh page on success
+    if (updateProfileResponse.status) {
+      setOpen(false);
+      router.refresh();
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -135,9 +195,12 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
               onSubmit={handleSubmit(handleUpdateProfile)}
               className="w-full h-full flex flex-col gap-[25px] max-h-[800px] "
             >
+              {/* Form Title */}
               <CardTitle title="Basic Info" />
+
+              {/* Scrollable content area for the form fields */}
               <div className="w-full h-full max-h-[700px] overflow-y-auto flex flex-col gap-[22px] ">
-                {/* Name */}
+                {/* First and Last Name fields */}
                 <div className="flex flex-col md:flex-row gap-[35px]">
                   <Controller
                     name="firstName"
@@ -169,7 +232,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                   />
                 </div>
 
-                {/* Gender & DOB */}
+                {/* Gender dropdown and Date of Birth picker */}
                 <div className="flex flex-col md:flex-row gap-[35px]">
                   <div className="flex-1">
                     <Controller
@@ -207,7 +270,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                   </div>
                 </div>
 
-                {/* Country & City */}
+                {/* Country and City/State dropdowns */}
                 <div className="flex flex-col md:flex-row gap-[35px]">
                   <div className="flex-1">
                     <Controller
@@ -235,14 +298,14 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                           label="State/City"
                           options={statesOptions}
                           placeholder="Select your city"
-                          disabled={!countryField}
+                          disabled={!countryField} // Disable city select if no country selected
                         />
                       )}
                     />
                   </div>
                 </div>
 
-                {/* Nationality & Marital Status */}
+                {/* Nationality input and Marital Status dropdown */}
                 <div className="flex flex-col md:flex-row gap-[35px]">
                   <div className="flex-1">
                     <Controller
@@ -278,7 +341,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                   </div>
                 </div>
 
-                {/* Bio */}
+                {/* Short bio textarea */}
                 <Controller
                   name="bio"
                   control={control}
@@ -295,7 +358,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                   )}
                 />
 
-                {/* Social Media Links */}
+                {/* Social Media Links inputs */}
                 <div className="flex flex-col items-start gap-[5px]">
                   <p className="text-[12px] lg:text-[14px] font-medium">
                     Social Links
@@ -323,6 +386,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                               error={
                                 errors.socialMediaLinks?.[index]?.link?.message
                               }
+                              // Update the socialMediaLinks array on change
                               onChange={(e) => {
                                 const updatedLinks = [...(socialLinks || [])];
                                 updatedLinks[index] = {
@@ -341,11 +405,13 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                   </div>
                 </div>
               </div>
-              {/* Footer Buttons */}
+
+              {/* Form action buttons */}
               <div className="flex items-center gap-[30px] text-[14px]">
                 <CommonButton
                   type="submit"
-                  label="Save"
+                  label={`${loading ? "Saving..." : "Save"}`}
+                  disabled={loading}
                   className="w-full bg-green text-white font-bold p-[10px] rounded-full"
                 />
                 <CommonButton

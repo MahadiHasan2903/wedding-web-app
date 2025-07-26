@@ -7,7 +7,7 @@ import {
   facebook,
   instagram,
   linkedin,
-  tikTok,
+  tiktok,
   twitter,
   whatsapp,
 } from "@/lib/components/image/icons";
@@ -30,7 +30,7 @@ const iconMap: Record<string, StaticImageData> = {
   facebook,
   instagram,
   linkedin,
-  tikTok,
+  tiktok,
   twitter,
   whatsapp,
 };

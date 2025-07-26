@@ -7,7 +7,7 @@ import quote from "@/public/icons/quote.svg";
 import avatar from "@/public/icons/avatar.svg";
 import report from "@/public/icons/report.svg";
 import google from "@/public/icons/google.svg";
-import tikTok from "@/public/icons/tiktok.svg";
+import tiktok from "@/public/icons/tiktok.svg";
 import twitter from "@/public/icons/twitter.svg";
 import message from "@/public/icons/message.svg";
 import polygon from "@/public/icons/polygon.svg";
@@ -42,7 +42,7 @@ export {
   report,
   google,
   message,
-  tikTok,
+  tiktok,
   twitter,
   polygon,
   whatsapp,

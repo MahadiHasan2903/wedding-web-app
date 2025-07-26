@@ -1,4 +1,13 @@
-import { differenceInYears, addYears, isBefore } from "date-fns";
+import {
+  parse,
+  format,
+  isValid,
+  isBefore,
+  addYears,
+  differenceInYears,
+} from "date-fns";
+
+export const DATE_FORMAT_1 = "yyyy-MM-dd";
 
 /**
  * Calculates the age in years from a given date of birth.
@@ -14,3 +23,28 @@ export const calculateAgeFromDOB = (dob: string | Date): number => {
   const nextBirthday = addYears(birthDate, age);
   return isBefore(new Date(), nextBirthday) ? age + 1 : age;
 };
+
+/**
+ * Parses a date string from a given input format and returns it in the specified output format.
+ * Returns empty string if input is invalid or empty.
+ *
+ * @param dateStr - The input date string, can be null or undefined.
+ * @param inputFormat - The format of the input date string (default: "MMM dd, yyyy").
+ * @param outputFormat - Desired output format (default: "yyyy-MM-dd").
+ * @returns The formatted date string or empty string.
+ */
+export function formatDateString1(
+  dateStr?: string | null,
+  inputFormat: string = "MMM dd, yyyy",
+  outputFormat: string = "yyyy-MM-dd"
+): string {
+  if (!dateStr) return "";
+
+  const parsedDate = parse(dateStr, inputFormat, new Date());
+
+  if (!isValid(parsedDate)) {
+    return "";
+  }
+
+  return format(parsedDate, outputFormat);
+}

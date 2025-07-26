@@ -159,7 +159,7 @@ const DatePicker = ({
           onBlur={handleBlur}
         />
         <div className="pointer-events-none absolute inset-0 left-auto right-2 sm:right-5 flex items-center">
-          <FaCalendarDays className="text-black" />
+          <FaCalendarDays className="text-primaryBorder" />
         </div>
       </div>
       {error && <p className="text-red m-[5px]">{error}</p>}

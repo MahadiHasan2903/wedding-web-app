@@ -28,13 +28,13 @@ export function fetchTyped<TResponse>(
   };
 
   return fetch(url, uConfig).then(async (response) => {
-    // if (response.status === 401) {
-    //   redirect("/login");
-    // }
+    if (response.status === 401) {
+      redirect("/login");
+    }
 
     const data = await response.json();
 
-    // console.log('Raw response:', JSON.stringify(data, null, 2)); //Using for debugging purpose
+    // console.log("Raw response:", JSON.stringify(data, null, 2)); //Using for debugging purpose
 
     // return the result data.
     return data as TResponse;

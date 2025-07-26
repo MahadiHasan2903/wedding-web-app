@@ -48,3 +48,14 @@ export function formatDateString1(
 
   return format(parsedDate, outputFormat);
 }
+
+/**
+ * Returns the user's local UTC offset in the format "UTC±HH:MM".
+ * Uses the system time and timezone to determine the current offset.
+ * @returns {string} The UTC offset string (e.g., "UTC+06:00", "UTC-04:00").
+ */
+export const getUserUtcOffset = (): string => {
+  const now = new Date();
+  const offset = format(now, "xxx");
+  return `UTC${offset}`;
+};

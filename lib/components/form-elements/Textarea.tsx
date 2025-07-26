@@ -47,7 +47,7 @@ const Textarea = ({
         readOnly={readOnly}
         rows={rows}
         className={`p-[24px] border rounded-[10px] outline-none transition-all duration-200 ${
-          error ? "border-red" : "border-[#A0A0A0] focus:border-primary"
+          error ? "border-red" : "border-primaryBorder focus:border-primary"
         } ${className}`}
       />
       {error && <p className="text-red text-sm">{error}</p>}

@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { User } from "@/lib/types/user/user.types";
 import { CardTitle } from "@/lib/components/heading";
 import { editIcon } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import ContactInfoUpdateForm from "./ContactInfoUpdateForm";
 
 interface PropsType {
   userProfile: User;
@@ -14,6 +15,8 @@ interface PropsType {
 
 const ContactInfo = ({ userProfile }: PropsType) => {
   const { data: session } = useSession();
+  const [open, setOpen] = useState(false);
+
   const isLoggedInUser = session?.user.data.id === userProfile.id;
 
   return (
@@ -24,7 +27,7 @@ const ContactInfo = ({ userProfile }: PropsType) => {
           {isLoggedInUser && (
             <CommonButton
               label="Edit Info"
-              // onClick={() => console.log("Triggered")}
+              onClick={() => setOpen(true)}
               className="w-fit flex items-center gap-[8px] bg-transparent border border-primaryBorder text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
               startIcon={
                 <ImageWithFallback
@@ -69,6 +72,13 @@ const ContactInfo = ({ userProfile }: PropsType) => {
           </p>
         </div>
       </div>
+      {open && (
+        <ContactInfoUpdateForm
+          open={open}
+          setOpen={setOpen}
+          userProfile={userProfile}
+        />
+      )}
     </div>
   );
 };

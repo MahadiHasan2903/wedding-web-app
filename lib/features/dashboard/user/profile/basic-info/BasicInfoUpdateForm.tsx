@@ -140,9 +140,6 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
 
     const formData = new FormData();
 
-    // Logging form data for debugging
-    console.log(JSON.stringify(data, null, 2));
-
     // Append all form fields to FormData (handling empty values)
     formData.append("firstName", data.firstName ?? "");
     formData.append("lastName", data.lastName ?? "");
@@ -363,7 +360,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                   <p className="text-[12px] lg:text-[14px] font-medium">
                     Social Links
                   </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-[25px] gap-y-[10px]">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[25px] gap-y-[10px]">
                     {socialPlatforms.map((platform, index) => (
                       <div
                         key={platform.name}
@@ -412,12 +409,12 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                   type="submit"
                   label={`${loading ? "Saving..." : "Save"}`}
                   disabled={loading}
-                  className="w-full bg-green text-white font-bold p-[10px] rounded-full"
+                  className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
                 />
                 <CommonButton
                   onClick={() => setOpen(false)}
                   label="Cancel"
-                  className="w-full bg-red text-white font-bold p-[10px] rounded-full"
+                  className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
                 />
               </div>
             </form>

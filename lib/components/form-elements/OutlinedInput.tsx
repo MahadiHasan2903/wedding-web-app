@@ -71,7 +71,7 @@ const OutlinedInput = ({
           required={required}
           readOnly={readOnly}
           className={`w-full text-[12px] lg:text-[14px] px-[16px] py-[12px] lg:p-[24px] border rounded-[10px] outline-none transition-all duration-200 pr-10 ${
-            error ? "border-red" : "border-[#A0A0A0] focus:border-primary"
+            error ? "border-red" : "border-primaryBorder focus:border-primary"
           }  ${className}`}
         />
 

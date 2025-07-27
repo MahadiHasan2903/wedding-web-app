@@ -76,6 +76,7 @@ const updateUserProfileAction = async (updatedProfileData: FormData) => {
       preferredAgeRange: response.data.preferredAgeRange,
       preferredNationality: response.data.preferredNationality,
       religionPreference: response.data.religionPreference,
+      politicalPreference: response.data.politicalPreference,
       partnerExpectations: response.data.partnerExpectations,
       weightKg: response.data.weightKg,
       heightCm: response.data.heightCm,

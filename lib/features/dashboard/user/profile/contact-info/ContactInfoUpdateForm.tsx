@@ -211,7 +211,6 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                           type="button"
                           onClick={() => removeLanguage(index)}
                           className="text-red text-xl"
-                          aria-label={`Remove language ${index + 1}`}
                         >
                           <RxCross1 />
                         </button>

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { formatLabel } from "@/lib/utils/helpers";
 import { User } from "@/lib/types/user/user.types";
@@ -8,6 +8,7 @@ import { CardTitle } from "@/lib/components/heading";
 import { editIcon } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import RelationshipPreferencesUpdateForm from "./RelationshipPreferencesUpdateForm";
 
 interface PropsType {
   userProfile: User;
@@ -15,6 +16,7 @@ interface PropsType {
 
 const RelationshipPreferences = ({ userProfile }: PropsType) => {
   const { data: session } = useSession();
+  const [open, setOpen] = useState(false);
   const isLoggedInUser = session?.user.data.id === userProfile.id;
   return (
     <div className="w-full bg-white rounded-none lg:rounded-[10px]">
@@ -24,7 +26,7 @@ const RelationshipPreferences = ({ userProfile }: PropsType) => {
           {isLoggedInUser && (
             <CommonButton
               label="Edit Info"
-              // onClick={() => console.log("Triggered")}
+              onClick={() => setOpen(true)}
               className="w-fit flex items-center gap-[8px] bg-transparent border border-primaryBorder text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
               startIcon={
                 <ImageWithFallback
@@ -87,10 +89,10 @@ const RelationshipPreferences = ({ userProfile }: PropsType) => {
           </div>
           <div className="flex flex-col items-start gap-1">
             <p className="text-[10px] lg:text-[14px] font-semibold">
-              Political View
+              Political Preference
             </p>
             <p className="text-[10px] lg:text-[14px] font-normal">
-              {formatLabel(userProfile.politicalView) || "N/A"}
+              {formatLabel(userProfile.politicalPreference) || "N/A"}
             </p>
           </div>
         </div>
@@ -105,6 +107,13 @@ const RelationshipPreferences = ({ userProfile }: PropsType) => {
           </div>
         </div>
       </div>
+      {open && (
+        <RelationshipPreferencesUpdateForm
+          open={open}
+          setOpen={setOpen}
+          userProfile={userProfile}
+        />
+      )}
     </div>
   );
 };

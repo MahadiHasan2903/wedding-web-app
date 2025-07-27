@@ -207,3 +207,8 @@ export enum HealthCondition {
   NOT_DISCLOSED = "not_disclosed",
   OTHER = "other",
 }
+
+export enum HasPet {
+  Yes = "yes",
+  No = "no",
+}

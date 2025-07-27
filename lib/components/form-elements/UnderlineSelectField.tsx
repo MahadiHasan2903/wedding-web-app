@@ -36,7 +36,9 @@ const UnderlineSelectField = ({
 }: UnderlineSelectFieldProps) => {
   // Function to handle change of the selected option
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (readOnly) return;
+    if (readOnly) {
+      return;
+    }
     onChange?.(e.target.value);
   };
 

@@ -43,6 +43,7 @@ export interface User {
   preferredAgeRange: string | null;
   preferredNationality: string[] | null;
   religionPreference: string | null;
+  politicalPreference: string | null;
   partnerExpectations: string | null;
   weightKg: number | null;
   heightCm: number | null;

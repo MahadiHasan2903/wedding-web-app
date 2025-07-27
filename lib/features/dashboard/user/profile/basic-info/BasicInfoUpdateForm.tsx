@@ -190,7 +190,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
             {/* Form */}
             <form
               onSubmit={handleSubmit(handleUpdateProfile)}
-              className="w-full h-full flex flex-col gap-[25px] max-h-[800px] "
+              className="w-full h-full flex flex-col gap-[25px]"
             >
               {/* Form Title */}
               <CardTitle title="Basic Info" />

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useSession } from "next-auth/react";
 import { formatLabel } from "@/lib/utils/helpers";
 import { User } from "@/lib/types/user/user.types";
@@ -8,6 +8,7 @@ import { CardTitle } from "@/lib/components/heading";
 import { editIcon } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import BackgroundInfoUpdateForm from "./BackgroundInfoUpdateForm";
 
 interface PropsType {
   userProfile: User;
@@ -15,6 +16,8 @@ interface PropsType {
 
 const BackgroundInfo = ({ userProfile }: PropsType) => {
   const { data: session } = useSession();
+  const [open, setOpen] = useState(false);
+
   const isLoggedInUser = session?.user.data.id === userProfile.id;
   return (
     <div className="w-full bg-white rounded-none lg:rounded-[10px]">
@@ -24,7 +27,7 @@ const BackgroundInfo = ({ userProfile }: PropsType) => {
           {isLoggedInUser && (
             <CommonButton
               label="Edit Info"
-              // onClick={() => console.log("Triggered")}
+              onClick={() => setOpen(true)}
               className="w-fit flex items-center gap-[8px] bg-transparent border border-primaryBorder text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
               startIcon={
                 <ImageWithFallback
@@ -39,7 +42,7 @@ const BackgroundInfo = ({ userProfile }: PropsType) => {
         </div>
       </div>
       <div className="w-full flex flex-col items-start gap-[16px] lg:gap-[25px] px-[17px] lg:px-[36px] pb-[17px] lg:py-[25px]">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[16px] lg:gap-[25px]">
+        <div className="w-full grid grid-cols-1 sm:grid-cols-2  gap-[16px] lg:gap-[25px]">
           <div className="flex flex-col items-start gap-1">
             <p className="text-[10px] lg:text-[14px] font-semibold">
               Education
@@ -110,6 +113,13 @@ const BackgroundInfo = ({ userProfile }: PropsType) => {
           </div>
         </div>
       </div>
+      {open && (
+        <BackgroundInfoUpdateForm
+          open={open}
+          setOpen={setOpen}
+          userProfile={userProfile}
+        />
+      )}
     </div>
   );
 };

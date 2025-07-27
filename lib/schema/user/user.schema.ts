@@ -30,7 +30,7 @@ export const updateUserSchema = z.object({
   institutionName: z.string().optional(),
   profession: z.string().optional(),
   companyName: z.string().optional(),
-  monthlyIncome: z.number().optional(),
+  monthlyIncome: z.union([z.string(), z.number()]).optional(),
   incomeCurrency: z.string().optional(),
   religion: z.string().optional(),
   politicalView: z.string().optional(),

@@ -110,7 +110,7 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
           <div className="w-full h-full max-w-[600px] max-h-[600px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
             <form
               onSubmit={handleSubmit(handleUpdateProfile)}
-              className="w-full h-full flex flex-col gap-[25px] max-h-[800px]"
+              className="w-full h-full flex flex-col gap-[25px]"
             >
               <CardTitle title="Contact & Accessibility" />
               <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
@@ -210,7 +210,7 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                         <button
                           type="button"
                           onClick={() => removeLanguage(index)}
-                          className="text-red-500 text-xl"
+                          className="text-red text-xl"
                           aria-label={`Remove language ${index + 1}`}
                         >
                           <RxCross1 />
@@ -232,7 +232,7 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                 <CommonButton
                   onClick={() => setOpen(false)}
                   label="Cancel"
-                  className="w-full bg-red-500 text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
+                  className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
                 />
               </div>
             </form>

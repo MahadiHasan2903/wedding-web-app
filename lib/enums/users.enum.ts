@@ -45,7 +45,6 @@ export enum PoliticalView {
   MODERATE = "moderate",
   APOLITICAL = "apolitical",
   OTHER = "other",
-  NOT_SHARED = "not_shared",
 }
 
 export enum LivingArrangement {
@@ -65,13 +64,12 @@ export enum LookingFor {
 }
 
 export enum ReligionPreference {
-  SAME_RELIGION = "same_religion",
   ISLAM = "islam",
   HINDUISM = "hinduism",
   CHRISTIANITY = "christianity",
   BUDDHISM = "buddhism",
   JUDAISM = "judaism",
-  ANY = "any",
+  Other = "other",
 }
 
 export enum BodyType {

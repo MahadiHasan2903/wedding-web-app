@@ -55,7 +55,7 @@ const updateUserProfileAction = async (updatedProfileData: FormData) => {
       additionalPhotos: response.data.additionalPhotos ?? [],
       blockedUsers: response.data.blockedUsers ?? null,
       likedUsers: response.data.likedUsers ?? null,
-      socialMediaLinks: response.data.socialMediaLinks ?? null,
+      socialMediaLinks: response.data.socialMediaLinks,
       preferredLanguages: response.data.preferredLanguages ?? [],
       userRole: response.data.userRole,
       accountStatus: response.data.accountStatus,

@@ -68,9 +68,9 @@ const UnderlineInput = ({
           onWheel={handleWheel}
           required={required}
           readOnly={readOnly}
-          className={`${
-            readOnly && "cursor-not-allowed"
-          } w-full text-[12px] lg:text-[14px] py-[10px] pr-10 border-b outline-none transition-all duration-200 ${
+          className={`${readOnly && "cursor-not-allowed"}
+          ${type === "password" && "pr-10"}
+          w-full text-[12px] lg:text-[14px] py-[10px] border-b outline-none transition-all duration-200 ${
             error ? "border-red" : "border-primaryBorder focus:border-primary"
           } ${className}`}
         />

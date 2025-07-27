@@ -18,7 +18,6 @@ import { getUserUtcOffset } from "@/lib/utils/dateUtils";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 
-// Props type for the ContactInfoUpdateForm component
 interface PropsType {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;

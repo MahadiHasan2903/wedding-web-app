@@ -163,3 +163,14 @@ export const updateUserResponseSchema = z.object({
 export type UpdateUserResponseType = z.infer<
   typeof updateUserResponseSchema.shape.data
 >;
+
+export const deleteAdditionalPhotosResponseSchema = z.object({
+  status: z.literal(200),
+  success: z.literal(true),
+  message: z.literal("Photo deleted successfully"),
+  data: z.object({}),
+});
+
+export type DeleteAdditionalPhotosResponseType = z.infer<
+  typeof deleteAdditionalPhotosResponseSchema.shape.data
+>;

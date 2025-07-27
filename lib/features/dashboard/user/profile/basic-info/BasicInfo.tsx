@@ -111,7 +111,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
         </div>
       </div>
       <div className="w-full flex flex-col items-start gap-[20px]">
-        <p className="text-[12px] sm:text-[14px] font-normal text-justify">
+        <p className="text-[12px] lg:text-[14px] font-normal text-justify">
           {userProfile.bio || "My bio ..."}
         </p>
         <div className="w-full flex items-center justify-between">

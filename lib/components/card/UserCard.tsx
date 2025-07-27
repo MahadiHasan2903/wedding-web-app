@@ -1,16 +1,16 @@
 "use client";
 
 import React, { MouseEvent } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { User } from "@/lib/types/user/user.types";
 import { CommonButton } from "@/lib/components/buttons";
 import { redHeart } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
-import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
+import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
-import { useSession } from "next-auth/react";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
 
 interface UserCardProps {
   user: User;

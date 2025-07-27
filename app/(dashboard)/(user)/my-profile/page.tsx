@@ -5,6 +5,7 @@ import BasicInfo from "@/lib/features/dashboard/user/profile/basic-info/BasicInf
 import ContactInfo from "@/lib/features/dashboard/user/profile/contact-info/ContactInfo";
 import OtherInformation from "@/lib/features/dashboard/user/profile/other-info/OtherInformation";
 import BackgroundInfo from "@/lib/features/dashboard/user/profile/background-info/BackgroundInfo";
+import AdditionalPhotos from "@/lib/features/dashboard/user/profile/additionalPhotos/AdditionalPhotos";
 import CulturalIdentity from "@/lib/features/dashboard/user/profile/cultural-identity/CulturalIdentity";
 import PersonalAttributes from "@/lib/features/dashboard/user/profile/personal-attributes/PersonalAttributes";
 import RelationshipPreferences from "@/lib/features/dashboard/user/profile/relationship-preferences/RelationshipPreferences";
@@ -24,6 +25,7 @@ const page = async () => {
       <RelationshipPreferences userProfile={loggedInUserProfile} />
       <PersonalAttributes userProfile={loggedInUserProfile} />
       <CulturalIdentity userProfile={loggedInUserProfile} />
+      <AdditionalPhotos userProfile={loggedInUserProfile} />
       <OtherInformation userProfile={loggedInUserProfile} />
     </div>
   );

@@ -1,6 +1,7 @@
 import star from "@/public/icons/star.svg";
 import send from "@/public/icons/send.svg";
 import mail from "@/public/icons/mail.svg";
+import alert from "@/public/icons/alert.svg";
 import crown from "@/public/icons/crown.svg";
 import heart from "@/public/icons/heart.svg";
 import quote from "@/public/icons/quote.svg";
@@ -35,6 +36,7 @@ export {
   star,
   send,
   mail,
+  alert,
   crown,
   heart,
   quote,

@@ -1,12 +1,14 @@
 "use server";
 
+import {
+  UpdateUserResponseType,
+  updateUserResponseSchema,
+  DeleteAdditionalPhotosResponseType,
+  deleteAdditionalPhotosResponseSchema,
+} from "@/lib/schema/user/user.schema";
+import { BASE_URL } from "@/lib/config/constants";
 import { fetchZodTyped } from "@/lib/action/client";
 import { getServerSessionData } from "@/lib/config/auth";
-import { BASE_URL } from "@/lib/config/constants";
-import {
-  updateUserResponseSchema,
-  UpdateUserResponseType,
-} from "@/lib/schema/user/user.schema";
 import { Result } from "@/lib/types/common/common.types";
 
 /**
@@ -125,4 +127,56 @@ const updateUserProfileAction = async (updatedProfileData: FormData) => {
   }
 };
 
-export { updateUserProfileAction };
+/**
+ * Deletes an additional photo from the user's profile by photo ID.
+ *
+ * @param photoId - The ID of the photo to delete
+ * @returns A `Result` object indicating the success or failure of the operation
+ */
+const deleteUserAdditionalPhotoAction = async (photoId: string) => {
+  // Ensure a valid photo ID is provided
+  if (!photoId) {
+    throw new Error("Invalid photo ID provided.");
+  }
+
+  const { accessToken } = await getServerSessionData();
+
+  try {
+    const response = await fetchZodTyped(
+      `${BASE_URL}/users/photo/${photoId}`,
+      {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+      deleteAdditionalPhotosResponseSchema
+    );
+
+    // Return success result with server-confirmed response
+    const result: Result<DeleteAdditionalPhotosResponseType> = {
+      status: true,
+      data: response.data,
+      message: "Photo deleted from your album successfully.",
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error("Photo deletion failed", error);
+
+    const isTimeout = error.message?.includes("timed out");
+
+    // Return failure result with a descriptive error message
+    const result: Result<DeleteAdditionalPhotosResponseType> = {
+      status: false,
+      message: isTimeout
+        ? "The request timed out. Please try again later."
+        : "Failed to delete photo from your album. Please try again.",
+      data: null,
+    };
+
+    return result;
+  }
+};
+
+export { updateUserProfileAction, deleteUserAdditionalPhotoAction };

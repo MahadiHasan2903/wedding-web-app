@@ -67,6 +67,7 @@ export type UpdateUserType = z.infer<typeof updateUserSchema>;
 export const updateUserResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
+  error: z.string().optional(),
   message: z.string(),
   data: z.object({
     id: z.string().uuid(),
@@ -165,9 +166,10 @@ export type UpdateUserResponseType = z.infer<
 >;
 
 export const deleteAdditionalPhotosResponseSchema = z.object({
-  status: z.literal(200),
-  success: z.literal(true),
-  message: z.literal("Photo deleted successfully"),
+  status: z.number(),
+  success: z.boolean(),
+  error: z.string().optional(),
+  message: z.string(),
   data: z.object({}),
 });
 

@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { MdDelete } from "react-icons/md";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { User } from "@/lib/types/user/user.types";
+import { AlterModal } from "@/lib/components/modal";
 import { CardTitle } from "@/lib/components/heading";
 import { editIcon } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import UpdateAdditionalPhotos from "./UpdateAdditionalPhotos";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
-import { MdDelete } from "react-icons/md";
 import { deleteUserAdditionalPhotoAction } from "@/lib/action/user/user.action";
-import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
-import { AlterModal } from "@/lib/components/modal";
 
 interface PropsType {
   userProfile: User;
@@ -58,30 +58,37 @@ const AdditionalPhotos = ({ userProfile }: PropsType) => {
       <div className="w-full py-[17px] lg:py-[25px] border-light border-b-0 lg:border-b-[3px]">
         <div className="w-full px-[17px] lg:px-[36px] flex items-center justify-between">
           <CardTitle title="Additional Photos" />
-          {isLoggedInUser &&
-            (userProfile.additionalPhotos?.length ?? 0) < 10 && (
-              <CommonButton
-                label="Edit Info"
-                onClick={() => setOpen(true)}
-                className="w-fit flex items-center gap-[8px] bg-transparent border border-primaryBorder text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
-                startIcon={
-                  <ImageWithFallback
-                    src={editIcon}
-                    width={13}
-                    height={13}
-                    alt="edit-icon"
-                  />
-                }
-              />
-            )}
+          {isLoggedInUser && userProfile.additionalPhotos?.length < 10 && (
+            <CommonButton
+              label="Edit Info"
+              onClick={() => setOpen(true)}
+              className="w-fit flex items-center gap-[8px] bg-transparent border border-primaryBorder text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
+              startIcon={
+                <ImageWithFallback
+                  src={editIcon}
+                  width={13}
+                  height={13}
+                  alt="edit-icon"
+                />
+              }
+            />
+          )}
         </div>
       </div>
 
       {/* Content */}
-      <div className="w-full px-[17px] lg:px-[36px] pb-[17px] lg:py-[25px] flex flex-col items-start gap-[16px]">
-        <p className="text-red text-[12px] sm:text-[14px] font-medium">
-          You can upload up to 10 photos only.
-        </p>
+      <div className="w-full px-[17px] lg:px-[36px] pb-[17px] lg:pt-[17px] lg:pb-[25px] flex flex-col items-start gap-[16px]">
+        {isLoggedInUser &&
+          (userProfile.additionalPhotos?.length >= 10 ? (
+            <p className="text-red text-[12px] sm:text-[14px] font-medium">
+              You’ve reached the maximum limit of 10 photos. Please remove an
+              existing photo to upload a new one.
+            </p>
+          ) : (
+            <p className="text-red text-[12px] sm:text-[14px] font-medium">
+              You can upload up to 10 photos.
+            </p>
+          ))}
 
         <div className="w-full flex items-start flex-wrap gap-[25px]">
           {userProfile.additionalPhotos &&

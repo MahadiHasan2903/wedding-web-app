@@ -1,6 +1,6 @@
 "use client";
 
-import React, { MouseEvent } from "react";
+import React from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -22,17 +22,12 @@ const UserCard = ({ user }: UserCardProps) => {
   const accessToken = session?.user.accessToken;
   const isVipUser = user.purchasedMembership?.membershipPackageInfo.id === 2;
 
-  const handleLikeClick = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-    console.log("Liked");
-  };
-
+  // Function to redirect user based on token
   const handleRedirection = () => {
     if (accessToken) {
       router.push(`/find-match/${user.id}`);
     } else {
-      toast.error("Please login first to view the matched user profile");
+      toast.error("Please login first to view the user profile");
     }
   };
 
@@ -83,8 +78,7 @@ const UserCard = ({ user }: UserCardProps) => {
       </div>
 
       <CommonButton
-        label="Like Profile"
-        onClick={handleLikeClick}
+        label="View Profile"
         className={`${
           isVipUser
             ? "btn-gold-gradient border-none"

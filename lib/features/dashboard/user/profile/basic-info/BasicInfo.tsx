@@ -1,12 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import Link from "next/link";
+import {
+  getCountryNameFromIso,
+  getStateNameFromIso,
+} from "@/lib/utils/helpers";
 import {
   editIcon,
   facebook,
   instagram,
   linkedin,
+  redHeart,
   tiktok,
   twitter,
   whatsapp,
@@ -16,15 +21,11 @@ import { StaticImageData } from "next/image";
 import { User } from "@/lib/types/user/user.types";
 import { CardTitle } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
+import BasicInfoUpdateForm from "./BasicInfoUpdateForm";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
 import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
-import BasicInfoUpdateForm from "./BasicInfoUpdateForm";
-import {
-  getCountryNameFromIso,
-  getStateNameFromIso,
-} from "@/lib/utils/helpers";
 
 const iconMap: Record<string, StaticImageData> = {
   facebook,
@@ -37,15 +38,22 @@ const iconMap: Record<string, StaticImageData> = {
 
 interface PropsType {
   userProfile: User;
+  isLiked?: boolean;
 }
 
-const BasicInfo = ({ userProfile }: PropsType) => {
+const BasicInfo = ({ userProfile, isLiked }: PropsType) => {
   const [open, setOpen] = useState(false);
   const { data: session } = useSession();
   const isLoggedInUser = session?.user.data.id === userProfile.id;
   const membershipId =
     session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
   const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
+
+  const handleLikeUserProfile = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    console.log("Liked");
+  };
 
   return (
     <div className="w-full h-full flex flex-col xl:flex-row items-start xl:items-center gap-[20px] lg:gap-[40px] xl:gap-[100px] bg-white rounded-none lg:rounded-[10px] px-[18px] py-[12px] lg:px-[36px] lg:py-[20px]">
@@ -139,7 +147,7 @@ const BasicInfo = ({ userProfile }: PropsType) => {
               );
             })}
           </div>
-          {isLoggedInUser && (
+          {isLoggedInUser ? (
             <CommonButton
               label="Edit Info"
               onClick={() => setOpen(true)}
@@ -153,6 +161,26 @@ const BasicInfo = ({ userProfile }: PropsType) => {
                 />
               }
             />
+          ) : (
+            isLiked && (
+              <CommonButton
+                label="Like Profile"
+                //  onClick={handleLikeUserProfile}
+                className={`${
+                  isVipUser
+                    ? "btn-gold-gradient border-none"
+                    : "bg-transparent border border-primaryBorder"
+                } w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal p-[10px] rounded-full`}
+                startIcon={
+                  <ImageWithFallback
+                    src={redHeart}
+                    width={15}
+                    height={12}
+                    alt="red-heart"
+                  />
+                }
+              />
+            )
           )}
         </div>
       </div>

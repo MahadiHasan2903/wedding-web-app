@@ -25,7 +25,7 @@ export interface User {
   }> | null;
   preferredLanguages: string[] | null;
   userRole: "user" | "admin";
-  accountStatus: "active" | "inactive" | string;
+  accountStatus: string;
   purchasedMembership: PurchasedMembership | null;
   timeZone: string | null;
   highestEducation: string | null;
@@ -59,9 +59,9 @@ export interface User {
   astrologicalSign: string | null;
   loveLanguage: string | null;
   favoriteQuote: string | null;
-  profileVisibility: string;
-  photoVisibility: string;
-  messageAvailability: string;
-  createdAt: string;
-  updatedAt: string;
+  profileVisibility?: boolean;
+  photoVisibility?: boolean;
+  messageAvailability?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }

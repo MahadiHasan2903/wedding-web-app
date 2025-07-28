@@ -1,9 +1,5 @@
 "use server";
 
-import { BASE_URL } from "@/lib/config/constants";
-import { fetchZodTyped } from "@/lib/action/client";
-import { getServerSessionData } from "@/lib/config/auth";
-import { Result } from "@/lib/types/common/common.types";
 import {
   UpdateLikeDislikeStatusType,
   UpdateBlockUnblockStatusType,
@@ -14,6 +10,10 @@ import {
   updateLikeDislikeStatusResponseSchema,
   updateBlockUnblockStatusResponseSchema,
 } from "@/lib/schema/user/userInteraction.schema";
+import { BASE_URL } from "@/lib/config/constants";
+import { fetchZodTyped } from "@/lib/action/client";
+import { getServerSessionData } from "@/lib/config/auth";
+import { Result } from "@/lib/types/common/common.types";
 
 /**
  * Updates the like or dislike status of a user.
@@ -35,15 +35,19 @@ const updateLikeDisLikeStatusAction = async (
 
   const { accessToken } = await getServerSessionData();
 
+  console.log(payload);
+
   try {
     // Send PATCH request to update like/dislike status
     const response = await fetchZodTyped(
-      `${BASE_URL}/users/like-status`,
+      `${BASE_URL}/users/liked-users/update-status`,
       {
         method: "PATCH",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
+        body: JSON.stringify(payload),
       },
       updateLikeDislikeStatusResponseSchema
     );
@@ -52,7 +56,7 @@ const updateLikeDisLikeStatusAction = async (
     const result: Result<UpdateLikeDislikeStatusResponseType> = {
       status: true,
       data: response.data,
-      message: "User like/dislike status updated successfully.",
+      message: `Profile ${payload.status}d successfully.`,
     };
 
     return result;
@@ -98,12 +102,14 @@ const updateBlockUnblockStatusAction = async (
   try {
     // Send PATCH request to update block/unblock status
     const response = await fetchZodTyped(
-      `${BASE_URL}/users/block-status`,
+      `${BASE_URL}/users/blocked-users/update-status`,
       {
         method: "PATCH",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${accessToken}`,
         },
+        body: JSON.stringify(payload),
       },
       updateBlockUnblockStatusResponseSchema
     );
@@ -112,7 +118,7 @@ const updateBlockUnblockStatusAction = async (
     const result: Result<UpdateBlockUnblockStatusResponseType> = {
       status: true,
       data: response.data,
-      message: "User block/unblock status updated successfully.",
+      message: `User ${payload.status}d successfully.`,
     };
 
     return result;

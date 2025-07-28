@@ -1,10 +1,10 @@
 "use client";
 
-import React, { MouseEvent, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import {
-  getCountryNameFromIso,
   getStateNameFromIso,
+  getCountryNameFromIso,
 } from "@/lib/utils/helpers";
 import {
   editIcon,
@@ -16,6 +16,8 @@ import {
   twitter,
   whatsapp,
 } from "@/lib/components/image/icons";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { StaticImageData } from "next/image";
 import { User } from "@/lib/types/user/user.types";
@@ -26,6 +28,7 @@ import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
 import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
+import { updateLikeDisLikeStatusAction } from "@/lib/action/user/userInteraction.action";
 
 const iconMap: Record<string, StaticImageData> = {
   facebook,
@@ -42,17 +45,38 @@ interface PropsType {
 }
 
 const BasicInfo = ({ userProfile, isLiked }: PropsType) => {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const { data: session } = useSession();
   const isLoggedInUser = session?.user.data.id === userProfile.id;
   const membershipId =
     session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
   const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
 
-  const handleLikeUserProfile = (e: MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-    console.log("Liked");
+  // Function to update like/dislike status
+  const handleUpdateLikeStatus = async () => {
+    setLoading(true);
+    const payload = {
+      likedUserId: userProfile.id,
+      status: isLiked ? "dislike" : "like",
+    };
+
+    const updateLikeStatusResponse = await updateLikeDisLikeStatusAction(
+      payload
+    );
+
+    // Show toast notification based on API response success or failure
+    toast(updateLikeStatusResponse.message, {
+      type: updateLikeStatusResponse.status ? "success" : "error",
+    });
+
+    // If update successful, close modal and refresh page data
+    if (updateLikeStatusResponse.status) {
+      router.refresh();
+    }
+    setLoading(false);
   };
 
   return (
@@ -162,25 +186,20 @@ const BasicInfo = ({ userProfile, isLiked }: PropsType) => {
               }
             />
           ) : (
-            isLiked && (
-              <CommonButton
-                label="Like Profile"
-                //  onClick={handleLikeUserProfile}
-                className={`${
-                  isVipUser
-                    ? "btn-gold-gradient border-none"
-                    : "bg-transparent border border-primaryBorder"
-                } w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal p-[10px] rounded-full`}
-                startIcon={
-                  <ImageWithFallback
-                    src={redHeart}
-                    width={15}
-                    height={12}
-                    alt="red-heart"
-                  />
-                }
-              />
-            )
+            <CommonButton
+              label={
+                loading
+                  ? isLiked
+                    ? "Disliking Profile..."
+                    : "Liking Profile..."
+                  : isLiked
+                  ? "Dislike Profile"
+                  : "Like Profile"
+              }
+              disabled={loading}
+              onClick={handleUpdateLikeStatus}
+              className="w-fit bg-primary border text-white flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full"
+            />
           )}
         </div>
       </div>

@@ -1,13 +1,14 @@
 import star from "@/public/icons/star.svg";
 import send from "@/public/icons/send.svg";
 import mail from "@/public/icons/mail.svg";
+import alert from "@/public/icons/alert.svg";
 import crown from "@/public/icons/crown.svg";
 import heart from "@/public/icons/heart.svg";
 import quote from "@/public/icons/quote.svg";
 import avatar from "@/public/icons/avatar.svg";
 import report from "@/public/icons/report.svg";
 import google from "@/public/icons/google.svg";
-import tikTok from "@/public/icons/tiktok.svg";
+import tiktok from "@/public/icons/tiktok.svg";
 import twitter from "@/public/icons/twitter.svg";
 import message from "@/public/icons/message.svg";
 import polygon from "@/public/icons/polygon.svg";
@@ -35,6 +36,7 @@ export {
   star,
   send,
   mail,
+  alert,
   crown,
   heart,
   quote,
@@ -42,7 +44,7 @@ export {
   report,
   google,
   message,
-  tikTok,
+  tiktok,
   twitter,
   polygon,
   whatsapp,

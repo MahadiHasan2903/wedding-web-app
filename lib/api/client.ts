@@ -34,7 +34,7 @@ export function fetchTyped<TResponse>(
 
     const data = await response.json();
 
-    // console.log('Raw response:', JSON.stringify(data, null, 2)); //Using for debugging purpose
+    // console.log("Raw response:", JSON.stringify(data, null, 2)); //Using for debugging purpose
 
     // return the result data.
     return data as TResponse;

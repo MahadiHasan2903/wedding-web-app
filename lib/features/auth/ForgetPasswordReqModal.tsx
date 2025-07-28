@@ -1,17 +1,17 @@
 "use client";
 
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { toast } from "react-toastify";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CommonButton } from "@/lib/components/buttons";
-import { SubHeading } from "@/lib/components/heading";
-import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
-import { forgetPasswordRequestAction } from "@/lib/action/auth/auth.action";
 import {
   forgetPasswordRequestSchema,
   ForgetPasswordRequestType,
-} from "@/lib/schema/auth.schema";
+} from "@/lib/schema/auth/auth.schema";
+import { toast } from "react-toastify";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubHeading } from "@/lib/components/heading";
+import { CommonButton } from "@/lib/components/buttons";
+import { UnderlineInput } from "@/lib/components/form-elements";
+import { forgetPasswordRequestAction } from "@/lib/action/auth/auth.action";
 
 interface PropsType {
   open: boolean;

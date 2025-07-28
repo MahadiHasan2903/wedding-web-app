@@ -74,7 +74,30 @@ const MatchFinderPage = async ({ searchParams }: PropsType) => {
     healthCondition,
   };
 
-  const getAllUsersData = await api.users.getAllUsers(page, pageSize);
+  const getAllUsersData = await api.users.getAllUsers(
+    page,
+    pageSize,
+    ageRange,
+    heightRange,
+    weightRange,
+    lookingFor,
+    maritalStatus,
+    haveChildren === "true",
+    monthlyIncome,
+    religion,
+    education,
+    politicalView,
+    countryLiving,
+    spokenLanguage,
+    profession,
+    livingArrangement,
+    familyMembers,
+    havePet === "true",
+    dietaryPreference,
+    smokingHabit,
+    drinkingHabit,
+    healthCondition
+  );
 
   return (
     <div className="w-full p-[18px] sm:px-[30px] lg:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[30px] lg:gap-[50px]">

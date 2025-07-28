@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import React, { ReactNode } from "react";
+import React, { MouseEventHandler, ReactNode } from "react";
 
 interface PropsType {
   label: string;
   href?: string;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
   startIcon?: ReactNode;
   endIcon?: ReactNode;

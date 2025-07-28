@@ -18,13 +18,14 @@ export interface User {
   profilePicture: Media | null;
   additionalPhotos: Media[];
   blockedUsers: string[] | null;
+  likedUsers: string[] | null;
   socialMediaLinks: Array<{
     name: string;
     link: string;
   }> | null;
   preferredLanguages: string[] | null;
   userRole: "user" | "admin";
-  accountStatus: "active" | "inactive" | string;
+  accountStatus: string;
   purchasedMembership: PurchasedMembership | null;
   timeZone: string | null;
   highestEducation: string | null;
@@ -42,6 +43,7 @@ export interface User {
   preferredAgeRange: string | null;
   preferredNationality: string[] | null;
   religionPreference: string | null;
+  politicalPreference: string | null;
   partnerExpectations: string | null;
   weightKg: number | null;
   heightCm: number | null;
@@ -57,9 +59,9 @@ export interface User {
   astrologicalSign: string | null;
   loveLanguage: string | null;
   favoriteQuote: string | null;
-  profileVisibility: string;
-  photoVisibility: string;
-  messageAvailability: string;
-  createdAt: string;
-  updatedAt: string;
+  profileVisibility?: boolean;
+  photoVisibility?: boolean;
+  messageAvailability?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }

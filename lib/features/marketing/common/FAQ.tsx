@@ -37,7 +37,7 @@ const FAQ = () => {
                 {faq.question}
               </p>
               <div
-                className={`w-[18px] md:w-[36px] h-[18px] md:h-[36px] p-1 text-[#A1A1A1] flex items-center justify-center border border-[#B0B1B3] rounded-full transition-transform duration-300 ${
+                className={`w-[18px] md:w-[36px] h-[18px] md:h-[36px] p-1 text-primaryBorder flex items-center justify-center border border-[#B0B1B3] rounded-full transition-transform duration-300 ${
                   openIndex === index ? "rotate-180" : ""
                 }`}
               >

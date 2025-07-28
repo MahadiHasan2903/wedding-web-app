@@ -28,7 +28,7 @@ import {
   registrationConfirmationResponseSchema,
   forgetPasswordConfirmationResponseSchema,
   ForgetPasswordConfirmationResponseType,
-} from "@/lib/schema/auth.schema";
+} from "@/lib/schema/auth/auth.schema";
 
 /**
  * Handles user login by validating credentials, sending them to the server,

@@ -84,7 +84,7 @@ const Footer = () => {
                   <Link
                     key={index}
                     href={href}
-                    className="p-[6px] border border-[#A1A1A1] rounded-lg"
+                    className="p-[6px] border border-primaryBorder rounded-lg"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

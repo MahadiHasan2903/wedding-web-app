@@ -6,12 +6,12 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SectionTitle } from "@/lib/components/heading";
 import { ImageWithFallback } from "@/lib/components/image";
-import { OutlinedInput, Textarea } from "@/lib/components/form-elements";
 import {
   contactSubmissionFormSchema,
   ContactSubmissionFormType,
-} from "@/lib/schema/contact.schema";
+} from "@/lib/schema/contact/contact.schema";
 import { CommonButton } from "@/lib/components/buttons";
+import { OutlinedInput, Textarea } from "@/lib/components/form-elements";
 
 const ContactForm = () => {
   const {

@@ -14,6 +14,7 @@ export interface PropsType {
   value?: string | number;
   defaultValue?: string | number;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
 }
 
 const OutlinedInput = ({
@@ -27,6 +28,7 @@ const OutlinedInput = ({
   error,
   required = true,
   readOnly = false,
+  className = "",
 }: PropsType) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
@@ -47,7 +49,10 @@ const OutlinedInput = ({
   return (
     <div className="flex flex-col gap-2 w-full">
       {label && (
-        <label htmlFor={name} className="text-[14px] font-medium">
+        <label
+          htmlFor={name}
+          className="text-[12px] lg:text-[14px] font-medium"
+        >
           {label}
           {required && <span className="text-red ml-1">*</span>}
         </label>
@@ -66,8 +71,8 @@ const OutlinedInput = ({
           required={required}
           readOnly={readOnly}
           className={`w-full text-[12px] lg:text-[14px] px-[16px] py-[12px] lg:p-[24px] border rounded-[10px] outline-none transition-all duration-200 pr-10 ${
-            error ? "border-red" : "border-[#A0A0A0] focus:border-primary"
-          }`}
+            error ? "border-red" : "border-primaryBorder focus:border-primary"
+          }  ${className}`}
         />
 
         {isPassword && (

@@ -12,6 +12,7 @@ export interface PropType {
   required?: boolean;
   readOnly?: boolean;
   rows?: number;
+  className?: string;
 }
 
 const Textarea = ({
@@ -24,13 +25,16 @@ const Textarea = ({
   required = false,
   readOnly = false,
   rows = 6,
+  className = "",
 }: PropType) => {
   return (
     <div className="flex flex-col gap-2 w-full">
       {label && (
-        <label htmlFor={name} className="text-md font-medium">
-          {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+        <label
+          htmlFor={name}
+          className="text-[12px] lg:text-[14px] font-medium"
+        >
+          {label} {required && <span className="text-red">*</span>}
         </label>
       )}
       <textarea
@@ -43,8 +47,8 @@ const Textarea = ({
         readOnly={readOnly}
         rows={rows}
         className={`p-[24px] border rounded-[10px] outline-none transition-all duration-200 ${
-          error ? "border-red" : "border-[#A0A0A0] focus:border-primary"
-        }`}
+          error ? "border-red" : "border-primaryBorder focus:border-primary"
+        } ${className}`}
       />
       {error && <p className="text-red text-sm">{error}</p>}
     </div>

@@ -6,6 +6,7 @@ import { PaginatedResponse } from "@/lib/types/common/common.types";
 type GetAllUsersResponse = PaginatedResponse<User>;
 type GetAllAdminsResponse = PaginatedResponse<User>;
 type GetAllBlockedUsersResponse = PaginatedResponse<User>;
+type GetAllLikedUsersResponse = PaginatedResponse<User>;
 
 interface GetUserDetailsResponse {
   status: number;
@@ -19,6 +20,24 @@ interface GetLoggedInUserProfileResponse {
   success: boolean;
   message: string;
   data: User;
+}
+
+interface GetUserLikeStatusCheckResponse {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    isLiked: boolean;
+  };
+}
+
+interface GetUserBlockStatusCheckResponse {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    isBlocked: boolean;
+  };
 }
 
 /**
@@ -129,6 +148,7 @@ const getAllUsers = async (
     profilePicture: user.profilePicture ?? null,
     additionalPhotos: user.additionalPhotos ?? [],
     blockedUsers: user.blockedUsers ?? null,
+    likedUsers: user.likedUsers ?? null,
     socialMediaLinks: user.socialMediaLinks ?? null,
     preferredLanguages: user.preferredLanguages ?? null,
     userRole: user.userRole,
@@ -150,6 +170,7 @@ const getAllUsers = async (
     preferredAgeRange: user.preferredAgeRange ?? null,
     preferredNationality: user.preferredNationality ?? null,
     religionPreference: user.religionPreference ?? null,
+    politicalPreference: user.politicalPreference ?? null,
     partnerExpectations: user.partnerExpectations ?? null,
     weightKg: user.weightKg ?? null,
     heightCm: user.heightCm ?? null,
@@ -185,6 +206,92 @@ const getAllUsers = async (
       nextPage: response.data.nextPage,
     },
   };
+};
+
+/**
+ * Fetches full details for a specific user by their ID.
+ *
+ * @param userId - The ID of the user to fetch.
+ * @param accessToken - Optional access token for authentication.
+ *
+ * @returns The complete `User` object.
+ * @throws Error if the user is not found or the response is invalid.
+ */
+const getUserDetails = async (userId: string, accessToken?: string) => {
+  const response = await fetchTyped<GetUserDetailsResponse>(
+    `${BASE_URL}/users/${userId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.data) {
+    throw new Error(
+      `Error: No user found for user id: ${userId} or invalid response from the server.`
+    );
+  }
+
+  const userDetails: User = {
+    id: response.data.id,
+    firstName: response.data.firstName,
+    lastName: response.data.lastName,
+    email: response.data.email,
+    userRole: response.data.userRole,
+    accountStatus: response.data.accountStatus,
+    phoneNumber: response.data.phoneNumber ?? null,
+    bio: response.data.bio ?? null,
+    motherTongue: response.data.motherTongue ?? null,
+    dateOfBirth: response.data.dateOfBirth ?? null,
+    gender: response.data.gender ?? null,
+    nationality: response.data.nationality ?? null,
+    country: response.data.country ?? null,
+    city: response.data.city ?? null,
+    maritalStatus: response.data.maritalStatus ?? null,
+    profilePicture: response.data.profilePicture ?? null,
+    additionalPhotos: response.data.additionalPhotos ?? [],
+    blockedUsers: response.data.blockedUsers ?? null,
+    likedUsers: response.data.likedUsers ?? null,
+    socialMediaLinks: response.data.socialMediaLinks ?? null,
+    preferredLanguages: response.data.preferredLanguages ?? null,
+    purchasedMembership: response.data.purchasedMembership ?? null,
+    timeZone: response.data.timeZone ?? null,
+    highestEducation: response.data.highestEducation ?? null,
+    institutionName: response.data.institutionName ?? null,
+    profession: response.data.profession ?? null,
+    companyName: response.data.companyName ?? null,
+    monthlyIncome: response.data.monthlyIncome ?? null,
+    incomeCurrency: response.data.incomeCurrency ?? null,
+    religion: response.data.religion ?? null,
+    politicalView: response.data.politicalView ?? null,
+    livingArrangement: response.data.livingArrangement ?? null,
+    familyMemberCount: response.data.familyMemberCount ?? null,
+    interestedInGender: response.data.interestedInGender ?? null,
+    lookingFor: response.data.lookingFor ?? null,
+    preferredAgeRange: response.data.preferredAgeRange ?? null,
+    preferredNationality: response.data.preferredNationality ?? null,
+    religionPreference: response.data.religionPreference ?? null,
+    politicalPreference: response.data.politicalPreference ?? null,
+    partnerExpectations: response.data.partnerExpectations ?? null,
+    weightKg: response.data.weightKg ?? null,
+    heightCm: response.data.heightCm ?? null,
+    bodyType: response.data.bodyType ?? null,
+    drinkingHabit: response.data.drinkingHabit ?? null,
+    smokingHabit: response.data.smokingHabit ?? null,
+    healthCondition: response.data.healthCondition ?? null,
+    hasPet: response.data.hasPet ?? null,
+    dietaryPreference: response.data.dietaryPreference ?? null,
+    children: response.data.children ?? null,
+    familyBackground: response.data.familyBackground ?? null,
+    culturalPractices: response.data.culturalPractices ?? null,
+    astrologicalSign: response.data.astrologicalSign ?? null,
+    loveLanguage: response.data.loveLanguage ?? null,
+    favoriteQuote: response.data.favoriteQuote ?? null,
+  };
+
+  return userDetails;
 };
 
 /**
@@ -234,6 +341,7 @@ const getAllAdmins = async (
     profilePicture: admin.profilePicture ?? null,
     additionalPhotos: admin.additionalPhotos ?? [],
     blockedUsers: admin.blockedUsers ?? null,
+    likedUsers: admin.likedUsers ?? null,
     socialMediaLinks: admin.socialMediaLinks ?? null,
     preferredLanguages: admin.preferredLanguages ?? null,
     userRole: admin.userRole,
@@ -255,6 +363,7 @@ const getAllAdmins = async (
     preferredAgeRange: admin.preferredAgeRange ?? null,
     preferredNationality: admin.preferredNationality ?? null,
     religionPreference: admin.religionPreference ?? null,
+    politicalPreference: admin.politicalPreference ?? null,
     partnerExpectations: admin.partnerExpectations ?? null,
     weightKg: admin.weightKg ?? null,
     heightCm: admin.heightCm ?? null,
@@ -293,7 +402,7 @@ const getAllAdmins = async (
 };
 
 /**
- * Fetches a paginated list of admin users from the server.
+ * Fetches a paginated list of all blocked users from the server.
  *
  * @param accessToken - Optional bearer token for authentication
  * @param page - Page number to fetch
@@ -322,7 +431,7 @@ const getAllBlockedUsers = async (
     );
   }
 
-  const blockedUsers: User[] = response.data.items.map((user) => ({
+  const allBlockedUsers: User[] = response.data.items.map((user) => ({
     id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
@@ -339,6 +448,7 @@ const getAllBlockedUsers = async (
     profilePicture: user.profilePicture ?? null,
     additionalPhotos: user.additionalPhotos ?? [],
     blockedUsers: user.blockedUsers ?? null,
+    likedUsers: user.likedUsers ?? null,
     socialMediaLinks: user.socialMediaLinks ?? null,
     preferredLanguages: user.preferredLanguages ?? null,
     userRole: user.userRole,
@@ -360,6 +470,7 @@ const getAllBlockedUsers = async (
     preferredAgeRange: user.preferredAgeRange ?? null,
     preferredNationality: user.preferredNationality ?? null,
     religionPreference: user.religionPreference ?? null,
+    politicalPreference: user.politicalPreference ?? null,
     partnerExpectations: user.partnerExpectations ?? null,
     weightKg: user.weightKg ?? null,
     heightCm: user.heightCm ?? null,
@@ -383,7 +494,7 @@ const getAllBlockedUsers = async (
   }));
 
   return {
-    blockedUsers,
+    allBlockedUsers,
     paginationInfo: {
       totalItems: response.data.totalItems,
       totalPages: response.data.totalPages,
@@ -398,77 +509,174 @@ const getAllBlockedUsers = async (
 };
 
 /**
- * Fetches full details for a specific user by their ID.
+ * Fetches whether the current user has blocked the specified target user.
  *
- * @param userId - The ID of the user to fetch.
- * @returns The complete `User` object.
- * @throws Error if the user is not found or the response is invalid.
+ * @param targetUserId - The ID of the user to check.
+ * @param accessToken - Optional access token for authentication.
+ * @returns An object indicating whether the target user is blocked.
  */
-const getUserDetails = async (userId: string) => {
-  const response = await fetchTyped<GetUserDetailsResponse>(
-    `${BASE_URL}/users/${userId}`,
+const getUserBlockStatus = async (
+  targetUserId: string,
+  accessToken?: string
+) => {
+  const response = await fetchTyped<GetUserBlockStatusCheckResponse>(
+    `${BASE_URL}/users/blocked-users/check/${targetUserId}`,
     {
       method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
     }
   );
 
   if (!response.data) {
     throw new Error(
-      `Error: No user found for user id: ${userId} or invalid response from the server.`
+      `Failed to retrieve block status. User with ID "${targetUserId}" may not exist or the server returned an invalid response.`
     );
   }
 
-  const userDetails: User = {
-    ...response.data,
-    phoneNumber: response.data.phoneNumber ?? null,
-    bio: response.data.bio ?? null,
-    motherTongue: response.data.motherTongue ?? null,
-    dateOfBirth: response.data.dateOfBirth ?? null,
-    gender: response.data.gender ?? null,
-    nationality: response.data.nationality ?? null,
-    country: response.data.country ?? null,
-    city: response.data.city ?? null,
-    maritalStatus: response.data.maritalStatus ?? null,
-    profilePicture: response.data.profilePicture ?? null,
-    additionalPhotos: response.data.additionalPhotos ?? [],
-    blockedUsers: response.data.blockedUsers ?? null,
-    socialMediaLinks: response.data.socialMediaLinks ?? null,
-    preferredLanguages: response.data.preferredLanguages ?? null,
-    purchasedMembership: response.data.purchasedMembership ?? null,
-    timeZone: response.data.timeZone ?? null,
-    highestEducation: response.data.highestEducation ?? null,
-    institutionName: response.data.institutionName ?? null,
-    profession: response.data.profession ?? null,
-    companyName: response.data.companyName ?? null,
-    monthlyIncome: response.data.monthlyIncome ?? null,
-    incomeCurrency: response.data.incomeCurrency ?? null,
-    religion: response.data.religion ?? null,
-    politicalView: response.data.politicalView ?? null,
-    livingArrangement: response.data.livingArrangement ?? null,
-    familyMemberCount: response.data.familyMemberCount ?? null,
-    interestedInGender: response.data.interestedInGender ?? null,
-    lookingFor: response.data.lookingFor ?? null,
-    preferredAgeRange: response.data.preferredAgeRange ?? null,
-    preferredNationality: response.data.preferredNationality ?? null,
-    religionPreference: response.data.religionPreference ?? null,
-    partnerExpectations: response.data.partnerExpectations ?? null,
-    weightKg: response.data.weightKg ?? null,
-    heightCm: response.data.heightCm ?? null,
-    bodyType: response.data.bodyType ?? null,
-    drinkingHabit: response.data.drinkingHabit ?? null,
-    smokingHabit: response.data.smokingHabit ?? null,
-    healthCondition: response.data.healthCondition ?? null,
-    hasPet: response.data.hasPet ?? null,
-    dietaryPreference: response.data.dietaryPreference ?? null,
-    children: response.data.children ?? null,
-    familyBackground: response.data.familyBackground ?? null,
-    culturalPractices: response.data.culturalPractices ?? null,
-    astrologicalSign: response.data.astrologicalSign ?? null,
-    loveLanguage: response.data.loveLanguage ?? null,
-    favoriteQuote: response.data.favoriteQuote ?? null,
+  return {
+    isBlocked: response.data.isBlocked,
   };
+};
 
-  return userDetails;
+/**
+ * Fetches a paginated list of all liked from the server.
+ *
+ * @param accessToken - Optional bearer token for authentication
+ * @param page - Page number to fetch
+ * @param pageSize - Number of users per page
+ * @returns A list of liked users and pagination metadata.
+ * @throws Error if the response contains no data or is invalid
+ */
+const getAllLikedUsers = async (
+  accessToken?: string,
+  page: number = 1,
+  pageSize: number = 10
+) => {
+  const response = await fetchTyped<GetAllLikedUsersResponse>(
+    `${BASE_URL}/users/liked-users?page=${page}&pageSize=${pageSize}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.data) {
+    throw new Error(
+      `Error: No liked users found or invalid response from the server.`
+    );
+  }
+
+  const allLikedUsers: User[] = response.data.items.map((user) => ({
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    phoneNumber: user.phoneNumber ?? null,
+    bio: user.bio ?? null,
+    motherTongue: user.motherTongue ?? null,
+    dateOfBirth: user.dateOfBirth ?? null,
+    gender: user.gender ?? null,
+    nationality: user.nationality ?? null,
+    country: user.country ?? null,
+    city: user.city ?? null,
+    maritalStatus: user.maritalStatus ?? null,
+    profilePicture: user.profilePicture ?? null,
+    additionalPhotos: user.additionalPhotos ?? [],
+    blockedUsers: user.blockedUsers ?? null,
+    likedUsers: user.likedUsers ?? null,
+    socialMediaLinks: user.socialMediaLinks ?? null,
+    preferredLanguages: user.preferredLanguages ?? null,
+    userRole: user.userRole,
+    accountStatus: user.accountStatus,
+    purchasedMembership: user.purchasedMembership ?? null,
+    timeZone: user.timeZone ?? null,
+    highestEducation: user.highestEducation ?? null,
+    institutionName: user.institutionName ?? null,
+    profession: user.profession ?? null,
+    companyName: user.companyName ?? null,
+    monthlyIncome: user.monthlyIncome ?? null,
+    incomeCurrency: user.incomeCurrency ?? null,
+    religion: user.religion ?? null,
+    politicalView: user.politicalView ?? null,
+    livingArrangement: user.livingArrangement ?? null,
+    familyMemberCount: user.familyMemberCount ?? null,
+    interestedInGender: user.interestedInGender ?? null,
+    lookingFor: user.lookingFor ?? null,
+    preferredAgeRange: user.preferredAgeRange ?? null,
+    preferredNationality: user.preferredNationality ?? null,
+    religionPreference: user.religionPreference ?? null,
+    politicalPreference: user.politicalPreference ?? null,
+    partnerExpectations: user.partnerExpectations ?? null,
+    weightKg: user.weightKg ?? null,
+    heightCm: user.heightCm ?? null,
+    bodyType: user.bodyType ?? null,
+    drinkingHabit: user.drinkingHabit ?? null,
+    smokingHabit: user.smokingHabit ?? null,
+    healthCondition: user.healthCondition ?? null,
+    hasPet: user.hasPet ?? null,
+    dietaryPreference: user.dietaryPreference ?? null,
+    children: user.children ?? null,
+    familyBackground: user.familyBackground ?? null,
+    culturalPractices: user.culturalPractices ?? null,
+    astrologicalSign: user.astrologicalSign ?? null,
+    loveLanguage: user.loveLanguage ?? null,
+    favoriteQuote: user.favoriteQuote ?? null,
+    profileVisibility: user.profileVisibility,
+    photoVisibility: user.photoVisibility,
+    messageAvailability: user.messageAvailability,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  }));
+
+  return {
+    allLikedUsers,
+    paginationInfo: {
+      totalItems: response.data.totalItems,
+      totalPages: response.data.totalPages,
+      itemsPerPage: response.data.itemsPerPage,
+      currentPage: response.data.currentPage,
+      hasPrevPage: response.data.hasPrevPage,
+      hasNextPage: response.data.hasNextPage,
+      prevPage: response.data.prevPage,
+      nextPage: response.data.nextPage,
+    },
+  };
+};
+
+/**
+ * Fetches whether the current user has liked the specified target user.
+ *
+ * @param targetUserId - The ID of the user to check.
+ * @param accessToken - Optional access token for authentication.
+ * @returns An object indicating whether the target user is liked.
+ */
+const getUserLikeStatus = async (
+  targetUserId: string,
+  accessToken?: string
+) => {
+  const response = await fetchTyped<GetUserLikeStatusCheckResponse>(
+    `${BASE_URL}/users/liked-users/check/${targetUserId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  if (!response.data) {
+    throw new Error(
+      `Failed to retrieve like status. User with ID "${targetUserId}" may not exist or the server returned an invalid response.`
+    );
+  }
+
+  return {
+    isLiked: response.data.isLiked,
+  };
 };
 
 /**
@@ -496,9 +704,14 @@ const getLoggedInUserProfile = async (accessToken?: string) => {
   }
 
   const userDetails: User = {
-    ...response.data,
+    id: response.data.id,
+    firstName: response.data.firstName,
+    lastName: response.data.lastName,
+    email: response.data.email,
+    userRole: response.data.userRole,
     phoneNumber: response.data.phoneNumber ?? null,
     bio: response.data.bio ?? null,
+    accountStatus: response.data.accountStatus ?? null,
     motherTongue: response.data.motherTongue ?? null,
     dateOfBirth: response.data.dateOfBirth ?? null,
     gender: response.data.gender ?? null,
@@ -509,6 +722,7 @@ const getLoggedInUserProfile = async (accessToken?: string) => {
     profilePicture: response.data.profilePicture ?? null,
     additionalPhotos: response.data.additionalPhotos ?? [],
     blockedUsers: response.data.blockedUsers ?? null,
+    likedUsers: response.data.likedUsers ?? null,
     socialMediaLinks: response.data.socialMediaLinks ?? null,
     preferredLanguages: response.data.preferredLanguages ?? null,
     purchasedMembership: response.data.purchasedMembership ?? null,
@@ -528,6 +742,7 @@ const getLoggedInUserProfile = async (accessToken?: string) => {
     preferredAgeRange: response.data.preferredAgeRange ?? null,
     preferredNationality: response.data.preferredNationality ?? null,
     religionPreference: response.data.religionPreference ?? null,
+    politicalPreference: response.data.politicalPreference ?? null,
     partnerExpectations: response.data.partnerExpectations ?? null,
     weightKg: response.data.weightKg ?? null,
     heightCm: response.data.heightCm ?? null,
@@ -552,7 +767,10 @@ const users = {
   getAllUsers,
   getAllAdmins,
   getUserDetails,
+  getAllLikedUsers,
+  getUserLikeStatus,
   getAllBlockedUsers,
+  getUserBlockStatus,
   getLoggedInUserProfile,
 };
 

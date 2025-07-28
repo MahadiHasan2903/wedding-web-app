@@ -1,11 +1,15 @@
 "use client";
 
+import React from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { User } from "@/lib/types/user/user.types";
 import { CommonButton } from "@/lib/components/buttons";
 import { redHeart } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
-import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
+import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
 
 interface UserCardProps {
@@ -13,10 +17,24 @@ interface UserCardProps {
 }
 
 const UserCard = ({ user }: UserCardProps) => {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const accessToken = session?.user.accessToken;
   const isVipUser = user.purchasedMembership?.membershipPackageInfo.id === 2;
+
+  // Function to redirect user based on token
+  const handleRedirection = () => {
+    if (accessToken) {
+      router.push(`/find-match/${user.id}`);
+    } else {
+      toast.error("Please login first to view the user profile");
+    }
+  };
+
   return (
     <div
-      className={`w-[150px] sm:w-[180px] lg:w-[240px] h-auto sm:h-[250px] lg:h-[350px] mx-auto flex flex-col items-center rounded-[10px] py-[8px] lg:py-[25px] ${
+      onClick={handleRedirection}
+      className={`w-[150px] sm:w-[180px] lg:w-[240px] cursor-pointer h-auto sm:h-[250px] lg:h-[350px] mx-auto flex flex-col items-center rounded-[10px] py-[8px] lg:py-[25px] ${
         isVipUser ? "bg-vip-gradient" : "bg-white"
       }`}
     >
@@ -60,12 +78,11 @@ const UserCard = ({ user }: UserCardProps) => {
       </div>
 
       <CommonButton
-        label="Like Profile"
-        href="#"
+        label="View Profile"
         className={`${
           isVipUser
             ? "btn-gold-gradient border-none"
-            : "bg-transparent border border-[#A1A1A1]"
+            : "bg-transparent border border-primaryBorder"
         } w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal p-[10px] rounded-full`}
         startIcon={
           <ImageWithFallback

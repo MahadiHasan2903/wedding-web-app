@@ -75,7 +75,7 @@ const PricingCard = ({ id, title, description, categoryInfo }: PropsType) => {
       <CommonButton
         label={isCurrent ? "Current Plan" : "Choose Plan"}
         type="button"
-        className={`w-full rounded-[5px] overflow-hidden border border-[#A1A1A1] p-[12px] text-[14px] font-semibold ${
+        className={`w-full rounded-[5px] overflow-hidden border border-primaryBorder p-[12px] text-[14px] font-semibold ${
           isCurrent
             ? "bg-transparent text-black"
             : `bg-${packageColor} text-white`

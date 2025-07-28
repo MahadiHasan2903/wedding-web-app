@@ -1,5 +1,5 @@
-import SelectField from "./SelectField";
 import RadioGroupField from "./RadioGroupField";
 import NumberRangeField from "./NumberRangeField";
+import OutlinedSelectField from "./OutlinedSelectField";
 
-export { SelectField, RadioGroupField, NumberRangeField };
+export { OutlinedSelectField, RadioGroupField, NumberRangeField };

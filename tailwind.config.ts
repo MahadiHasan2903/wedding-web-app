@@ -21,6 +21,7 @@ const config: Config = {
         textPrimary: "#D9D9D9",
         vipLight: "#F7E7CE",
         vipMedium: "#F5D199",
+        primaryBorder: "#A1A1A1",
         vipHeavy: "#FF9F05",
       },
       backgroundImage: {

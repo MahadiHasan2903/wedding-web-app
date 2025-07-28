@@ -5,16 +5,16 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import VerificationModal from "./VerificationModal";
+import { SubHeading } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
-import { SubHeading } from "@/lib/components/heading";
 import ForgetPasswordReqModal from "./ForgetPasswordReqModal";
-import { loginSchema, LoginType } from "@/lib/schema/auth.schema";
-import UnderlineInput from "@/lib/components/form-elements/UnderlineInput";
-import VerificationModal from "./VerificationModal";
+import { UnderlineInput } from "@/lib/components/form-elements";
+import { loginSchema, LoginType } from "@/lib/schema/auth/auth.schema";
 import { forgetPasswordConfirmationAction } from "@/lib/action/auth/auth.action";
 
 const LoginForm = () => {
@@ -91,7 +91,7 @@ const LoginForm = () => {
     >
       <div className="w-full flex flex-col items-center gap-[40px]">
         <SubHeading title="Sign in to Your Account" />
-        <div className="w-full flex items-center gap-2 border border-[#A1A1A1] px-[20px] py-[12px] rounded-[10px]">
+        <div className="w-full flex items-center gap-2 border border-primaryBorder px-[20px] py-[12px] rounded-[10px]">
           <ImageWithFallback src={google} width={16} height={16} alt="google" />
           <h3 className="w-full text-[14px] text-center font-normal">
             Continue with Google

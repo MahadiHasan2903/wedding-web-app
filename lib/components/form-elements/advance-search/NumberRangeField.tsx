@@ -49,7 +49,7 @@ const NumberRangeField = ({
 
   // Common Tailwind class for both number input fields
   const sharedInputClass =
-    "w-[50px] h-[30px] text-center text-[12px] lg:text-[14px] px-[10px] py-[10px] border border-[#A1A1A1] rounded-[5px] outline-none transition-all duration-200";
+    "w-[50px] h-[30px] text-center text-[12px] lg:text-[14px] px-[10px] py-[10px] border border-primaryBorder rounded-[5px] outline-none transition-all duration-200";
 
   return (
     <div className="flex items-center justify-between gap-[20px]">

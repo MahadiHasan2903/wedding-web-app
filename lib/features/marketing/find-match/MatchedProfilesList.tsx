@@ -67,15 +67,21 @@ const MatchedProfilesList = ({ getAllUsersData }: PropsType) => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="w-full bg-[#EDEDED] rounded-[10px]">
-        <div className="w-full grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-between gap-[8px] md:gap-[25px] p-2 lg:px-[30px] lg:py-[20px]">
-          {getAllUsersData.users.map((user) => (
-            <UserCard key={user.id} user={user} />
-          ))}
-        </div>
+      <div className="w-full bg-[#EDEDED] rounded-[10px] p-2 lg:px-[30px] lg:py-[20px]">
+        {getAllUsersData.users.length > 0 ? (
+          <div className="w-full grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-between gap-[8px] md:gap-[25px]">
+            {getAllUsersData.users.map((user) => (
+              <UserCard key={user.id} user={user} />
+            ))}
+          </div>
+        ) : (
+          <div className="w-full text-center text-black text-[20px] font-medium py-8">
+            No matched users found.
+          </div>
+        )}
       </div>
 
-      <div className="flex items-center gap-[10px] my-[50px] lg:mt-[130px] lg:mb-[80px] text-[#A1A1A1] mx-auto">
+      <div className="flex items-center gap-[10px] my-[50px] lg:mt-[130px] lg:mb-[80px] text-primaryBorder mx-auto">
         {/* Prev button */}
         <button
           onClick={onPrevClick}
@@ -97,7 +103,7 @@ const MatchedProfilesList = ({ getAllUsersData }: PropsType) => {
               className={`w-[30px] h-[30px] flex items-center justify-center border ${
                 page === currentPage
                   ? "border-primary bg-primary text-white font-bold"
-                  : "border-[#A1A1A1]"
+                  : "border-primaryBorder"
               }`}
             >
               {page}

@@ -49,31 +49,31 @@ const MatchFinderPage = async ({ searchParams }: PropsType) => {
   const smokingHabit = getQueryParam(searchParams, "smokingHabit");
   const drinkingHabit = getQueryParam(searchParams, "drinkingHabit");
   const healthCondition = getQueryParam(searchParams, "healthCondition");
+  const accountType = getQueryParam(searchParams, "accountType");
 
-  const allUsersData = await api.users.getAllUsers(
-    page,
-    pageSize,
-    ageRange,
-    heightRange,
-    weightRange,
-    lookingFor,
-    maritalStatus,
-    haveChildren === "true",
-    monthlyIncome,
-    religion,
-    education,
-    politicalView,
-    countryLiving,
-    spokenLanguage,
-    profession,
-    livingArrangement,
-    familyMembers,
-    havePet === "true",
-    dietaryPreference,
-    smokingHabit,
-    drinkingHabit,
-    healthCondition
-  );
+  const allUsersData = await api.users.getAllUsers(page, pageSize, {
+    age: ageRange ?? undefined,
+    height: heightRange ?? undefined,
+    weight: weightRange ?? undefined,
+    lookingFor: lookingFor ?? undefined,
+    maritalStatus: maritalStatus ?? undefined,
+    hasChildren: haveChildren === "true" ? true : undefined,
+    monthlyIncome: monthlyIncome ?? undefined,
+    religion: religion ?? undefined,
+    education: education ?? undefined,
+    politicalView: politicalView ?? undefined,
+    country: countryLiving ?? undefined,
+    languageSpoken: spokenLanguage ?? undefined,
+    profession: profession ?? undefined,
+    livingArrangement: livingArrangement ?? undefined,
+    familyMember: familyMembers ?? undefined,
+    hasPet: havePet === "true" ? true : undefined,
+    dietaryPreference: dietaryPreference ?? undefined,
+    smokingHabit: smokingHabit ?? undefined,
+    drinkingHabit: drinkingHabit ?? undefined,
+    healthCondition: healthCondition ?? undefined,
+    accountType: accountType ?? undefined,
+  });
 
   return (
     <div className="w-full p-[18px] sm:px-[30px] lg:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[30px] lg:gap-[50px]">

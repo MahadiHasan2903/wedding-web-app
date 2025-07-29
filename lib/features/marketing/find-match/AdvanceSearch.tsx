@@ -111,6 +111,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
       smokingHabit,
       drinkingHabit,
       healthCondition,
+      accountType,
     };
 
     const searchParams = new URLSearchParams();
@@ -146,7 +147,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
 
       <div className="w-full flex flex-col items-start text-black">
         {/* Section 1 */}
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
+        <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] border-t-[3px] border-light py-[16px] px-[20px]">
           <RadioGroupField
             label="Looking For"
             name="lookingFor"

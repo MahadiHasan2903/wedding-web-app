@@ -14,9 +14,10 @@ import userPlaceholder from "@/public/images/common/user-placeholder.png";
 
 interface UserCardProps {
   user: User;
+  returnUrl?: string;
 }
 
-const UserCard = ({ user }: UserCardProps) => {
+const UserCard = ({ user, returnUrl = "/find-match" }: UserCardProps) => {
   const router = useRouter();
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
@@ -25,7 +26,7 @@ const UserCard = ({ user }: UserCardProps) => {
   // Function to redirect user based on token
   const handleRedirection = () => {
     if (accessToken) {
-      router.push(`/find-match/${user.id}`);
+      router.push(`${returnUrl}/${user.id}`);
     } else {
       toast.error("Please login first to view the user profile");
     }

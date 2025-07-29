@@ -1,7 +1,10 @@
 import { fetchTyped } from "../client";
 import { BASE_URL } from "@/lib/config/constants";
 import { User } from "@/lib/types/user/user.types";
-import { PaginatedResponse } from "@/lib/types/common/common.types";
+import {
+  PaginatedResponse,
+  UserFilterOptions,
+} from "@/lib/types/common/common.types";
 
 type GetAllUsersResponse = PaginatedResponse<User>;
 type GetAllAdminsResponse = PaginatedResponse<User>;
@@ -45,78 +48,28 @@ interface GetUserBlockStatusCheckResponse {
  *
  * @param page - The page number for pagination (default is 1).
  * @param pageSize - The number of users per page (default is 10).
- * @param age - Age range filter (e.g., "25-35").
- * @param height - Height range filter (e.g., "160-180").
- * @param weight - Weight range filter (e.g., "50-70").
- * @param lookingFor - Gender preference filter (e.g., "female").
- * @param maritalStatus - Marital status filter (e.g., "single").
- * @param hasChildren - Whether the user has children.
- * @param monthlyIncome - Monthly income range (e.g., "2000-3000").
- * @param religion - Religion filter.
- * @param education - Education level filter.
- * @param politicalView - Political view filter.
- * @param country - Country filter.
- * @param languageSpoken - Spoken language filter.
- * @param profession - Profession filter.
- * @param livingArrangement - Living arrangement filter.
- * @param familyMember - Number of family members filter.
- * @param hasPet - Whether the user has a pet.
- * @param dietaryPreference - Dietary preference filter.
- * @param smokingHabit - Smoking habit filter.
- * @param drinkingHabit - Drinking habit filter.
- * @param healthCondition - Health condition filter.
- * @returns A list of users and pagination metadata.
- * @throws Error if the API returns no data or an invalid structure.
+ * @param filters - Filter options
+ * @returns
  */
 const getAllUsers = async (
   page = 1,
   pageSize = 10,
-  age?: string,
-  height?: string,
-  weight?: string,
-  lookingFor?: string,
-  maritalStatus?: string,
-  hasChildren?: boolean,
-  monthlyIncome?: string,
-  religion?: string,
-  education?: string,
-  politicalView?: string,
-  country?: string,
-  languageSpoken?: string,
-  profession?: string,
-  livingArrangement?: string,
-  familyMember?: string,
-  hasPet?: boolean,
-  dietaryPreference?: string,
-  smokingHabit?: string,
-  drinkingHabit?: string,
-  healthCondition?: string
+  filters: UserFilterOptions = {}
 ) => {
   const params = new URLSearchParams();
-
   params.append("page", page.toString());
   params.append("pageSize", pageSize.toString());
 
-  if (age) params.append("age", age);
-  if (height) params.append("height", height);
-  if (weight) params.append("weight", weight);
-  if (lookingFor) params.append("lookingFor", lookingFor);
-  if (maritalStatus) params.append("maritalStatus", maritalStatus);
-  if (hasChildren === true) params.append("hasChildren", "true");
-  if (hasPet === true) params.append("hasPet", "true");
-  if (monthlyIncome) params.append("monthlyIncome", monthlyIncome);
-  if (religion) params.append("religion", religion);
-  if (education) params.append("education", education);
-  if (politicalView) params.append("politicalView", politicalView);
-  if (country) params.append("country", country);
-  if (languageSpoken) params.append("languageSpoken", languageSpoken);
-  if (profession) params.append("profession", profession);
-  if (livingArrangement) params.append("livingArrangement", livingArrangement);
-  if (familyMember) params.append("familyMember", familyMember);
-  if (dietaryPreference) params.append("dietaryPreference", dietaryPreference);
-  if (smokingHabit) params.append("smokingHabit", smokingHabit);
-  if (drinkingHabit) params.append("drinkingHabit", drinkingHabit);
-  if (healthCondition) params.append("healthCondition", healthCondition);
+  for (const [key, value] of Object.entries(filters)) {
+    if (
+      value !== undefined &&
+      value !== null &&
+      !(typeof value === "string" && value.trim() === "") &&
+      !(typeof value === "boolean" && value === false)
+    ) {
+      params.append(key, String(value));
+    }
+  }
 
   const url = `${BASE_URL}/users?${params.toString()}`;
 

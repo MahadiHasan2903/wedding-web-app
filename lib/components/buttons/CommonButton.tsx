@@ -8,6 +8,7 @@ interface PropsType {
   href?: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
+  labelStyle?: string;
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   type?: "button" | "submit" | "reset";
@@ -19,6 +20,7 @@ const CommonButton = ({
   href,
   onClick,
   className,
+  labelStyle = "",
   startIcon,
   endIcon,
   type = "button",
@@ -27,7 +29,7 @@ const CommonButton = ({
   const content = (
     <>
       {startIcon}
-      {label}
+      <span className={labelStyle}>{label}</span>
       {endIcon}
     </>
   );

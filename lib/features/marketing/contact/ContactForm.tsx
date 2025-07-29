@@ -1,19 +1,25 @@
 "use client";
 
-import React from "react";
-import { mail } from "@/lib/components/image/icons";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SectionTitle } from "@/lib/components/heading";
-import { ImageWithFallback } from "@/lib/components/image";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import {
   contactSubmissionFormSchema,
   ContactSubmissionFormType,
 } from "@/lib/schema/contact/contact.schema";
+import { mail } from "@/lib/components/image/icons";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SectionTitle } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
+import { ImageWithFallback } from "@/lib/components/image";
+import { contactFormSubmitAction } from "@/lib/action/contact";
 import { OutlinedInput, Textarea } from "@/lib/components/form-elements";
 
 const ContactForm = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const {
     control,
     handleSubmit,
@@ -22,8 +28,34 @@ const ContactForm = () => {
     resolver: zodResolver(contactSubmissionFormSchema),
   });
 
-  const handleContactFormSubmit = (data: ContactSubmissionFormType) => {
-    console.log("Form Submitted:", JSON.stringify(data, null, 2));
+  // function to submit contact request
+  const handleContactFormSubmit = async (data: ContactSubmissionFormType) => {
+    setLoading(true);
+
+    // Prepare payload
+    const payload = {
+      email: data.email,
+      subject: data.subject,
+      message: data.message,
+      lastName: data.lastName,
+      firstName: data.firstName,
+      phoneNumber: data.phoneNumber,
+    };
+
+    // Submit request
+    const registrationConfirmationResponse = await contactFormSubmitAction(
+      payload
+    );
+
+    // Show toast notification with confirmation result
+    toast(registrationConfirmationResponse.message, {
+      type: registrationConfirmationResponse.status ? "success" : "error",
+    });
+
+    if (registrationConfirmationResponse.status) {
+      router.push("/");
+    }
+    setLoading(false);
   };
 
   return (
@@ -149,7 +181,8 @@ const ContactForm = () => {
           />
           <CommonButton
             type="submit"
-            label="Submit"
+            label={loading ? "Submitting..." : "Submit"}
+            disabled={loading}
             className="w-full p-[12px] lg:p-[20px] bg-red text-white text-[16px] font-semibold rounded-full"
           />
         </form>

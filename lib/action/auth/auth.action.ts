@@ -1,7 +1,7 @@
 "use server";
 
-import { BASE_URL } from "@/lib/config/constants";
 import { fetchZodTyped } from "../client";
+import { BASE_URL } from "@/lib/config/constants";
 import { Result } from "@/lib/types/common/common.types";
 import {
   LoginType,

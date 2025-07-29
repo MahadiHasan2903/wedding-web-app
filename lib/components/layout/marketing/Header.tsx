@@ -1,44 +1,69 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import Link from "next/link";
+import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
 import { navItems } from "@/lib/utils/data";
-import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import UserMenuDropdown from "./UserMenuDropdown";
 import { LIGHT_LOGO } from "@/lib/config/constants";
+import { signOut, useSession } from "next-auth/react";
 import { CommonButton } from "@/lib/components/buttons";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
-import { avatar, crown, hamburger } from "@/lib/components/image/icons";
+import { crown, avatar, hamburger } from "@/lib/components/image/icons";
 
 const Header = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const menuRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
-  // Extract access info and user state
   const accessToken = session?.user.accessToken ?? null;
+  const isAdmin = useMemo(
+    () => session?.user.data.userRole === "admin",
+    [session]
+  );
   const profileImageUrl = session?.user.data.profilePicture?.url;
   const membershipId =
     session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
-  const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
-  const isAdmin = session?.user.data.userRole === "admin" ? true : false;
+  const isVipUser = useMemo(
+    () => membershipId !== undefined && [2, 3].includes(membershipId),
+    [membershipId]
+  );
 
-  // Closes the mobile drawer with animation
-  const closeDrawer = () => {
+  const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
+
+  const closeDrawer = useCallback(() => {
     setIsAnimatingOut(true);
     setTimeout(() => {
       setIsDrawerOpen(false);
       setIsAnimatingOut(false);
     }, 300);
-  };
+  }, []);
 
-  // Handle clicks outside of drawer to close it
+  const handleLogout = useCallback(async () => {
+    await signOut({ callbackUrl: "/login" });
+    setIsMenuOpen(false);
+    toast.success("Logout Successfully");
+  }, []);
+
+  // Close drawer on outside click
   useEffect(() => {
+    if (!isDrawerOpen) return;
+
     const handleClickOutside = (event: MouseEvent) => {
       if (
         drawerRef.current &&
@@ -48,21 +73,42 @@ const Header = () => {
       }
     };
 
-    if (isDrawerOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isDrawerOpen, closeDrawer]);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+  // Close user menu on outside click
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const hasIgnoreClass = (el: HTMLElement | null): boolean => {
+      if (!el) return false;
+      if (el.classList.contains("ignore-close-menu")) return true;
+      return hasIgnoreClass(el.parentElement);
     };
-  }, [isDrawerOpen]);
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(target) &&
+        !hasIgnoreClass(target)
+      ) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside, true);
+    return () =>
+      document.removeEventListener("mousedown", handleClickOutside, true);
+  }, [isMenuOpen]);
 
   return (
-    <div className="w-full bg-primary text-vipLight">
+    <header className="w-full bg-primary text-vipLight relative">
       {/* Desktop Navbar */}
-      <div className="w-full hidden lg:flex items-center justify-between px-[36px] py-[16px]">
-        <div className="w-2/3 flex items-center gap-[60px] xl:gap-[100px]">
-          <Link href="/" className="cursor-pointer">
+      <div className="hidden lg:flex items-center justify-between px-9 py-4">
+        <div className="flex items-center gap-20 xl:gap-24 w-2/3">
+          <Link href="/">
             <ImageWithFallback
               src={LIGHT_LOGO}
               width={100}
@@ -70,27 +116,28 @@ const Header = () => {
               alt="logo"
             />
           </Link>
-          <div className="w-full flex items-center gap-[50px]">
-            {navItems.map((item) => (
+          <nav className="flex items-center gap-12 w-full">
+            {navItems.map(({ href, label }) => (
               <Link
-                key={item.href}
-                href={item.href}
-                className={`${
-                  pathname === item.href && "text-vipHeavy"
-                } text-[16px] hover:text-vipHeavy font-medium cursor-pointer`}
+                key={href}
+                href={href}
+                className={`text-base font-medium cursor-pointer hover:text-vipHeavy ${
+                  pathname === href ? "text-vipHeavy" : ""
+                }`}
               >
-                {item.label}
+                {label}
               </Link>
             ))}
-          </div>
+          </nav>
         </div>
-        <div className="flex justify-end">
+
+        <div className="flex justify-end relative">
           {accessToken ? (
-            <div className="w-full flex items-center gap-[25px]">
+            <div className="flex items-center gap-6">
               <CommonButton
-                label=" Manage Plan"
+                label="Manage Plan"
                 href="/pricing"
-                className="w-fit flex items-center gap-[8px] bg-transparent border border-vipHeavy text-vipLight font-medium px-[20px] py-[12px] rounded-lg"
+                className="flex gap-2 items-center bg-transparent border border-vipHeavy text-vipLight px-5 py-3 rounded-lg"
                 startIcon={
                   <ImageWithFallback
                     src={crown}
@@ -100,40 +147,52 @@ const Header = () => {
                   />
                 }
               />
-              <Link
-                href={`${isAdmin ? "overview" : "/my-profile"}`}
-                className="w-[48px] h-[48px] relative flex items-center justify-center"
-              >
-                <ImageWithFallback
-                  src={profileImageUrl}
-                  width={45}
-                  height={45}
-                  alt="user"
-                  fallBackImage={avatar}
-                  className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
-                />
-                {isVipUser && (
+              <div className="relative">
+                <button
+                  onClick={toggleMenu}
+                  className="w-12 h-12 relative flex items-center justify-center"
+                  aria-haspopup="true"
+                  aria-expanded={isMenuOpen}
+                >
                   <ImageWithFallback
-                    src={vipRing}
-                    width={48}
-                    height={48}
-                    alt="ring"
-                    className="cursor-pointer z-10"
+                    src={profileImageUrl}
+                    fallBackImage={avatar}
+                    width={45}
+                    height={45}
+                    alt="user"
+                    className="absolute rounded-full overflow-hidden border border-black"
+                  />
+                  {isVipUser && (
+                    <ImageWithFallback
+                      src={vipRing}
+                      width={48}
+                      height={48}
+                      alt="vip ring"
+                      className="z-10"
+                    />
+                  )}
+                </button>
+                {isMenuOpen && (
+                  <UserMenuDropdown
+                    isAdmin={isAdmin}
+                    onClose={closeMenu}
+                    menuRef={menuRef}
+                    handleLogout={handleLogout}
                   />
                 )}
-              </Link>
+              </div>
             </div>
           ) : (
-            <div className="w-full flex items-center gap-[25px]">
+            <div className="flex items-center gap-6">
               <CommonButton
                 label="Join Now"
                 href="/registration"
-                className="w-fit bg-vipHeavy text-vipLight font-bold px-[20px] py-[10px] rounded-lg"
+                className="bg-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
               />
               <CommonButton
-                href="/login"
                 label="Sign In"
-                className="w-fit bg-transparent border border-vipHeavy text-vipLight font-bold px-[20px] py-[10px] rounded-lg"
+                href="/login"
+                className="border border-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
               />
             </div>
           )}
@@ -141,16 +200,16 @@ const Header = () => {
       </div>
 
       {/* Mobile Navbar */}
-      <div className="w-full flex items-center justify-between lg:hidden p-[16px]">
+      <div className="flex lg:hidden items-center justify-between p-4">
         <ImageWithFallback
           src={hamburger}
           width={22}
           height={16}
-          alt="hamburger"
-          className="cursor-pointer z-10"
+          alt="menu"
           onClick={() => setIsDrawerOpen(true)}
+          className="cursor-pointer z-10"
         />
-        <Link href="/" className="cursor-pointer">
+        <Link href="/">
           <ImageWithFallback
             src={LIGHT_LOGO}
             width={100}
@@ -158,24 +217,38 @@ const Header = () => {
             alt="logo"
           />
         </Link>
-
         {accessToken ? (
-          <div className="w-[42px] h-[42px] relative flex items-center justify-center">
-            <ImageWithFallback
-              src={profileImageUrl}
-              width={45}
-              height={45}
-              alt="user"
-              fallBackImage={avatar}
-              className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
-            />
-            {isVipUser && (
+          <div className="relative z-20">
+            <button
+              onClick={toggleMenu}
+              className="relative w-[42px] h-[42px] flex items-center justify-center"
+              aria-haspopup="true"
+              aria-expanded={isMenuOpen}
+            >
               <ImageWithFallback
-                src={vipRing}
-                width={40}
-                height={40}
-                alt="ring"
-                className="cursor-pointer z-10"
+                src={profileImageUrl}
+                fallBackImage={avatar}
+                width={45}
+                height={45}
+                alt="user"
+                className="rounded-full overflow-hidden border border-black"
+              />
+              {isVipUser && (
+                <ImageWithFallback
+                  src={vipRing}
+                  width={40}
+                  height={40}
+                  alt="ring"
+                  className="z-10"
+                />
+              )}
+            </button>
+            {isMenuOpen && (
+              <UserMenuDropdown
+                isAdmin={isAdmin}
+                onClose={closeMenu}
+                menuRef={menuRef}
+                handleLogout={handleLogout}
               />
             )}
           </div>
@@ -183,7 +256,7 @@ const Header = () => {
           <CommonButton
             href="/login"
             label="Sign In"
-            className="w-fit bg-transparent border border-vipHeavy text-vipLight font-bold px-[20px] py-[10px] rounded-lg"
+            className="border border-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
           />
         )}
       </div>
@@ -191,13 +264,11 @@ const Header = () => {
       {/* Mobile Drawer */}
       {(isDrawerOpen || isAnimatingOut) && (
         <div className="fixed inset-0 z-40 flex">
-          {/* Overlay */}
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+            className="fixed inset-0 bg-black bg-opacity-50"
             onClick={closeDrawer}
+            aria-hidden="true"
           />
-
-          {/* Drawer */}
           <div
             ref={drawerRef}
             className={`relative w-[250px] h-full bg-primary p-4 shadow-lg z-50 transition-transform duration-300 ${
@@ -205,29 +276,36 @@ const Header = () => {
                 ? "animate-slide-out-left"
                 : "animate-slide-in-left"
             }`}
+            role="dialog"
+            aria-modal="true"
           >
-            <div className="w-full flex justify-end">
-              <RxCross1 size={20} onClick={closeDrawer} className="text-red" />
+            <div className="flex justify-end">
+              <RxCross1
+                size={20}
+                onClick={closeDrawer}
+                className="text-red cursor-pointer"
+                role="button"
+                aria-label="Close menu"
+              />
             </div>
-
             <nav className="flex flex-col gap-4 mt-5">
-              {navItems.map((item) => (
+              {navItems.map(({ href, label }) => (
                 <Link
-                  key={item.href}
-                  href={item.href}
+                  key={href}
+                  href={href}
                   onClick={closeDrawer}
-                  className={`${
-                    pathname === item.href && "text-vipHeavy"
-                  } text-vipLight pb-[10px] border-b border-b-vipLight text-[14px] font-medium`}
+                  className={`text-sm font-medium pb-2 border-b border-b-vipLight text-vipLight ${
+                    pathname === href ? "text-vipHeavy" : ""
+                  }`}
                 >
-                  {item.label}
+                  {label}
                 </Link>
               ))}
             </nav>
           </div>
         </div>
       )}
-    </div>
+    </header>
   );
 };
 

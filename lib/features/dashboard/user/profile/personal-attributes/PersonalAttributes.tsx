@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSession } from "next-auth/react";
 import { formatLabel } from "@/lib/utils/helpers";
 import { User } from "@/lib/types/user/user.types";
 import { CardTitle } from "@/lib/components/heading";
@@ -12,18 +11,17 @@ import PersonalAttributesUpdateForm from "./PersonalAttributesUpdateForm";
 
 interface PropsType {
   userProfile: User;
+  editable?: boolean;
 }
 
-const PersonalAttributes = ({ userProfile }: PropsType) => {
-  const { data: session } = useSession();
+const PersonalAttributes = ({ userProfile, editable = false }: PropsType) => {
   const [open, setOpen] = useState(false);
-  const isLoggedInUser = session?.user.data.id === userProfile.id;
   return (
     <div className="w-full bg-white rounded-none lg:rounded-[10px]">
       <div className="w-full py-[17px] lg:py-[25px] border-light border-b-0 lg:border-b-[3px]">
         <div className="w-full px-[17px] lg:px-[36px] flex items-center justify-between">
           <CardTitle title="Personal Attributes & Habits" />
-          {isLoggedInUser && (
+          {editable && (
             <CommonButton
               label="Edit Info"
               onClick={() => setOpen(true)}

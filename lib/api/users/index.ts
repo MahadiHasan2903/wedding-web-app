@@ -102,8 +102,8 @@ const getAllUsers = async (
   if (weight) params.append("weight", weight);
   if (lookingFor) params.append("lookingFor", lookingFor);
   if (maritalStatus) params.append("maritalStatus", maritalStatus);
-  if (hasChildren !== undefined)
-    params.append("hasChildren", hasChildren ? "true" : "false");
+  if (hasChildren === true) params.append("hasChildren", "true");
+  if (hasPet === true) params.append("hasPet", "true");
   if (monthlyIncome) params.append("monthlyIncome", monthlyIncome);
   if (religion) params.append("religion", religion);
   if (education) params.append("education", education);
@@ -113,13 +113,14 @@ const getAllUsers = async (
   if (profession) params.append("profession", profession);
   if (livingArrangement) params.append("livingArrangement", livingArrangement);
   if (familyMember) params.append("familyMember", familyMember);
-  if (hasPet !== undefined) params.append("hasPet", hasPet ? "true" : "false");
   if (dietaryPreference) params.append("dietaryPreference", dietaryPreference);
   if (smokingHabit) params.append("smokingHabit", smokingHabit);
   if (drinkingHabit) params.append("drinkingHabit", drinkingHabit);
   if (healthCondition) params.append("healthCondition", healthCondition);
 
   const url = `${BASE_URL}/users?${params.toString()}`;
+
+  console.log(url);
 
   const response = await fetchTyped<GetAllUsersResponse>(url, {
     method: "GET",
@@ -570,7 +571,7 @@ const getAllLikedUsers = async (
     );
   }
 
-  const allLikedUsers: User[] = response.data.items.map((user) => ({
+  const likedProfiles: User[] = response.data.items.map((user) => ({
     id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
@@ -633,7 +634,7 @@ const getAllLikedUsers = async (
   }));
 
   return {
-    allLikedUsers,
+    likedProfiles,
     paginationInfo: {
       totalItems: response.data.totalItems,
       totalPages: response.data.totalPages,

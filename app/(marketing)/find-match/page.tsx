@@ -50,31 +50,7 @@ const MatchFinderPage = async ({ searchParams }: PropsType) => {
   const drinkingHabit = getQueryParam(searchParams, "drinkingHabit");
   const healthCondition = getQueryParam(searchParams, "healthCondition");
 
-  // Combine into an object to pass as props
-  const filterValues = {
-    lookingFor,
-    age: ageRange,
-    height: heightRange,
-    weight: weightRange,
-    maritalStatus,
-    haveChildren,
-    religion,
-    politicalView,
-    country: countryLiving,
-    languageSpoken: spokenLanguage,
-    education,
-    profession,
-    monthlyIncome,
-    livingArrangement,
-    familyMember: familyMembers,
-    hasPet: havePet,
-    dietaryPreference,
-    smokingHabit,
-    drinkingHabit,
-    healthCondition,
-  };
-
-  const getAllUsersData = await api.users.getAllUsers(
+  const allUsersData = await api.users.getAllUsers(
     page,
     pageSize,
     ageRange,
@@ -102,7 +78,7 @@ const MatchFinderPage = async ({ searchParams }: PropsType) => {
   return (
     <div className="w-full p-[18px] sm:px-[30px] lg:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[30px] lg:gap-[50px]">
       <AdvanceSearch page={page} />
-      <MatchedProfilesList getAllUsersData={getAllUsersData} />
+      <MatchedProfilesList allUsersData={allUsersData} />
     </div>
   );
 };

@@ -35,8 +35,6 @@ const updateLikeDisLikeStatusAction = async (
 
   const { accessToken } = await getServerSessionData();
 
-  console.log(payload);
-
   try {
     // Send PATCH request to update like/dislike status
     const response = await fetchZodTyped(

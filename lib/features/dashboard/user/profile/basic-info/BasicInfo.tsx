@@ -11,7 +11,6 @@ import {
   facebook,
   instagram,
   linkedin,
-  redHeart,
   tiktok,
   twitter,
   whatsapp,
@@ -42,15 +41,21 @@ const iconMap: Record<string, StaticImageData> = {
 interface PropsType {
   userProfile: User;
   isLiked?: boolean;
+  editable?: boolean;
+  returnUrl?: string;
 }
 
-const BasicInfo = ({ userProfile, isLiked }: PropsType) => {
+const BasicInfo = ({
+  userProfile,
+  isLiked,
+  editable = false,
+  returnUrl,
+}: PropsType) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { data: session } = useSession();
-  const isLoggedInUser = session?.user.data.id === userProfile.id;
   const membershipId =
     session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
   const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
@@ -74,6 +79,9 @@ const BasicInfo = ({ userProfile, isLiked }: PropsType) => {
 
     // If update successful, close modal and refresh page data
     if (updateLikeStatusResponse.status) {
+      if (returnUrl) {
+        router.push(returnUrl);
+      }
       router.refresh();
     }
     setLoading(false);
@@ -171,7 +179,7 @@ const BasicInfo = ({ userProfile, isLiked }: PropsType) => {
               );
             })}
           </div>
-          {isLoggedInUser ? (
+          {editable ? (
             <CommonButton
               label="Edit Info"
               onClick={() => setOpen(true)}

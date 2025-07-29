@@ -26,7 +26,7 @@ const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
   return (
     <div
       onClick={handleRedirection}
-      className={`w-[150px] sm:w-[180px] lg:w-[240px] cursor-pointer h-auto sm:h-[250px] lg:h-[350px] mx-auto flex flex-col items-center rounded-[10px] py-[8px] lg:py-[25px] ${
+      className={`w-[160px] sm:w-[180px] lg:w-[240px] cursor-pointer h-auto sm:h-[250px] lg:h-[350px] mx-auto flex flex-col items-center rounded-[10px] py-[8px] lg:py-[25px] ${
         isVipUser ? "bg-vip-gradient" : "bg-white"
       }`}
     >
@@ -69,14 +69,15 @@ const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
         </p>
       </div>
 
-      <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-[15px]">
+      <div className="w-full flex items-center justify-center gap-2 lg:gap-[15px]">
         <CommonButton
           label="Liked"
           className={`${
             isVipUser
               ? "btn-gold-gradient border-none"
               : "bg-red border border-primaryBorder text-white"
-          } w-fit flex items-center gap-[5px] text-[10px] font-normal p-[10px] rounded-full`}
+          } w-fit flex items-center gap-[5px] text-[10px] font-normal p-[8px] lg:p-[10px] rounded-full`}
+          labelStyle="hidden lg:block"
           startIcon={
             <ImageWithFallback
               src={whiteHeart}
@@ -92,7 +93,7 @@ const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
             isVipUser
               ? "btn-gold-gradient border-none"
               : "bg-transparent border border-primaryBorder text-black"
-          } w-fit flex items-center gap-[5px] text-[10px] font-normal p-[10px] rounded-full`}
+          } w-fit flex items-center gap-[5px] text-[10px] font-normal p-[8px] lg:p-[10px] rounded-full`}
           startIcon={
             <ImageWithFallback
               src={sendMessage}

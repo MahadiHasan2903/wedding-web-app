@@ -24,7 +24,7 @@ const RadioGroupField = ({
   disabled = false,
 }: PropsType) => {
   return (
-    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-[12px] lg:gap-[30px]">
+    <div className="flex flex-col lg:flex-row items-start lg:items-center gap-[12px] lg:gap-[30px]">
       <p className="text-[12px] lg:text-[14px] font-semibold">{label}</p>
       <div className="flex flex-wrap items-center gap-[18px]">
         {options.map((option) => {

@@ -37,8 +37,6 @@ export interface Result<T> {
 }
 
 export interface UserFilterOptions {
-  page?: number;
-  pageSize?: number;
   age?: string;
   height?: string;
   weight?: string;
@@ -59,4 +57,5 @@ export interface UserFilterOptions {
   smokingHabit?: string;
   drinkingHabit?: string;
   healthCondition?: string;
+  accountType?: string;
 }

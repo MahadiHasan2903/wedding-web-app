@@ -52,7 +52,7 @@ const NumberRangeField = ({
     "w-[50px] h-[30px] text-center text-[12px] lg:text-[14px] px-[10px] py-[10px] border border-primaryBorder rounded-[5px] outline-none transition-all duration-200";
 
   return (
-    <div className="flex items-center justify-between gap-[20px]">
+    <div className="flex items-center gap-[20px]">
       <p className="text-[12px] lg:text-[14px] font-semibold">{label}</p>
       <div className="flex items-center gap-[12px]">
         <input

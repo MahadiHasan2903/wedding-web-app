@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { UserCard } from "@/lib/components/card";
 import { User } from "@/lib/types/user/user.types";
 import { Pagination } from "@/lib/components/table";
+import { LikedProfileCard } from "@/lib/components/card";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface PropsType {
-  allUsersData: {
-    users: User[];
+  allLikedProfilesData: {
+    likedProfiles: User[];
     paginationInfo: {
       totalItems: number;
       itemsPerPage: number;
@@ -22,12 +22,12 @@ interface PropsType {
   };
 }
 
-const MatchedProfilesList = ({ allUsersData }: PropsType) => {
+const AllLikedProfileList = ({ allLikedProfilesData }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { currentPage, totalPages, prevPage, nextPage } =
-    allUsersData.paginationInfo;
+    allLikedProfilesData.paginationInfo;
 
   // Helper to build URL with updated page param
   const getUrlWithPage = (page: number) => {
@@ -67,16 +67,16 @@ const MatchedProfilesList = ({ allUsersData }: PropsType) => {
 
   return (
     <div className="w-full flex flex-col items-center">
-      <div className="w-full bg-[#EDEDED] rounded-[10px] p-2 lg:px-[30px] lg:py-[20px]">
-        {allUsersData.users.length > 0 ? (
-          <div className="w-full grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-between gap-[8px] md:gap-[25px]">
-            {allUsersData.users.map((user) => (
-              <UserCard key={user.id} user={user} />
+      <div className="w-full bg-[#EDEDED] rounded-[10px] p-4 lg:px-[30px] lg:py-[20px]">
+        {allLikedProfilesData.likedProfiles.length > 0 ? (
+          <div className="w-full grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4  justify-between gap-[8px] md:gap-[25px]">
+            {allLikedProfilesData.likedProfiles.map((user) => (
+              <LikedProfileCard key={user.id} user={user} />
             ))}
           </div>
         ) : (
           <div className="w-full text-center text-black text-[20px] font-medium py-8">
-            No matched users found.
+            No liked profiles found.
           </div>
         )}
       </div>
@@ -94,4 +94,4 @@ const MatchedProfilesList = ({ allUsersData }: PropsType) => {
   );
 };
 
-export default MatchedProfilesList;
+export default AllLikedProfileList;

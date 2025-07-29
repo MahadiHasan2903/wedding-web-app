@@ -23,7 +23,9 @@ import instagram from "@/public/icons/instagram.svg";
 import hamburger from "@/public/icons/hamburger.svg";
 import myProfile from "@/public/icons/my-profile.svg";
 import findMatch from "@/public/icons/find-match.svg";
+import whiteHeart from "@/public/icons/white-heart.svg";
 import tickCircle from "@/public/icons/tick-circle.svg";
+import sendMessage from "@/public/icons/send-message.svg";
 import manageAdmin from "@/public/icons/manage-admin.svg";
 import subscription from "@/public/icons/subscription.svg";
 import blockedUsers from "@/public/icons/blocked-users.svg";
@@ -58,7 +60,9 @@ export {
   hamburger,
   instagram,
   findMatch,
+  whiteHeart,
   tickCircle,
+  sendMessage,
   manageAdmin,
   blockedUsers,
   subscription,

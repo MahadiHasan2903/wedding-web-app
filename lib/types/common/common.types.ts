@@ -35,3 +35,28 @@ export interface Result<T> {
   message: string;
   data: T | null;
 }
+
+export interface UserFilterOptions {
+  page?: number;
+  pageSize?: number;
+  age?: string;
+  height?: string;
+  weight?: string;
+  lookingFor?: string;
+  maritalStatus?: string;
+  hasChildren?: boolean;
+  monthlyIncome?: string;
+  religion?: string;
+  education?: string;
+  politicalView?: string;
+  country?: string;
+  languageSpoken?: string;
+  profession?: string;
+  livingArrangement?: string;
+  familyMember?: string;
+  hasPet?: boolean;
+  dietaryPreference?: string;
+  smokingHabit?: string;
+  drinkingHabit?: string;
+  healthCondition?: string;
+}

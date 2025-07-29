@@ -1,34 +1,26 @@
 "use client";
 
 import React from "react";
-import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { User } from "@/lib/types/user/user.types";
 import { CommonButton } from "@/lib/components/buttons";
-import { redHeart } from "@/lib/components/image/icons";
+import { sendMessage, whiteHeart } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
 import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
 
-interface UserCardProps {
+interface LikedProfileCardProps {
   user: User;
 }
 
-const UserCard = ({ user }: UserCardProps) => {
+const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
   const router = useRouter();
-  const { data: session } = useSession();
-  const accessToken = session?.user.accessToken;
   const isVipUser = user.purchasedMembership?.membershipPackageInfo.id === 2;
 
   // Function to redirect user based on token
   const handleRedirection = () => {
-    if (accessToken) {
-      router.push(`/find-match/${user.id}`);
-    } else {
-      toast.error("Please login first to view the user profile");
-    }
+    router.push(`/liked-profiles/${user.id}`);
   };
 
   return (
@@ -77,24 +69,42 @@ const UserCard = ({ user }: UserCardProps) => {
         </p>
       </div>
 
-      <CommonButton
-        label="View Profile"
-        className={`${
-          isVipUser
-            ? "btn-gold-gradient border-none"
-            : "bg-transparent border border-primaryBorder"
-        } w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal p-[10px] rounded-full`}
-        startIcon={
-          <ImageWithFallback
-            src={redHeart}
-            width={15}
-            height={12}
-            alt="red-heart"
-          />
-        }
-      />
+      <div className="w-full flex flex-col lg:flex-row items-center justify-center gap-[15px]">
+        <CommonButton
+          label="Liked"
+          className={`${
+            isVipUser
+              ? "btn-gold-gradient border-none"
+              : "bg-red border border-primaryBorder text-white"
+          } w-fit flex items-center gap-[5px] text-[10px] font-normal p-[10px] rounded-full`}
+          startIcon={
+            <ImageWithFallback
+              src={whiteHeart}
+              width={13}
+              height={12}
+              alt="red-heart"
+            />
+          }
+        />
+        <CommonButton
+          label="Send Message"
+          className={`${
+            isVipUser
+              ? "btn-gold-gradient border-none"
+              : "bg-transparent border border-primaryBorder text-black"
+          } w-fit flex items-center gap-[5px] text-[10px] font-normal p-[10px] rounded-full`}
+          startIcon={
+            <ImageWithFallback
+              src={sendMessage}
+              width={13}
+              height={12}
+              alt="red-heart"
+            />
+          }
+        />
+      </div>
     </div>
   );
 };
 
-export default UserCard;
+export default LikedProfileCard;

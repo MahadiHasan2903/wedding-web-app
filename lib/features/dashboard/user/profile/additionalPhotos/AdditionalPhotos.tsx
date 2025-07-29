@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
 import { User } from "@/lib/types/user/user.types";
 import { AlterModal } from "@/lib/components/modal";
 import { CardTitle } from "@/lib/components/heading";
@@ -17,18 +16,16 @@ import { deleteUserAdditionalPhotoAction } from "@/lib/action/user/user.action";
 
 interface PropsType {
   userProfile: User;
+  editable?: boolean;
 }
 
-const AdditionalPhotos = ({ userProfile }: PropsType) => {
-  const { data: session } = useSession();
+const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
   const router = useRouter();
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openAlertModal, setOpenAlertModal] = useState(false);
   const [selectedPhotoId, setSelectedPhotoId] = useState<string | null>(null);
-
-  const isLoggedInUser = session?.user.data.id === userProfile.id;
 
   const handleDeleteFile = async () => {
     if (!selectedPhotoId) return;
@@ -58,7 +55,7 @@ const AdditionalPhotos = ({ userProfile }: PropsType) => {
       <div className="w-full py-[17px] lg:py-[25px] border-light border-b-0 lg:border-b-[3px]">
         <div className="w-full px-[17px] lg:px-[36px] flex items-center justify-between">
           <CardTitle title="Additional Photos" />
-          {isLoggedInUser && userProfile.additionalPhotos?.length < 10 && (
+          {editable && userProfile.additionalPhotos?.length < 10 && (
             <CommonButton
               label="Edit Info"
               onClick={() => setOpen(true)}
@@ -78,7 +75,7 @@ const AdditionalPhotos = ({ userProfile }: PropsType) => {
 
       {/* Content */}
       <div className="w-full px-[17px] lg:px-[36px] pb-[17px] lg:pt-[17px] lg:pb-[25px] flex flex-col items-start gap-[16px]">
-        {isLoggedInUser &&
+        {editable &&
           (userProfile.additionalPhotos?.length >= 10 ? (
             <p className="text-red text-[12px] sm:text-[14px] font-medium">
               You’ve reached the maximum limit of 10 photos. Please remove an

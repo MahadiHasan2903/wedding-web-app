@@ -22,6 +22,10 @@ const Pagination: React.FC<PaginationProps> = ({
   onPrevClick,
   onNextClick,
 }) => {
+  if (totalPages < 2) {
+    return null;
+  }
+
   return (
     <div className="flex items-center gap-[10px] my-[50px] lg:mt-[130px] lg:mb-[80px] text-primaryBorder mx-auto">
       {/* Prev button */}

@@ -75,10 +75,21 @@ const MatchFinderPage = async ({ searchParams }: PropsType) => {
     accountType: accountType ?? undefined,
   });
 
+  // ✅ Filter out users with role 'admin'
+  const filteredUsers = allUsersData.users.filter(
+    (user) => user.userRole !== "admin"
+  );
+
+  // ✅ Create new object with updated user list
+  const filteredAllUsersData = {
+    ...allUsersData,
+    users: filteredUsers,
+  };
+
   return (
     <div className="w-full p-[18px] sm:px-[30px] lg:px-[60px] sm:py-[32px] xl:px-[120px] xl:py-[80px] flex flex-col justify-between gap-[30px] lg:gap-[50px]">
       <AdvanceSearch page={page} />
-      <MatchedProfilesList allUsersData={allUsersData} />
+      <MatchedProfilesList allUsersData={filteredAllUsersData} />
     </div>
   );
 };

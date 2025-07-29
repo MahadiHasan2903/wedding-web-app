@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DARK_LOGO } from "@/lib/config/constants";
 import { userSidebarItems, adminSidebarItems } from "@/lib/utils/data";
-import { crown } from "@/lib/components/image/icons";
+import { crown, logout } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { useSession } from "next-auth/react";
 
@@ -62,23 +62,29 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      {!isAdmin && (
-        <div className="w-fit flex items-start gap-[8px] rounded-[10px] border border-primaryBorder py-[20px] pl-[10px] pr-[20px] mx-[26px] my-[20px]">
-          <ImageWithFallback
-            src={crown}
-            width={18}
-            height={18}
-            alt="crown"
-            className="mt-1"
-          />
-          <div className="flex flex-col items-start gap-[9px]">
-            <h3 className="text-[14px] font-medium">Manage Plan</h3>
-            <p className="text-[10px] font-light">
-              Subscription will be ended in 120 days
-            </p>
-          </div>
+      <div className="flex flex-col items-start gap-[12px] mx-[26px] my-[20px]">
+        <div className="w-full flex items-center gap-[7px] border border-primaryBorder py-2 px-[10px] rounded-[5px]">
+          <ImageWithFallback src={logout} width={25} height={25} alt="logout" />
+          Logout
         </div>
-      )}
+        {!isAdmin && (
+          <div className="w-fit flex items-start gap-[8px] rounded-[10px] border border-primaryBorder py-[20px] pl-[10px] pr-[20px]">
+            <ImageWithFallback
+              src={crown}
+              width={18}
+              height={18}
+              alt="crown"
+              className="mt-1"
+            />
+            <div className="flex flex-col items-start gap-[9px]">
+              <h3 className="text-[14px] font-medium">Manage Plan</h3>
+              <p className="text-[10px] font-light">
+                Subscription will be ended in 120 days
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };

@@ -4,10 +4,10 @@ import dynamic from "next/dynamic";
 import { getQueryParam } from "@/lib/utils/helpers";
 import { getServerSessionData } from "@/lib/config/auth";
 
-const AllRecommendedUsersList = dynamic(
+const AllRecommendedUsers = dynamic(
   () =>
     import(
-      "@/lib/features/dashboard/user/recommended-matches/AllRecommendedUsersList"
+      "@/lib/features/dashboard/user/recommended-matches/AllRecommendedUsers"
     ),
   { ssr: false }
 );
@@ -42,19 +42,20 @@ const RecommendedUsersPage = async ({ searchParams }: PropsType) => {
     allLikedProfilesData.likedProfiles.map((user) => user.id)
   );
 
-  // Filter recommended users: exclude those who are liked already and also filter out the currently logged in user
+  // Exclude liked users, the logged-in user, and admin users
   const filteredRecommendedUsers = {
     ...allRecommendedUsersData,
     users: allRecommendedUsersData.users.filter(
-      (user) => user.id !== loggedInUserProfile.id && !likedUserIds.has(user.id)
+      (user) =>
+        user.id !== loggedInUserProfile.id &&
+        !likedUserIds.has(user.id) &&
+        user.userRole !== "admin"
     ),
   };
 
   return (
     <div className="w-full h-full flex flex-col gap-[2px] lg:gap-[30px] items-start py-0 lg:py-[30px]">
-      <AllRecommendedUsersList
-        allRecommendedUsersData={filteredRecommendedUsers}
-      />
+      <AllRecommendedUsers allRecommendedUsersData={filteredRecommendedUsers} />
     </div>
   );
 };

@@ -7,7 +7,7 @@ const LoginForm = dynamic(() => import("@/lib/features/auth/LoginForm"), {
 
 const LoginPage = () => {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center p-[50px]">
+    <div className="w-full h-full flex flex-col items-center justify-center py-[50px] px-[30px] lg:p-[50px]">
       <LoginForm />
     </div>
   );

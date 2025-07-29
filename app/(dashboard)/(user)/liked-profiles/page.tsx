@@ -4,9 +4,8 @@ import dynamic from "next/dynamic";
 import { getQueryParam } from "@/lib/utils/helpers";
 import { getServerSessionData } from "@/lib/config/auth";
 
-const AllLikedProfileList = dynamic(
-  () =>
-    import("@/lib/features/dashboard/user/liked-profiles/AllLikedProfileList"),
+const AllLikedProfiles = dynamic(
+  () => import("@/lib/features/dashboard/user/liked-profiles/AllLikedProfiles"),
   { ssr: false }
 );
 
@@ -29,7 +28,7 @@ const LikedProfilePage = async ({ searchParams }: PropsType) => {
 
   return (
     <div className="w-full h-full flex flex-col gap-[2px] lg:gap-[30px] items-start py-0 lg:py-[30px]">
-      <AllLikedProfileList allLikedProfilesData={allLikedProfilesData} />
+      <AllLikedProfiles allLikedProfilesData={allLikedProfilesData} />
     </div>
   );
 };

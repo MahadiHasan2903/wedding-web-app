@@ -6,6 +6,7 @@ import crown from "@/public/icons/crown.svg";
 import heart from "@/public/icons/heart.svg";
 import quote from "@/public/icons/quote.svg";
 import avatar from "@/public/icons/avatar.svg";
+import logout from "@/public/icons/logout.svg";
 import report from "@/public/icons/report.svg";
 import google from "@/public/icons/google.svg";
 import tiktok from "@/public/icons/tiktok.svg";
@@ -43,6 +44,7 @@ export {
   heart,
   quote,
   avatar,
+  logout,
   report,
   google,
   message,

@@ -3,12 +3,12 @@
 import React, { useEffect } from "react";
 import { User } from "@/lib/types/user/user.types";
 import { Pagination } from "@/lib/components/table";
-import { UserCard } from "@/lib/components/card";
+import { LikedProfileCard } from "@/lib/components/card";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 interface PropsType {
-  allRecommendedUsersData: {
-    users: User[];
+  allLikedProfilesData: {
+    likedProfiles: User[];
     paginationInfo: {
       totalItems: number;
       itemsPerPage: number;
@@ -22,12 +22,12 @@ interface PropsType {
   };
 }
 
-const AllRecommendedUsersList = ({ allRecommendedUsersData }: PropsType) => {
+const AllLikedProfiles = ({ allLikedProfilesData }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { currentPage, totalPages, prevPage, nextPage } =
-    allRecommendedUsersData.paginationInfo;
+    allLikedProfilesData.paginationInfo;
 
   // Helper to build URL with updated page param
   const getUrlWithPage = (page: number) => {
@@ -68,19 +68,16 @@ const AllRecommendedUsersList = ({ allRecommendedUsersData }: PropsType) => {
   return (
     <div className="w-full flex flex-col items-center">
       <div className="w-full p-3 lg:p-0">
-        {allRecommendedUsersData.users.length > 0 ? (
+        {allLikedProfilesData.likedProfiles.length > 0 ? (
           <div className="w-full grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4  justify-between gap-[8px] md:gap-[25px]">
-            {allRecommendedUsersData.users.map((user) => (
-              <UserCard
-                returnUrl="/recommended-matches"
-                key={user.id}
-                user={user}
-              />
+            {allLikedProfilesData.likedProfiles.map((user) => (
+              <LikedProfileCard key={user.id} user={user} />
             ))}
           </div>
         ) : (
-          <div className="w-full text-center text-black text-[20px] font-medium py-8">
-            No recommended profiles found.
+          <div className="mx-auto max-w-[500px] text-center flex items-center justify-center min-h-[60vh] text-black text-[20px] font-medium py-8">
+            No liked profiles found. Start liking profiles to see them listed
+            here.
           </div>
         )}
       </div>
@@ -98,4 +95,4 @@ const AllRecommendedUsersList = ({ allRecommendedUsersData }: PropsType) => {
   );
 };
 
-export default AllRecommendedUsersList;
+export default AllLikedProfiles;

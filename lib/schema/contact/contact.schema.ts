@@ -26,3 +26,25 @@ export const contactSubmissionFormSchema = z.object({
 export type ContactSubmissionFormType = z.infer<
   typeof contactSubmissionFormSchema
 >;
+
+export const contactSubmissionFormResponseSchema = z.object({
+  status: z.number(),
+  success: z.boolean(),
+  error: z.string().optional(),
+  message: z.string(),
+  data: z.object({
+    id: z.string().uuid(),
+    firstName: z.string(),
+    lastName: z.string(),
+    email: z.string().email(),
+    phoneNumber: z.string(),
+    subject: z.string(),
+    message: z.string(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+  }),
+});
+
+export type ContactSubmissionFormResponseType = z.infer<
+  typeof contactSubmissionFormResponseSchema.shape.data
+>;

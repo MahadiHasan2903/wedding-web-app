@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { passwordRegex } from "../common/media.schema";
 
 /**
  * Registration Request Schema
@@ -21,12 +22,17 @@ export const registrationRequestSchema = z.object({
   password: z
     .string()
     .min(6, "Password must be at least 6 characters")
-    .refine((value) => value.trim().length > 0, "Password is required"),
-
+    .regex(
+      passwordRegex,
+      "Password must be 6+ characters with uppercase, lowercase, number, and special character."
+    ),
   retypePassword: z
     .string()
     .min(6, "Password must be at least 6 characters")
-    .refine((value) => value.trim().length > 0, "Password is required")
+    .regex(
+      passwordRegex,
+      "Password must be 6+ characters with uppercase, lowercase, number, and special character."
+    )
     .optional(),
 });
 

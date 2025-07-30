@@ -43,16 +43,16 @@ const ContactForm = () => {
     };
 
     // Submit request
-    const registrationConfirmationResponse = await contactFormSubmitAction(
+    const contactFormSubmissionResponse = await contactFormSubmitAction(
       payload
     );
 
     // Show toast notification with confirmation result
-    toast(registrationConfirmationResponse.message, {
-      type: registrationConfirmationResponse.status ? "success" : "error",
+    toast(contactFormSubmissionResponse.message, {
+      type: contactFormSubmissionResponse.status ? "success" : "error",
     });
 
-    if (registrationConfirmationResponse.status) {
+    if (contactFormSubmissionResponse.status) {
       router.push("/");
     }
     setLoading(false);

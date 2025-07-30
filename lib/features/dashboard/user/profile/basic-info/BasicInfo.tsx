@@ -106,8 +106,6 @@ const BasicInfo = ({
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       setPreviewImageUrl(previewUrl);
-      console.log("Selected profile image:", file);
-
       const formData = new FormData();
       formData.append("profilePicture", file);
 

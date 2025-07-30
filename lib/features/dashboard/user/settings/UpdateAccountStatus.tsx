@@ -1,12 +1,14 @@
 "use client";
 
+import React, { useState } from "react";
+import Link from "next/link";
+import { toast } from "react-toastify";
+import { AlterModal } from "@/lib/components/modal";
+import { crown } from "@/lib/components/image/icons";
+import { signOut, useSession } from "next-auth/react";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
-import { crown } from "@/lib/components/image/icons";
-import { AlterModal } from "@/lib/components/modal";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import React, { useState } from "react";
+import { updateAccountStatusAction } from "@/lib/action/user/user.action";
 
 const UpdateAccountStatus = () => {
   const { data: session } = useSession();
@@ -16,8 +18,28 @@ const UpdateAccountStatus = () => {
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
 
-  const handleUpdateAccountStatus = () => {
-    console.log(status);
+  const handleUpdateAccountStatus = async () => {
+    setLoading(true);
+
+    // Prepare payload
+    const payload = {
+      accountStatus: status,
+    };
+
+    // Submit request
+    const accountStatusUpdateResponse = await updateAccountStatusAction(
+      payload
+    );
+
+    // Show toast notification with confirmation result
+    toast(accountStatusUpdateResponse.message, {
+      type: accountStatusUpdateResponse.status ? "success" : "error",
+    });
+
+    if (accountStatusUpdateResponse.status) {
+      await signOut({ callbackUrl: "/login" });
+    }
+    setLoading(false);
   };
 
   return (
@@ -71,9 +93,9 @@ const UpdateAccountStatus = () => {
           setOpen={setOpen}
           handleConfirm={handleUpdateAccountStatus}
           confirmButtonText={
-            status === "delete" ? "Delete Account" : "Deactivate Profile"
+            status === "delete" ? "Delete Account" : "Deactivate Account"
           }
-          title={status === "delete" ? "Delete Account" : "Deactivate Profile"}
+          title={status === "delete" ? "Delete Account" : "Deactivate Account"}
           description={`Are you sure you want to ${
             status === "delete" ? "delete" : "deactivate"
           } your account?`}

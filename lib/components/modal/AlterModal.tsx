@@ -28,7 +28,7 @@ const AlterModal = ({
 
   return (
     <div className="fixed left-0 top-0 z-[99] flex h-full w-full items-center justify-center bg-black/60 px-4 py-5">
-      <div className="w-full max-w-[470px] rounded-[10px] bg-white p-[24px] lg:p-[32px] flex flex-col items-start gap-[24px]">
+      <div className="w-full max-w-[470px] rounded-[10px] bg-white p-[24px] lg:p-[32px] flex flex-col items-start gap-[16px] md:gap-[24px]">
         <ImageWithFallback src={alert} width={40} height={40} alt="alert" />
         <div className="flex flex-col items-start gap-[12px]">
           <h2 className="text-[24px] font-semibold text-primary">{title}</h2>

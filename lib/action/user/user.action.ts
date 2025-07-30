@@ -1,14 +1,16 @@
 "use server";
 
 import {
+  ChangePasswordType,
+  changePasswordSchema,
   UpdateUserResponseType,
+  UpdateAccountStatusType,
   updateUserResponseSchema,
+  updateAccountStatusSchema,
+  ChangePasswordResponseType,
+  changePasswordResponseSchema,
   DeleteAdditionalPhotosResponseType,
   deleteAdditionalPhotosResponseSchema,
-  changePasswordSchema,
-  ChangePasswordType,
-  changePasswordResponseSchema,
-  ChangePasswordResponseType,
 } from "@/lib/schema/user/user.schema";
 import { BASE_URL } from "@/lib/config/constants";
 import { fetchZodTyped } from "@/lib/action/client";
@@ -123,7 +125,8 @@ const updateUserProfileAction = async (updatedProfileData: FormData) => {
       status: false,
       message: isTimeout
         ? "The request timed out. Please try again later."
-        : "Failed to update profile. Please check your input or try again.",
+        : String(error.message) ||
+          "Failed to update profile. Please check your input or try again.",
       data: null,
     };
 
@@ -175,7 +178,8 @@ const deleteUserAdditionalPhotoAction = async (photoId: string) => {
       status: false,
       message: isTimeout
         ? "The request timed out. Please try again later."
-        : "Failed to delete photo from your album. Please try again.",
+        : String(error.message) ||
+          "Failed to delete photo from your album. Please try again.",
       data: null,
     };
 
@@ -238,7 +242,133 @@ const changePasswordAction = async (requestPayload: ChangePasswordType) => {
       data: null,
       message: isTimeout
         ? "Request timed out. Please check your connection and try again."
-        : "Failed to change your password at this time. Please try again later.",
+        : String(error.message) ||
+          "Failed to change your password at this time. Please try again later.",
+    };
+
+    return result;
+  }
+};
+
+/**
+ * Updates the user's account status by sending a PATCH request to the API.
+ *
+ * @param requestPayload - The object containing the new account status
+ * @returns Result object indicating success or failure of the update operation
+ */
+const updateAccountStatusAction = async (
+  requestPayload: UpdateAccountStatusType
+) => {
+  // Validate the request payload against the schema
+  const safeParse = updateAccountStatusSchema.safeParse(requestPayload);
+  if (!safeParse.success) {
+    // Throw error if validation fails
+    throw new Error("Invalid account status provided.");
+  }
+
+  // Retrieve access token for authorization
+  const { accessToken } = await getServerSessionData();
+
+  try {
+    // Send PATCH request to update account status endpoint
+    const response = await fetchZodTyped(
+      `${BASE_URL}/users/profile/account-status`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(requestPayload),
+      },
+      updateUserResponseSchema
+    );
+
+    // Map response data to expected user profile structure
+    const updatedUserProfile: UpdateUserResponseType = {
+      id: response.data.id,
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
+      email: response.data.email,
+      phoneNumber: response.data.phoneNumber,
+      bio: response.data.bio,
+      motherTongue: response.data.motherTongue,
+      dateOfBirth: response.data.dateOfBirth,
+      gender: response.data.gender,
+      nationality: response.data.nationality,
+      country: response.data.country,
+      city: response.data.city,
+      maritalStatus: response.data.maritalStatus,
+      profilePicture: response.data.profilePicture ?? null,
+      additionalPhotos: response.data.additionalPhotos ?? [],
+      blockedUsers: response.data.blockedUsers ?? null,
+      likedUsers: response.data.likedUsers ?? null,
+      socialMediaLinks: response.data.socialMediaLinks,
+      preferredLanguages: response.data.preferredLanguages ?? [],
+      userRole: response.data.userRole,
+      accountStatus: response.data.accountStatus,
+      purchasedMembership: response.data.purchasedMembership ?? null,
+      timeZone: response.data.timeZone,
+      highestEducation: response.data.highestEducation,
+      institutionName: response.data.institutionName,
+      profession: response.data.profession,
+      companyName: response.data.companyName,
+      monthlyIncome: response.data.monthlyIncome,
+      incomeCurrency: response.data.incomeCurrency,
+      religion: response.data.religion,
+      politicalView: response.data.politicalView,
+      livingArrangement: response.data.livingArrangement,
+      familyMemberCount: response.data.familyMemberCount ?? null,
+      interestedInGender: response.data.interestedInGender,
+      lookingFor: response.data.lookingFor,
+      preferredAgeRange: response.data.preferredAgeRange,
+      preferredNationality: response.data.preferredNationality,
+      religionPreference: response.data.religionPreference,
+      politicalPreference: response.data.politicalPreference,
+      partnerExpectations: response.data.partnerExpectations,
+      weightKg: response.data.weightKg,
+      heightCm: response.data.heightCm,
+      bodyType: response.data.bodyType,
+      drinkingHabit: response.data.drinkingHabit,
+      smokingHabit: response.data.smokingHabit,
+      healthCondition: response.data.healthCondition,
+      hasPet: response.data.hasPet ?? null,
+      dietaryPreference: response.data.dietaryPreference,
+      children: response.data.children,
+      familyBackground: response.data.familyBackground,
+      culturalPractices: response.data.culturalPractices,
+      astrologicalSign: response.data.astrologicalSign,
+      loveLanguage: response.data.loveLanguage,
+      favoriteQuote: response.data.favoriteQuote,
+      profileVisibility: response.data.profileVisibility,
+      photoVisibility: response.data.photoVisibility,
+      messageAvailability: response.data.messageAvailability,
+      createdAt: response.data.createdAt,
+      updatedAt: response.data.updatedAt,
+    };
+
+    // Return success result with updated user profile
+    const result: Result<UpdateUserResponseType> = {
+      status: true,
+      message: "Your account status has been updated successfully.",
+      data: updatedUserProfile,
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error("Account status update failed:", error);
+
+    // Check if error is due to request timeout
+    const isTimeout = error.message?.includes("timed out");
+
+    // Return failure result with appropriate message based on error type
+    const result: Result<UpdateUserResponseType> = {
+      status: false,
+      data: null,
+      message: isTimeout
+        ? "The request timed out. Please check your internet connection and try again."
+        : String(error.error) ||
+          "Failed to update account status at the moment. Please try again later.",
     };
 
     return result;
@@ -246,7 +376,8 @@ const changePasswordAction = async (requestPayload: ChangePasswordType) => {
 };
 
 export {
-  updateUserProfileAction,
-  deleteUserAdditionalPhotoAction,
   changePasswordAction,
+  updateUserProfileAction,
+  updateAccountStatusAction,
+  deleteUserAdditionalPhotoAction,
 };

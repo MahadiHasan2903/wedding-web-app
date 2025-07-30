@@ -68,7 +68,8 @@ const updateLikeDisLikeStatusAction = async (
       status: false,
       message: isTimeout
         ? "The request timed out. Please try again later."
-        : "Failed to update user like/dislike status. Please try again.",
+        : String(error.message) ||
+          "Failed to update user like/dislike status. Please try again.",
       data: null,
     };
 
@@ -130,7 +131,8 @@ const updateBlockUnblockStatusAction = async (
       status: false,
       message: isTimeout
         ? "The request timed out. Please try again later."
-        : "Failed to update user block/unblock status. Please try again.",
+        : String(error.message) ||
+          "Failed to update user block/unblock status. Please try again.",
       data: null,
     };
 

@@ -68,7 +68,8 @@ const contactFormSubmitAction = async (
       data: null,
       message: isTimeout
         ? "Request timed out. Please try again."
-        : "Failed to submit the contact form. Please try again later.",
+        : String(error.message) ||
+          "Failed to submit the contact form. Please try again later.",
     };
 
     return result;

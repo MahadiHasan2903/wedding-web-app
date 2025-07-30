@@ -83,8 +83,6 @@ const accountLoginAction = async (requestPayload: LoginType) => {
 
     return result;
   } catch (error: any) {
-    console.error("Login request failed:", error);
-
     const isTimeout = error.message?.includes("timed out");
 
     // Failed result
@@ -93,7 +91,8 @@ const accountLoginAction = async (requestPayload: LoginType) => {
       data: null,
       message: isTimeout
         ? "Login request timed out. Please try again."
-        : "Login failed. Please check your credentials.",
+        : String(error.message) ||
+          "Login failed. Please check your credentials.",
     };
 
     return result;
@@ -148,7 +147,8 @@ const resetPasswordAction = async (requestPayload: ResetPasswordType) => {
       data: null,
       message: isTimeout
         ? "The request timed out. Please check your internet connection and try again."
-        : "We couldn't reset your password at this time. Please try again later.",
+        : String(error.message) ||
+          "We couldn't reset your password at this time. Please try again later.",
     };
 
     return result;
@@ -207,7 +207,8 @@ const forgetPasswordRequestAction = async (
       data: null,
       message: isTimeout
         ? "The request timed out. Please check your internet connection and try again."
-        : "Unable to process your request at the moment. Please try again later.",
+        : String(error.message) ||
+          "Unable to process your request at the moment. Please try again later.",
     };
 
     return result;
@@ -266,7 +267,8 @@ const forgetPasswordConfirmationAction = async (
       data: null,
       message: isTimeout
         ? "The request timed out. Please check your internet connection and try again."
-        : "Failed to verify OTP. Please make sure the code is correct and try again.",
+        : String(error.message) ||
+          "Failed to verify OTP. Please make sure the code is correct and try again.",
     };
 
     return result;
@@ -327,7 +329,8 @@ const accountRegistrationRequestAction = async (
       status: false,
       message: isTimeout
         ? "The request timed out. Please try again."
-        : "Failed to complete registration request. Please try again later.",
+        : String(error.message) ||
+          "Failed to complete registration request. Please try again later.",
       data: null,
     };
 
@@ -396,7 +399,8 @@ const accountRegistrationConfirmationAction = async (
       status: false,
       message: isTimeout
         ? "The request timed out. Please check your connection and try again."
-        : "Failed to verify OTP. Please ensure your code is correct and try again.",
+        : String(error.message) ||
+          "Failed to verify OTP. Please ensure your code is correct and try again.",
       data: null,
     };
 

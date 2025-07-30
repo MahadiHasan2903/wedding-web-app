@@ -30,12 +30,19 @@ export function fetchZodTyped<T>(
   };
 
   return fetch(url, uConfig)
-    .then((response) => {
+    .then(async (response) => {
       clearTimeout(timeout);
-      return response.json();
-    })
-    .then((data) => {
+      const data = await response.json();
+
       console.log("Raw response:", JSON.stringify(data, null, 2));
+
+      // Check if the response contains an error field
+      if (data.success === false) {
+        const serverError =
+          data?.error || data?.message || "Unknown server error";
+        throw new Error(serverError);
+      }
+
       const result = schema.safeParse(data);
       if (!result.success) {
         throw new Error(`Validation error: ${result.error.message}`);

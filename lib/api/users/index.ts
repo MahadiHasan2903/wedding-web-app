@@ -73,8 +73,6 @@ const getAllUsers = async (
 
   const url = `${BASE_URL}/users?${params.toString()}`;
 
-  console.log(url);
-
   const response = await fetchTyped<GetAllUsersResponse>(url, {
     method: "GET",
   });
@@ -367,17 +365,20 @@ const getAllAdmins = async (
 const getAllBlockedUsers = async (
   accessToken?: string,
   page: number = 1,
-  pageSize: number = 10
+  pageSize: number = 10,
+  name?: string
 ) => {
-  const response = await fetchTyped<GetAllBlockedUsersResponse>(
-    `${BASE_URL}/users/blocked-users?page=${page}&pageSize=${pageSize}`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  // Constructing the URL with optional query parameters
+  const url =
+    `${BASE_URL}/users/blocked-users?page=${page}&pageSize=${pageSize}&sort=id,DESC` +
+    (name && name !== "" ? `&name=${name}` : "");
+
+  const response = await fetchTyped<GetAllBlockedUsersResponse>(url, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
   if (!response.data) {
     throw new Error(
@@ -385,7 +386,7 @@ const getAllBlockedUsers = async (
     );
   }
 
-  const allBlockedUsers: User[] = response.data.items.map((user) => ({
+  const blockedUsers: User[] = response.data.items.map((user) => ({
     id: user.id,
     firstName: user.firstName,
     lastName: user.lastName,
@@ -448,7 +449,7 @@ const getAllBlockedUsers = async (
   }));
 
   return {
-    allBlockedUsers,
+    blockedUsers,
     paginationInfo: {
       totalItems: response.data.totalItems,
       totalPages: response.data.totalPages,

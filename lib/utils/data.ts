@@ -105,7 +105,7 @@ export const userSidebarItems = [
   },
   {
     label: "Settings",
-    href: "/my-profile/settings",
+    href: "/settings",
     icon: settings,
   },
 ];

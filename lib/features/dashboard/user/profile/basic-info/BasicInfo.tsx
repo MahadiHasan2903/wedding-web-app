@@ -11,6 +11,7 @@ import {
   facebook,
   instagram,
   linkedin,
+  sendMessage,
   tiktok,
   twitter,
   whatsapp,
@@ -194,20 +195,40 @@ const BasicInfo = ({
               }
             />
           ) : (
-            <CommonButton
-              label={
-                loading
-                  ? isLiked
-                    ? "Disliking Profile..."
-                    : "Liking Profile..."
-                  : isLiked
-                  ? "Dislike Profile"
-                  : "Like Profile"
-              }
-              disabled={loading}
-              onClick={handleUpdateLikeStatus}
-              className="w-fit bg-primary border text-white flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full"
-            />
+            <div className="flex items-center justify-center gap-2 lg:gap-[15px]">
+              <CommonButton
+                label={
+                  loading
+                    ? isLiked
+                      ? "Disliking Profile..."
+                      : "Liking Profile..."
+                    : isLiked
+                    ? "Dislike Profile"
+                    : "Like Profile"
+                }
+                disabled={loading}
+                onClick={handleUpdateLikeStatus}
+                className="w-fit bg-primary border text-white flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full"
+              />
+              {returnUrl && returnUrl === "/liked-profiles" && (
+                <CommonButton
+                  label="Send Message"
+                  className={`${
+                    isVipUser
+                      ? "btn-gold-gradient border-none"
+                      : "bg-transparent border border-primaryBorder text-black"
+                  } w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full`}
+                  startIcon={
+                    <ImageWithFallback
+                      src={sendMessage}
+                      width={15}
+                      height={15}
+                      alt="red-heart"
+                    />
+                  }
+                />
+              )}
+            </div>
           )}
         </div>
       </div>

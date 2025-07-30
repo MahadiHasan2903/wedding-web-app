@@ -1,19 +1,25 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import Link from "next/link";
+import { toast } from "react-toastify";
 import { usePathname } from "next/navigation";
 import { DARK_LOGO } from "@/lib/config/constants";
-import { userSidebarItems, adminSidebarItems } from "@/lib/utils/data";
-import { crown, logout } from "@/lib/components/image/icons";
+import { signOut, useSession } from "next-auth/react";
 import { ImageWithFallback } from "@/lib/components/image";
-import { useSession } from "next-auth/react";
+import { crown, logout } from "@/lib/components/image/icons";
+import { userSidebarItems, adminSidebarItems } from "@/lib/utils/data";
 
 const Sidebar = () => {
   const { data: session } = useSession();
   const pathname = usePathname();
   const isAdmin = session?.user.data.userRole === "admin";
   const sidebarItems = isAdmin ? adminSidebarItems : userSidebarItems;
+
+  const handleLogout = useCallback(async () => {
+    await signOut({ callbackUrl: "/login" });
+    toast.success("Logout Successfully");
+  }, []);
 
   return (
     <div className="w-full h-full max-w-[270px] bg-white text-[#292D32] hidden lg:flex flex-col items-center justify-between rounded-[10px]">
@@ -52,7 +58,7 @@ const Sidebar = () => {
                 {/* Highlight Bar */}
                 <div
                   className={`w-[6px] h-[25px] bg-primary transition-opacity duration-200 ${
-                    pathname === item.href
+                    pathname.startsWith(item.href)
                       ? "opacity-100"
                       : "opacity-0 group-hover:opacity-100"
                   }`}
@@ -62,13 +68,19 @@ const Sidebar = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col items-start gap-[12px] mx-[26px] my-[20px]">
-        <div className="w-full flex items-center gap-[7px] border border-primaryBorder py-2 px-[10px] rounded-[5px]">
+      <div className="w-full flex flex-col items-start gap-[12px] px-[26px] py-[20px]">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center cursor-pointer gap-[7px] hover:bg-red border hover:text-white border-primaryBorder py-2 px-[10px] rounded-[5px]"
+        >
           <ImageWithFallback src={logout} width={25} height={25} alt="logout" />
           Logout
-        </div>
+        </button>
         {!isAdmin && (
-          <div className="w-fit flex items-start gap-[8px] rounded-[10px] border border-primaryBorder py-[20px] pl-[10px] pr-[20px]">
+          <Link
+            href="/manage-plan"
+            className="w-fit cursor-pointer flex items-start gap-[8px] rounded-[10px] border border-primaryBorder py-[20px] pl-[10px] pr-[20px]"
+          >
             <ImageWithFallback
               src={crown}
               width={18}
@@ -82,7 +94,7 @@ const Sidebar = () => {
                 Subscription will be ended in 120 days
               </p>
             </div>
-          </div>
+          </Link>
         )}
       </div>
     </div>

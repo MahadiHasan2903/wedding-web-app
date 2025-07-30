@@ -5,6 +5,10 @@ import {
   updateUserResponseSchema,
   DeleteAdditionalPhotosResponseType,
   deleteAdditionalPhotosResponseSchema,
+  changePasswordSchema,
+  ChangePasswordType,
+  changePasswordResponseSchema,
+  ChangePasswordResponseType,
 } from "@/lib/schema/user/user.schema";
 import { BASE_URL } from "@/lib/config/constants";
 import { fetchZodTyped } from "@/lib/action/client";
@@ -179,4 +183,70 @@ const deleteUserAdditionalPhotoAction = async (photoId: string) => {
   }
 };
 
-export { updateUserProfileAction, deleteUserAdditionalPhotoAction };
+/**
+ * Handles the password change process by validating input and sending
+ * a request to the backend API to update the user's password.
+ *
+ * @param requestPayload - The password change form data
+ * @returns Result object indicating success or failure of the operation
+ */
+const changePasswordAction = async (requestPayload: ChangePasswordType) => {
+  // Validate the password change input using Zod schema
+  const safeParse = changePasswordSchema.safeParse(requestPayload);
+  if (!safeParse.success) {
+    // Throw error if validation fails
+    throw new Error("Invalid password data.");
+  }
+
+  const { accessToken } = await getServerSessionData();
+
+  try {
+    // Send POST request to change password endpoint with validated data
+    const response = await fetchZodTyped(
+      `${BASE_URL}/account/change-password`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          currentPassword: requestPayload.currentPassword,
+          newPassword: requestPayload.newPassword,
+        }),
+      },
+      changePasswordResponseSchema
+    );
+
+    // Return success result with response data
+    const result: Result<ChangePasswordResponseType> = {
+      status: true,
+      message: "Your password has been changed successfully.",
+      data: response.data,
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error("Password change failed:", error);
+
+    // Detect if error was due to a timeout
+    const isTimeout = error.message?.includes("timed out");
+
+    // Return failure result with appropriate message
+    const result: Result<ChangePasswordResponseType> = {
+      status: false,
+      data: null,
+      message: isTimeout
+        ? "Request timed out. Please check your connection and try again."
+        : "Failed to change your password at this time. Please try again later.",
+    };
+
+    return result;
+  }
+};
+
+export {
+  updateUserProfileAction,
+  deleteUserAdditionalPhotoAction,
+  changePasswordAction,
+};

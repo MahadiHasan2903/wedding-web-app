@@ -39,19 +39,21 @@ const contactFormSubmitAction = async (
       contactSubmissionFormResponseSchema
     );
 
+    const submissionResponse = {
+      id: response.data.id,
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
+      email: response.data.email,
+      phoneNumber: response.data.phoneNumber,
+      subject: response.data.subject,
+      message: response.data.message,
+      createdAt: response.data.createdAt,
+      updatedAt: response.data.updatedAt,
+    };
+
     const result: Result<ContactSubmissionFormResponseType> = {
       status: true,
-      data: {
-        id: response.data.id,
-        firstName: response.data.firstName,
-        lastName: response.data.lastName,
-        email: response.data.email,
-        phoneNumber: response.data.phoneNumber,
-        subject: response.data.subject,
-        message: response.data.message,
-        createdAt: response.data.createdAt,
-        updatedAt: response.data.updatedAt,
-      },
+      data: submissionResponse,
       message: "Your message was submitted successfully.",
     };
 

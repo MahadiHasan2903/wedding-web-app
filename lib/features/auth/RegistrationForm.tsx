@@ -43,7 +43,7 @@ const RegistrationForm = () => {
   const handleRegistrationRequestSubmit = async (
     data: RegistrationRequestType
   ) => {
-    setPasswordError(""); // Clear previous password error
+    setPasswordError("");
 
     if (data.password !== data.retypePassword) {
       setPasswordError("Passwords do not match");

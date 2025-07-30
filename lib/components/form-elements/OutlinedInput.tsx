@@ -70,7 +70,9 @@ const OutlinedInput = ({
           onWheel={handleWheel}
           required={required}
           readOnly={readOnly}
-          className={`w-full text-[12px] lg:text-[14px] px-[16px] py-[12px] lg:p-[24px] border rounded-[10px] outline-none transition-all duration-200 pr-10 ${
+          className={`${
+            readOnly && "cursor-not-allowed"
+          } w-full text-[12px] lg:text-[14px] px-[16px] py-[12px] lg:p-[24px] border rounded-[10px] outline-none transition-all duration-200 pr-10 ${
             error ? "border-red" : "border-primaryBorder focus:border-primary"
           }  ${className}`}
         />

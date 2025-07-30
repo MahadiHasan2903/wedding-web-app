@@ -71,7 +71,7 @@ const Sidebar = () => {
       <div className="w-full flex flex-col items-start gap-[12px] px-[26px] py-[20px]">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center cursor-pointer gap-[7px] hover:bg-red border hover:text-white border-primaryBorder py-2 px-[10px] rounded-[5px]"
+          className="w-full flex items-center cursor-pointer gap-[7px] hover:bg-[#E5E5E5] border border-primaryBorder py-2 px-[10px] rounded-[5px]"
         >
           <ImageWithFallback src={logout} width={25} height={25} alt="logout" />
           Logout
@@ -79,7 +79,9 @@ const Sidebar = () => {
         {!isAdmin && (
           <Link
             href="/manage-plan"
-            className="w-fit cursor-pointer flex items-start gap-[8px] rounded-[10px] border border-primaryBorder py-[20px] pl-[10px] pr-[20px]"
+            className={`${
+              pathname === "/manage-plan" ? "bg-[#E5E5E5]" : "bg-transparent"
+            } w-fit cursor-pointer flex items-start gap-[8px] rounded-[10px] hover:bg-[#E5E5E5] border border-primaryBorder py-[20px] pl-[10px] pr-[20px]`}
           >
             <ImageWithFallback
               src={crown}

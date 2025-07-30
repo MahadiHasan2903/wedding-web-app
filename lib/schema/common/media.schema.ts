@@ -1,5 +1,9 @@
 import z from "zod";
 
+// Password regex for strong validation
+export const passwordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^+=_-])[A-Za-z\d@$!%*?&#^+=_-]{6,}$/;
+
 export const mediaSchema = z.object({
   id: z.string(),
   collectionName: z.string(),

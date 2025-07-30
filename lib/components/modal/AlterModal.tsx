@@ -12,6 +12,7 @@ interface PropsType {
   description?: string;
   loading?: boolean;
   handleConfirm?: () => void;
+  confirmButtonText?: string;
 }
 
 const AlterModal = ({
@@ -20,6 +21,7 @@ const AlterModal = ({
   title = "Warning",
   description = "Are you sure you want to perform this action?",
   loading = false,
+  confirmButtonText = "Remove",
   handleConfirm,
 }: PropsType) => {
   if (!open) return null;
@@ -40,7 +42,7 @@ const AlterModal = ({
             className="w-fit bg-[#E3E3E3] text-[#1E1E1E] font-bold px-[14px] py-[10px] text-[14px] rounded-lg"
           />
           <CommonButton
-            label={loading ? "Removing..." : "Remove"}
+            label={loading ? "Processing..." : confirmButtonText}
             disabled={loading}
             onClick={handleConfirm}
             className="w-fit bg-red text-white font-bold px-[14px] py-[10px] text-[14px] rounded-lg"

@@ -43,25 +43,10 @@ const MatchedProfilesList = ({ allUsersData }: PropsType) => {
     }
   }, [searchParams, currentPage, pathname, router]);
 
-  // Handle page click
-  const onPageClick = (page: number) => {
-    if (page === currentPage) {
-      return;
-    }
-    router.push(getUrlWithPage(page));
-  };
-
-  // Handle prev click
-  const onPrevClick = () => {
-    if (prevPage) {
-      router.push(getUrlWithPage(prevPage));
-    }
-  };
-
-  // Handle next click
-  const onNextClick = () => {
-    if (nextPage) {
-      router.push(getUrlWithPage(nextPage));
+  // Handler to update route with selected page
+  const handlePageChange = (page: number | null) => {
+    if (page && page !== currentPage) {
+      router.push(getUrlWithPage(page));
     }
   };
 
@@ -86,9 +71,9 @@ const MatchedProfilesList = ({ allUsersData }: PropsType) => {
         totalPages={totalPages}
         prevPage={prevPage}
         nextPage={nextPage}
-        onPageClick={onPageClick}
-        onPrevClick={onPrevClick}
-        onNextClick={onNextClick}
+        onPageClick={(page) => handlePageChange(page)}
+        onPrevClick={() => handlePageChange(prevPage)}
+        onNextClick={() => handlePageChange(nextPage)}
       />
     </div>
   );

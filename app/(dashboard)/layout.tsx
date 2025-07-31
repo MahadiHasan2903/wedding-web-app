@@ -19,9 +19,7 @@ const DashboardLayout = ({
         <div className="w-full block lg:hidden">
           <Header />
         </div>
-        <div className="flex-1 overflow-y-auto mb-[50px] lg:mb-0">
-          {children}
-        </div>
+        <div className="flex-1 overflow-auto mb-[50px] lg:mb-0">{children}</div>
       </div>
 
       <div className="block lg:hidden fixed bottom-0 left-0 right-0 z-50">

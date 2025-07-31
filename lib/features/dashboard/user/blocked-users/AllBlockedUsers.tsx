@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { RxCross1 } from "react-icons/rx";
 import { IoSearchOutline } from "react-icons/io5";
 import { User } from "@/lib/types/user/user.types";
 import { Pagination } from "@/lib/components/table";
@@ -11,7 +12,6 @@ import { CommonButton } from "@/lib/components/buttons";
 import { OutlinedInput } from "@/lib/components/form-elements";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { updateBlockUnblockStatusAction } from "@/lib/action/user/userInteraction.action";
-import { RxCross1 } from "react-icons/rx";
 
 interface PropsType {
   allBlockedUsersData: {
@@ -64,25 +64,6 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
     }
   }, [searchParams, currentPage, pathname, router]);
 
-  // Handlers for pagination controls
-  const onPageClick = (page: number) => {
-    if (page !== currentPage) {
-      router.push(getUrlWithPage(page));
-    }
-  };
-
-  const onPrevClick = () => {
-    if (prevPage) {
-      router.push(getUrlWithPage(prevPage));
-    }
-  };
-
-  const onNextClick = () => {
-    if (nextPage) {
-      router.push(getUrlWithPage(nextPage));
-    }
-  };
-
   // Handler for the search button click
   const handleUserSearch = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -128,6 +109,13 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
     }
 
     setLoading(false);
+  };
+
+  // Handler to update route with selected page
+  const handlePageChange = (page: number | null) => {
+    if (page && page !== currentPage) {
+      router.push(getUrlWithPage(page));
+    }
   };
 
   return (
@@ -184,7 +172,7 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
                 <tr>
                   <td
                     colSpan={2}
-                    className="text-center py-4 text-sm text-gray-500"
+                    className="text-center py-4 text-sm text-gray"
                   >
                     No blocked users found.
                   </td>
@@ -224,9 +212,9 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
             totalPages={totalPages}
             prevPage={prevPage}
             nextPage={nextPage}
-            onPageClick={onPageClick}
-            onPrevClick={onPrevClick}
-            onNextClick={onNextClick}
+            onPageClick={(page) => handlePageChange(page)}
+            onPrevClick={() => handlePageChange(prevPage)}
+            onNextClick={() => handlePageChange(nextPage)}
           />
         </div>
       </div>

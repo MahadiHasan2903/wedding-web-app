@@ -11,6 +11,7 @@ import { CommonButton } from "@/lib/components/buttons";
 import { OutlinedInput } from "@/lib/components/form-elements";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { updateBlockUnblockStatusAction } from "@/lib/action/user/userInteraction.action";
+import { RxCross1 } from "react-icons/rx";
 
 interface PropsType {
   allBlockedUsersData: {
@@ -97,6 +98,15 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
+  //Function to clear search input field
+  const handleClearSearch = () => {
+    setSearchName("");
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("name");
+    params.set("page", "1");
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   //Function to unblock user
   const handleUnblockUser = async () => {
     setLoading(true);
@@ -129,14 +139,23 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
             <CardTitle title="Blocked Users" />
             <div className="w-full sm:w-2/3 md:w-1/2 md:max-w-[800px] flex items-center gap-4">
               {/* Name search input */}
-              <OutlinedInput
-                name="name"
-                type="text"
-                placeholder="Search blocked user"
-                value={searchName}
-                onChange={(e) => setSearchName(e.target.value)}
-                className="!pl-[10px] pr-[40px] !py-[10px] rounded-[5px] w-full"
-              />
+              <div className="w-full relative">
+                <OutlinedInput
+                  name="name"
+                  type="text"
+                  placeholder="Search blocked user"
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                  className="!pl-[10px] !pr-[35px] !py-[10px] rounded-[5px] w-full"
+                />
+                {searchName.trim() && (
+                  <RxCross1
+                    size={20}
+                    className="text-red cursor-pointer absolute right-2 top-3"
+                    onClick={handleClearSearch}
+                  />
+                )}
+              </div>
               {/* Search button */}
               <CommonButton
                 label="Search"

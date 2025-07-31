@@ -4,10 +4,12 @@ import {
   isValid,
   isBefore,
   addYears,
+  parseISO,
   differenceInYears,
 } from "date-fns";
 
 export const DATE_FORMAT_1 = "yyyy-MM-dd";
+export const DATE_FORMAT_2 = "MMMM d, yyyy 'at' hh:mm a";
 
 /**
  * Calculates the age in years from a given date of birth.
@@ -48,6 +50,22 @@ export function formatDateString1(
 
   return format(parsedDate, outputFormat);
 }
+
+/**
+ * Formats an ISO date string into a human-readable format.
+ * If the input is null or undefined, returns null.
+ *
+ * @param isoString - ISO date string (e.g. "2025-07-21T03:30:14.034Z")
+ * @returns A formatted date string (e.g. "July 21, 2025 at 03:30 AM") or null
+ */
+export const formatDateString2 = (isoString?: string | null): string | null => {
+  if (!isoString) {
+    return null;
+  }
+
+  const date = parseISO(isoString);
+  return format(date, DATE_FORMAT_2);
+};
 
 /**
  * Returns the user's local UTC offset in the format "UTC±HH:MM".

@@ -7,17 +7,16 @@ import {
   getCountryNameFromIso,
 } from "@/lib/utils/helpers";
 import {
+  editIcon,
+  facebook,
+  instagram,
+  linkedin,
+  sendMessage,
   tiktok,
   twitter,
   whatsapp,
-  editIcon,
-  facebook,
-  linkedin,
-  instagram,
-  sendMessage,
 } from "@/lib/components/image/icons";
 import { toast } from "react-toastify";
-import { IoIosCamera } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { StaticImageData } from "next/image";
@@ -62,7 +61,7 @@ const BasicInfo = ({
   const { data: session } = useSession();
   const membershipId =
     session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
-  const isVipUser = true;
+  const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
 
   useEffect(() => {
     return () => {
@@ -107,6 +106,8 @@ const BasicInfo = ({
     if (file) {
       const previewUrl = URL.createObjectURL(file);
       setPreviewImageUrl(previewUrl);
+      console.log("Selected profile image:", file);
+
       const formData = new FormData();
       formData.append("profilePicture", file);
 
@@ -152,9 +153,6 @@ const BasicInfo = ({
               fallBackImage={userPlaceholder}
               className="rounded-full object-cover border border-black"
             />
-          </div>
-          <div className="absolute z-[99] bg-white right-0 lg:right-1 bottom-0 xl:right-4 lg:bottom-6 xl:bottom-4 rounded-full p-[2px] border border-primary">
-            <IoIosCamera size={20} className="text-black" />
           </div>
 
           {isVipUser && (

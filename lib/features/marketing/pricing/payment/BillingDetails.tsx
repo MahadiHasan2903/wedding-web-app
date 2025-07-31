@@ -19,24 +19,15 @@ const BillingDetails = () => {
         readOnly
         value={`${user?.firstName ?? ""} ${user?.lastName ?? ""}`}
       />
-      <div className="w-full flex items-start gap-4">
-        <UnderlineInput
-          label="Email"
-          type="email"
-          name="email"
-          placeholder="Enter your email"
-          readOnly
-          value={user?.email ?? ""}
-        />
-        <UnderlineInput
-          label="Phone Number"
-          type="text"
-          name="phoneNumber"
-          placeholder="Enter your phone number"
-          readOnly
-          value={user?.phoneNumber ?? ""}
-        />
-      </div>
+
+      <UnderlineInput
+        label="Phone Number"
+        type="text"
+        name="phoneNumber"
+        placeholder="Enter your phone number"
+        readOnly
+        value={user?.phoneNumber ?? ""}
+      />
     </div>
   );
 };

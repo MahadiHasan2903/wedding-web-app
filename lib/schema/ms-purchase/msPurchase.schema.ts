@@ -26,7 +26,7 @@ export const msPackagePurchaseResponseSchema = z.object({
     status: z.string(),
     paymentStatus: z.string(),
     purchasedAt: z.string(),
-    expiresAt: z.string(),
+    expiresAt: z.string().nullable(),
     membershipPackageInfo: z.object({
       id: z.number(),
       title: z.string(),

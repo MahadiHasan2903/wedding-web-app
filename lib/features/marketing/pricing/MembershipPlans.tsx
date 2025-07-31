@@ -7,9 +7,15 @@ import PaymentFormModal from "./payment/PaymentFormModal";
 
 interface PropsType {
   allMsPackages: MembershipPackage[];
+  PAYPAL_CLIENT_ID?: string;
+  STRIPE_PUBLISHABLE_KEY?: string;
 }
 
-const MembershipPlans = ({ allMsPackages }: PropsType) => {
+const MembershipPlans = ({
+  allMsPackages,
+  PAYPAL_CLIENT_ID,
+  STRIPE_PUBLISHABLE_KEY,
+}: PropsType) => {
   const [open, setOpen] = useState(false);
   const [loadingPackageId, setLoadingPackageId] = useState<number | null>(null);
 
@@ -71,7 +77,14 @@ const MembershipPlans = ({ allMsPackages }: PropsType) => {
             />
           ))}
       </div>
-      {open && <PaymentFormModal open={open} setOpen={setOpen} />}
+      {open && (
+        <PaymentFormModal
+          open={open}
+          setOpen={setOpen}
+          PAYPAL_CLIENT_ID={PAYPAL_CLIENT_ID}
+          STRIPE_PUBLISHABLE_KEY={STRIPE_PUBLISHABLE_KEY}
+        />
+      )}
     </div>
   );
 };

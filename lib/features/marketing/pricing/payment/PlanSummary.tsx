@@ -12,7 +12,7 @@ const PlanSummary = () => {
     msPackagePurchaseData?.membershipPackage.categoryInfo.category ?? "";
 
   return (
-    <div className="w-full pr-[35px] border-r border-[#E0E0E0]">
+    <div className="w-full">
       <h3 className="text-[24px] font-normal">Subscribe to Premium Plan</h3>
       <div className="w-full flex flex-col lg:flex-row items-end mt-[40px] mb-[60px]">
         <p className="text-[32px] md:text-[42px] lg:text-[64px] font-normal leading-[100%]">

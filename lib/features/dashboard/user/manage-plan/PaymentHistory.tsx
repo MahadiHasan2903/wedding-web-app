@@ -55,7 +55,10 @@ const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
 
   // Memoize the data to prevent re-renders unless data changes
   const data = useMemo(
-    () => allPaymentHistoriesData.paymentHistories || [],
+    () =>
+      (allPaymentHistoriesData.paymentHistories || []).filter(
+        (payment) => payment.servicePurchaseId.paymentStatus !== "pending"
+      ),
     [allPaymentHistoriesData.paymentHistories]
   );
 
@@ -81,12 +84,12 @@ const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
   };
 
   return (
-    <div className="w-full xl:min-h-[47vh] bg-white rounded-none lg:rounded-[10px]">
+    <div className="w-full bg-white rounded-none lg:rounded-[10px]">
       <div className="w-full py-[17px] px-[17px] lg:px-[36px] lg:py-[25px] border-light border-b-0 lg:border-b-[3px]">
         <CardTitle title="Payment History" />
       </div>
 
-      <div className="w-full">
+      <div className="w-full h-full">
         <div className="max-w-[360px] sm:max-w-[640px] md:max-w-[768px] xl:max-w-full overflow-x-auto">
           <table className="w-full">
             <thead>

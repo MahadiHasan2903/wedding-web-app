@@ -71,7 +71,12 @@ const OutlinedSelectField = ({
 
         {/* Custom arrow */}
         <div className="pointer-events-none absolute right-[12px] top-1/2 transform -translate-y-1/2">
-          <ImageWithFallback src={polygon} width={10} height={10} alt="arrow" />
+          <ImageWithFallback
+            src={polygon}
+            width={10}
+            height={10}
+            alt="polygon"
+          />
         </div>
       </div>
     </div>

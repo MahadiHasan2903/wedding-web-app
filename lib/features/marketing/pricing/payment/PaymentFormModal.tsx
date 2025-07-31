@@ -3,21 +3,29 @@
 import React, { Dispatch, SetStateAction } from "react";
 import PlanSummary from "./PlanSummary";
 import { RxCross1 } from "react-icons/rx";
+import PaymentMethod from "./PaymentMethod";
 import BillingDetails from "./BillingDetails";
 
 interface PropsType {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  PAYPAL_CLIENT_ID?: string;
+  STRIPE_PUBLISHABLE_KEY?: string;
 }
 
-const PaymentFormModal = ({ open, setOpen }: PropsType) => {
+const PaymentFormModal = ({
+  open,
+  setOpen,
+  PAYPAL_CLIENT_ID,
+  STRIPE_PUBLISHABLE_KEY,
+}: PropsType) => {
   if (!open) {
     return null;
   }
 
   return (
     <div className="fixed left-0 top-0 z-[99] flex h-full w-full items-center justify-center bg-black/60 px-4 py-5">
-      <div className="w-full max-w-[70%] rounded-[10px] bg-white p-[18px] lg:p-[60px] relative">
+      <div className="w-full max-w-[70%] max-h-[800px] overflow-y-auto rounded-[10px] bg-white p-[18px] lg:p-[60px] relative">
         <RxCross1
           onClick={() => setOpen(false)}
           size={20}
@@ -25,12 +33,21 @@ const PaymentFormModal = ({ open, setOpen }: PropsType) => {
         />
         <div className="w-full flex items-start gap-[40px]">
           <PlanSummary />
-          <div className="w-full">
+          <div className="w-full pl-[35px] border-l border-[#E0E0E0] flex flex-col gap-[40px]">
             <div className="flex flex-col gap-[24px]">
               <h3 className="text-[20px] text-primary font-normal">
                 Billing Details
               </h3>
               <BillingDetails />
+            </div>
+            <div className="flex flex-col gap-[24px]">
+              <h3 className="text-[20px] text-primary font-normal">
+                Payment Method
+              </h3>
+              <PaymentMethod
+                PAYPAL_CLIENT_ID={PAYPAL_CLIENT_ID}
+                STRIPE_PUBLISHABLE_KEY={STRIPE_PUBLISHABLE_KEY}
+              />
             </div>
           </div>
         </div>

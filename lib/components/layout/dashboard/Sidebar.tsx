@@ -22,7 +22,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div className="w-full h-full max-w-[270px] bg-white text-[#292D32] hidden lg:flex flex-col items-center justify-between rounded-[10px]">
+    <div className="w-full h-full max-w-[270px] shrink-0 bg-white text-[#292D32] hidden lg:flex flex-col items-center justify-between rounded-[10px]">
       <div className="w-full gap-[32px]">
         <div className="w-full pb-[20px] border-b-[3px] border-light flex flex-col items-center ">
           <Link href="/" className="cursor-pointer">

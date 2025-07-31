@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
+import { RxCross1 } from "react-icons/rx";
 import { IoSearchOutline } from "react-icons/io5";
 import { User } from "@/lib/types/user/user.types";
 import { Pagination } from "@/lib/components/table";
@@ -11,7 +12,6 @@ import { CommonButton } from "@/lib/components/buttons";
 import { OutlinedInput } from "@/lib/components/form-elements";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { updateBlockUnblockStatusAction } from "@/lib/action/user/userInteraction.action";
-import { RxCross1 } from "react-icons/rx";
 
 interface PropsType {
   allBlockedUsersData: {
@@ -64,25 +64,6 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
     }
   }, [searchParams, currentPage, pathname, router]);
 
-  // Handlers for pagination controls
-  const onPageClick = (page: number) => {
-    if (page !== currentPage) {
-      router.push(getUrlWithPage(page));
-    }
-  };
-
-  const onPrevClick = () => {
-    if (prevPage) {
-      router.push(getUrlWithPage(prevPage));
-    }
-  };
-
-  const onNextClick = () => {
-    if (nextPage) {
-      router.push(getUrlWithPage(nextPage));
-    }
-  };
-
   // Handler for the search button click
   const handleUserSearch = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -130,9 +111,16 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
     setLoading(false);
   };
 
+  // Handler to update route with selected page
+  const handlePageChange = (page: number | null) => {
+    if (page && page !== currentPage) {
+      router.push(getUrlWithPage(page));
+    }
+  };
+
   return (
-    <div className="w-full min-h-[85vh] flex flex-col">
-      <div className="w-full bg-white rounded-none lg:rounded-[10px] flex flex-col flex-1">
+    <div className="w-full flex flex-col">
+      <div className="w-full bg-white rounded-none lg:rounded-[10px]">
         {/* Page header with title and search input */}
         <div className="w-full py-[17px] lg:py-[25px] border-b-[1px] lg:border-b-[3px] border-light">
           <div className="w-full px-[17px] lg:px-[36px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
@@ -184,7 +172,7 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
                 <tr>
                   <td
                     colSpan={2}
-                    className="text-center py-4 text-sm text-gray-500"
+                    className="text-center py-4 text-sm text-gray"
                   >
                     No blocked users found.
                   </td>
@@ -224,9 +212,9 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
             totalPages={totalPages}
             prevPage={prevPage}
             nextPage={nextPage}
-            onPageClick={onPageClick}
-            onPrevClick={onPrevClick}
-            onNextClick={onNextClick}
+            onPageClick={(page) => handlePageChange(page)}
+            onPrevClick={() => handlePageChange(prevPage)}
+            onNextClick={() => handlePageChange(nextPage)}
           />
         </div>
       </div>

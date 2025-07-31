@@ -14,7 +14,7 @@ const DashboardLayout = ({
   return (
     <div className="w-full h-screen flex overflow-hidden gap-[24px] lg:p-[20px] relative">
       <Sidebar />
-      <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
         <Navbar />
         <div className="w-full block lg:hidden">
           <Header />

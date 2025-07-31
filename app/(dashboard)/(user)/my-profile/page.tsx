@@ -18,7 +18,7 @@ const page = async () => {
   );
 
   return (
-    <div className="w-full h-full flex flex-col gap-[2px] lg:gap-[30px] items-start py-0 lg:py-[30px]">
+    <div className="w-full h-full flex flex-col gap-[2px] lg:gap-[30px] items-start py-0 lg:py-[45px]">
       <BasicInfo userProfile={loggedInUserProfile} editable={true} />
       <ContactInfo userProfile={loggedInUserProfile} editable={true} />
       <BackgroundInfo userProfile={loggedInUserProfile} editable={true} />

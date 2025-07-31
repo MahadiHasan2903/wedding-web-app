@@ -29,7 +29,7 @@ const AllBlockedUsersPage = async ({ searchParams }: PropsType) => {
   );
 
   return (
-    <div className="w-full h-full py-0 lg:py-[30px]">
+    <div className="w-full h-full py-0 lg:py-[45px]">
       <AllBlockedUsers allBlockedUsersData={allBlockedUsersData} />
     </div>
   );

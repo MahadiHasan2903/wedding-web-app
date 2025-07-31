@@ -86,11 +86,9 @@ const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
         <CardTitle title="Payment History" />
       </div>
 
-      {/* Fixed container structure */}
-      <div className="w-full flex flex-col">
-        {/* Scrollable table container */}
-        <div className="w-full overflow-x-auto">
-          <table className="min-w-[800px] w-full">
+      <div className="w-full">
+        <div className="max-w-[360px] sm:max-w-[640px] md:max-w-[768px] xl:max-w-full overflow-x-auto">
+          <table className="w-full">
             <thead>
               <tr className="border-b-[1px] lg:border-b-[3px] border-light">
                 {[

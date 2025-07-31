@@ -119,8 +119,8 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
   };
 
   return (
-    <div className="w-full min-h-[85vh] flex flex-col">
-      <div className="w-full bg-white rounded-none lg:rounded-[10px] flex flex-col flex-1">
+    <div className="w-full flex flex-col">
+      <div className="w-full bg-white rounded-none lg:rounded-[10px]">
         {/* Page header with title and search input */}
         <div className="w-full py-[17px] lg:py-[25px] border-b-[1px] lg:border-b-[3px] border-light">
           <div className="w-full px-[17px] lg:px-[36px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">

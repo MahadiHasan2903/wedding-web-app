@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 import { IoSearchOutline } from "react-icons/io5";
-import { CardTitle } from "@/lib/components/heading";
 import { User } from "@/lib/types/user/user.types";
 import { Pagination } from "@/lib/components/table";
+import { AlertModal } from "@/lib/components/modal";
+import { CardTitle } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { OutlinedInput } from "@/lib/components/form-elements";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { updateBlockUnblockStatusAction } from "@/lib/action/user/userInteraction.action";
 
 interface PropsType {
   allBlockedUsersData: {
@@ -29,7 +32,9 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState("");
   const { currentPage, totalPages, prevPage, nextPage } =
     allBlockedUsersData.paginationInfo;
 
@@ -92,8 +97,27 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleUnblockUser = async (userId: string) => {
-    console.log(userId);
+  //Function to unblock user
+  const handleUnblockUser = async () => {
+    setLoading(true);
+
+    const payload = {
+      blockedUserId: selectedUserId,
+      status: "unblock",
+    };
+
+    const unblockUserResponse = await updateBlockUnblockStatusAction(payload);
+
+    toast(unblockUserResponse.message, {
+      type: unblockUserResponse.status ? "success" : "error",
+    });
+
+    if (unblockUserResponse.status) {
+      router.refresh();
+      setOpen(false);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -138,7 +162,6 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
 
             <tbody>
               {data.length === 0 ? (
-                // If no blocked users found
                 <tr>
                   <td
                     colSpan={2}
@@ -148,23 +171,22 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
                   </td>
                 </tr>
               ) : (
-                // Loop through each blocked user
                 data.map((user) => (
                   <tr
                     key={user.id}
                     className="border-b-[1px] lg:border-b-[3px] border-light hover:bg-light transition"
                   >
-                    {/* User name */}
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left">
                       {user.firstName} {user.lastName}
                     </td>
 
-                    {/* Actions: Unblock button + debug log button */}
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-right">
-                      {/* Placeholder button for future unblock functionality */}
                       <button
-                        className="px-[15px] py-[5px] border border-primaryBorder rounded-full"
-                        onClick={() => handleUnblockUser(user.id)}
+                        className="px-[15px] py-[5px] border border-primaryBorder rounded-full hover:bg-primary hover:text-white"
+                        onClick={() => {
+                          setOpen(true);
+                          setSelectedUserId(user.id);
+                        }}
                       >
                         Unblock
                       </button>
@@ -189,6 +211,17 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
           />
         </div>
       </div>
+      {open && (
+        <AlertModal
+          open={open}
+          loading={loading}
+          setOpen={setOpen}
+          handleConfirm={handleUnblockUser}
+          confirmButtonText="Confirm"
+          title="Unblock User"
+          description="Are you sure that you want to unblock this user"
+        />
+      )}
     </div>
   );
 };

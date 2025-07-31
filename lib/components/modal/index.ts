@@ -1,2 +1,2 @@
-import AlterModal from "./AlterModal";
-export { AlterModal };
+import AlertModal from "./AlertModal";
+export { AlertModal };

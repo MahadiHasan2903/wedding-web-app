@@ -1,6 +1,7 @@
 import star from "@/public/icons/star.svg";
 import send from "@/public/icons/send.svg";
 import mail from "@/public/icons/mail.svg";
+import visa from "@/public/icons/visa.svg";
 import alert from "@/public/icons/alert.svg";
 import crown from "@/public/icons/crown.svg";
 import heart from "@/public/icons/heart.svg";
@@ -11,6 +12,7 @@ import logout from "@/public/icons/logout.svg";
 import report from "@/public/icons/report.svg";
 import google from "@/public/icons/google.svg";
 import tiktok from "@/public/icons/tiktok.svg";
+import paypal from "@/public/icons/paypal.svg";
 import twitter from "@/public/icons/twitter.svg";
 import message from "@/public/icons/message.svg";
 import polygon from "@/public/icons/polygon.svg";
@@ -26,6 +28,7 @@ import hamburger from "@/public/icons/hamburger.svg";
 import whiteSave from "@/public/icons/white-save.svg";
 import myProfile from "@/public/icons/my-profile.svg";
 import findMatch from "@/public/icons/find-match.svg";
+import masterCard from "@/public/icons/master-card.svg";
 import whiteHeart from "@/public/icons/white-heart.svg";
 import tickCircle from "@/public/icons/tick-circle.svg";
 import sendMessage from "@/public/icons/send-message.svg";
@@ -35,12 +38,14 @@ import blockedUsers from "@/public/icons/blocked-users.svg";
 import managePricing from "@/public/icons/manage-pricing.svg";
 import likedProfiles from "@/public/icons/liked-profiles.svg";
 import userManagement from "@/public/icons/user-management.svg";
+import americanExpress from "@/public/icons/american-express.svg";
 import recommendedMatches from "@/public/icons/recommended-matches.svg";
 
 export {
   star,
   send,
   mail,
+  visa,
   alert,
   crown,
   heart,
@@ -52,6 +57,7 @@ export {
   google,
   message,
   tiktok,
+  paypal,
   twitter,
   polygon,
   whatsapp,
@@ -68,6 +74,7 @@ export {
   findMatch,
   whiteHeart,
   tickCircle,
+  masterCard,
   sendMessage,
   manageAdmin,
   blockedUsers,
@@ -75,5 +82,6 @@ export {
   managePricing,
   likedProfiles,
   userManagement,
+  americanExpress,
   recommendedMatches,
 };

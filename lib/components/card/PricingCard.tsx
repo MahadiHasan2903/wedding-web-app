@@ -3,7 +3,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { HeadingLine } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
@@ -65,6 +65,12 @@ const PricingCard = ({
 
   // Handler function for initiating package purchase
   const handleMsPackagePurchaseInitialization = async () => {
+    if (!session || !session.user.accessToken) {
+      toast.error("Please log in to purchase a new membership plan.");
+      router.push("/login");
+      return;
+    }
+
     // Prevent purchase if already current package or no current package info
     if (!currentPackageId || isCurrent) {
       return;
@@ -85,12 +91,19 @@ const PricingCard = ({
     }
 
     if (msPackagePurchaseResponse.status && msPackagePurchaseResponse.data) {
-      setMsPackagePurchaseData({
-        membershipPackage: msPackagePurchaseResponse.data.membershipPackageInfo,
-        msPackagePurchaseId: msPackagePurchaseResponse.data.id,
-      });
-
-      setPaymentFormOpen(true);
+      if (payload.msPackageId === 1) {
+        toast.success(
+          "Purchase Completed. Please log in again to see the updated changes."
+        );
+        await signOut({ callbackUrl: "/login" });
+      } else {
+        setMsPackagePurchaseData({
+          membershipPackage:
+            msPackagePurchaseResponse.data.membershipPackageInfo,
+          msPackagePurchaseId: msPackagePurchaseResponse.data.id,
+        });
+        setPaymentFormOpen(true);
+      }
     }
 
     // Reset loading state

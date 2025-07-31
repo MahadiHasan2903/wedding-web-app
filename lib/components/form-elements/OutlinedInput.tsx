@@ -3,7 +3,7 @@
 import React, { ChangeEvent, useState } from "react";
 import { IoMdEye, IoMdEyeOff } from "react-icons/io";
 
-export interface PropsType {
+interface PropsType {
   name: string;
   type: string;
   label?: string;

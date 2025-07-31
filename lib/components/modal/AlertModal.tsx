@@ -24,7 +24,9 @@ const AlertModal = ({
   confirmButtonText = "Remove",
   handleConfirm,
 }: PropsType) => {
-  if (!open) return null;
+  if (!open) {
+    return null;
+  }
 
   return (
     <div className="fixed left-0 top-0 z-[99] flex h-full w-full items-center justify-center bg-black/60 px-4 py-5">

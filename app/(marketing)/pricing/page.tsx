@@ -1,7 +1,11 @@
 import React from "react";
-import { FAQ, HeroBanner } from "@/lib/features/marketing/common";
-import { MembershipPlans } from "@/lib/features/marketing/pricing";
 import api from "@/lib/api";
+import dynamic from "next/dynamic";
+import { FAQ, HeroBanner } from "@/lib/features/marketing/common";
+
+const MembershipPlans = dynamic(
+  () => import("@/lib/features/marketing/pricing/MembershipPlans")
+);
 
 const PricingPage = async () => {
   const allMsPackages = await api.msPackage.getAllMsPackages();

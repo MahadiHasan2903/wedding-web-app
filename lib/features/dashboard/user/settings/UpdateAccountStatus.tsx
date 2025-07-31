@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { AlterModal } from "@/lib/components/modal";
+import { AlertModal } from "@/lib/components/modal";
 import { crown } from "@/lib/components/image/icons";
 import { signOut, useSession } from "next-auth/react";
 import { CommonButton } from "@/lib/components/buttons";
@@ -87,7 +87,7 @@ const UpdateAccountStatus = () => {
       )}
 
       {open && (
-        <AlterModal
+        <AlertModal
           open={open}
           loading={loading}
           setOpen={setOpen}

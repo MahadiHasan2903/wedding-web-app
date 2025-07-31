@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { User } from "@/lib/types/user/user.types";
-import { AlterModal } from "@/lib/components/modal";
+import { AlertModal } from "@/lib/components/modal";
 import { CardTitle } from "@/lib/components/heading";
 import { editIcon } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
@@ -132,7 +132,7 @@ const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
 
       {/* Delete Confirmation Modal */}
       {openAlertModal && selectedPhotoId && (
-        <AlterModal
+        <AlertModal
           open={openAlertModal}
           loading={loading}
           setOpen={setOpenAlertModal}

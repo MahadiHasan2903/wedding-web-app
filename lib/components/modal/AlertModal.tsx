@@ -15,7 +15,7 @@ interface PropsType {
   confirmButtonText?: string;
 }
 
-const AlterModal = ({
+const AlertModal = ({
   open,
   setOpen,
   title = "Warning",
@@ -53,4 +53,4 @@ const AlterModal = ({
   );
 };
 
-export default AlterModal;
+export default AlertModal;

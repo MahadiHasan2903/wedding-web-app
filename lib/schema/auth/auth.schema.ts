@@ -48,6 +48,7 @@ export const registrationRequestResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
   message: z.string(),
+  error: z.string().optional(),
   data: z.object({
     otp: z.string().optional(),
   }),
@@ -82,6 +83,7 @@ export const registrationConfirmationResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
   message: z.string(),
+  error: z.string().optional(),
   data: z.object({
     id: z.string(),
     firstName: z.string(),
@@ -126,6 +128,7 @@ export const loginResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
   message: z.string(),
+  error: z.string().optional(),
   data: z.object({
     user: z.object({
       id: z.string(),
@@ -203,6 +206,7 @@ export const forgetPasswordRequestResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
   message: z.string(),
+  error: z.string().optional(),
   data: z.object({
     otp: z.string().optional(),
   }),
@@ -254,6 +258,7 @@ export type ForgetPasswordConfirmationType = z.infer<
 export const forgetPasswordConfirmationResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
+  error: z.string().optional(),
   message: z.string(),
   data: z.object({}).strict(),
 });
@@ -271,6 +276,7 @@ export type ForgetPasswordConfirmationResponseType = z.infer<
 export const resetPasswordResponseSchema = z.object({
   status: z.number(),
   success: z.boolean(),
+  error: z.string().optional(),
   message: z.string(),
   data: z.object({}).strict(),
 });

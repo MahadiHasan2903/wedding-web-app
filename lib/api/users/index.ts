@@ -1,15 +1,15 @@
 import { fetchTyped } from "../client";
-import { BASE_URL } from "@/lib/config/constants";
-import { User } from "@/lib/types/user/user.types";
 import {
   PaginatedResponse,
   UserFilterOptions,
 } from "@/lib/types/common/common.types";
+import { BASE_URL } from "@/lib/config/constants";
+import { User } from "@/lib/types/user/user.types";
 
 type GetAllUsersResponse = PaginatedResponse<User>;
 type GetAllAdminsResponse = PaginatedResponse<User>;
-type GetAllBlockedUsersResponse = PaginatedResponse<User>;
 type GetAllLikedUsersResponse = PaginatedResponse<User>;
+type GetAllBlockedUsersResponse = PaginatedResponse<User>;
 
 interface GetUserDetailsResponse {
   status: number;

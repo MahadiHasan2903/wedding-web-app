@@ -5,6 +5,7 @@ import alert from "@/public/icons/alert.svg";
 import crown from "@/public/icons/crown.svg";
 import heart from "@/public/icons/heart.svg";
 import quote from "@/public/icons/quote.svg";
+import change from "@/public/icons/change.svg";
 import avatar from "@/public/icons/avatar.svg";
 import logout from "@/public/icons/logout.svg";
 import report from "@/public/icons/report.svg";
@@ -44,6 +45,7 @@ export {
   crown,
   heart,
   quote,
+  change,
   avatar,
   logout,
   report,

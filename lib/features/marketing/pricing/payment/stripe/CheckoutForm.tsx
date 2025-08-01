@@ -82,12 +82,6 @@ const CheckoutForm = () => {
     }
 
     const confirmResult = await checkout.confirm();
-
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
     if (confirmResult.type === "error") {
       setMessage(confirmResult.error.message);
     }

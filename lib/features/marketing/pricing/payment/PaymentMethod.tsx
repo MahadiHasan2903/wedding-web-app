@@ -42,7 +42,7 @@ const PaymentMethod = ({
             onChange={() => setSelectedMethod("paypal")}
             className="accent-primary"
           />
-          <p>Paypal</p>
+          <p className="text-[10px] sm:text-[14px]">Paypal</p>
         </div>
         <div className="flex items-center gap-[2px]">
           <ImageWithFallback src={paypal} width={40} height={12} alt="paypal" />
@@ -65,7 +65,7 @@ const PaymentMethod = ({
             onChange={() => setSelectedMethod("credit-card")}
             className="accent-primary"
           />
-          <p>Credit Card</p>
+          <p className="text-[10px] sm:text-[14px]">Credit Card</p>
         </div>
         <div className="flex items-center gap-[2px]">
           <ImageWithFallback src={visa} width={27} height={8} alt="visa" />

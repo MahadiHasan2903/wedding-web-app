@@ -23,29 +23,48 @@ import { crown, avatar, hamburger } from "@/lib/components/image/icons";
 const Header = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const accessToken = session?.user.accessToken ?? null;
   const menuRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
-  const accessToken = session?.user.accessToken ?? null;
+  // Determine if the current user is an admin by checking userRole from session data
   const isAdmin = useMemo(
     () => session?.user.data.userRole === "admin",
     [session]
   );
-  const profileImageUrl = session?.user.data.profilePicture?.url;
-  const membershipId =
-    session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
-  const isVipUser = useMemo(
-    () => membershipId !== undefined && [2, 3].includes(membershipId),
-    [membershipId]
-  );
 
+  // Determine if the user is a VIP or not
+  const isVipUser = useMemo(() => {
+    const expiresAt = session?.user.data.purchasedMembership?.expiresAt;
+
+    if (!expiresAt) {
+      return false;
+    }
+    const expiryDate = new Date(expiresAt);
+    if (isNaN(expiryDate.getTime())) {
+      return false;
+    }
+    const now = new Date();
+    const membershipId =
+      session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
+    // Check package and not expired
+    return (
+      membershipId !== undefined &&
+      [2, 3].includes(membershipId) &&
+      expiryDate > now
+    );
+  }, [session]);
+
+  // Toggle the user menu dropdown open/close state
   const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
+
+  // Close the user menu dropdown
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
 
+  // Close the mobile drawer menu with an animation delay for smooth closing effect
   const closeDrawer = useCallback(() => {
     setIsAnimatingOut(true);
     setTimeout(() => {
@@ -54,6 +73,7 @@ const Header = () => {
     }, 300);
   }, []);
 
+  // Logout handler, signs the user out via next-auth and shows a toast notification
   const handleLogout = useCallback(async () => {
     await signOut({ callbackUrl: "/login" });
     setIsMenuOpen(false);
@@ -155,7 +175,7 @@ const Header = () => {
                   aria-expanded={isMenuOpen}
                 >
                   <ImageWithFallback
-                    src={profileImageUrl}
+                    src={session?.user.data.profilePicture?.url}
                     fallBackImage={avatar}
                     width={45}
                     height={45}
@@ -226,7 +246,7 @@ const Header = () => {
               aria-expanded={isMenuOpen}
             >
               <ImageWithFallback
-                src={profileImageUrl}
+                src={session?.user.data.profilePicture?.url}
                 fallBackImage={avatar}
                 width={45}
                 height={45}

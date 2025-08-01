@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@/lib/types/user/user.types";
 import { CommonButton } from "@/lib/components/buttons";
@@ -16,7 +16,27 @@ interface LikedProfileCardProps {
 
 const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
   const router = useRouter();
-  const isVipUser = user.purchasedMembership?.membershipPackageInfo.id === 2;
+
+  // Determine if the user is a VIP or not
+  const isVipUser = useMemo(() => {
+    const expiresAt = user.purchasedMembership?.expiresAt;
+
+    if (!expiresAt) {
+      return false;
+    }
+    const expiryDate = new Date(expiresAt);
+    if (isNaN(expiryDate.getTime())) {
+      return false;
+    }
+    const now = new Date();
+    const membershipId = user.purchasedMembership?.membershipPackageInfo?.id;
+    // Check package and not expired
+    return (
+      membershipId !== undefined &&
+      [2, 3].includes(membershipId) &&
+      expiryDate > now
+    );
+  }, [user]);
 
   // Function to redirect user based on token
   const handleRedirection = () => {

@@ -95,7 +95,7 @@ const PricingCard = ({
         toast.success(
           "Purchase Completed. Please log in again to see the updated changes."
         );
-        await signOut({ callbackUrl: "/login" });
+        router.push("/pricing/payment-success");
       } else {
         setMsPackagePurchaseData({
           membershipPackage:

@@ -34,7 +34,11 @@ const StripeCheckoutProvider = ({ STRIPE_PUBLISHABLE_KEY }: PropsType) => {
 
       const paymentInitialingResponse = await initiatePaymentAction(payload);
 
-      if (paymentInitialingResponse.status && paymentInitialingResponse.data) {
+      if (
+        paymentInitialingResponse.status &&
+        paymentInitialingResponse.data &&
+        paymentInitialingResponse.data.clientSecret
+      ) {
         return paymentInitialingResponse.data.clientSecret;
       }
     }

@@ -24,6 +24,7 @@ const EmailInput = ({ email, setEmail, error, setError }: EmailInputProps) => {
 
   const handleBlur = async () => {
     if (!email) {
+      setError("Email is required");
       return;
     }
 
@@ -55,7 +56,11 @@ const EmailInput = ({ email, setEmail, error, setError }: EmailInputProps) => {
           } `}
         />
       </label>
-      {error && <div id="email-errors">{error}</div>}
+      {error && (
+        <div id="email-errors" className="text-red text-[12px] mt-1">
+          {error}
+        </div>
+      )}
     </div>
   );
 };
@@ -82,12 +87,6 @@ const CheckoutForm = () => {
     }
 
     const confirmResult = await checkout.confirm();
-
-    // This point will only be reached if there is an immediate error when
-    // confirming the payment. Otherwise, your customer will be redirected to
-    // your `return_url`. For some payment methods like iDEAL, your customer will
-    // be redirected to an intermediate site first to authorize the payment, then
-    // redirected to the `return_url`.
     if (confirmResult.type === "error") {
       setMessage(confirmResult.error.message);
     }
@@ -111,6 +110,7 @@ const CheckoutForm = () => {
 
       <CommonButton
         disabled={isLoading}
+        type="submit"
         label={
           isLoading
             ? "Processing Payment..."
@@ -118,8 +118,6 @@ const CheckoutForm = () => {
         }
         className="w-full bg-primary text-white font-semibold px-[14px] py-[10px] text-[14px] rounded-[5px]"
       />
-      {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
     </form>
   );
 };

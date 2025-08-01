@@ -25,6 +25,7 @@ import redHeart from "@/public/icons/red-heart.svg";
 import editIcon from "@/public/icons/edit-icon.svg";
 import instagram from "@/public/icons/instagram.svg";
 import hamburger from "@/public/icons/hamburger.svg";
+import successful from "@/public/icons/successful.svg";
 import whiteSave from "@/public/icons/white-save.svg";
 import myProfile from "@/public/icons/my-profile.svg";
 import findMatch from "@/public/icons/find-match.svg";
@@ -72,6 +73,7 @@ export {
   hamburger,
   instagram,
   findMatch,
+  successful,
   whiteHeart,
   tickCircle,
   masterCard,

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   getStateNameFromIso,
@@ -54,15 +54,34 @@ const BasicInfo = ({
   returnUrl,
 }: PropsType) => {
   const router = useRouter();
+  const { data: session } = useSession();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
 
-  const { data: session } = useSession();
-  const membershipId =
-    session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
-  const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
+  // Determine if the user is a VIP or not
+  const isVipUser = useMemo(() => {
+    const expiresAt = session?.user.data.purchasedMembership?.expiresAt;
 
+    if (!expiresAt) {
+      return false;
+    }
+    const expiryDate = new Date(expiresAt);
+    if (isNaN(expiryDate.getTime())) {
+      return false;
+    }
+    const now = new Date();
+    const membershipId =
+      session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
+    // Check package and not expired
+    return (
+      membershipId !== undefined &&
+      [2, 3].includes(membershipId) &&
+      expiryDate > now
+    );
+  }, [session]);
+
+  // Show the selected image preview
   useEffect(() => {
     return () => {
       if (previewImageUrl) {

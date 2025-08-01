@@ -14,7 +14,9 @@ interface PropsType {
 }
 
 const PaymentSuccessPage = ({ searchParams }: PropsType) => {
-  const transactionId = Number(getQueryParam(searchParams, "transactionId", 1));
+  const transactionId = getQueryParam(searchParams, "transactionId", "");
+
+  console.log("Transaction Id:", transactionId);
 
   return (
     <div className="w-full h-full flex items-center justify-center p-[32px] sm:p-[120px]">

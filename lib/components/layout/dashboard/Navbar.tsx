@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { navItems } from "@/lib/utils/data";
 import { useSession } from "next-auth/react";
@@ -14,11 +14,29 @@ const Navbar = () => {
   const { data: session } = useSession();
 
   // Extract info
-  const profileImageUrl = session?.user.data.profilePicture?.url ?? avatar;
-  const membershipId =
-    session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
-  const isVipUser = membershipId !== undefined && [2, 3].includes(membershipId);
   const isAdmin = session?.user.data.userRole === "admin" ? true : false;
+
+  // Determine if the user is a VIP or not
+  const isVipUser = useMemo(() => {
+    const expiresAt = session?.user.data.purchasedMembership?.expiresAt;
+
+    if (!expiresAt) {
+      return false;
+    }
+    const expiryDate = new Date(expiresAt);
+    if (isNaN(expiryDate.getTime())) {
+      return false;
+    }
+    const now = new Date();
+    const membershipId =
+      session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
+    // Check package and not expired
+    return (
+      membershipId !== undefined &&
+      [2, 3].includes(membershipId) &&
+      expiryDate > now
+    );
+  }, [session]);
 
   return (
     <div className="w-full h-[70px] overflow-hidden bg-primary text-vipLight hidden lg:flex items-center justify-between px-[32px] py-[14px] rounded-[10px]">
@@ -42,10 +60,11 @@ const Navbar = () => {
       >
         <div className="w-[48px] h-[48px] relative flex items-center justify-center">
           <ImageWithFallback
-            src={profileImageUrl}
+            src={session?.user.data.profilePicture?.url}
             width={45}
             height={45}
             alt="user"
+            fallBackImage={avatar}
             className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
           />
           {isVipUser && (

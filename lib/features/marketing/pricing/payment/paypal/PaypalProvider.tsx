@@ -65,7 +65,6 @@ const PaypalProvider = ({ PAYPAL_CLIENT_ID }: PropsType) => {
     // Redirect user if payment is confirmed
     if (confirmPaymentResponse.status) {
       clearMsPackagePurchaseData();
-      await signOut();
       router.push(`${confirmPaymentResponse.data?.url}`);
     }
   };

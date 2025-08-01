@@ -11,7 +11,6 @@ import {
 } from "@/lib/schema/payment/payment.schema";
 import { BASE_URL } from "@/lib/config/constants";
 import { Result } from "@/lib/types/common/common.types";
-import { getServerSessionData } from "@/lib/config/auth";
 
 /**
  * Initiates a membership payment by validating the request payload,
@@ -30,8 +29,6 @@ const initiatePaymentAction = async (requestPayload: InitiatePaymentType) => {
     );
   }
 
-  const { accessToken } = await getServerSessionData();
-
   try {
     // Call payment initiation API with authorization header
     const response = await fetchZodTyped(
@@ -40,7 +37,6 @@ const initiatePaymentAction = async (requestPayload: InitiatePaymentType) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(requestPayload),
       },
@@ -93,8 +89,6 @@ const paypalPaymentCallbackAction = async (orderId: string) => {
     throw new Error("Missing PayPal order ID. Please try again.");
   }
 
-  const { accessToken } = await getServerSessionData();
-
   try {
     // Call the backend API to finalize the PayPal payment
     const response = await fetchZodTyped(
@@ -103,7 +97,7 @@ const paypalPaymentCallbackAction = async (orderId: string) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
+          // Authorization: `Bearer ${accessToken}`,
         },
       },
       paypalPaymentCallbackResponseSchema

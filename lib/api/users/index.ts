@@ -370,7 +370,7 @@ const getAllBlockedUsers = async (
 ) => {
   // Constructing the URL with optional query parameters
   const url =
-    `${BASE_URL}/users/blocked-users?page=${page}&pageSize=${pageSize}&sort=id,DESC` +
+    `${BASE_URL}/users/blocked-users?page=${page}&pageSize=${pageSize}&sort=updatedAt,DESC` +
     (name && name !== "" ? `&name=${name}` : "");
 
   const response = await fetchTyped<GetAllBlockedUsersResponse>(url, {

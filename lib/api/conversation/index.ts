@@ -22,13 +22,13 @@ export interface GetConversationDetailsResponse {
  * @returns An object containing the list of enriched conversations and pagination metadata.
  * @throws Error if the response does not contain valid data.
  */
-const getAllMyConversation = async (
+const getMyAllConversation = async (
   accessToken?: string,
   page: number = 1,
   pageSize: number = 10
 ) => {
   const response = await fetchTyped<GetAllConversationResponse>(
-    `${BASE_URL}/my-conversations?page=${page}&pageSize=${pageSize}&sort=updatedAt,DESC`,
+    `${BASE_URL}/conversation/my-conversations?page=${page}&pageSize=${pageSize}&sort=updatedAt,DESC`,
     {
       method: "GET",
       headers: {
@@ -183,7 +183,7 @@ const getConversationDetails = async (
 };
 
 const conversation = {
-  getAllMyConversation,
+  getMyAllConversation,
   getSenderAllConversation,
   getConversationDetails,
 };

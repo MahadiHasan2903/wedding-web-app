@@ -6,6 +6,7 @@ import {
   addYears,
   parseISO,
   differenceInYears,
+  formatDistanceToNowStrict,
 } from "date-fns";
 
 export const DATE_FORMAT_1 = "yyyy-MM-dd";
@@ -40,6 +41,21 @@ export const getUserUtcOffset = (): string => {
 };
 
 /**
+ *
+ * @param date
+ * @returns
+ */
+export const formatRelativeTime = (
+  date: string | number | Date
+): string | null => {
+  if (!date) {
+    return null;
+  }
+
+  return formatDistanceToNowStrict(new Date(date), { addSuffix: true });
+};
+
+/**
  * Parses a date string from a given input format and returns it in the specified output format.
  * Returns an empty string if the input is invalid or empty.
  *
@@ -53,7 +69,9 @@ export function formatDateString1(
   inputFormat: string = "MMM dd, yyyy",
   outputFormat: string = "yyyy-MM-dd"
 ): string {
-  if (!dateStr) return "";
+  if (!dateStr) {
+    return "";
+  }
 
   const parsedDate = parse(dateStr, inputFormat, new Date());
 

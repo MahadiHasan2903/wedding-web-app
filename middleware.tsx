@@ -2,7 +2,7 @@ export { default } from "next-auth/middleware";
 
 export const config = {
   matcher: [
-    "/messages/:path*",
+    "/conversations/:path*",
     "/overview/:path*",
     "/my-profile/:path*",
     "/blocked-users/:path*",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import Link from "next/link";
 import {
   americanExpress,
@@ -11,18 +11,18 @@ import { ImageWithFallback } from "@/lib/components/image";
 import StripeCheckoutProvider from "./stripe/StripeCheckoutProvider";
 
 interface PropsType {
+  selectedMethod: string;
+  setSelectedMethod: Dispatch<SetStateAction<"credit-card" | "paypal">>;
   PAYPAL_CLIENT_ID?: string;
   STRIPE_PUBLISHABLE_KEY?: string;
 }
 
 const PaymentMethod = ({
+  selectedMethod,
+  setSelectedMethod,
   PAYPAL_CLIENT_ID,
   STRIPE_PUBLISHABLE_KEY,
 }: PropsType) => {
-  const [selectedMethod, setSelectedMethod] = useState<
-    "credit-card" | "paypal"
-  >("paypal");
-
   return (
     <div className="w-full flex flex-col gap-[30px]">
       {/* Paypal Option */}

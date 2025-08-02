@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import PlanSummary from "./PlanSummary";
 import { RxCross1 } from "react-icons/rx";
 import PaymentMethod from "./PaymentMethod";
@@ -19,6 +19,10 @@ const PaymentFormModal = ({
   PAYPAL_CLIENT_ID,
   STRIPE_PUBLISHABLE_KEY,
 }: PropsType) => {
+  const [selectedMethod, setSelectedMethod] = useState<
+    "credit-card" | "paypal"
+  >("paypal");
+
   if (!open) {
     return null;
   }
@@ -38,13 +42,18 @@ const PaymentFormModal = ({
               <h3 className="text-[12px] lg:text-[20px] text-primary font-normal">
                 Billing Details
               </h3>
-              <BillingDetails />
+              <BillingDetails
+                selectedMethod={selectedMethod}
+                setSelectedMethod={setSelectedMethod}
+              />
             </div>
             <div className="flex flex-col gap-[24px]">
               <h3 className="text-[12px] lg:text-[20px] text-primary font-normal">
                 Payment Method
               </h3>
               <PaymentMethod
+                selectedMethod={selectedMethod}
+                setSelectedMethod={setSelectedMethod}
                 PAYPAL_CLIENT_ID={PAYPAL_CLIENT_ID}
                 STRIPE_PUBLISHABLE_KEY={STRIPE_PUBLISHABLE_KEY}
               />

@@ -1,10 +1,15 @@
 "use client";
 
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { useSession } from "next-auth/react";
 import { UnderlineInput } from "@/lib/components/form-elements";
 
-const BillingDetails = () => {
+interface PropsType {
+  selectedMethod: string;
+  setSelectedMethod: Dispatch<SetStateAction<"credit-card" | "paypal">>;
+}
+
+const BillingDetails = ({ selectedMethod, setSelectedMethod }: PropsType) => {
   const { data: session } = useSession();
 
   const user = session?.user.data;
@@ -19,6 +24,17 @@ const BillingDetails = () => {
         readOnly
         value={`${user?.firstName ?? ""} ${user?.lastName ?? ""}`}
       />
+
+      {selectedMethod === "paypal" && (
+        <UnderlineInput
+          label="Email"
+          type="email"
+          name="email"
+          placeholder="Enter your email"
+          readOnly
+          value={user?.email ?? ""}
+        />
+      )}
 
       <UnderlineInput
         label="Phone Number"

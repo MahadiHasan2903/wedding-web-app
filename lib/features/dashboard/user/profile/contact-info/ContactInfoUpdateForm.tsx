@@ -14,7 +14,7 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
-import { getUserUtcOffset } from "@/lib/utils/dateUtils";
+import { getUserUtcOffset } from "@/lib/utils/date/dateUtils";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 

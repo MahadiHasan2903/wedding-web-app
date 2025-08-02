@@ -27,7 +27,7 @@ const Pagination = ({
   // }
 
   return (
-    <div className="flex items-center gap-[10px] my-[80px] text-primaryBorder mx-auto">
+    <div className="flex items-center gap-[10px] my-[40px] xl:my-[80px] text-primaryBorder mx-auto">
       {/* Prev button */}
       <button
         onClick={onPrevClick}

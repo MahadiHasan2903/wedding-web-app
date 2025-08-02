@@ -6,7 +6,7 @@ import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { avatar } from "@/lib/components/image/icons";
 import { useSession } from "next-auth/react";
-import { formatRelativeTime } from "@/lib/utils/dateUtils";
+import { formatRelativeTimeShort } from "@/lib/utils/date/dateUtils";
 import Link from "next/link";
 
 interface PropsType {
@@ -23,20 +23,26 @@ interface PropsType {
       nextPage: number | null;
     };
   };
+  conversationId?: string;
 }
 
-const ConversationList = ({ allMyConversationData }: PropsType) => {
+const ConversationList = ({
+  allMyConversationData,
+  conversationId,
+}: PropsType) => {
   const { data: session } = useSession();
   const userId = session?.user?.data?.id;
 
   return (
-    <div className="w-full h-full max-w-[300px] rounded-[10px] bg-white py-[16px] px-[18px]">
-      <CommonButton
-        label="Inbox"
-        className="w-full bg-primary text-white font-semibold px-[14px] py-[10px] text-[14px] rounded-[5px] mb-4"
-      />
+    <div className="w-full h-full overflow-y-auto max-w-full md:max-w-[300px] rounded-0 lg:rounded-[10px] bg-white py-[16px]">
+      <div className="w-full px-[18px]">
+        <CommonButton
+          label="Inbox"
+          className="w-full bg-primary text-white font-semibold px-[14px] py-[10px] text-[14px] rounded-[5px] mb-4 "
+        />
+      </div>
 
-      <div className="w-full h-full flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-2">
         {allMyConversationData.allConversations.length === 0 ? (
           <p className="text-sm text-center">No conversations found.</p>
         ) : (
@@ -51,7 +57,9 @@ const ConversationList = ({ allMyConversationData }: PropsType) => {
               <Link
                 href={`/conversations/${conversation.id}`}
                 key={conversation.id}
-                className="w-full flex items-center gap-3 hover:bg-light p-2 rounded-md transition cursor-pointer"
+                className={`w-full flex items-center gap-3 p-2 transition cursor-pointer hover:bg-light px-[18px] ${
+                  conversation.id === conversationId ? "bg-light" : ""
+                }`}
               >
                 <div className="w-[50px] h-[50px] relative flex items-center justify-center rounded-full overflow-hidden">
                   <ImageWithFallback
@@ -69,10 +77,11 @@ const ConversationList = ({ allMyConversationData }: PropsType) => {
                   </p>
                   <div className="w-full flex items-center justify-between">
                     <p className="text-[12px] font-normal truncate ">
-                      {conversation.lastMessage ?? "N/A"}
+                      {conversation.senderId === userId && <span>You: </span>}
+                      {conversation.lastMessage}
                     </p>
                     <p className="text-[12px] font-normal">
-                      {formatRelativeTime(conversation.updatedAt)}
+                      {formatRelativeTimeShort(conversation.updatedAt)}
                     </p>
                   </div>
                 </div>

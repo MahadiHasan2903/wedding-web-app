@@ -44,6 +44,11 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
     searchParams.get("name") || ""
   );
 
+  const mockConversations = Array(25)
+    .fill(allBlockedUsersData.blockedUsers)
+    .flat()
+    .slice(0, 50);
+
   // Memoize the blocked user list to prevent unnecessary re-renders
   const data = useMemo(
     () => allBlockedUsersData.blockedUsers || [],

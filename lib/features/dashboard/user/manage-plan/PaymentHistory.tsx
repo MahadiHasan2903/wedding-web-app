@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo } from "react";
 import { Pagination } from "@/lib/components/table";
 import { CardTitle } from "@/lib/components/heading";
-import { formatDateString3 } from "@/lib/utils/dateUtils";
+import { formatDateString3 } from "@/lib/utils/date/dateUtils";
 import { PaymentTransaction } from "@/lib/types/payment/payment.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 

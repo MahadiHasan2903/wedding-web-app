@@ -27,7 +27,7 @@ const LikedProfilePage = async ({ searchParams }: PropsType) => {
   );
 
   return (
-    <div className="w-full h-full flex flex-col gap-[2px] lg:gap-[30px] items-start py-0 lg:py-[45px]">
+    <div className="w-full h-full py-0 lg:py-[45px]">
       <AllLikedProfiles allLikedProfilesData={allLikedProfilesData} />
     </div>
   );

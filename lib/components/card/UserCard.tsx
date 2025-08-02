@@ -8,7 +8,7 @@ import { User } from "@/lib/types/user/user.types";
 import { CommonButton } from "@/lib/components/buttons";
 import { redHeart } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
-import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
+import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
 import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
 
@@ -55,7 +55,7 @@ const UserCard = ({ user, returnUrl = "/find-match" }: UserCardProps) => {
   return (
     <div
       onClick={handleRedirection}
-      className={`w-[150px] sm:w-[180px] lg:w-[240px] cursor-pointer h-auto sm:h-[250px] lg:h-[350px] mx-auto flex flex-col items-center rounded-[10px] py-[8px] lg:py-[25px] ${
+      className={`w-[150px] sm:w-[180px] lg:w-[240px] cursor-pointer h-auto sm:h-[250px] lg:h-[350px] flex flex-col items-center rounded-[10px] py-[8px] lg:py-[25px] ${
         isVipUser ? "bg-vip-gradient" : "bg-white"
       }`}
     >

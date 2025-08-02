@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { User } from "@/lib/types/user/user.types";
 import { CommonButton } from "@/lib/components/buttons";
 import { sendMessage, whiteHeart } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
-import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
+import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
 import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
+import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
+import { createConversationAction } from "@/lib/action/conversation/conversation.action";
 
 interface LikedProfileCardProps {
   user: User;
@@ -16,6 +19,8 @@ interface LikedProfileCardProps {
 
 const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
   const router = useRouter();
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
 
   // Determine if the user is a VIP or not
   const isVipUser = useMemo(() => {
@@ -43,10 +48,38 @@ const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
     router.push(`/liked-profiles/${user.id}`);
   };
 
+  //Function to create a conversation
+  const handleSendMessage = async (receiverId: string) => {
+    if (!session?.user?.data?.id || !receiverId) {
+      toast.error("You must be logged in to send a message.");
+      return;
+    }
+
+    const senderId = session.user.data.id;
+    setLoading(true);
+
+    const payload = {
+      senderId,
+      receiverId,
+    };
+
+    const createConversationResponse = await createConversationAction(payload);
+
+    toast(createConversationResponse.message, {
+      type: createConversationResponse.status ? "success" : "error",
+    });
+
+    if (createConversationResponse.status && createConversationResponse.data) {
+      router.push(`/conversations/${createConversationResponse.data.id}`);
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div
       onClick={handleRedirection}
-      className={`w-[160px] sm:w-[180px] lg:w-[240px] cursor-pointer h-auto sm:h-[250px] lg:h-[350px] mx-auto flex flex-col items-center rounded-[10px] py-[8px] lg:py-[25px] ${
+      className={`w-[160px] sm:w-[180px] lg:w-[240px] cursor-pointer h-auto sm:h-[250px] lg:h-[350px] flex flex-col items-center rounded-[10px] py-[8px] lg:py-[25px] ${
         isVipUser ? "bg-vip-gradient" : "bg-white"
       }`}
     >
@@ -108,7 +141,9 @@ const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
           }
         />
         <CommonButton
-          label="Send Message"
+          label={loading ? "Processing..." : "Send Message"}
+          disabled={loading}
+          onClick={() => handleSendMessage(user.id)}
           className={`${
             isVipUser
               ? "btn-gold-gradient border-none"

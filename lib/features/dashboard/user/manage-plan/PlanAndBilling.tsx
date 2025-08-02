@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { CardTitle } from "@/lib/components/heading";
 import { change } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
-import { formatDateString2 } from "@/lib/utils/dateUtils";
+import { formatDateString2 } from "@/lib/utils/date/dateUtils";
 import { ImageWithFallback } from "@/lib/components/image";
 
 const PlanAndBilling = () => {

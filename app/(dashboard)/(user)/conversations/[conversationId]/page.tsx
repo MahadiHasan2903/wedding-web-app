@@ -3,19 +3,26 @@ import api from "@/lib/api";
 import dynamic from "next/dynamic";
 import { getQueryParam } from "@/lib/utils/helpers";
 import { getServerSessionData } from "@/lib/config/auth";
-import { ImageWithFallback } from "@/lib/components/image";
-import conversationPlaceholder from "@/public/images/common/conversation-placeholder.svg";
 
 const ConversationList = dynamic(
   () => import("@/lib/features/dashboard/user/conversation/ConversationList"),
   { ssr: false }
 );
 
+const ConversationDetails = dynamic(
+  () =>
+    import("@/lib/features/dashboard/user/conversation/ConversationDetails"),
+  { ssr: false }
+);
+
 interface PropsType {
+  params: {
+    conversationId: string;
+  };
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-const ConversationListPage = async ({ searchParams }: PropsType) => {
+const ConversationDetailsPage = async ({ params, searchParams }: PropsType) => {
   const { accessToken } = await getServerSessionData();
 
   // Get the current page number as string, then parse to number with fallback
@@ -30,21 +37,15 @@ const ConversationListPage = async ({ searchParams }: PropsType) => {
 
   return (
     <div className="w-full h-full flex md:gap-[25px] items-start py-0 lg:pt-[45px]">
-      <div className="w-full md:max-w-[300px] h-full">
-        <ConversationList allMyConversationData={allMyConversationData} />
+      <div className="w-full md:max-w-[300px] h-full hidden md:block">
+        <ConversationList
+          allMyConversationData={allMyConversationData}
+          conversationId={params.conversationId}
+        />
       </div>
-      <div className="w-full h-full hidden md:flex items-center justify-center bg-white rounded-0 lg:rounded-[10px]">
-        <div className="relative overflow-hidden w-[300px] xl:w-[500px] h-[300px] xl:h-[500px] ">
-          <ImageWithFallback
-            src={conversationPlaceholder}
-            fill
-            alt="placeholder"
-            className="rounded-full object-contain"
-          />
-        </div>
-      </div>
+      <ConversationDetails />
     </div>
   );
 };
 
-export default ConversationListPage;
+export default ConversationDetailsPage;

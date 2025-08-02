@@ -26,10 +26,11 @@ import { CommonButton } from "@/lib/components/buttons";
 import BasicInfoUpdateForm from "./BasicInfoUpdateForm";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
-import { calculateAgeFromDOB } from "@/lib/utils/dateUtils";
+import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
 import { updateLikeDisLikeStatusAction } from "@/lib/action/user/userInteraction.action";
+import { createConversationAction } from "@/lib/action/conversation/conversation.action";
 
 const iconMap: Record<string, StaticImageData> = {
   facebook,
@@ -142,6 +143,34 @@ const BasicInfo = ({
 
       setLoading(false);
     }
+  };
+
+  //Function to create a conversation
+  const handleSendMessage = async (receiverId: string) => {
+    if (!session?.user?.data?.id || !receiverId) {
+      toast.error("You must be logged in to send a message.");
+      return;
+    }
+
+    const senderId = session.user.data.id;
+    setLoading(true);
+
+    const payload = {
+      senderId,
+      receiverId,
+    };
+
+    const createConversationResponse = await createConversationAction(payload);
+
+    toast(createConversationResponse.message, {
+      type: createConversationResponse.status ? "success" : "error",
+    });
+
+    if (createConversationResponse.status && createConversationResponse.data) {
+      router.push(`/conversations/${createConversationResponse.data.id}`);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -283,12 +312,10 @@ const BasicInfo = ({
               />
               {returnUrl && returnUrl === "/liked-profiles" && (
                 <CommonButton
-                  label="Send Message"
-                  className={`${
-                    isVipUser
-                      ? "btn-gold-gradient border-none"
-                      : "bg-transparent border border-primaryBorder text-black"
-                  } w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full`}
+                  label={loading ? "Processing..." : "Send Message"}
+                  disabled={loading}
+                  onClick={() => handleSendMessage(userProfile.id)}
+                  className="btn-gold-gradient border-none w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full"
                   startIcon={
                     <ImageWithFallback
                       src={sendMessage}

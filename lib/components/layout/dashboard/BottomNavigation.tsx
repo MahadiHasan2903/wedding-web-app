@@ -2,20 +2,18 @@
 
 import React from "react";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
 import { userSidebarItems, adminSidebarItems } from "@/lib/utils/data";
 import Link from "next/link";
 import { ImageWithFallback } from "../../image";
 
 const BottomNavigation = () => {
   const { data: session } = useSession();
-  const pathname = usePathname();
   const sidebarItems =
     session?.user.data.userRole === "admin"
       ? adminSidebarItems
       : userSidebarItems;
   return (
-    <div className="w-full fixed bottom-0 left-0 h-[50px] bg-white z-50 flex justify-around items-center lg:hidden gap-[36px] px-[14px]">
+    <div className="w-full fixed bottom-0 left-0 h-[50px] border-t border-light bg-white z-50 flex justify-around items-center lg:hidden gap-[36px] px-[14px]">
       {sidebarItems.map((item, index) => (
         <Link
           href={item.href}

@@ -51,10 +51,10 @@ const AllLikedProfiles = ({ allLikedProfilesData }: PropsType) => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col justify-between items-start min-h-[85vh]">
       <div className="w-full p-3 lg:p-0">
         {allLikedProfilesData.likedProfiles.length > 0 ? (
-          <div className="w-full grid grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4  justify-between gap-[8px] md:gap-[25px]">
+          <div className="w-full flex flex-wrap items-start justify-start gap-[8px] md:gap-[25px]">
             {allLikedProfilesData.likedProfiles.map((user) => (
               <LikedProfileCard key={user.id} user={user} />
             ))}
@@ -66,16 +66,17 @@ const AllLikedProfiles = ({ allLikedProfilesData }: PropsType) => {
           </div>
         )}
       </div>
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        prevPage={prevPage}
-        nextPage={nextPage}
-        onPageClick={(page) => handlePageChange(page)}
-        onPrevClick={() => handlePageChange(prevPage)}
-        onNextClick={() => handlePageChange(nextPage)}
-      />
+      <div className="w-full flex items-center justify-center">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          prevPage={prevPage}
+          nextPage={nextPage}
+          onPageClick={(page) => handlePageChange(page)}
+          onPrevClick={() => handlePageChange(prevPage)}
+          onNextClick={() => handlePageChange(nextPage)}
+        />
+      </div>
     </div>
   );
 };

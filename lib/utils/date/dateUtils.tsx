@@ -8,6 +8,7 @@ import {
   differenceInYears,
   formatDistanceToNowStrict,
 } from "date-fns";
+import { enShort } from "./enShort";
 
 export const DATE_FORMAT_1 = "yyyy-MM-dd";
 export const DATE_FORMAT_2 = "MMMM d, yyyy 'at' hh:mm a";
@@ -41,18 +42,36 @@ export const getUserUtcOffset = (): string => {
 };
 
 /**
+ * Formats a given date into a **long relative time string** with suffix.
+ * Example outputs: "9 minutes ago", "3 hours ago", "2 days ago"
  *
- * @param date
- * @returns
+ * @param date - A valid date string, number, or Date object
+ * @returns A human-readable relative time string with suffix, or null if no date provided
  */
-export const formatRelativeTime = (
+export const formatRelativeTimeLong = (
   date: string | number | Date
 ): string | null => {
-  if (!date) {
-    return null;
-  }
+  if (!date) return null;
 
   return formatDistanceToNowStrict(new Date(date), { addSuffix: true });
+};
+
+/**
+ * Formats a given date into a **short relative time string** without suffix.
+ * Example outputs: "9min", "3h", "2d"
+ *
+ * @param date - A valid date string, number, or Date object
+ * @returns A concise relative time string without suffix, or null if no date provided
+ */
+export const formatRelativeTimeShort = (
+  date: string | number | Date
+): string | null => {
+  if (!date) return null;
+
+  return formatDistanceToNowStrict(new Date(date), {
+    locale: enShort,
+    addSuffix: false,
+  });
 };
 
 /**

@@ -27,7 +27,7 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
-import { formatDateString1 } from "@/lib/utils/dateUtils";
+import { formatDateString1 } from "@/lib/utils/date/dateUtils";
 import { ImageWithFallback } from "@/lib/components/image";
 import { Gender, MaritalStatus } from "@/lib/enums/users.enum";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";

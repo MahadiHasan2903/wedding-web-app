@@ -95,7 +95,7 @@ export const userSidebarItems = [
   },
   {
     label: "Messages",
-    href: "/messages",
+    href: "/conversations",
     icon: message,
   },
   {

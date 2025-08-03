@@ -18,6 +18,7 @@ import { signOut, useSession } from "next-auth/react";
 import { CommonButton } from "@/lib/components/buttons";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
+import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import { crown, avatar, hamburger } from "@/lib/components/image/icons";
 
 const Header = () => {
@@ -37,26 +38,7 @@ const Header = () => {
   );
 
   // Determine if the user is a VIP or not
-  const isVipUser = useMemo(() => {
-    const expiresAt = session?.user.data.purchasedMembership?.expiresAt;
-
-    if (!expiresAt) {
-      return false;
-    }
-    const expiryDate = new Date(expiresAt);
-    if (isNaN(expiryDate.getTime())) {
-      return false;
-    }
-    const now = new Date();
-    const membershipId =
-      session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
-    // Check package and not expired
-    return (
-      membershipId !== undefined &&
-      [2, 3].includes(membershipId) &&
-      expiryDate > now
-    );
-  }, [session]);
+  const isVipUser = hasActiveVipMembership(session?.user.data);
 
   // Toggle the user menu dropdown open/close state
   const toggleMenu = useCallback(() => setIsMenuOpen((prev) => !prev), []);
@@ -174,24 +156,27 @@ const Header = () => {
                   aria-haspopup="true"
                   aria-expanded={isMenuOpen}
                 >
-                  <ImageWithFallback
-                    src={session?.user.data.profilePicture?.url}
-                    fallBackImage={avatar}
-                    width={45}
-                    height={45}
-                    alt="user"
-                    className="absolute rounded-full overflow-hidden border border-black"
-                  />
+                  <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+                    <ImageWithFallback
+                      src={session?.user.data.profilePicture?.url}
+                      fallBackImage={avatar}
+                      alt="user"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+
                   {isVipUser && (
                     <ImageWithFallback
                       src={vipRing}
                       width={48}
                       height={48}
                       alt="vip ring"
-                      className="z-10"
+                      className="z-10 absolute"
                     />
                   )}
                 </button>
+
                 {isMenuOpen && (
                   <UserMenuDropdown
                     isAdmin={isAdmin}
@@ -241,25 +226,27 @@ const Header = () => {
           <div className="relative z-20">
             <button
               onClick={toggleMenu}
-              className="relative w-[42px] h-[42px] flex items-center justify-center"
+              className="w-12 h-12 relative flex items-center justify-center"
               aria-haspopup="true"
               aria-expanded={isMenuOpen}
             >
-              <ImageWithFallback
-                src={session?.user.data.profilePicture?.url}
-                fallBackImage={avatar}
-                width={45}
-                height={45}
-                alt="user"
-                className="rounded-full overflow-hidden border border-black"
-              />
+              <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+                <ImageWithFallback
+                  src={session?.user.data.profilePicture?.url}
+                  fallBackImage={avatar}
+                  alt="user"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+
               {isVipUser && (
                 <ImageWithFallback
                   src={vipRing}
-                  width={40}
-                  height={40}
-                  alt="ring"
-                  className="z-10"
+                  width={48}
+                  height={48}
+                  alt="vip ring"
+                  className="z-10 absolute"
                 />
               )}
             </button>

@@ -17,7 +17,11 @@ import { UnderlineInput } from "@/lib/components/form-elements";
 import { loginSchema, LoginType } from "@/lib/schema/auth/auth.schema";
 import { forgetPasswordConfirmationAction } from "@/lib/action/auth/auth.action";
 
-const LoginForm = () => {
+interface PropsType {
+  callbackUrl?: string;
+}
+
+const LoginForm = ({ callbackUrl }: PropsType) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState<string>("");
@@ -51,7 +55,11 @@ const LoginForm = () => {
         toast.error("Login failed. Please check your credentials");
       } else {
         toast.success("Logged in successfully");
-        router.push("/");
+        if (callbackUrl) {
+          router.push(callbackUrl);
+        } else {
+          router.push("/");
+        }
       }
     } catch {
       toast.error("An error occurred during login.");

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React from "react";
 import Link from "next/link";
 import { navItems } from "@/lib/utils/data";
 import { useSession } from "next-auth/react";
@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import { avatar } from "@/lib/components/image/icons";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
+import { hasActiveVipMembership } from "@/lib/utils/helpers";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -17,26 +18,7 @@ const Navbar = () => {
   const isAdmin = session?.user.data.userRole === "admin" ? true : false;
 
   // Determine if the user is a VIP or not
-  const isVipUser = useMemo(() => {
-    const expiresAt = session?.user.data.purchasedMembership?.expiresAt;
-
-    if (!expiresAt) {
-      return false;
-    }
-    const expiryDate = new Date(expiresAt);
-    if (isNaN(expiryDate.getTime())) {
-      return false;
-    }
-    const now = new Date();
-    const membershipId =
-      session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
-    // Check package and not expired
-    return (
-      membershipId !== undefined &&
-      [2, 3].includes(membershipId) &&
-      expiryDate > now
-    );
-  }, [session]);
+  const isVipUser = hasActiveVipMembership(session?.user.data);
 
   return (
     <div className="w-full h-[70px] overflow-hidden bg-primary text-vipLight hidden lg:flex items-center justify-between px-[32px] py-[14px] rounded-[10px]">
@@ -65,7 +47,7 @@ const Navbar = () => {
             height={45}
             alt="user"
             fallBackImage={avatar}
-            className="absolute cursor-pointer rounded-full overflow-hidden border border-black"
+            className="absolute cursor-pointer object-cover rounded-full overflow-hidden border border-black"
           />
           {isVipUser && (
             <ImageWithFallback

@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { User } from "@/lib/types/user/user.types";
 import { CommonButton } from "@/lib/components/buttons";
-import { sendMessage, whiteHeart } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
-import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
+import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import vipRing2 from "@/public/images/common/vip-ring-2.png";
+import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
+import { sendMessage, whiteHeart } from "@/lib/components/image/icons";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
-import { useSession } from "next-auth/react";
-import { toast } from "react-toastify";
 import { createConversationAction } from "@/lib/action/conversation/conversation.action";
 
 interface LikedProfileCardProps {
@@ -23,25 +24,7 @@ const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
   const [loading, setLoading] = useState(false);
 
   // Determine if the user is a VIP or not
-  const isVipUser = useMemo(() => {
-    const expiresAt = user.purchasedMembership?.expiresAt;
-
-    if (!expiresAt) {
-      return false;
-    }
-    const expiryDate = new Date(expiresAt);
-    if (isNaN(expiryDate.getTime())) {
-      return false;
-    }
-    const now = new Date();
-    const membershipId = user.purchasedMembership?.membershipPackageInfo?.id;
-    // Check package and not expired
-    return (
-      membershipId !== undefined &&
-      [2, 3].includes(membershipId) &&
-      expiryDate > now
-    );
-  }, [user]);
+  const isVipUser = hasActiveVipMembership(user);
 
   // Function to redirect user based on token
   const handleRedirection = () => {

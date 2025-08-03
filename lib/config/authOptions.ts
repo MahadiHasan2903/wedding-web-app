@@ -75,6 +75,19 @@ export const authOptions: NextAuthOptions = {
 
   // Specify custom sign-in page
   pages: { signIn: "/login" },
+
+  cookies: {
+    sessionToken: {
+      name: "wedding-web-app-session-token",
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        secure: false,
+        path: "/",
+      },
+    },
+  },
+
   callbacks: {
     jwt: ({ token, user }) => {
       return { ...token, ...user };

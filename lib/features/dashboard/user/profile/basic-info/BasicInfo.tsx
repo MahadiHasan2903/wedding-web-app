@@ -1,10 +1,11 @@
 "use client";
 
-import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   getStateNameFromIso,
   getCountryNameFromIso,
+  hasActiveVipMembership,
 } from "@/lib/utils/helpers";
 import {
   editIcon,
@@ -61,26 +62,7 @@ const BasicInfo = ({
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
 
   // Determine if the user is a VIP or not
-  const isVipUser = useMemo(() => {
-    const expiresAt = session?.user.data.purchasedMembership?.expiresAt;
-
-    if (!expiresAt) {
-      return false;
-    }
-    const expiryDate = new Date(expiresAt);
-    if (isNaN(expiryDate.getTime())) {
-      return false;
-    }
-    const now = new Date();
-    const membershipId =
-      session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
-    // Check package and not expired
-    return (
-      membershipId !== undefined &&
-      [2, 3].includes(membershipId) &&
-      expiryDate > now
-    );
-  }, [session]);
+  const isVipUser = hasActiveVipMembership(session?.user.data);
 
   // Show the selected image preview
   useEffect(() => {

@@ -51,7 +51,7 @@ const AllLikedProfiles = ({ allLikedProfilesData }: PropsType) => {
   };
 
   return (
-    <div className="w-full flex flex-col justify-between items-start min-h-[85vh]">
+    <div className="w-full flex flex-col justify-between items-start">
       <div className="w-full p-3 lg:p-0">
         {allLikedProfilesData.likedProfiles.length > 0 ? (
           <div className="w-full flex flex-wrap items-start justify-start gap-[8px] md:gap-[25px]">

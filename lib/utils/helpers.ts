@@ -132,11 +132,6 @@ export const getPaginationPages = (
  * @param input - The snake_case string to format.
  * @returns The formatted string.
  */
-/**
- * Converts a snake_case string into a readable format.
- * @param input - The snake_case string to format.
- * @returns The formatted string or "N/A".
- */
 export const formatLabel = (input: string | null | undefined): string => {
   if (!input || typeof input !== "string" || input.trim() === "") {
     return "N/A";
@@ -187,5 +182,32 @@ export const getStateNameFromIso = (
     State.getStatesOfCountry(countryIsoCode).find(
       (s) => s.isoCode === stateIsoCode
     )?.name ?? ""
+  );
+};
+
+/**
+ * Checks if the user has an active VIP membership.
+ * @param user - The user object with membership data.
+ * @returns `true` if the user has an active VIP membership, otherwise `false`.
+ */
+export const hasActiveVipMembership = (user?: {
+  purchasedMembership?: {
+    expiresAt?: string | null;
+    membershipPackageInfo?: { id?: number };
+  } | null;
+}): boolean => {
+  const expiresAt = user?.purchasedMembership?.expiresAt;
+  if (!expiresAt) return false;
+
+  const expiryDate = new Date(expiresAt);
+  if (isNaN(expiryDate.getTime())) return false;
+
+  const now = new Date();
+  const membershipId = user.purchasedMembership?.membershipPackageInfo?.id;
+
+  return (
+    membershipId !== undefined &&
+    [2, 3].includes(membershipId) &&
+    expiryDate > now
   );
 };

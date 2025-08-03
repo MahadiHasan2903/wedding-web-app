@@ -40,22 +40,24 @@ const Navbar = () => {
         href={`${isAdmin ? "/overview" : "/my-profile"}`}
         className="w-auto flex items-center justify-end"
       >
-        <div className="w-[48px] h-[48px] relative flex items-center justify-center">
-          <ImageWithFallback
-            src={session?.user.data.profilePicture?.url}
-            width={45}
-            height={45}
-            alt="user"
-            fallBackImage={avatar}
-            className="absolute cursor-pointer object-cover rounded-full overflow-hidden border border-black"
-          />
+        <div className="w-12 h-12 relative flex items-center justify-center">
+          <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+            <ImageWithFallback
+              src={session?.user.data.profilePicture?.url}
+              fallBackImage={avatar}
+              alt="user"
+              fill
+              className="object-cover"
+            />
+          </div>
+
           {isVipUser && (
             <ImageWithFallback
               src={vipRing}
               width={48}
               height={48}
               alt="vip ring"
-              className="cursor-pointer z-10"
+              className="z-10 absolute"
             />
           )}
         </div>

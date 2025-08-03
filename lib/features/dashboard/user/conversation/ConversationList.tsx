@@ -1,13 +1,14 @@
 "use client";
 
-import React from "react";
-import { Conversation } from "@/lib/types/conversation/conversation.types";
+import React, { useEffect, useRef, useMemo, useCallback } from "react";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { avatar } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
-import { avatar } from "@/lib/components/image/icons";
-import { useSession } from "next-auth/react";
 import { formatRelativeTimeShort } from "@/lib/utils/date/dateUtils";
-import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Conversation } from "@/lib/types/conversation/conversation.types";
 
 interface PropsType {
   allMyConversationData: {
@@ -32,9 +33,91 @@ const ConversationList = ({
 }: PropsType) => {
   const { data: session } = useSession();
   const userId = session?.user?.data?.id;
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  const { currentPage, itemsPerPage, totalItems } =
+    allMyConversationData.paginationInfo;
+
+  // Memoize searchParams for stable dependencies
+  const memoizedSearchParams = useMemo(
+    () => new URLSearchParams(searchParams.toString()),
+    [searchParams]
+  );
+
+  // Memoized function to build URL with pageSize param
+  const getUrlWithSearchParams = useCallback(
+    (pageSize: number) => {
+      const params = new URLSearchParams(memoizedSearchParams.toString());
+      params.set("page", currentPage.toString());
+      params.set("pageSize", pageSize.toString());
+      return `${pathname}?${params.toString()}`;
+    },
+    [memoizedSearchParams, currentPage, pathname]
+  );
+
+  // Sync URL params if missing or out of sync, avoiding redundant router.replace calls
+  useEffect(() => {
+    const page = searchParams.get("page");
+    const pageSize = searchParams.get("pageSize");
+
+    if (
+      page !== currentPage.toString() ||
+      pageSize !== itemsPerPage.toString()
+    ) {
+      router.replace(getUrlWithSearchParams(itemsPerPage));
+    }
+  }, [searchParams, currentPage, itemsPerPage, getUrlWithSearchParams, router]);
+
+  // Intersection Observer for infinite scrolling
+  useEffect(() => {
+    if (!sentinelRef.current || !scrollContainerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentPageSize = Number(
+              urlParams.get("pageSize") || itemsPerPage
+            );
+            const newPageSize = currentPageSize + 20;
+            if (newPageSize <= totalItems) {
+              router.replace(getUrlWithSearchParams(newPageSize));
+            }
+          }
+        });
+      },
+      {
+        root: scrollContainerRef.current,
+        rootMargin: "0px",
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(sentinelRef.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [itemsPerPage, router, totalItems, getUrlWithSearchParams]);
+
+  // Memoize conversations to show based on pageSize
+  const pageSize = Number(searchParams.get("pageSize") || itemsPerPage);
+  const conversationsToShow = useMemo(
+    () => allMyConversationData.allConversations.slice(0, pageSize),
+    [allMyConversationData.allConversations, pageSize]
+  );
 
   return (
-    <div className="w-full h-full overflow-y-auto max-w-full md:max-w-[300px] rounded-0 lg:rounded-[10px] bg-white py-[16px]">
+    <div
+      ref={scrollContainerRef}
+      className="w-full h-full overflow-y-auto max-w-full md:max-w-[300px] rounded-0 lg:rounded-[10px] bg-white py-[16px]"
+    >
       <div className="w-full px-[18px]">
         <CommonButton
           label="Inbox"
@@ -44,10 +127,9 @@ const ConversationList = ({
 
       <div className="w-full flex flex-col gap-2">
         {allMyConversationData.allConversations.length === 0 ? (
-          <p className="text-sm text-center">No conversations found.</p>
+          <p className="text-sm text-center">No conversations found</p>
         ) : (
-          allMyConversationData.allConversations.map((conversation) => {
-            // determine the other participant
+          conversationsToShow.map((conversation) => {
             const isCurrentUserSender = conversation.senderId === userId;
             const otherUser = isCurrentUserSender
               ? conversation.receiver
@@ -61,22 +143,24 @@ const ConversationList = ({
                   conversation.id === conversationId ? "bg-light" : ""
                 }`}
               >
-                <div className="w-[50px] h-[50px] relative flex items-center justify-center rounded-full overflow-hidden">
-                  <ImageWithFallback
-                    src={otherUser?.profilePicture?.url}
-                    fallBackImage={avatar}
-                    width={45}
-                    height={45}
-                    alt={otherUser?.firstName ?? "User"}
-                    className="absolute rounded-full overflow-hidden bg-light border border-primaryBorder"
-                  />
+                <div className="w-12 h-12 relative flex items-center justify-center">
+                  <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+                    <ImageWithFallback
+                      src={otherUser?.profilePicture?.url}
+                      fallBackImage={avatar}
+                      alt="user"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
+
                 <div className="w-full flex flex-col items-start gap-1 overflow-hidden">
-                  <p className="text-[14px] font-medium text-primary truncate">
+                  <p className="text-[14px] font-medium text-primary">
                     {otherUser?.firstName ?? "Unknown User"}
                   </p>
                   <div className="w-full flex items-center justify-between">
-                    <p className="text-[12px] font-normal truncate ">
+                    <p className="text-[12px] font-normal truncate">
                       {conversation.senderId === userId && <span>You: </span>}
                       {conversation.lastMessage}
                     </p>
@@ -89,6 +173,9 @@ const ConversationList = ({
             );
           })
         )}
+
+        {/* Sentinel element to observe for infinite scroll */}
+        <div ref={sentinelRef} className="w-full h-[1px]" />
       </div>
     </div>
   );

@@ -1,0 +1,23 @@
+import { Media } from "../common/common.types";
+
+export interface Message {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  receiverId: string;
+  message: {
+    originalText: string;
+    sourceLanguage: string;
+    translationEn: string;
+    translationFr: string;
+    translationEs: string;
+  };
+  messageType: string;
+  status: string;
+  readAt: string | null;
+  replyToMessageId: string | null;
+  attachments: Media[] | null;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

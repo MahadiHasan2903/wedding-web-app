@@ -33,8 +33,8 @@ const ConversationListPage = async ({ searchParams }: PropsType) => {
       <div className="w-full md:max-w-[300px] h-full">
         <ConversationList allMyConversationData={allMyConversationData} />
       </div>
-      <div className="w-full h-full hidden md:flex items-center justify-center bg-white rounded-0 lg:rounded-[10px]">
-        <div className="relative overflow-hidden w-[300px] xl:w-[500px] h-[300px] xl:h-[500px] ">
+      <div className="w-full h-full hidden md:flex flex-col items-center justify-center bg-white rounded-0 lg:rounded-[10px]">
+        <div className="relative overflow-hidden w-[220px] h-[220px]">
           <ImageWithFallback
             src={conversationPlaceholder}
             fill
@@ -42,6 +42,9 @@ const ConversationListPage = async ({ searchParams }: PropsType) => {
             className="rounded-full object-contain"
           />
         </div>
+        <p className="w-full max-w-[240px] text-[14px] font-semibold text-center text-[#292D32]">
+          Please Select a Conversation to Start Messaging{" "}
+        </p>
       </div>
     </div>
   );

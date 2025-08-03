@@ -29,10 +29,30 @@ const ConversationDetailsPage = async ({ params, searchParams }: PropsType) => {
   const page = Number(getQueryParam(searchParams, "page", 1));
   const pageSize = Number(getQueryParam(searchParams, "pageSize", 20));
 
+  // Get the current page number as string, then parse to number with fallback
+  const messagePageNumber = Number(
+    getQueryParam(searchParams, "messagePageNumber", 1)
+  );
+  const messagePageSize = Number(
+    getQueryParam(searchParams, "messagePageSize", 20)
+  );
+
   const allMyConversationData = await api.conversation.getMyAllConversation(
     accessToken,
     page,
     pageSize
+  );
+
+  const allMessageData = await api.message.getMessagesByConversationId(
+    params.conversationId,
+    accessToken,
+    messagePageNumber,
+    messagePageSize
+  );
+
+  const conversationDetails = await api.conversation.getConversationDetails(
+    params.conversationId,
+    accessToken
   );
 
   return (
@@ -43,7 +63,10 @@ const ConversationDetailsPage = async ({ params, searchParams }: PropsType) => {
           conversationId={params.conversationId}
         />
       </div>
-      <ConversationDetails />
+      <ConversationDetails
+        conversationDetails={conversationDetails}
+        allMessageData={allMessageData}
+      />
     </div>
   );
 };

@@ -36,18 +36,11 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
-  const { currentPage, totalPages, prevPage, nextPage } =
-    allBlockedUsersData.paginationInfo;
-
-  // Manage state for search input
   const [searchName, setSearchName] = useState<string>(
     searchParams.get("name") || ""
   );
-
-  const mockConversations = Array(25)
-    .fill(allBlockedUsersData.blockedUsers)
-    .flat()
-    .slice(0, 50);
+  const { currentPage, totalPages, prevPage, nextPage } =
+    allBlockedUsersData.paginationInfo;
 
   // Memoize the blocked user list to prevent unnecessary re-renders
   const data = useMemo(

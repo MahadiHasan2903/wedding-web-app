@@ -2,10 +2,13 @@ import star from "@/public/icons/star.svg";
 import send from "@/public/icons/send.svg";
 import mail from "@/public/icons/mail.svg";
 import visa from "@/public/icons/visa.svg";
+import dots from "@/public/icons/dots.svg";
 import alert from "@/public/icons/alert.svg";
 import crown from "@/public/icons/crown.svg";
 import heart from "@/public/icons/heart.svg";
 import quote from "@/public/icons/quote.svg";
+import emoji from "@/public/icons/emoji.svg";
+import voice from "@/public/icons/voice.svg";
 import change from "@/public/icons/change.svg";
 import avatar from "@/public/icons/avatar.svg";
 import logout from "@/public/icons/logout.svg";
@@ -25,10 +28,11 @@ import redHeart from "@/public/icons/red-heart.svg";
 import editIcon from "@/public/icons/edit-icon.svg";
 import instagram from "@/public/icons/instagram.svg";
 import hamburger from "@/public/icons/hamburger.svg";
-import successful from "@/public/icons/successful.svg";
 import whiteSave from "@/public/icons/white-save.svg";
 import myProfile from "@/public/icons/my-profile.svg";
 import findMatch from "@/public/icons/find-match.svg";
+import attachment from "@/public/icons/attachment.svg";
+import successful from "@/public/icons/successful.svg";
 import masterCard from "@/public/icons/master-card.svg";
 import whiteHeart from "@/public/icons/white-heart.svg";
 import tickCircle from "@/public/icons/tick-circle.svg";
@@ -47,10 +51,13 @@ export {
   send,
   mail,
   visa,
+  dots,
   alert,
   crown,
   heart,
   quote,
+  emoji,
+  voice,
   change,
   avatar,
   logout,
@@ -73,6 +80,7 @@ export {
   hamburger,
   instagram,
   findMatch,
+  attachment,
   successful,
   whiteHeart,
   tickCircle,

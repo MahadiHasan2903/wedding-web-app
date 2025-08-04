@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useCallback, useMemo } from "react";
-import { useSession } from "next-auth/react";
 import { ImageWithFallback } from "@/lib/components/image";
+import { User, SessionUser } from "@/lib/types/user/user.types";
 import { Message } from "@/lib/types/conversation/message.types";
 import { avatar as defaultAvatar } from "@/lib/components/image/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Conversation } from "@/lib/types/conversation/conversation.types";
 
 interface PropsType {
-  conversationDetails: Conversation;
+  loggedInUser?: SessionUser;
+  otherUser?: User;
   allMessageData: {
     allMessages: Message[];
     paginationInfo: {
@@ -23,29 +23,20 @@ interface PropsType {
   };
 }
 
-const AllMessages = ({ conversationDetails, allMessageData }: PropsType) => {
+const AllMessages = ({
+  allMessageData,
+  loggedInUser,
+  otherUser,
+}: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const { data: session } = useSession();
-
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
   const { currentPage, itemsPerPage, totalItems } =
     allMessageData.paginationInfo;
-  const loggedInUserId = session?.user?.data?.id;
-  const loggedInUserAvatar = session?.user?.data?.profilePicture?.url;
 
-  const isCurrentUserSender = conversationDetails.senderId === loggedInUserId;
-  const otherUser = useMemo(
-    () =>
-      isCurrentUserSender
-        ? conversationDetails.receiver
-        : conversationDetails.sender,
-    [isCurrentUserSender, conversationDetails]
-  );
-  const otherUserAvatar = otherUser?.profilePicture?.url;
+  console.log("");
 
   // Memoize URL search params object for stable reference
   const memoizedSearchParams = useMemo(() => {
@@ -115,10 +106,28 @@ const AllMessages = ({ conversationDetails, allMessageData }: PropsType) => {
   const messagePageSize = Number(
     searchParams.get("messagePageSize") || itemsPerPage
   );
-  const messagesToShow = useMemo(
-    () => allMessageData.allMessages.slice(0, messagePageSize).reverse(),
-    [allMessageData.allMessages, messagePageSize]
-  );
+
+  // Memoize messages to show based on current page size
+  const messagesToShow = useMemo(() => {
+    const startIndex = Math.max(
+      allMessageData.allMessages.length - messagePageSize,
+      0
+    );
+    return allMessageData.allMessages.slice(
+      startIndex,
+      allMessageData.allMessages.length
+    );
+  }, [allMessageData.allMessages, messagePageSize]);
+
+  // Scroll to bottom on initial load
+  useEffect(() => {
+    if (!scrollContainerRef.current) {
+      return;
+    }
+
+    const container = scrollContainerRef.current;
+    container.scrollTop = container.scrollHeight;
+  }, [messagesToShow]);
 
   return (
     <div
@@ -128,10 +137,10 @@ const AllMessages = ({ conversationDetails, allMessageData }: PropsType) => {
       {/* Sentinel element for infinite scroll */}
       <div ref={sentinelRef} className="w-full h-[1px]" />
       {messagesToShow.map((message, index, array) => {
-        const isSentByLoggedInUser = message.senderId === loggedInUserId;
+        const isSentByLoggedInUser = message.senderId === loggedInUser?.id;
         const avatarSrc = isSentByLoggedInUser
-          ? loggedInUserAvatar
-          : otherUserAvatar;
+          ? loggedInUser.profilePicture?.url
+          : otherUser?.profilePicture?.url;
 
         // Only show avatar if this is the first message in a group
         const isFirstInGroup =

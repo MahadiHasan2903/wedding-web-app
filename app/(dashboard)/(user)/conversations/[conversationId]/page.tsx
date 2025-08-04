@@ -27,14 +27,14 @@ const ConversationDetailsPage = async ({ params, searchParams }: PropsType) => {
 
   // Get the current page number as string, then parse to number with fallback
   const page = Number(getQueryParam(searchParams, "page", 1));
-  const pageSize = Number(getQueryParam(searchParams, "pageSize", 20));
+  const pageSize = Number(getQueryParam(searchParams, "pageSize", 50));
 
   // Get the current page number as string, then parse to number with fallback
   const messagePageNumber = Number(
     getQueryParam(searchParams, "messagePageNumber", 1)
   );
   const messagePageSize = Number(
-    getQueryParam(searchParams, "messagePageSize", 20)
+    getQueryParam(searchParams, "messagePageSize", 200)
   );
 
   const allMyConversationData = await api.conversation.getMyAllConversation(

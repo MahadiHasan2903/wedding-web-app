@@ -87,13 +87,14 @@ const ConversationDetails = ({
       return;
     }
 
-    socket?.emit("sendMessage", {
-      senderId: loggedInUser?.id,
-      receiverId: otherUser?.id,
-      conversationId: conversationDetails.id,
-      message: text,
-      replyToMessageId: replyToMessageId ?? null,
-    });
+    if (isConnected)
+      socket?.emit("sendMessage", {
+        senderId: loggedInUser?.id,
+        receiverId: otherUser?.id,
+        conversationId: conversationDetails.id,
+        message: text,
+        replyToMessageId: replyToMessageId ?? null,
+      });
   };
 
   return (

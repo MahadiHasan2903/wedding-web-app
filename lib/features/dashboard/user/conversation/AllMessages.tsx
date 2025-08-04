@@ -109,14 +109,13 @@ const AllMessages = ({
 
   // Memoize messages to show based on current page size
   const messagesToShow = useMemo(() => {
-    const startIndex = Math.max(
-      allMessageData.allMessages.length - messagePageSize,
-      0
+    const sortedMessages = [...allMessageData.allMessages].sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
-    return allMessageData.allMessages.slice(
-      startIndex,
-      allMessageData.allMessages.length
-    );
+
+    const startIndex = Math.max(sortedMessages.length - messagePageSize, 0);
+    return sortedMessages.slice(startIndex);
   }, [allMessageData.allMessages, messagePageSize]);
 
   // Scroll to bottom on initial load

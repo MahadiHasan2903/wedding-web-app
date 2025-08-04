@@ -32,6 +32,7 @@ const getMessagesByConversationId = async (
     `${BASE_URL}/message/conversation/${conversationId}?page=${page}&pageSize=${pageSize}&sort=updatedAt,DESC`,
     {
       method: "GET",
+      cache: "no-store",
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

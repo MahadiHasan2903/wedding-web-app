@@ -4,13 +4,18 @@ import {
   Navbar,
   BottomNavigation,
 } from "@/lib/components/layout/dashboard";
+import { SOCKET_ID } from "@/lib/config/constants";
+import { getServerSessionData } from "@/lib/config/auth";
 import { Header } from "@/lib/components/layout/marketing";
+import { SocketProvider } from "@/lib/providers/SocketProvider";
 
-const DashboardLayout = ({
-  children,
-}: Readonly<{
+interface PropsType {
   children: ReactNode;
-}>) => {
+}
+
+const DashboardLayout = async ({ children }: Readonly<PropsType>) => {
+  const { data } = await getServerSessionData();
+
   return (
     <div className="w-full h-screen flex overflow-hidden gap-[24px] lg:p-[20px] relative">
       <Sidebar />
@@ -20,7 +25,9 @@ const DashboardLayout = ({
           <Header />
         </div>
         <div className="flex-1 overflow-y-auto mb-[50px] lg:mb-0">
-          {children}
+          <SocketProvider userId={data.id} SOCKET_ID={SOCKET_ID}>
+            {children}
+          </SocketProvider>
         </div>
       </div>
 

@@ -22,6 +22,11 @@ export const DARK_LOGO = logoDark;
 export const BASE_URL = process.env.BASE_URL;
 
 /**
+ * The socket.io server URL used for real-time communication.
+ */
+export const SOCKET_ID = process.env.BASE_URL;
+
+/**
  * PayPal Client ID used to initialize the PayPal JS SDK.
  */
 export const PAYPAL_CLIENT_ID = process.env.PAYPAL_CLIENT_ID;

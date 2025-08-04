@@ -9,9 +9,13 @@ import { Conversation } from "@/lib/types/conversation/conversation.types";
 
 interface PropsType {
   conversationDetails: Conversation;
+  isOtherUserOnline: boolean;
 }
 
-const ConversationHeader = ({ conversationDetails }: PropsType) => {
+const ConversationHeader = ({
+  conversationDetails,
+  isOtherUserOnline,
+}: PropsType) => {
   const { data: session } = useSession();
   const loggedInUserId = session?.user?.data?.id;
   const isCurrentUserSender = conversationDetails.senderId === loggedInUserId;
@@ -55,12 +59,16 @@ const ConversationHeader = ({ conversationDetails }: PropsType) => {
                 className="object-cover"
               />
             </div>
+            <div className="absolute w-[35px] h-[35px] rounded-full z-50 bg-transparent border-[2px] border-[#1BEA1B]" />
           </div>
+
           <div className="flex flex-col items-start">
             <p className="text-[14px] font-medium text-primary">
               {otherUser?.firstName ?? "Unknown User"}
             </p>
-            <p className="text-[10px] font-normal">Active Now</p>
+            {isOtherUserOnline && (
+              <p className="text-[10px] font-normal">Active Now</p>
+            )}
           </div>
         </div>
 

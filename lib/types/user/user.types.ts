@@ -1,6 +1,18 @@
 import { Media } from "../common/common.types";
 import { PurchasedMembership } from "../membership/ms-purchase.types";
 
+export interface SessionUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string | null;
+  userRole: string;
+  accountStatus: string;
+  profilePicture: Media | null;
+  purchasedMembership: PurchasedMembership;
+}
+
 export interface User {
   id: string;
   firstName: string;

@@ -1,23 +1,12 @@
 import "next-auth";
 import { Media } from "./common.types";
+import { SessionUser } from "../user/user.types";
 import { PurchasedMembership } from "../membership/ms-purchase.types";
 
 interface BaseUser {
-  data: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    email: string;
-    phoneNumber: string | null;
-    userRole: string;
-    accountStatus: string;
-    profilePicture: Media | null;
-    purchasedMembership: PurchasedMembership;
-  };
+  data: SessionUser;
   accessToken: string;
 }
-
 declare module "next-auth" {
   export type User = BaseUser;
 

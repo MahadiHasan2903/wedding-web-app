@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useMemo, useCallback } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useMemo,
+  useCallback,
+  useState,
+} from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { avatar } from "@/lib/components/image/icons";
@@ -9,6 +15,7 @@ import { ImageWithFallback } from "@/lib/components/image";
 import { formatRelativeTimeShort } from "@/lib/utils/date/dateUtils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Conversation } from "@/lib/types/conversation/conversation.types";
+import { useSocket } from "@/lib/providers/SocketProvider";
 
 interface PropsType {
   allMyConversationData: {
@@ -31,14 +38,15 @@ const ConversationList = ({
   allMyConversationData,
   conversationId,
 }: PropsType) => {
+  const { socket } = useSocket();
   const { data: session } = useSession();
   const userId = session?.user?.data?.id;
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const [onlineUsers, setOnlineUsers] = useState<Record<string, boolean>>({});
 
   const { currentPage, itemsPerPage, totalItems } =
     allMyConversationData.paginationInfo;
@@ -59,6 +67,29 @@ const ConversationList = ({
     },
     [memoizedSearchParams, currentPage, pathname]
   );
+
+  // Check which user is online
+  useEffect(() => {
+    if (!socket) {
+      return;
+    }
+
+    const handleUserStatusChanged = ({
+      userId,
+      isOnline,
+    }: {
+      userId: string;
+      isOnline: boolean;
+    }) => {
+      setOnlineUsers((prev) => ({ ...prev, [userId]: isOnline }));
+    };
+
+    socket.on("userStatusChanged", handleUserStatusChanged);
+
+    return () => {
+      socket.off("userStatusChanged", handleUserStatusChanged);
+    };
+  }, [socket]);
 
   // Sync URL params if missing or out of sync, avoiding redundant router.replace calls
   useEffect(() => {
@@ -135,6 +166,8 @@ const ConversationList = ({
               ? conversation.receiver
               : conversation.sender;
 
+            const isOtherUserOnline = onlineUsers[otherUser?.id ?? ""] ?? false;
+
             return (
               <Link
                 href={`/conversations/${conversation.id}`}
@@ -143,7 +176,7 @@ const ConversationList = ({
                   conversation.id === conversationId ? "bg-light" : ""
                 }`}
               >
-                <div className="w-12 h-12 relative flex items-center justify-center">
+                <div className="relative w-12 h-12 flex items-center justify-center">
                   <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
                     <ImageWithFallback
                       src={otherUser?.profilePicture?.url}
@@ -153,6 +186,9 @@ const ConversationList = ({
                       className="object-cover"
                     />
                   </div>
+                  {isOtherUserOnline && (
+                    <div className="absolute w-12 h-12 rounded-full z-50 bg-transparent border-[2px] border-[#1BEA1B]" />
+                  )}
                 </div>
 
                 <div className="w-full flex flex-col items-start gap-1 overflow-hidden">

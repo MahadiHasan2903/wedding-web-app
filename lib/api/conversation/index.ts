@@ -31,6 +31,7 @@ const getMyAllConversation = async (
     `${BASE_URL}/conversation/my-conversations?page=${page}&pageSize=${pageSize}&sort=updatedAt,DESC`,
     {
       method: "GET",
+      cache: "no-store",
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -95,6 +96,7 @@ const getSenderAllConversation = async (
     `${BASE_URL}/conversation/sender/${senderId}?page=${page}&pageSize=${pageSize}&sort=updatedAt,DESC`,
     {
       method: "GET",
+      cache: "no-store",
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

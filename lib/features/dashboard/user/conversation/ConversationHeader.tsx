@@ -49,8 +49,8 @@ const ConversationHeader = ({
     <div className="w-full border-b-[3px] border-light">
       <div className="w-full relative flex items-center justify-between pb-[14px] px-[18px]">
         <div className="w-1/2 gap-2 flex items-center">
-          <div className="w-[35px] h-[35px] relative flex items-center justify-center">
-            <div className="w-[35px] h-[35px] relative rounded-full overflow-hidden border border-black">
+          <div className="relative w-[35px] h-[35px] flex items-center justify-center">
+            <div className="relative w-[35px] h-[35px] rounded-full overflow-hidden border border-black">
               <ImageWithFallback
                 src={otherUser?.profilePicture?.url}
                 fallBackImage={avatar}
@@ -59,7 +59,9 @@ const ConversationHeader = ({
                 className="object-cover"
               />
             </div>
-            <div className="absolute w-[35px] h-[35px] rounded-full z-50 bg-transparent border-[2px] border-[#1BEA1B]" />
+            {isOtherUserOnline && (
+              <div className="absolute w-[35px] h-[35px] rounded-full z-50 bg-transparent border-[2px] border-[#1BEA1B]" />
+            )}
           </div>
 
           <div className="flex flex-col items-start">

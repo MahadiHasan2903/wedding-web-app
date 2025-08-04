@@ -19,7 +19,7 @@ import { Result } from "@/lib/types/common/common.types";
  */
 const createConversationAction = async (
   requestPayload: AddConversationType
-): Promise<Result<AddConversationResponseType>> => {
+) => {
   // Validate the payload against Zod schema
   const safeParse = addConversationSchema.safeParse(requestPayload);
   if (!safeParse.success) {
@@ -53,17 +53,18 @@ const createConversationAction = async (
       updatedAt: response.data.updatedAt,
     };
 
-    return {
+    const result: Result<AddConversationResponseType> = {
       status: true,
       data: conversationResponse,
       message: "Conversation created successfully.",
     };
+    return result;
   } catch (error: any) {
     console.error("Conversation creation failed:", error);
 
     const isTimeout = error.message?.includes("timed out");
 
-    return {
+    const result: Result<AddConversationResponseType> = {
       status: false,
       data: null,
       message: isTimeout
@@ -71,6 +72,7 @@ const createConversationAction = async (
         : error.message ||
           "Unable to create conversation at this time. Please try again later.",
     };
+    return result;
   }
 };
 

@@ -195,15 +195,17 @@ const ConversationList = ({
                   <p className="text-[14px] font-medium text-primary">
                     {otherUser?.firstName ?? "Unknown User"}
                   </p>
-                  <div className="w-full flex items-center justify-between">
-                    <p className="text-[12px] font-normal truncate">
-                      {conversation.senderId === userId && <span>You: </span>}
-                      {conversation.lastMessage}
-                    </p>
-                    <p className="text-[12px] font-normal">
-                      {formatRelativeTimeShort(conversation.updatedAt)}
-                    </p>
-                  </div>
+                  {conversation.lastMessageId && conversation.lastMessage && (
+                    <div className="w-full flex items-center justify-between">
+                      <p className="text-[12px] font-normal truncate">
+                        {conversation.senderId === userId && <span>You: </span>}
+                        {conversation.lastMessage}
+                      </p>
+                      <p className="text-[12px] font-normal">
+                        {formatRelativeTimeShort(conversation.updatedAt)}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </Link>
             );

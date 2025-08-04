@@ -1,60 +1,69 @@
-import React, { useRef, useEffect, useCallback, useMemo } from "react";
+// AllMessages.tsx
+import React, {
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
+import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { User, SessionUser } from "@/lib/types/user/user.types";
 import { Message } from "@/lib/types/conversation/message.types";
-import { avatar as defaultAvatar } from "@/lib/components/image/icons";
+import { avatar as defaultAvatar, dots } from "@/lib/components/image/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import conversationPlaceholder from "@/public/images/common/conversation-placeholder.svg";
+import { useSocket } from "@/lib/providers/SocketProvider";
 
 interface PropsType {
+  messages: Message[];
+  paginationInfo: {
+    totalItems: number;
+    itemsPerPage: number;
+    currentPage: number;
+    totalPages: number;
+    hasPrevPage: boolean;
+    hasNextPage: boolean;
+    prevPage: number | null;
+    nextPage: number | null;
+  };
   loggedInUser?: SessionUser;
   otherUser?: User;
-  allMessageData: {
-    allMessages: Message[];
-    paginationInfo: {
-      totalItems: number;
-      itemsPerPage: number;
-      currentPage: number;
-      totalPages: number;
-      hasPrevPage: boolean;
-      hasNextPage: boolean;
-      prevPage: number | null;
-      nextPage: number | null;
-    };
-  };
+  setReplayToMessage: (message: Message | null) => void;
 }
 
 const AllMessages = ({
-  allMessageData,
+  messages,
+  paginationInfo,
+  setReplayToMessage,
   loggedInUser,
   otherUser,
 }: PropsType) => {
   const router = useRouter();
+  const { socket } = useSocket();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  const { currentPage, itemsPerPage, totalItems } =
-    allMessageData.paginationInfo;
+  const [openMenuMessageId, setOpenMenuMessageId] = useState<string | null>(
+    null
+  );
 
-  console.log("");
+  const { currentPage, itemsPerPage, totalItems } = paginationInfo;
 
-  // Memoize URL search params object for stable reference
-  const memoizedSearchParams = useMemo(() => {
-    return new URLSearchParams(searchParams.toString());
-  }, [searchParams]);
-
-  // Generate URL with given messagePageSize
+  // Function to get the URL with updated search parameters
   const getUrlWithSearchParams = useCallback(
     (messagePageSize: number) => {
-      const params = new URLSearchParams(memoizedSearchParams.toString());
+      const params = new URLSearchParams(searchParams.toString());
       params.set("messagePageNumber", currentPage.toString());
       params.set("messagePageSize", messagePageSize.toString());
       return `${pathname}?${params.toString()}`;
     },
-    [memoizedSearchParams, currentPage, pathname]
+    [searchParams, currentPage, pathname]
   );
 
-  // Sync URL params on mount only if missing or different (prevent redundant updates)
+  // Update the URL with search parameters when currentPage or itemsPerPage changes
   useEffect(() => {
     const messagePageNumber = searchParams.get("messagePageNumber");
     const messagePageSize = searchParams.get("messagePageSize");
@@ -65,10 +74,9 @@ const AllMessages = ({
     ) {
       router.replace(getUrlWithSearchParams(itemsPerPage));
     }
-    // Only want to run on mount or when these values change
   }, [searchParams, currentPage, itemsPerPage, getUrlWithSearchParams, router]);
 
-  // Intersection observer callback to load more messages
+  // Intersection Observer to load more messages when the sentinel is visible
   useEffect(() => {
     if (!sentinelRef.current || !scrollContainerRef.current) return;
 
@@ -81,7 +89,6 @@ const AllMessages = ({
               urlParams.get("messagePageSize") || itemsPerPage
             );
             const newPageSize = currentPageSize + 20;
-
             if (newPageSize <= totalItems) {
               router.replace(getUrlWithSearchParams(newPageSize));
             }
@@ -96,111 +103,236 @@ const AllMessages = ({
     );
 
     observer.observe(sentinelRef.current);
-
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [itemsPerPage, router, totalItems, getUrlWithSearchParams]);
 
-  // Show messages based on messagePageSize from URL or default itemsPerPage
+  // Get the message page size from search params or use itemsPerPage as default
   const messagePageSize = Number(
     searchParams.get("messagePageSize") || itemsPerPage
   );
 
-  // Memoize messages to show based on current page size
-  const messagesToShow = useMemo(() => {
-    const sortedMessages = [...allMessageData.allMessages].sort(
+  // Sort messages by creation date
+  const sortedMessages = useMemo(() => {
+    return [...messages].sort(
       (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
     );
+  }, [messages]);
 
+  // Get the messages to show based on the current page size
+  const messagesToShow = useMemo(() => {
     const startIndex = Math.max(sortedMessages.length - messagePageSize, 0);
     return sortedMessages.slice(startIndex);
-  }, [allMessageData.allMessages, messagePageSize]);
+  }, [sortedMessages, messagePageSize]);
 
   // Scroll to bottom on initial load
   useEffect(() => {
     if (!scrollContainerRef.current) {
       return;
     }
-
     const container = scrollContainerRef.current;
     container.scrollTop = container.scrollHeight;
   }, [messagesToShow]);
+
+  // Close the menu when clicking outside of it
+  useEffect(() => {
+    if (menuRef.current) {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (!menuRef.current?.contains(event.target as Node)) {
+          setOpenMenuMessageId(null);
+        }
+      };
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
+    }
+  }, []);
+
+  // Handle message deletion
+  const handleDeleteMessage = (messageId: string) => {
+    setOpenMenuMessageId(null);
+    socket?.emit("toggleMessageDeletion", {
+      messageId,
+      isDeleted: true,
+    });
+  };
 
   return (
     <div
       ref={scrollContainerRef}
       className="w-full h-full px-[18px] py-4 overflow-y-auto flex flex-col gap-6 md:gap-3"
     >
-      {/* Sentinel element for infinite scroll */}
       <div ref={sentinelRef} className="w-full h-[1px]" />
-      {messagesToShow.map((message, index, array) => {
-        const isSentByLoggedInUser = message.senderId === loggedInUser?.id;
-        const avatarSrc = isSentByLoggedInUser
-          ? loggedInUser.profilePicture?.url
-          : otherUser?.profilePicture?.url;
+      {messagesToShow.length > 0 ? (
+        messagesToShow.map((message, index, array) => {
+          const isSentByLoggedInUser = message.senderId === loggedInUser?.id;
+          const isFirstInGroup =
+            index === 0 || array[index - 1].senderId !== message.senderId;
+          const avatarSrc = isSentByLoggedInUser
+            ? loggedInUser?.profilePicture?.url
+            : otherUser?.profilePicture?.url;
 
-        // Only show avatar if this is the first message in a group
-        const isFirstInGroup =
-          index === 0 || array[index - 1].senderId !== message.senderId;
-
-        return (
-          <div
-            key={message.id}
-            className={`flex items-end gap-2 ${
-              isSentByLoggedInUser ? "justify-end" : "justify-start"
-            }`}
-          >
-            {/* Avatar (only for first message in group) */}
-            {!isSentByLoggedInUser && isFirstInGroup && (
-              <div className="w-[32px] h-[32px] relative rounded-full overflow-hidden border border-gray-300">
-                <ImageWithFallback
-                  src={avatarSrc}
-                  fallBackImage={defaultAvatar}
-                  alt="user avatar"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )}
-
-            {/* Placeholder for alignment if avatar not shown */}
-            {!isSentByLoggedInUser && !isFirstInGroup && (
-              <div className="w-[32px] h-[32px]" />
-            )}
-
-            {/* Message bubble */}
+          return (
             <div
-              className={`max-w-[70%] md:max-w-[50%] px-4 py-2 rounded-lg text-sm ${
-                isSentByLoggedInUser
-                  ? "bg-primary text-white rounded-br-none"
-                  : "bg-light text-black rounded-bl-none"
+              key={message.id}
+              className={`flex items-end gap-2 ${
+                isSentByLoggedInUser ? "justify-end" : "justify-start"
               }`}
             >
-              {message.message?.originalText || "[No message text]"}
-            </div>
+              {!isSentByLoggedInUser && (
+                <div className="w-[32px] h-[32px]">
+                  {isFirstInGroup && (
+                    <div className="relative w-full h-full rounded-full overflow-hidden border border-gray-300">
+                      <ImageWithFallback
+                        src={avatarSrc}
+                        fallBackImage={defaultAvatar}
+                        alt="user avatar"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
 
-            {/* Avatar for logged-in user (only once per group) */}
-            {isSentByLoggedInUser && isFirstInGroup && (
-              <div className="w-[32px] h-[32px] relative rounded-full overflow-hidden border border-gray-300">
-                <ImageWithFallback
-                  src={avatarSrc}
-                  fallBackImage={defaultAvatar}
-                  alt="user avatar"
-                  fill
-                  className="object-cover"
-                />
+              <div className="max-w-[50%]">
+                {message.isDeleted ? (
+                  <div className="cursor-not-allowed bg-gray px-4 py-2 rounded-full border border-primaryBorder italic text-sm">
+                    Message deleted
+                  </div>
+                ) : (
+                  <div
+                    className={`${
+                      isSentByLoggedInUser
+                        ? "flex flex-row-reverse"
+                        : "flex flex-row"
+                    } items-center gap-2`}
+                  >
+                    <div
+                      className={`w-fit flex flex-col gap-2 items-start px-3 pt-3 pb-2 rounded-lg text-sm ${
+                        isSentByLoggedInUser
+                          ? "bg-primary text-white rounded-br-none"
+                          : "bg-light text-black rounded-bl-none"
+                      }`}
+                    >
+                      {message.repliedToMessage?.message?.originalText && (
+                        <div className="flex flex-col gap-1 p-2 bg-black/20 rounded-[5px]">
+                          <p className="text-[13px] font-medium">
+                            {message.repliedToMessage.senderId ===
+                            loggedInUser?.id
+                              ? "You"
+                              : `${otherUser?.firstName} ${otherUser?.lastName}`}
+                          </p>
+                          <p className="text-[12px] font-normal">
+                            {message.repliedToMessage.message.originalText}
+                          </p>
+                        </div>
+                      )}
+
+                      <p className="text-[14px] font-normal">
+                        {message.message?.originalText || ""}
+                      </p>
+                    </div>
+                    <div className="relative">
+                      <ImageWithFallback
+                        src={dots}
+                        width={12}
+                        height={5}
+                        alt="dots"
+                        className="cursor-pointer rotate-90"
+                        onClick={() =>
+                          setOpenMenuMessageId((prev) =>
+                            prev === message.id ? null : message.id
+                          )
+                        }
+                      />
+                      {openMenuMessageId === message.id && (
+                        <div
+                          ref={menuRef}
+                          className={`${
+                            !isSentByLoggedInUser
+                              ? "left-[-30px]"
+                              : "right-[-30px]"
+                          } w-[150px] absolute top-6 bg-white shadow-lg border border-light p-2 rounded-[5px] z-10`}
+                        >
+                          <div
+                            className={`${
+                              !isSentByLoggedInUser ? "left-8" : "right-8"
+                            } absolute shadow-lg w-3 h-3 bg-white border-t border-l border-light rotate-45 top-[-7px] z-0`}
+                          />
+                          <div className="w-full flex flex-col items-start text-[14px]">
+                            <CommonButton
+                              label="Replay"
+                              className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
+                              onClick={() => {
+                                setReplayToMessage(message);
+                                setOpenMenuMessageId(null);
+                              }}
+                            />
+                            {!isSentByLoggedInUser && (
+                              <CommonButton
+                                label="Report"
+                                className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
+                                onClick={() => setOpenMenuMessageId(null)}
+                              />
+                            )}
+                            {isSentByLoggedInUser && (
+                              <>
+                                <CommonButton
+                                  label="Edit"
+                                  className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
+                                  onClick={() => setOpenMenuMessageId(null)}
+                                />
+                                <CommonButton
+                                  label="Delete"
+                                  className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
+                                  onClick={() =>
+                                    handleDeleteMessage(message.id)
+                                  }
+                                />
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
 
-            {/* Placeholder for alignment if avatar not shown */}
-            {isSentByLoggedInUser && !isFirstInGroup && (
-              <div className="w-[32px] h-[32px]" />
-            )}
+              {isSentByLoggedInUser && (
+                <div className="w-[32px] h-[32px]">
+                  {isFirstInGroup && (
+                    <div className="relative w-full h-full rounded-full overflow-hidden border border-gray-300">
+                      <ImageWithFallback
+                        src={avatarSrc}
+                        fallBackImage={defaultAvatar}
+                        alt="user avatar"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })
+      ) : (
+        <div className="w-full h-full hidden md:flex flex-col items-center justify-center bg-white rounded-0 lg:rounded-[10px]">
+          <div className="relative overflow-hidden w-[220px] h-[220px]">
+            <ImageWithFallback
+              src={conversationPlaceholder}
+              fill
+              alt="placeholder"
+              className="rounded-full object-contain"
+            />
           </div>
-        );
-      })}
+          <p className="w-full max-w-[240px] text-[14px] font-semibold text-center text-[#292D32]">
+            No messages in this conversation
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -80,68 +80,70 @@ const MessageItem = ({
                 isSentByLoggedInUser ? "flex flex-row-reverse" : "flex flex-row"
               } items-center gap-2`}
             >
-              <div
-                className={`w-fit flex flex-col gap-3 items-start px-3 pt-3 pb-2 rounded-lg text-sm ${
-                  isSentByLoggedInUser
-                    ? "bg-primary text-white rounded-br-none"
-                    : "bg-light text-black rounded-bl-none"
-                }`}
-              >
-                {message.repliedToMessage?.message?.originalText && (
-                  <div className="w-full flex flex-col gap-1 p-2 bg-black/20 rounded-[5px]">
-                    <p className="text-[13px] font-medium">
-                      {message.repliedToMessage.senderId === loggedInUser?.id
-                        ? "You"
-                        : `${otherUser?.firstName} ${otherUser?.lastName}`}
-                    </p>
-                    <p className="text-[12px] font-normal">
-                      {message.repliedToMessage.message.originalText}
-                    </p>
-                  </div>
-                )}
+              {message.message && (
+                <div
+                  className={`w-fit flex flex-col gap-3 items-start px-3 pt-3 pb-2 rounded-lg text-sm ${
+                    isSentByLoggedInUser
+                      ? "bg-primary text-white rounded-br-none"
+                      : "bg-light text-black rounded-bl-none"
+                  }`}
+                >
+                  {message.repliedToMessage?.message?.originalText && (
+                    <div className="w-full flex flex-col gap-1 p-2 bg-black/20 rounded-[5px]">
+                      <p className="text-[13px] font-medium">
+                        {message.repliedToMessage.senderId === loggedInUser?.id
+                          ? "You"
+                          : `${otherUser?.firstName} ${otherUser?.lastName}`}
+                      </p>
+                      <p className="text-[12px] font-normal">
+                        {message.repliedToMessage.message.originalText}
+                      </p>
+                    </div>
+                  )}
 
-                <div className="w-full flex flex-col items-start gap-3">
-                  <p className="text-[14px] font-normal">
-                    {translatedLanguage === "en" &&
-                    message.message.translationEn
-                      ? message.message.translationEn
-                      : translatedLanguage === "es" &&
-                        message.message.translationEs
-                      ? message.message.translationEs
-                      : translatedLanguage === "fr" &&
-                        message.message.translationFr
-                      ? message.message.translationFr
-                      : message.message.originalText}
-                  </p>
-
-                  <div className="flex items-center gap-1 italic">
-                    <RiTranslate />
-                    <p className="font-bold text-[10px]">
-                      Translate to{" "}
-                      <span
-                        className="underline cursor-pointer"
-                        onClick={() => handleTranslation(message.id, "en")}
-                      >
-                        English
-                      </span>{" "}
-                      /{" "}
-                      <span
-                        className="underline cursor-pointer"
-                        onClick={() => handleTranslation(message.id, "es")}
-                      >
-                        Spanish
-                      </span>{" "}
-                      /{" "}
-                      <span
-                        className="underline cursor-pointer"
-                        onClick={() => handleTranslation(message.id, "fr")}
-                      >
-                        French
-                      </span>
+                  <div className="w-full flex flex-col items-start gap-3">
+                    <p className="text-[14px] font-normal">
+                      {translatedLanguage === "en" &&
+                      message.message.translationEn
+                        ? message.message.translationEn
+                        : translatedLanguage === "es" &&
+                          message.message.translationEs
+                        ? message.message.translationEs
+                        : translatedLanguage === "fr" &&
+                          message.message.translationFr
+                        ? message.message.translationFr
+                        : message.message.originalText}
                     </p>
+
+                    <div className="flex items-center gap-1 italic">
+                      <RiTranslate />
+                      <p className="font-bold text-[10px]">
+                        Translate to{" "}
+                        <span
+                          className="underline cursor-pointer"
+                          onClick={() => handleTranslation(message.id, "en")}
+                        >
+                          English
+                        </span>{" "}
+                        /{" "}
+                        <span
+                          className="underline cursor-pointer"
+                          onClick={() => handleTranslation(message.id, "es")}
+                        >
+                          Spanish
+                        </span>{" "}
+                        /{" "}
+                        <span
+                          className="underline cursor-pointer"
+                          onClick={() => handleTranslation(message.id, "fr")}
+                        >
+                          French
+                        </span>
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
               <div className="relative">
                 <ImageWithFallback

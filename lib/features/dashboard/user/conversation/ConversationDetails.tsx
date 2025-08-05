@@ -119,6 +119,7 @@ const ConversationDetails = ({
       />
       <AllMessages
         messages={messages}
+        setMessages={setMessages}
         paginationInfo={allMessageData.paginationInfo}
         loggedInUser={loggedInUser}
         otherUser={otherUser}

@@ -64,7 +64,7 @@ const MessageItem = ({
         </div>
       )}
 
-      <div className="max-w-[50%]">
+      <div className="max-w-[60%] lg:max-w-[50%]">
         {message.isDeleted ? (
           <div className="cursor-not-allowed bg-gray px-4 py-2 rounded-full border border-primaryBorder italic text-sm">
             Message deleted
@@ -88,7 +88,7 @@ const MessageItem = ({
                 }`}
               >
                 {message.repliedToMessage?.message?.originalText && (
-                  <div className="flex flex-col gap-1 p-2 bg-black/20 rounded-[5px]">
+                  <div className="w-full flex flex-col gap-1 p-2 bg-black/20 rounded-[5px]">
                     <p className="text-[13px] font-medium">
                       {message.repliedToMessage.senderId === loggedInUser?.id
                         ? "You"
@@ -161,7 +161,7 @@ const MessageItem = ({
                     data-menu
                     className={`${
                       !isSentByLoggedInUser ? "left-[-30px]" : "right-[-30px]"
-                    } w-[150px] absolute top-6 bg-white shadow-lg border border-light p-2 rounded-[5px] z-10`}
+                    } w-[100px] md:w-[150px] absolute top-6 bg-white shadow-lg border border-light p-2 rounded-[5px] z-10`}
                   >
                     <div
                       className={`${

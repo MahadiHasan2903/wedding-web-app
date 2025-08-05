@@ -1,10 +1,11 @@
-// AllMessages.tsx
 import React, {
   useRef,
+  useMemo,
+  Dispatch,
+  useState,
   useEffect,
   useCallback,
-  useMemo,
-  useState,
+  SetStateAction,
 } from "react";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
@@ -17,6 +18,7 @@ import { useSocket } from "@/lib/providers/SocketProvider";
 
 interface PropsType {
   messages: Message[];
+  setMessages: Dispatch<SetStateAction<Message[]>>;
   paginationInfo: {
     totalItems: number;
     itemsPerPage: number;
@@ -34,6 +36,7 @@ interface PropsType {
 
 const AllMessages = ({
   messages,
+  setMessages,
   paginationInfo,
   setReplayToMessage,
   loggedInUser,
@@ -136,25 +139,29 @@ const AllMessages = ({
 
   // Close the menu when clicking outside of it
   useEffect(() => {
-    if (menuRef.current) {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (!menuRef.current?.contains(event.target as Node)) {
-          setOpenMenuMessageId(null);
-        }
-      };
-      document.addEventListener("mousedown", handleClickOutside);
-      return () =>
-        document.removeEventListener("mousedown", handleClickOutside);
-    }
-  }, []);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        openMenuMessageId !== null &&
+        !(event.target as HTMLElement).closest("[data-menu]")
+      ) {
+        setOpenMenuMessageId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openMenuMessageId]);
 
   // Handle message deletion
   const handleDeleteMessage = (messageId: string) => {
-    setOpenMenuMessageId(null);
     socket?.emit("toggleMessageDeletion", {
       messageId,
       isDeleted: true,
     });
+
+    setOpenMenuMessageId(null);
   };
 
   return (
@@ -248,7 +255,7 @@ const AllMessages = ({
                       />
                       {openMenuMessageId === message.id && (
                         <div
-                          ref={menuRef}
+                          data-menu
                           className={`${
                             !isSentByLoggedInUser
                               ? "left-[-30px]"

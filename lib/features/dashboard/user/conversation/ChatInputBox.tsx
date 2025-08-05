@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { IoMdSend } from "react-icons/io";
 import { ImageWithFallback } from "@/lib/components/image";
 import { emoji, voice, attachment } from "@/lib/components/image/icons";
@@ -24,7 +24,16 @@ const ChatInputBox = ({
   handleSendMessage,
 }: PropsType) => {
   const [message, setMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
+  // Focus the input field when replying to a message
+  useEffect(() => {
+    if (replayToMessage && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [replayToMessage]);
+
+  // Function to handle sending the message
   const handleSend = () => {
     if (!message.trim()) {
       return;
@@ -32,7 +41,7 @@ const ChatInputBox = ({
 
     handleSendMessage(message, replayToMessage?.id);
     setMessage("");
-    setReplayToMessage(null); // optionally clear reply state after sending
+    setReplayToMessage(null);
   };
 
   return (
@@ -79,6 +88,7 @@ const ChatInputBox = ({
         </div>
         <div className="w-full relative">
           <input
+            ref={inputRef}
             name="message"
             type="text"
             value={message}

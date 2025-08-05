@@ -8,13 +8,13 @@ import React, {
   SetStateAction,
 } from "react";
 import { CommonButton } from "@/lib/components/buttons";
+import { useSocket } from "@/lib/providers/SocketProvider";
 import { ImageWithFallback } from "@/lib/components/image";
 import { User, SessionUser } from "@/lib/types/user/user.types";
 import { Message } from "@/lib/types/conversation/message.types";
-import { avatar as defaultAvatar, dots } from "@/lib/components/image/icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { avatar as defaultAvatar, dots } from "@/lib/components/image/icons";
 import conversationPlaceholder from "@/public/images/common/conversation-placeholder.svg";
-import { useSocket } from "@/lib/providers/SocketProvider";
 
 interface PropsType {
   messages: Message[];
@@ -43,10 +43,9 @@ const AllMessages = ({
   otherUser,
 }: PropsType) => {
   const router = useRouter();
-  const { socket } = useSocket();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const menuRef = useRef<HTMLDivElement | null>(null);
+  const { socket, isConnected } = useSocket();
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const [openMenuMessageId, setOpenMenuMessageId] = useState<string | null>(
@@ -136,6 +135,27 @@ const AllMessages = ({
     const container = scrollContainerRef.current;
     container.scrollTop = container.scrollHeight;
   }, [messagesToShow]);
+
+  // Listen for message deletion toggled events from the socket
+  useEffect(() => {
+    if (!socket || !isConnected) {
+      return;
+    }
+
+    const handleMessageDeletionToggled = (updatedMessage: Message) => {
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.id === updatedMessage.id ? { ...msg, ...updatedMessage } : msg
+        )
+      );
+    };
+
+    socket.on("messageDeletionToggled", handleMessageDeletionToggled);
+
+    return () => {
+      socket.off("messageDeletionToggled", handleMessageDeletionToggled);
+    };
+  }, [socket, setMessages]);
 
   // Close the menu when clicking outside of it
   useEffect(() => {

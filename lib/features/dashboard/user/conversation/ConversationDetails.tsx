@@ -5,9 +5,9 @@ import AllMessages from "./AllMessages";
 import ChatInputBox from "./ChatInputBox";
 import { useSession } from "next-auth/react";
 import ConversationHeader from "./ConversationHeader";
+import { useSocket } from "@/lib/providers/SocketProvider";
 import { Message } from "@/lib/types/conversation/message.types";
 import { Conversation } from "@/lib/types/conversation/conversation.types";
-import { useSocket } from "@/lib/providers/SocketProvider";
 
 interface PropsType {
   conversationDetails: Conversation;
@@ -27,17 +27,18 @@ interface PropsType {
 }
 
 const ConversationDetails = ({
-  conversationDetails,
   allMessageData,
+  conversationDetails,
 }: PropsType) => {
-  const { socket, isConnected } = useSocket();
   const { data: session } = useSession();
+  const { socket, isConnected } = useSocket();
   const [isOtherUserOnline, setIsOtherUserOnline] = useState(false);
   const [replayToMessage, setReplayToMessage] = useState<Message | null>(null);
   const [messages, setMessages] = useState<Message[]>(
     allMessageData.allMessages
   );
 
+  // Determine the logged-in user and other user in the conversation
   const loggedInUser = session?.user?.data;
   const isCurrentUserSender = conversationDetails.senderId === loggedInUser?.id;
   const otherUser = useMemo(
@@ -48,7 +49,7 @@ const ConversationDetails = ({
     [isCurrentUserSender, conversationDetails]
   );
 
-  // Function to handle new incoming messages
+  // Handle incoming new messages
   const handleNewMessage = useCallback((msg: Message) => {
     setMessages((prevMessages) => {
       if (msg.repliedToMessage === null && msg.repliedToMessageId) {
@@ -63,14 +64,14 @@ const ConversationDetails = ({
     });
   }, []);
 
-  // Function to handle edited messages
+  // Handle message edits
   const handleEditedMessage = useCallback((msg: Message) => {
     setMessages((prev) => prev.map((m) => (m.id === msg.id ? msg : m)));
   }, []);
 
-  // Function to handle user status changes
+  // Handle user online status updates
   const handleUserStatus = useCallback(
-    ({ userId, isOnline }: any) => {
+    ({ userId, isOnline }: { userId: string; isOnline: boolean }) => {
       if (userId === otherUser?.id) {
         setIsOtherUserOnline(isOnline);
       }
@@ -78,7 +79,32 @@ const ConversationDetails = ({
     [otherUser?.id]
   );
 
-  // This effect sets up the socket listeners for new messages, edited messages, and user status changes
+  // Check other user's status on mount or ID change (with retry)
+  useEffect(() => {
+    if (!socket || !isConnected || !otherUser?.id) {
+      return;
+    }
+
+    setIsOtherUserOnline(false); // Reset to false on ID change
+
+    let attempt = 0;
+    const maxAttempts = 3;
+
+    const checkStatus = () => {
+      if (attempt >= maxAttempts) {
+        return;
+      }
+      socket.emit("checkUserOnlineStatus", { userIdToCheck: otherUser.id });
+      attempt++;
+    };
+
+    const interval = setInterval(checkStatus, 1000); // Retry every 1s
+    checkStatus(); // Initial attempt
+
+    return () => clearInterval(interval);
+  }, [socket, isConnected, otherUser?.id]);
+
+  // Setup socket event listeners
   useEffect(() => {
     if (!socket) return;
 
@@ -93,12 +119,7 @@ const ConversationDetails = ({
     };
   }, [socket, handleNewMessage, handleEditedMessage, handleUserStatus]);
 
-  // This effect sets the initial online status of the other user
-  useEffect(() => {
-    setIsOtherUserOnline(false);
-  }, [otherUser?.id]);
-
-  // Function to handle sending messages
+  // Send message handler
   const handleSendMessage = (text: string, replyToMessageId?: string) => {
     if (!text.trim() || !isConnected) return;
 

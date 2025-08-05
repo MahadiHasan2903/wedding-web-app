@@ -7,6 +7,7 @@ import React, {
   useCallback,
   SetStateAction,
 } from "react";
+import { RiTranslate } from "react-icons/ri";
 import { CommonButton } from "@/lib/components/buttons";
 import { useSocket } from "@/lib/providers/SocketProvider";
 import { ImageWithFallback } from "@/lib/components/image";
@@ -53,7 +54,11 @@ const AllMessages = ({
   const [openMenuMessageId, setOpenMenuMessageId] = useState<string | null>(
     null
   );
+  const [translatedLanguages, setTranslatedLanguages] = useState<{
+    [messageId: string]: "en" | "es" | "fr" | null;
+  }>({});
 
+  // Get pagination info from props
   const { currentPage, itemsPerPage, totalItems } = paginationInfo;
 
   // Function to get the URL with updated search parameters
@@ -66,6 +71,14 @@ const AllMessages = ({
     },
     [searchParams, currentPage, pathname]
   );
+
+  // Handle translation for messages
+  const handleTranslation = (messageId: string, lang: "en" | "es" | "fr") => {
+    setTranslatedLanguages((prev) => ({
+      ...prev,
+      [messageId]: lang,
+    }));
+  };
 
   // Update the URL with search parameters when currentPage or itemsPerPage changes
   useEffect(() => {
@@ -238,7 +251,7 @@ const AllMessages = ({
                     } items-center gap-2`}
                   >
                     <div
-                      className={`w-fit flex flex-col gap-2 items-start px-3 pt-3 pb-2 rounded-lg text-sm ${
+                      className={`w-fit flex flex-col gap-3 items-start px-3 pt-3 pb-2 rounded-lg text-sm ${
                         isSentByLoggedInUser
                           ? "bg-primary text-white rounded-br-none"
                           : "bg-light text-black rounded-bl-none"
@@ -258,9 +271,53 @@ const AllMessages = ({
                         </div>
                       )}
 
-                      <p className="text-[14px] font-normal">
-                        {message.message?.originalText || ""}
-                      </p>
+                      <div className="w-full flex flex-col items-start gap-3">
+                        <p className="text-[14px] font-normal">
+                          {translatedLanguages[message.id] === "en" &&
+                          message.message.translationEn
+                            ? message.message.translationEn
+                            : translatedLanguages[message.id] === "es" &&
+                              message.message.translationEs
+                            ? message.message.translationEs
+                            : translatedLanguages[message.id] === "fr" &&
+                              message.message.translationFr
+                            ? message.message.translationFr
+                            : message.message.originalText}
+                        </p>
+
+                        <div className="flex items-center gap-1 italic">
+                          <RiTranslate />
+                          <p className="font-bold text-[10px]">
+                            Translate to{" "}
+                            <span
+                              className="underline cursor-pointer"
+                              onClick={() =>
+                                handleTranslation(message.id, "en")
+                              }
+                            >
+                              English
+                            </span>{" "}
+                            /{" "}
+                            <span
+                              className="underline cursor-pointer"
+                              onClick={() =>
+                                handleTranslation(message.id, "es")
+                              }
+                            >
+                              Spanish
+                            </span>{" "}
+                            /{" "}
+                            <span
+                              className="underline cursor-pointer"
+                              onClick={() =>
+                                handleTranslation(message.id, "fr")
+                              }
+                            >
+                              French
+                            </span>
+                          </p>
+                        </div>
+                      </div>
                     </div>
                     <div className="relative">
                       <ImageWithFallback

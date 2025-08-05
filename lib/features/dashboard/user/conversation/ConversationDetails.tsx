@@ -34,6 +34,7 @@ const ConversationDetails = ({
   const { socket, isConnected } = useSocket();
   const [isOtherUserOnline, setIsOtherUserOnline] = useState(false);
   const [replayToMessage, setReplayToMessage] = useState<Message | null>(null);
+  const [updatedMessage, setUpdatedMessage] = useState<Message | null>(null);
   const [messages, setMessages] = useState<Message[]>(
     allMessageData.allMessages
   );
@@ -66,7 +67,9 @@ const ConversationDetails = ({
 
   // Handle message edits
   const handleEditedMessage = useCallback((msg: Message) => {
-    setMessages((prev) => prev.map((m) => (m.id === msg.id ? msg : m)));
+    setMessages((prevMessages) =>
+      prevMessages.map((m) => (m.id === msg.id ? { ...m, ...msg } : m))
+    );
   }, []);
 
   // Handle user online status updates
@@ -119,10 +122,11 @@ const ConversationDetails = ({
     };
   }, [socket, handleNewMessage, handleEditedMessage, handleUserStatus]);
 
-  // Send message handler
+  // Send a message handler
   const handleSendMessage = (text: string, replyToMessageId?: string) => {
-    if (!text.trim() || !isConnected) return;
-
+    if (!text.trim() || !isConnected) {
+      return;
+    }
     socket?.emit("sendMessage", {
       senderId: loggedInUser?.id,
       receiverId: otherUser?.id,
@@ -132,8 +136,22 @@ const ConversationDetails = ({
     });
   };
 
+  // Function to handle editing a message
+  const handleEditMessage = (messageId: string, text: string) => {
+    if (!text.trim() || !isConnected) {
+      return;
+    }
+
+    socket?.emit("editMessage", {
+      messageId: messageId,
+      updatedMessage: text,
+      senderId: loggedInUser?.id,
+      receiverId: otherUser?.id,
+    });
+  };
+
   return (
-    <div className="w-full h-full flex flex-col items-start justify-between rounded-0 lg:rounded-[10px] bg-white py-[16px]">
+    <div className="w-full h-full flex flex-col items-start justify-between rounded-0 lg:rounded-[10px] bg-white">
       <ConversationHeader
         isOtherUserOnline={isOtherUserOnline}
         conversationDetails={conversationDetails}
@@ -145,12 +163,16 @@ const ConversationDetails = ({
         loggedInUser={loggedInUser}
         otherUser={otherUser}
         setReplayToMessage={setReplayToMessage}
+        setUpdatedMessage={setUpdatedMessage}
       />
       <ChatInputBox
-        handleSendMessage={handleSendMessage}
-        loggedInUser={loggedInUser}
         otherUser={otherUser}
+        loggedInUser={loggedInUser}
+        updatedMessage={updatedMessage}
         replayToMessage={replayToMessage}
+        setUpdatedMessage={setUpdatedMessage}
+        handleSendMessage={handleSendMessage}
+        handleEditMessage={handleEditMessage}
         setReplayToMessage={setReplayToMessage}
       />
     </div>

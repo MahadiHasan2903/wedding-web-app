@@ -46,7 +46,7 @@ const ConversationHeader = ({
   }, [menuOpen]);
 
   return (
-    <div className="w-full border-b-[3px] border-light">
+    <div className="w-full border-b-[3px] border-light pt-[16px]">
       <div className="w-full relative flex items-center justify-between pb-[14px] px-[18px]">
         <div className="w-1/2 gap-2 flex items-center">
           <div className="relative w-[35px] h-[35px] flex items-center justify-center">

@@ -18,7 +18,6 @@ import conversationPlaceholder from "@/public/images/common/conversation-placeho
 
 interface PropsType {
   messages: Message[];
-  setMessages: Dispatch<SetStateAction<Message[]>>;
   paginationInfo: {
     totalItems: number;
     itemsPerPage: number;
@@ -29,18 +28,21 @@ interface PropsType {
     prevPage: number | null;
     nextPage: number | null;
   };
-  loggedInUser?: SessionUser;
   otherUser?: User;
+  loggedInUser?: SessionUser;
+  setMessages: Dispatch<SetStateAction<Message[]>>;
   setReplayToMessage: (message: Message | null) => void;
+  setUpdatedMessage: (message: Message | null) => void;
 }
 
 const AllMessages = ({
   messages,
-  setMessages,
-  paginationInfo,
-  setReplayToMessage,
-  loggedInUser,
   otherUser,
+  setMessages,
+  loggedInUser,
+  paginationInfo,
+  setUpdatedMessage,
+  setReplayToMessage,
 }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -117,7 +119,7 @@ const AllMessages = ({
   const sortedMessages = useMemo(() => {
     return [...messages].sort(
       (a, b) =>
-        new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime()
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
   }, [messages]);
 
@@ -292,6 +294,7 @@ const AllMessages = ({
                               label="Replay"
                               className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
                               onClick={() => {
+                                setUpdatedMessage(null);
                                 setReplayToMessage(message);
                                 setOpenMenuMessageId(null);
                               }}
@@ -305,11 +308,21 @@ const AllMessages = ({
                             )}
                             {isSentByLoggedInUser && (
                               <>
-                                <CommonButton
-                                  label="Edit"
-                                  className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
-                                  onClick={() => setOpenMenuMessageId(null)}
-                                />
+                                {isSentByLoggedInUser &&
+                                  Date.now() -
+                                    new Date(message.createdAt).getTime() <
+                                    5 * 60 * 1000 && (
+                                    <CommonButton
+                                      label="Edit"
+                                      className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
+                                      onClick={() => {
+                                        setReplayToMessage(null);
+                                        setUpdatedMessage(message);
+                                        setOpenMenuMessageId(null);
+                                      }}
+                                    />
+                                  )}
+
                                 <CommonButton
                                   label="Delete"
                                   className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"

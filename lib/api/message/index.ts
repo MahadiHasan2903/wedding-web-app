@@ -29,7 +29,7 @@ const getMessagesByConversationId = async (
   pageSize: number = 10
 ) => {
   const response = await fetchTyped<GetConversationMessagesResponse>(
-    `${BASE_URL}/message/conversation/${conversationId}?page=${page}&pageSize=${pageSize}&sort=updatedAt,DESC`,
+    `${BASE_URL}/message/conversation/${conversationId}?page=${page}&pageSize=${pageSize}&sort=createdAt,DESC`,
     {
       method: "GET",
       cache: "no-store",

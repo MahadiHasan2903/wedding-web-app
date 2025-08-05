@@ -26,10 +26,6 @@ interface PropsType {
   };
 }
 
-interface IncomingMessage extends Message {
-  repliedToMessageId?: string;
-}
-
 const ConversationDetails = ({
   conversationDetails,
   allMessageData,
@@ -53,7 +49,7 @@ const ConversationDetails = ({
   );
 
   // Function to handle new incoming messages
-  const handleNewMessage = useCallback((msg: IncomingMessage) => {
+  const handleNewMessage = useCallback((msg: Message) => {
     setMessages((prevMessages) => {
       if (msg.repliedToMessage === null && msg.repliedToMessageId) {
         const repliedMsg = prevMessages.find(

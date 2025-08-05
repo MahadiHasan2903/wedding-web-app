@@ -16,6 +16,7 @@ export interface Message {
   status: string;
   readAt: string | null;
   repliedToMessage: Message | null;
+  repliedToMessageId?: string;
   attachments: Media[] | null;
   isDeleted: boolean;
   createdAt: string;

@@ -6,8 +6,8 @@ import ChatInputBox from "./ChatInputBox";
 import { useSession } from "next-auth/react";
 import ConversationHeader from "./ConversationHeader";
 import { useSocket } from "@/lib/providers/SocketProvider";
-import { Message } from "@/lib/types/conversation/message.types";
-import { Conversation } from "@/lib/types/conversation/conversation.types";
+import { Message } from "@/lib/types/chat/message.types";
+import { Conversation } from "@/lib/types/chat/conversation.types";
 
 interface PropsType {
   conversationDetails: Conversation;

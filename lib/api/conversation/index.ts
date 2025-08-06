@@ -1,7 +1,7 @@
 import { fetchTyped } from "../client";
 import { BASE_URL } from "@/lib/config/constants";
 import { PaginatedResponse } from "@/lib/types/common/common.types";
-import { Conversation } from "@/lib/types/conversation/conversation.types";
+import { Conversation } from "@/lib/types/chat/conversation.types";
 
 type GetAllConversationResponse = PaginatedResponse<Conversation>;
 

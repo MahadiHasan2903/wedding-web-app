@@ -12,7 +12,7 @@ import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
 import { sendMessage, whiteHeart } from "@/lib/components/image/icons";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
-import { createConversationAction } from "@/lib/action/conversation/conversation.action";
+import { createConversationAction } from "@/lib/action/chat/conversation.action";
 
 interface LikedProfileCardProps {
   user: User;

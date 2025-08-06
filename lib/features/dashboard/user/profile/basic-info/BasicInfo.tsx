@@ -31,7 +31,7 @@ import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
 import { updateLikeDisLikeStatusAction } from "@/lib/action/user/userInteraction.action";
-import { createConversationAction } from "@/lib/action/conversation/conversation.action";
+import { createConversationAction } from "@/lib/action/chat/conversation.action";
 
 const iconMap: Record<string, StaticImageData> = {
   facebook,

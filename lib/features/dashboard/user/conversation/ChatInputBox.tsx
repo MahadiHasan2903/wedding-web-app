@@ -5,7 +5,7 @@ import { IoMdSend } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 import { ImageWithFallback } from "@/lib/components/image";
 import { SessionUser, User } from "@/lib/types/user/user.types";
-import { Message } from "@/lib/types/conversation/message.types";
+import { Message } from "@/lib/types/chat/message.types";
 import { emoji, voice, attachment } from "@/lib/components/image/icons";
 
 interface PropsType {

@@ -8,7 +8,7 @@ import {
   addConversationSchema,
   AddConversationResponseType,
   addConversationResponseSchema,
-} from "@/lib/schema/conversation/conversation.schema";
+} from "@/lib/schema/chat/conversation.schema";
 import { Result } from "@/lib/types/common/common.types";
 
 /**

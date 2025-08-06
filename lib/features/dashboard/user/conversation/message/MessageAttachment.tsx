@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { FaPlayCircle } from "react-icons/fa";
 import AttachmentPreview from "./AttachmentPreview";
 import { Media } from "@/lib/types/common/common.types";
@@ -6,10 +6,16 @@ import { ImageWithFallback } from "@/lib/components/image";
 import { useVideoThumbnail } from "@/lib/hooks/useVideoThumbnail";
 
 interface PropsType {
+  isSentByLoggedInUser: boolean;
   attachment: Media;
+  setDeletedAttachments?: Dispatch<SetStateAction<string[]>>;
 }
 
-const MessageAttachment = ({ attachment }: PropsType) => {
+const MessageAttachment = ({
+  isSentByLoggedInUser,
+  attachment,
+  setDeletedAttachments,
+}: PropsType) => {
   const [open, setOpen] = useState(false);
   const isVideo = attachment.mimetype.startsWith("video");
   const thumbnail = useVideoThumbnail(attachment.url);
@@ -50,8 +56,10 @@ const MessageAttachment = ({ attachment }: PropsType) => {
       {open && (
         <AttachmentPreview
           open={open}
-          onClose={() => setOpen(false)}
+          setOpen={setOpen}
           attachment={attachment}
+          isSentByLoggedInUser={isSentByLoggedInUser}
+          setDeletedAttachments={setDeletedAttachments}
         />
       )}
     </>

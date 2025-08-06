@@ -11,7 +11,7 @@ import MessageItem from "./MessageItem";
 import { useSocket } from "@/lib/providers/SocketProvider";
 import { ImageWithFallback } from "@/lib/components/image";
 import { User, SessionUser } from "@/lib/types/user/user.types";
-import { Message } from "@/lib/types/conversation/message.types";
+import { Message } from "@/lib/types/chat/message.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import conversationPlaceholder from "@/public/images/common/conversation-placeholder.svg";
 

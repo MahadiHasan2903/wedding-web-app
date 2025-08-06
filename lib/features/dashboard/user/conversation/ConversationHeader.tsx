@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { avatar, dots } from "@/lib/components/image/icons";
-import { Conversation } from "@/lib/types/conversation/conversation.types";
+import { Conversation } from "@/lib/types/chat/conversation.types";
 
 interface PropsType {
   conversationDetails: Conversation;

@@ -14,7 +14,7 @@ import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { formatRelativeTimeShort } from "@/lib/utils/date/dateUtils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Conversation } from "@/lib/types/conversation/conversation.types";
+import { Conversation } from "@/lib/types/chat/conversation.types";
 import { useSocket } from "@/lib/providers/SocketProvider";
 
 interface PropsType {

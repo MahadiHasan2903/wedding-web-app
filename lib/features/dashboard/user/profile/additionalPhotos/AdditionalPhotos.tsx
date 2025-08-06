@@ -27,6 +27,7 @@ const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
   const [openAlertModal, setOpenAlertModal] = useState(false);
   const [selectedPhotoId, setSelectedPhotoId] = useState<string | null>(null);
 
+  // Function to handle the deletion of a selected photo
   const handleDeleteFile = async () => {
     if (!selectedPhotoId) return;
 

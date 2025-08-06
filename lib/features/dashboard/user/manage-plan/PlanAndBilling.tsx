@@ -5,8 +5,9 @@ import { useSession } from "next-auth/react";
 import { CardTitle } from "@/lib/components/heading";
 import { change } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
-import { formatDateString2 } from "@/lib/utils/date/dateUtils";
 import { ImageWithFallback } from "@/lib/components/image";
+import { hasActiveVipMembership } from "@/lib/utils/helpers";
+import { formatDateString2 } from "@/lib/utils/date/dateUtils";
 
 const PlanAndBilling = () => {
   const { data: session } = useSession();
@@ -17,10 +18,7 @@ const PlanAndBilling = () => {
   const planType = categoryInfo?.category;
   const rawFee = categoryInfo?.sellPrice ?? 0;
   const packageFee = Number(rawFee).toFixed(2);
-
-  const membershipId = packageInfo?.id;
-  const isPremiumMembership = [2, 3].includes(membershipId ?? -1);
-  const isActive = membership?.status === "succeeded";
+  const isVipUser = hasActiveVipMembership(session?.user.data);
   const expiryDate = formatDateString2(membership?.purchasedAt);
 
   //Function to get plan label
@@ -97,7 +95,7 @@ const PlanAndBilling = () => {
                   {getPlanLabel()} Plan
                 </p>
                 <div className="w-full flex items-center justify-end gap-[6px]">
-                  {!isPremiumMembership && (
+                  {isVipUser && (
                     <CommonButton
                       label="Premium"
                       className="w-fit bg-vipHeavy text-white text-[10px] font-normal rounded-full px-[10px] py-[5px]"
@@ -105,17 +103,17 @@ const PlanAndBilling = () => {
                   )}
                   <div
                     className={`${
-                      isActive
+                      isVipUser
                         ? "text-green bg-[#D0FFEF]"
                         : "text-primaryBorder bg-gray"
                     } w-fit flex items-center gap-1 text-[10px] font-normal rounded-full px-[10px] py-[5px]`}
                   >
                     <div
                       className={`${
-                        isActive ? "bg-green" : "bg-primaryBorder"
+                        isVipUser ? "bg-green" : "bg-primaryBorder"
                       } w-[5px] h-[5px] rounded-full`}
                     />
-                    <p>{isActive ? "Active" : "Inactive"}</p>
+                    <p>{isVipUser ? "Active" : "Inactive"}</p>
                   </div>
                 </div>
               </div>

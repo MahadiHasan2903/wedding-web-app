@@ -199,7 +199,9 @@ const ConversationList = ({
                     <div className="w-full flex items-center justify-between">
                       <p className="text-[12px] font-normal truncate">
                         {conversation.senderId === userId && <span>You: </span>}
-                        {conversation.lastMessage}
+                        {conversation.lastMessage === "[attachment]"
+                          ? "Sent attachments"
+                          : conversation.lastMessage}
                       </p>
                       <p className="text-[12px] font-normal">
                         {formatRelativeTimeShort(conversation.updatedAt)}

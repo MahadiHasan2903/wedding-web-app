@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import AllMessages from "./AllMessages";
+import AllMessages from "./message/AllMessages";
 import ChatInputBox from "./ChatInputBox";
 import { useSession } from "next-auth/react";
 import ConversationHeader from "./ConversationHeader";

@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { getSession } from "next-auth/react";
 import VerificationModal from "./VerificationModal";
+import { signIn, useSession } from "next-auth/react";
 import { SubHeading } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,6 +24,7 @@ interface PropsType {
 
 const LoginForm = ({ callbackUrl }: PropsType) => {
   const router = useRouter();
+  const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState<string>("");
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
@@ -45,21 +47,29 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
     try {
       setLoading(true);
 
-      // Call next-auth signIn with credentials provider (no redirect)
       const response = await signIn("credentials", {
         ...data,
         redirect: false,
       });
 
-      if (response && !response.ok) {
-        toast.error("Login failed. Please check your credentials");
-      } else {
+      if (response?.ok) {
         toast.success("Logged in successfully");
+
+        const updatedSession = await getSession();
+
+        const user = updatedSession?.user;
+        const accessToken = user?.accessToken;
+        const isAdmin = user?.data.userRole === "admin";
+
         if (callbackUrl) {
           router.push(callbackUrl);
+        } else if (accessToken) {
+          router.push(isAdmin ? "/overview" : "/my-profile");
         } else {
           router.push("/");
         }
+      } else {
+        toast.error("Login failed. Please check your credentials");
       }
     } catch {
       toast.error("An error occurred during login.");

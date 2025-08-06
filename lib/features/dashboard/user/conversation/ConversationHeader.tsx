@@ -90,10 +90,7 @@ const ConversationHeader = ({
             <div className="absolute top-6 right-[-8px] bg-white shadow-lg border border-light py-[10px] px-[25px] rounded-[5px]">
               <div className="absolute shadow-lg w-2 h-2 bg-white border-t border-l border-light rotate-45 top-[-5px] right-3 z-0" />
               <CommonButton
-                onClick={() => {
-                  console.log("Triggered");
-                  setMenuOpen(false);
-                }}
+                onClick={() => setMenuOpen(false)}
                 label="Report Profile"
                 className="text-[14px]"
               />

@@ -1,12 +1,11 @@
 import { RiTranslate } from "react-icons/ri";
 import MessageAttachment from "./MessageAttachment";
 import { CommonButton } from "@/lib/components/buttons";
+import { Message } from "@/lib/types/chat/message.types";
 import { ImageWithFallback } from "@/lib/components/image";
 import { avatar, dots } from "@/lib/components/image/icons";
 import { User, SessionUser } from "@/lib/types/user/user.types";
-import { Message } from "@/lib/types/chat/message.types";
 import { formatRelativeTimeLong } from "@/lib/utils/date/dateUtils";
-import { useState } from "react";
 
 interface Props {
   index: number;
@@ -37,8 +36,6 @@ const MessageItem = ({
   handleDeleteMessage,
   setOpenMenuMessageId,
 }: Props) => {
-  const [deletedAttachments, setDeletedAttachments] = useState<string[]>([]);
-
   const isSentByLoggedInUser = message.senderId === loggedInUser?.id;
   const isFirstInGroup =
     index === 0 || array[index - 1].senderId !== message.senderId;
@@ -91,20 +88,14 @@ const MessageItem = ({
               >
                 {message.attachments &&
                   message.attachments.length > 0 &&
-                  message.attachments
-                    .filter(
-                      (attachment) =>
-                        !deletedAttachments.includes(attachment.id)
-                    )
-
-                    .map((attachment, index) => (
-                      <MessageAttachment
-                        key={index}
-                        isSentByLoggedInUser={isSentByLoggedInUser}
-                        attachment={attachment}
-                        setDeletedAttachments={setDeletedAttachments}
-                      />
-                    ))}
+                  message.attachments.map((attachment, index) => (
+                    <MessageAttachment
+                      key={index}
+                      attachment={attachment}
+                      messageId={message.id}
+                      isSentByLoggedInUser={isSentByLoggedInUser}
+                    />
+                  ))}
               </div>
               <div>
                 {message.message && (

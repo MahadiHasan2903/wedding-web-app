@@ -12,10 +12,10 @@ import { useSession } from "next-auth/react";
 import { avatar } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import { useSocket } from "@/lib/providers/SocketProvider";
+import { Conversation } from "@/lib/types/chat/conversation.types";
 import { formatRelativeTimeShort } from "@/lib/utils/date/dateUtils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Conversation } from "@/lib/types/chat/conversation.types";
-import { useSocket } from "@/lib/providers/SocketProvider";
 
 interface PropsType {
   allMyConversationData: {
@@ -139,6 +139,8 @@ const ConversationList = ({
 
   // Memoize conversations to show based on pageSize
   const pageSize = Number(searchParams.get("pageSize") || itemsPerPage);
+
+  // Memoize the conversations to show based on the current page size
   const conversationsToShow = useMemo(
     () => allMyConversationData.allConversations.slice(0, pageSize),
     [allMyConversationData.allConversations, pageSize]
@@ -160,7 +162,7 @@ const ConversationList = ({
         {allMyConversationData.allConversations.length === 0 ? (
           <p className="text-sm text-center">No conversations found</p>
         ) : (
-          conversationsToShow.map((conversation) => {
+          conversationsToShow.map((conversation, index) => {
             const isCurrentUserSender = conversation.senderId === userId;
             const otherUser = isCurrentUserSender
               ? conversation.receiver
@@ -171,7 +173,7 @@ const ConversationList = ({
             return (
               <Link
                 href={`/conversations/${conversation.id}`}
-                key={conversation.id}
+                key={index}
                 className={`w-full flex items-center gap-3 p-2 transition cursor-pointer hover:bg-light px-[18px] ${
                   conversation.id === conversationId ? "bg-light" : ""
                 }`}
@@ -199,9 +201,14 @@ const ConversationList = ({
                     <div className="w-full flex items-center justify-between">
                       <p className="text-[12px] font-normal truncate">
                         {conversation.senderId === userId && <span>You: </span>}
-                        {conversation.lastMessage === "[attachment]"
-                          ? "Sent attachments"
-                          : conversation.lastMessage}
+                        {conversation.lastMessage.isDeleted
+                          ? "Message deleted"
+                          : conversation.lastMessage.message
+                          ? conversation.lastMessage.message.originalText
+                          : conversation.lastMessage.attachments &&
+                            conversation.lastMessage.attachments.length > 0
+                          ? "Sent attachment"
+                          : "No message content"}
                       </p>
                       <p className="text-[12px] font-normal">
                         {formatRelativeTimeShort(conversation.updatedAt)}

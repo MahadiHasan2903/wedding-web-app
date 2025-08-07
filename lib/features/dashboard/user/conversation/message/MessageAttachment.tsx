@@ -16,8 +16,12 @@ const MessageAttachment = ({
   attachment,
   messageId,
 }: PropsType) => {
+  if (!attachment) {
+    return;
+  }
+
   const [open, setOpen] = useState(false);
-  const isVideo = attachment.mimetype.startsWith("video");
+  const isVideo = attachment.mimetype?.startsWith("video") ?? false;
   const thumbnail = useVideoThumbnail(attachment.url);
 
   return (

@@ -82,13 +82,37 @@ const ConversationDetails = ({
     [otherUser?.id]
   );
 
+  const handleAttachmentDeleted = useCallback(
+    ({
+      messageId,
+      attachmentId,
+    }: {
+      messageId: string;
+      attachmentId: string;
+    }) => {
+      setMessages((prevMessages) =>
+        prevMessages.map((msg) =>
+          msg.id === messageId
+            ? {
+                ...msg,
+                attachments:
+                  msg.attachments?.filter((att) => att.id !== attachmentId) ||
+                  null,
+              }
+            : msg
+        )
+      );
+    },
+    []
+  );
+
   // Check other user's status on mount or ID change (with retry)
   useEffect(() => {
     if (!socket || !isConnected || !otherUser?.id) {
       return;
     }
 
-    setIsOtherUserOnline(false); // Reset to false on ID change
+    setIsOtherUserOnline(false);
 
     let attempt = 0;
     const maxAttempts = 3;
@@ -102,23 +126,27 @@ const ConversationDetails = ({
     };
 
     const interval = setInterval(checkStatus, 1000); // Retry every 1s
-    checkStatus(); // Initial attempt
+    checkStatus();
 
     return () => clearInterval(interval);
   }, [socket, isConnected, otherUser?.id]);
 
   // Setup socket event listeners
   useEffect(() => {
-    if (!socket) return;
+    if (!socket) {
+      return;
+    }
 
     socket.on("newMessage", handleNewMessage);
     socket.on("messageEdited", handleEditedMessage);
     socket.on("userStatusChanged", handleUserStatus);
+    socket.on("attachmentDeleted", handleAttachmentDeleted);
 
     return () => {
       socket.off("newMessage", handleNewMessage);
       socket.off("messageEdited", handleEditedMessage);
       socket.off("userStatusChanged", handleUserStatus);
+      socket.off("attachmentDeleted", handleAttachmentDeleted);
     };
   }, [socket, handleNewMessage, handleEditedMessage, handleUserStatus]);
 

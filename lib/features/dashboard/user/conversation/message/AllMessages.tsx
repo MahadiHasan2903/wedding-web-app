@@ -8,10 +8,10 @@ import React, {
   SetStateAction,
 } from "react";
 import MessageItem from "./MessageItem";
+import { Message } from "@/lib/types/chat/message.types";
 import { useSocket } from "@/lib/providers/SocketProvider";
 import { ImageWithFallback } from "@/lib/components/image";
 import { User, SessionUser } from "@/lib/types/user/user.types";
-import { Message } from "@/lib/types/chat/message.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import conversationPlaceholder from "@/public/images/common/conversation-placeholder.svg";
 
@@ -189,6 +189,9 @@ const AllMessages = ({
 
   // Handle message deletion
   const handleDeleteMessage = (messageId: string) => {
+    if (!isConnected) {
+      return;
+    }
     socket?.emit("toggleMessageDeletion", {
       messageId,
       isDeleted: true,

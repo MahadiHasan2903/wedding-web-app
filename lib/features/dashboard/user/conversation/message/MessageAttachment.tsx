@@ -8,13 +8,13 @@ import { useVideoThumbnail } from "@/lib/hooks/useVideoThumbnail";
 interface PropsType {
   isSentByLoggedInUser: boolean;
   attachment: Media;
-  setDeletedAttachments?: Dispatch<SetStateAction<string[]>>;
+  messageId: string;
 }
 
 const MessageAttachment = ({
   isSentByLoggedInUser,
   attachment,
-  setDeletedAttachments,
+  messageId,
 }: PropsType) => {
   const [open, setOpen] = useState(false);
   const isVideo = attachment.mimetype.startsWith("video");
@@ -58,8 +58,8 @@ const MessageAttachment = ({
           open={open}
           setOpen={setOpen}
           attachment={attachment}
+          messageId={messageId}
           isSentByLoggedInUser={isSentByLoggedInUser}
-          setDeletedAttachments={setDeletedAttachments}
         />
       )}
     </>

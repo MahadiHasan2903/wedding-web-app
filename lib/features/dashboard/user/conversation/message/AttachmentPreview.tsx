@@ -1,56 +1,64 @@
 "use client";
 
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { Media } from "@/lib/types/common/common.types";
-import { ImageWithFallback } from "@/lib/components/image";
-import { MdDelete } from "react-icons/md";
-import { RiCollapseDiagonalLine } from "react-icons/ri";
-import { AlertModal } from "@/lib/components/modal";
-import { deleteMessageAttachmentAction } from "@/lib/action/chat/message.action";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { MdDelete } from "react-icons/md";
+import { ImDownload } from "react-icons/im";
+import { AlertModal } from "@/lib/components/modal";
+import { Media } from "@/lib/types/common/common.types";
+import { RiCollapseDiagonalLine } from "react-icons/ri";
+import { ImageWithFallback } from "@/lib/components/image";
+import { useSocket } from "@/lib/providers/SocketProvider";
 
 interface PropsType {
   open: boolean;
   attachment: Media;
+  messageId: string;
   isSentByLoggedInUser: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  setDeletedAttachments?: Dispatch<SetStateAction<string[]>>;
 }
 
 const AttachmentPreview = ({
   open,
   setOpen,
+  messageId,
   attachment,
   isSentByLoggedInUser,
-  setDeletedAttachments,
 }: PropsType) => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { socket, isConnected } = useSocket();
   const [openAlertModal, setOpenAlertModal] = useState(false);
 
   // Function to handle the deletion of a attachment
-  const handleDeleteAttachment = async () => {
-    if (!attachment || !setDeletedAttachments || !isSentByLoggedInUser) {
+  const handleDeleteAttachment = () => {
+    if (!isConnected) {
       return;
     }
-
-    setLoading(true);
-    const deleteAttachmentResponse = await deleteMessageAttachmentAction(
-      attachment.id
-    );
-
-    toast(deleteAttachmentResponse.message, {
-      type: deleteAttachmentResponse.status ? "success" : "error",
+    socket?.emit("deleteAttachment", {
+      attachmentId: attachment.id,
+      messageId: messageId,
     });
+    setOpenAlertModal(false);
+    setOpen(false);
+  };
 
-    if (deleteAttachmentResponse.status) {
-      setDeletedAttachments((prev) => [...prev, attachment.id]);
-      setOpenAlertModal(false);
-      setOpen(false);
-      router.refresh();
+  // Function to handle the download of the attachment
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(attachment.url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = attachment.originalName || "attachment";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      toast.error("Failed to download attachment");
+      console.error("Download error:", error);
     }
-    setLoading(false);
   };
 
   if (!open) {
@@ -71,6 +79,12 @@ const AttachmentPreview = ({
               onClick={() => setOpenAlertModal(true)}
             />
           )}
+
+          <ImDownload
+            size={20}
+            className="text-secondary cursor-pointer"
+            onClick={handleDownload}
+          />
 
           <RiCollapseDiagonalLine
             size={20}
@@ -100,7 +114,6 @@ const AttachmentPreview = ({
       {openAlertModal && (
         <AlertModal
           open={openAlertModal}
-          loading={loading}
           setOpen={setOpenAlertModal}
           handleConfirm={handleDeleteAttachment}
           title="Remove Attachment"

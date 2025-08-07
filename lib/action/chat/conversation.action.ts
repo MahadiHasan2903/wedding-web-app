@@ -40,7 +40,7 @@ const createConversationAction = async (
         },
         body: JSON.stringify(requestPayload),
       },
-      addConversationResponseSchema // Validate the response shape
+      addConversationResponseSchema
     );
 
     const conversationResponse: AddConversationResponseType = {

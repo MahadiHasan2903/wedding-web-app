@@ -1,18 +1,28 @@
 "use client";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { IoMdSend } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 import { ImageWithFallback } from "@/lib/components/image";
 import { SessionUser, User } from "@/lib/types/user/user.types";
 import { Message } from "@/lib/types/chat/message.types";
-import { emoji, voice, attachment } from "@/lib/components/image/icons";
+import { emoji, attachment } from "@/lib/components/image/icons";
+import { FaPlayCircle } from "react-icons/fa";
 
 interface PropsType {
+  loading: boolean;
   otherUser?: User;
+  attachments: File[];
   loggedInUser?: SessionUser;
   updatedMessage: Message | null;
   replayToMessage: Message | null;
+  setAttachments: Dispatch<SetStateAction<File[]>>;
   setUpdatedMessage: (message: Message | null) => void;
   setReplayToMessage: (message: Message | null) => void;
   handleEditMessage: (messageId: string, text: string) => void;
@@ -20,8 +30,11 @@ interface PropsType {
 }
 
 const ChatInputBox = ({
+  loading,
   otherUser,
+  attachments,
   loggedInUser,
+  setAttachments,
   updatedMessage,
   replayToMessage,
   handleSendMessage,
@@ -33,7 +46,31 @@ const ChatInputBox = ({
   const [message, setMessage] = useState(
     updatedMessage?.message.originalText || ""
   );
-  const inputRef = useRef<HTMLInputElement>(null);
+  const messageInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const handleAttachmentClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) {
+      return;
+    }
+
+    const selectedFiles = Array.from(files);
+    const allowedTypes = ["image/", "video/"];
+
+    const filteredFiles = selectedFiles.filter((file) =>
+      allowedTypes.some((type) => file.type.startsWith(type))
+    );
+    setUpdatedMessage(null);
+    setReplayToMessage(null);
+    setAttachments(filteredFiles);
+  };
 
   // Focus input when editing or replying and update message state accordingly
   useEffect(() => {
@@ -46,17 +83,13 @@ const ChatInputBox = ({
 
   // Focus input when replying to a message or editing an existing message
   useEffect(() => {
-    if ((replayToMessage || updatedMessage) && inputRef.current) {
-      inputRef.current.focus();
+    if ((replayToMessage || updatedMessage) && messageInputRef.current) {
+      messageInputRef.current.focus();
     }
   }, [replayToMessage, updatedMessage]);
 
   // Handle send or edit message logic
   const handleSendOrEdit = () => {
-    if (!message.trim()) {
-      return;
-    }
-
     if (updatedMessage) {
       // Edit existing message
       handleEditMessage(updatedMessage.id, message);
@@ -73,7 +106,8 @@ const ChatInputBox = ({
   return (
     <div
       className={`${
-        (replayToMessage || updatedMessage) && "bg-gray border-t border-light"
+        (replayToMessage || updatedMessage || attachments.length > 0) &&
+        "bg-gray border-t border-light"
       } w-full flex flex-col items-start gap-3 p-2 py-[16px]`}
     >
       {replayToMessage && (
@@ -119,6 +153,58 @@ const ChatInputBox = ({
           </div>
         </div>
       )}
+      <div className="w-full flex flex-wrap gap-2">
+        {attachments.length > 0 && (
+          <div className="w-full flex flex-col gap-2 px-[18px] bg-black/10 py-3 rounded-[5px]">
+            <div className="w-full flex items-center justify-between">
+              <div className={`text-sm font-semibold ${loading && "italic"}`}>
+                {loading ? "Uploading Attachments....." : "Upload Attachments"}
+              </div>
+              {!loading && (
+                <RxCross1
+                  size={20}
+                  className="text-red cursor-pointer"
+                  onClick={() => setAttachments([])}
+                />
+              )}
+            </div>
+
+            <div className="w-full flex flex-wrap gap-2">
+              {attachments.map((file, idx) => {
+                const previewUrl = URL.createObjectURL(file);
+                const isVideo = file.type.startsWith("video");
+
+                return (
+                  <div
+                    key={idx}
+                    className="relative w-[50px] h-[50px] rounded-sm overflow-hidden border border-primary"
+                  >
+                    {isVideo ? (
+                      <div className="w-full h-full relative">
+                        <video
+                          src={previewUrl}
+                          className="object-cover w-full h-full"
+                          muted
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <FaPlayCircle className="text-white text-2xl" />
+                        </div>
+                      </div>
+                    ) : (
+                      <ImageWithFallback
+                        src={previewUrl}
+                        alt={file.name}
+                        fill
+                        className="object-cover"
+                      />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="w-full flex items-center justify-between gap-[18px]  px-[18px]">
         <div className="flex items-center gap-1">
@@ -128,18 +214,21 @@ const ChatInputBox = ({
             height={30}
             alt="attachment"
             className="cursor-pointer"
+            onClick={handleAttachmentClick}
           />
-          {/* <ImageWithFallback
-            src={voice}
-            width={30}
-            height={30}
-            alt="voice"
-            className="cursor-pointer"
-          /> */}
+
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*,video/*"
+            multiple
+            hidden
+            onChange={handleFileChange}
+          />
         </div>
         <div className="w-full relative">
           <input
-            ref={inputRef}
+            ref={messageInputRef}
             name="message"
             type="text"
             value={message}

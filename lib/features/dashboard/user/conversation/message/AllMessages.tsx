@@ -30,6 +30,7 @@ interface PropsType {
   otherUser?: User;
   loggedInUser?: SessionUser;
   setMessages: Dispatch<SetStateAction<Message[]>>;
+  setAttachments: Dispatch<SetStateAction<File[]>>;
   setReplayToMessage: (message: Message | null) => void;
   setUpdatedMessage: (message: Message | null) => void;
 }
@@ -39,6 +40,7 @@ const AllMessages = ({
   otherUser,
   setMessages,
   loggedInUser,
+  setAttachments,
   paginationInfo,
   setUpdatedMessage,
   setReplayToMessage,
@@ -221,6 +223,7 @@ const AllMessages = ({
             handleTranslation={handleTranslation}
             setReplayToMessage={setReplayToMessage}
             setUpdatedMessage={setUpdatedMessage}
+            setAttachments={setAttachments}
             handleDeleteMessage={handleDeleteMessage}
           />
         ))

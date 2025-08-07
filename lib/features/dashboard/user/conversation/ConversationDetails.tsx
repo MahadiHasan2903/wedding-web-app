@@ -8,6 +8,7 @@ import ConversationHeader from "./ConversationHeader";
 import { useSocket } from "@/lib/providers/SocketProvider";
 import { Message } from "@/lib/types/chat/message.types";
 import { Conversation } from "@/lib/types/chat/conversation.types";
+import { uploadMediaAction } from "@/lib/action/media/media.action";
 
 interface PropsType {
   conversationDetails: Conversation;
@@ -32,9 +33,11 @@ const ConversationDetails = ({
 }: PropsType) => {
   const { data: session } = useSession();
   const { socket, isConnected } = useSocket();
+  const [loading, setLoading] = useState(false);
+  const [attachments, setAttachments] = useState<File[]>([]);
   const [isOtherUserOnline, setIsOtherUserOnline] = useState(false);
-  const [replayToMessage, setReplayToMessage] = useState<Message | null>(null);
   const [updatedMessage, setUpdatedMessage] = useState<Message | null>(null);
+  const [replayToMessage, setReplayToMessage] = useState<Message | null>(null);
   const [messages, setMessages] = useState<Message[]>(
     allMessageData.allMessages
   );
@@ -82,6 +85,7 @@ const ConversationDetails = ({
     [otherUser?.id]
   );
 
+  // Handle attachment deletion
   const handleAttachmentDeleted = useCallback(
     ({
       messageId,
@@ -151,21 +155,51 @@ const ConversationDetails = ({
   }, [socket, handleNewMessage, handleEditedMessage, handleUserStatus]);
 
   // Send a message handler
-  const handleSendMessage = (text: string, replyToMessageId?: string) => {
-    if (!text.trim() || !isConnected) {
+  const handleSendMessage = async (text: string, replyToMessageId?: string) => {
+    if ((!text.trim() && attachments.length <= 0) || !isConnected) {
       return;
     }
+
+    setLoading(true);
+
+    let attachmentIds: string[] = [];
+
+    // Upload new attachments (if any)
+    if (attachments.length > 0) {
+      const formData = new FormData();
+      formData.append("conversationId", conversationDetails.id);
+
+      attachments.forEach((file) => {
+        formData.append("files", file);
+      });
+
+      const uploadMediaResponse = await uploadMediaAction(formData);
+
+      if (uploadMediaResponse.status && uploadMediaResponse.data) {
+        // Extract the media `id`s
+        attachmentIds = uploadMediaResponse.data.map((media) => media.id);
+      } else {
+        console.error("Failed to upload attachments.");
+        return;
+      }
+    }
+
     socket?.emit("sendMessage", {
       senderId: loggedInUser?.id,
       receiverId: otherUser?.id,
       conversationId: conversationDetails.id,
       message: text,
       repliedToMessage: replyToMessageId ?? null,
+      attachmentIds,
     });
+
+    // Clear attachments after sending
+    setAttachments([]);
+    setLoading(false);
   };
 
   // Function to handle editing a message
-  const handleEditMessage = (messageId: string, text: string) => {
+  const handleEditMessage = async (messageId: string, text: string) => {
     if (!text.trim() || !isConnected) {
       return;
     }
@@ -186,16 +220,20 @@ const ConversationDetails = ({
       />
       <AllMessages
         messages={messages}
-        setMessages={setMessages}
-        paginationInfo={allMessageData.paginationInfo}
-        loggedInUser={loggedInUser}
         otherUser={otherUser}
-        setReplayToMessage={setReplayToMessage}
+        setMessages={setMessages}
+        loggedInUser={loggedInUser}
+        setAttachments={setAttachments}
         setUpdatedMessage={setUpdatedMessage}
+        setReplayToMessage={setReplayToMessage}
+        paginationInfo={allMessageData.paginationInfo}
       />
       <ChatInputBox
+        loading={loading}
         otherUser={otherUser}
+        attachments={attachments}
         loggedInUser={loggedInUser}
+        setAttachments={setAttachments}
         updatedMessage={updatedMessage}
         replayToMessage={replayToMessage}
         setUpdatedMessage={setUpdatedMessage}

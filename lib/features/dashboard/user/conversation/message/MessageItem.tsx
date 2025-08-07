@@ -6,6 +6,7 @@ import { ImageWithFallback } from "@/lib/components/image";
 import { avatar, dots } from "@/lib/components/image/icons";
 import { User, SessionUser } from "@/lib/types/user/user.types";
 import { formatRelativeTimeLong } from "@/lib/utils/date/dateUtils";
+import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   index: number;
@@ -15,6 +16,7 @@ interface Props {
   loggedInUser?: SessionUser;
   openMenuMessageId: string | null;
   translatedLanguage: "en" | "es" | "fr" | null;
+  setAttachments: Dispatch<SetStateAction<File[]>>;
   handleDeleteMessage: (messageId: string) => void;
   setOpenMenuMessageId: (id: string | null) => void;
   setUpdatedMessage: (message: Message | null) => void;
@@ -28,6 +30,7 @@ const MessageItem = ({
   message,
   otherUser,
   loggedInUser,
+  setAttachments,
   openMenuMessageId,
   handleTranslation,
   setUpdatedMessage,
@@ -66,7 +69,10 @@ const MessageItem = ({
       )}
 
       <div className="max-w-[60%] lg:max-w-[50%]">
-        {message.isDeleted ? (
+        {message.isDeleted ||
+        (message.message === null &&
+          message.attachments &&
+          message.attachments.length <= 0) ? (
           <div className="cursor-not-allowed bg-gray px-4 py-2 rounded-full border border-primaryBorder italic text-sm">
             Message deleted
           </div>
@@ -88,14 +94,16 @@ const MessageItem = ({
               >
                 {message.attachments &&
                   message.attachments.length > 0 &&
-                  message.attachments.map((attachment, index) => (
-                    <MessageAttachment
-                      key={index}
-                      attachment={attachment}
-                      messageId={message.id}
-                      isSentByLoggedInUser={isSentByLoggedInUser}
-                    />
-                  ))}
+                  message.attachments.map((attachment, index) => {
+                    return (
+                      <MessageAttachment
+                        key={index}
+                        attachment={attachment}
+                        messageId={message.id}
+                        isSentByLoggedInUser={isSentByLoggedInUser}
+                      />
+                    );
+                  })}
               </div>
               <div>
                 {message.message && (
@@ -204,6 +212,7 @@ const MessageItem = ({
                       className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
                       onClick={() => {
                         setUpdatedMessage(null);
+                        setAttachments([]);
                         setReplayToMessage(message);
                         setOpenMenuMessageId(null);
                       }}
@@ -212,7 +221,11 @@ const MessageItem = ({
                       <CommonButton
                         label="Report"
                         className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
-                        onClick={() => setOpenMenuMessageId(null)}
+                        onClick={() => {
+                          setUpdatedMessage(null);
+                          setAttachments([]);
+                          setOpenMenuMessageId(null);
+                        }}
                       />
                     )}
                     {isSentByLoggedInUser && (
@@ -224,6 +237,7 @@ const MessageItem = ({
                             className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
                             onClick={() => {
                               setReplayToMessage(null);
+                              setAttachments([]);
                               setUpdatedMessage(message);
                               setOpenMenuMessageId(null);
                             }}
@@ -232,7 +246,12 @@ const MessageItem = ({
                         <CommonButton
                           label="Delete"
                           className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
-                          onClick={() => handleDeleteMessage(message.id)}
+                          onClick={() => {
+                            setAttachments([]);
+                            setReplayToMessage(null);
+                            setUpdatedMessage(null);
+                            handleDeleteMessage(message.id);
+                          }}
                         />
                       </>
                     )}

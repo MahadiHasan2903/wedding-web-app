@@ -36,8 +36,12 @@ export function fetchZodTyped<T>(
 
       console.log("Raw response:", JSON.stringify(data, null, 2));
 
-      // Check if the response contains an error field
-      if (data.success === false) {
+      if (!response.ok) {
+        // Use server message if available
+        throw new Error(data?.message || `HTTP Error: ${response.status}`);
+      }
+
+      if (data.success === false || data.status === false) {
         const serverError =
           data?.error || data?.message || "Unknown server error";
         throw new Error(serverError);
@@ -47,6 +51,7 @@ export function fetchZodTyped<T>(
       if (!result.success) {
         throw new Error(`Validation error: ${result.error.message}`);
       }
+
       return result.data;
     })
     .catch((error) => {

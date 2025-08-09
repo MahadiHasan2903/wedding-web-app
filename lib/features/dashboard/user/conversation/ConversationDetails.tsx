@@ -225,6 +225,7 @@ const ConversationDetails = ({
         loggedInUser={loggedInUser}
         setAttachments={setAttachments}
         setUpdatedMessage={setUpdatedMessage}
+        conversationId={conversationDetails.id}
         setReplayToMessage={setReplayToMessage}
         paginationInfo={allMessageData.paginationInfo}
       />

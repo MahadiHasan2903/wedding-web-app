@@ -1,18 +1,20 @@
+import { useState, Dispatch, SetStateAction } from "react";
 import { RiTranslate } from "react-icons/ri";
 import MessageAttachment from "./MessageAttachment";
+import ReportMessageForm from "./ReportMessageForm";
 import { CommonButton } from "@/lib/components/buttons";
 import { Message } from "@/lib/types/chat/message.types";
 import { ImageWithFallback } from "@/lib/components/image";
 import { avatar, dots } from "@/lib/components/image/icons";
 import { User, SessionUser } from "@/lib/types/user/user.types";
 import { formatRelativeTimeLong } from "@/lib/utils/date/dateUtils";
-import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   index: number;
   array: Message[];
   otherUser?: User;
   message: Message;
+  conversationId: string;
   loggedInUser?: SessionUser;
   openMenuMessageId: string | null;
   translatedLanguage: "en" | "es" | "fr" | null;
@@ -30,6 +32,7 @@ const MessageItem = ({
   message,
   otherUser,
   loggedInUser,
+  conversationId,
   setAttachments,
   openMenuMessageId,
   handleTranslation,
@@ -39,6 +42,8 @@ const MessageItem = ({
   handleDeleteMessage,
   setOpenMenuMessageId,
 }: Props) => {
+  const [openReportModal, setOpenReportModal] = useState(false);
+
   const isSentByLoggedInUser = message.senderId === loggedInUser?.id;
   const isFirstInGroup =
     index === 0 || array[index - 1].senderId !== message.senderId;
@@ -225,6 +230,7 @@ const MessageItem = ({
                           setUpdatedMessage(null);
                           setAttachments([]);
                           setOpenMenuMessageId(null);
+                          setOpenReportModal(true);
                         }}
                       />
                     )}
@@ -277,6 +283,17 @@ const MessageItem = ({
             </div>
           )}
         </div>
+      )}
+
+      {openReportModal && (
+        <ReportMessageForm
+          open={openReportModal}
+          messageId={message.id}
+          senderId={message.senderId}
+          setOpen={setOpenReportModal}
+          conversationId={conversationId}
+          receiverId={message.receiverId}
+        />
       )}
     </div>
   );

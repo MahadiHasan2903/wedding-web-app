@@ -103,7 +103,7 @@ const ConversationHeader = ({
 
           <div className="flex flex-col items-start">
             <p className="text-[14px] font-medium text-primary">
-              {otherUser?.firstName ?? "Unknown User"}
+              {otherUser?.firstName} {otherUser?.lastName}
             </p>
             {isOtherUserOnline && (
               <p className="text-[10px] font-normal">Active Now</p>

@@ -195,7 +195,7 @@ const ConversationList = ({
 
                 <div className="w-full flex flex-col items-start gap-1 overflow-hidden">
                   <p className="text-[14px] font-medium text-primary">
-                    {otherUser?.firstName ?? "Unknown User"}
+                    {otherUser?.firstName} {otherUser?.lastName}
                   </p>
                   {conversation.lastMessageId && conversation.lastMessage && (
                     <div className="w-full flex items-center justify-between">

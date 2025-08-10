@@ -9,7 +9,7 @@ export const updateUserSchema = z.object({
   phoneNumber: z.string().optional(),
   bio: z.string().optional(),
   motherTongue: z.string().optional(),
-  dateOfBirth: z.string().optional(),
+  dateOfBirth: z.string().optional().nullable(),
   gender: z.string().optional(),
   nationality: z.string().optional(),
   country: z.string().optional(),
@@ -98,7 +98,7 @@ export const updateUserResponseSchema = z.object({
         })
       )
       .optional(),
-    preferredLanguages: z.array(z.string()).default([]),
+    preferredLanguages: z.array(z.string()).default([]).nullable(),
     userRole: z.string(),
     accountStatus: z.string(),
     purchasedMembership: z.union([
@@ -127,7 +127,7 @@ export const updateUserResponseSchema = z.object({
         })
         .nullable(),
     ]),
-    timeZone: z.string(),
+    timeZone: z.string().nullable(),
     highestEducation: z.string().nullable(),
     institutionName: z.string().nullable(),
     profession: z.string().nullable(),
@@ -148,7 +148,7 @@ export const updateUserResponseSchema = z.object({
     weightKg: z.number().nullable(),
     heightCm: z.number().nullable(),
     bodyType: z.string().nullable(),
-    drinkingHabit: z.string(),
+    drinkingHabit: z.string().nullable(),
     smokingHabit: z.string().nullable(),
     healthCondition: z.string().nullable(),
     hasPet: z.boolean().nullable().nullable(),

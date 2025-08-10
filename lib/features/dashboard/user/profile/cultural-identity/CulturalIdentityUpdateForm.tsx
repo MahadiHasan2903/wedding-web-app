@@ -51,21 +51,31 @@ const CulturalIdentityUpdateForm = ({
   const handleUpdateProfile = async (data: UpdateUserType) => {
     setLoading(true);
 
-    // Prepare form data to send to the API
     const formData = new FormData();
-    formData.append("bio", data.bio ?? "");
-    formData.append("familyBackground", data.familyBackground ?? "");
-    formData.append("culturalPractices", data.culturalPractices ?? "");
 
-    // Call update profile action API
+    // Fields to append only if not empty
+    const fields: Partial<UpdateUserType> = {
+      bio: data.bio,
+      familyBackground: data.familyBackground,
+      culturalPractices: data.culturalPractices,
+    };
+
+    Object.entries(fields).forEach(([key, value]) => {
+      if (
+        value !== null &&
+        value !== undefined &&
+        String(value).trim() !== ""
+      ) {
+        formData.append(key, String(value));
+      }
+    });
+
     const updateProfileResponse = await updateUserProfileAction(formData);
 
-    // Show toast notification based on API response success or failure
     toast(updateProfileResponse.message, {
       type: updateProfileResponse.status ? "success" : "error",
     });
 
-    // If update successful, close modal and refresh page data
     if (updateProfileResponse.status) {
       setOpen(false);
       router.refresh();

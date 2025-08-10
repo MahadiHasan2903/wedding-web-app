@@ -18,6 +18,7 @@ import {
   whatsapp,
 } from "@/lib/components/image/icons";
 import { toast } from "react-toastify";
+import { IoCamera } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { StaticImageData } from "next/image";
@@ -193,6 +194,10 @@ const BasicInfo = ({
               />
             </div>
           )}
+
+          <div className="absolute z-20 w-6 h-6 flex items-center justify-center bg-light rounded-full right-1 lg:right-3 bottom-1 lg:bottom-5 border border-secondary">
+            <IoCamera size={15} className="z-50 text-red" />
+          </div>
         </label>
 
         <div className="flex flex-col items-start gap-1 lg:gap-[15px]">

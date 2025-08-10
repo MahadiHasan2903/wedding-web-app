@@ -51,21 +51,27 @@ const OtherInformationUpdateForm = ({
   const handleUpdateProfile = async (data: UpdateUserType) => {
     setLoading(true);
 
-    // Prepare form data to send to the API
     const formData = new FormData();
-    formData.append("astrologicalSign", data.astrologicalSign ?? "");
-    formData.append("loveLanguage", data.loveLanguage ?? "");
-    formData.append("favoriteQuote", data.favoriteQuote ?? "");
 
-    // Call update profile action API
+    // Only append fields that have a non-empty value
+    const fields: Partial<UpdateUserType> = {
+      astrologicalSign: data.astrologicalSign,
+      loveLanguage: data.loveLanguage,
+      favoriteQuote: data.favoriteQuote,
+    };
+
+    Object.entries(fields).forEach(([key, value]) => {
+      if (value && value.trim() !== "") {
+        formData.append(key, value);
+      }
+    });
+
     const updateProfileResponse = await updateUserProfileAction(formData);
 
-    // Show toast notification based on API response success or failure
     toast(updateProfileResponse.message, {
       type: updateProfileResponse.status ? "success" : "error",
     });
 
-    // If update successful, close modal and refresh page data
     if (updateProfileResponse.status) {
       setOpen(false);
       router.refresh();

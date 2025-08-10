@@ -140,40 +140,47 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
 
     const formData = new FormData();
 
-    // Append all form fields to FormData (handling empty values)
-    formData.append("firstName", data.firstName ?? "");
-    formData.append("lastName", data.lastName ?? "");
-    formData.append("gender", data.gender ?? "");
+    // Fields to check for emptiness before appending
+    const fields: Partial<UpdateUserType> = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      gender: data.gender,
+      dateOfBirth:
+        formatDateString1(data.dateOfBirth) === ""
+          ? userProfile.dateOfBirth
+          : formatDateString1(data.dateOfBirth),
+      country: data.country,
+      city: data.city,
+      nationality: data.nationality,
+      maritalStatus: data.maritalStatus,
+      bio: data.bio,
+    };
 
-    // Format dateOfBirth; fallback to original if empty after formatting
-    formData.append(
-      "dateOfBirth",
-      formatDateString1(data.dateOfBirth) === ""
-        ? userProfile.dateOfBirth ?? ""
-        : formatDateString1(data.dateOfBirth)
-    );
+    // Append only non-empty values
+    Object.entries(fields).forEach(([key, value]) => {
+      if (
+        value !== null &&
+        value !== undefined &&
+        String(value).trim() !== ""
+      ) {
+        formData.append(key, String(value));
+      }
+    });
 
-    formData.append("country", data.country ?? "");
-    formData.append("city", data.city ?? "");
-    formData.append("nationality", data.nationality ?? "");
-    formData.append("maritalStatus", data.maritalStatus ?? "");
-    formData.append("bio", data.bio ?? "");
-
-    // Filter out empty social links and append as JSON string
+    // Append social links only if non-empty
     const filteredSocialLinks = (data.socialMediaLinks ?? []).filter(
-      (link) => link.name && link.link
+      (link) => link.name?.trim() && link.link?.trim()
     );
-    formData.append("socialMediaLinks", JSON.stringify(filteredSocialLinks));
+    if (filteredSocialLinks.length > 0) {
+      formData.append("socialMediaLinks", JSON.stringify(filteredSocialLinks));
+    }
 
-    // Call update profile API action
     const updateProfileResponse = await updateUserProfileAction(formData);
 
-    // Show toast notification based on API response
     toast(updateProfileResponse.message, {
       type: updateProfileResponse.status ? "success" : "error",
     });
 
-    // Close modal and refresh page on success
     if (updateProfileResponse.status) {
       setOpen(false);
       router.refresh();
@@ -255,12 +262,12 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                       render={({ field }) => (
                         <Datepicker
                           {...field}
+                          defaultDate={String(field.value)}
                           ref={null}
                           title="dateOfBirth"
                           label="Date of Birth"
                           setValue={setValue}
                           error={errors.dateOfBirth?.message}
-                          defaultDate={field.value}
                         />
                       )}
                     />

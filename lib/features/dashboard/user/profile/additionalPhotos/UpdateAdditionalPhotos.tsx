@@ -111,7 +111,7 @@ const UpdateAdditionalPhotos = ({ open, setOpen, userProfile }: PropsType) => {
             onSubmit={handleSubmit(handleUpdateProfile)}
             className="w-full h-full flex flex-col gap-[25px]"
           >
-            <CardTitle title="Contact & Accessibility" />
+            <CardTitle title="Additional Photos" />
 
             <div
               className={`${

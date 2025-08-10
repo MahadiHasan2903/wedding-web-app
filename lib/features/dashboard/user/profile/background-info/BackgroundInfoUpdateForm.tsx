@@ -63,26 +63,37 @@ const BackgroundInfoUpdateForm = ({
   const handleUpdateProfile = async (data: UpdateUserType) => {
     setLoading(true);
 
-    // Prepare form data to send to the API
     const formData = new FormData();
-    formData.append("highestEducation", data.highestEducation ?? "");
-    formData.append("institutionName", data.institutionName ?? "");
-    formData.append("profession", data.profession ?? "");
-    formData.append("companyName", data.companyName ?? "");
-    formData.append("monthlyIncome", String(data.monthlyIncome) ?? "0");
-    formData.append("religion", data.religion ?? "");
-    formData.append("politicalView", data.politicalView ?? "");
-    formData.append("livingArrangement", data.livingArrangement ?? "");
 
-    // Call update profile action API
+    // Map the fields
+    const fields: Partial<UpdateUserType> = {
+      highestEducation: data.highestEducation,
+      institutionName: data.institutionName,
+      profession: data.profession,
+      companyName: data.companyName,
+      monthlyIncome: data.monthlyIncome,
+      religion: data.religion,
+      politicalView: data.politicalView,
+      livingArrangement: data.livingArrangement,
+    };
+
+    // Append only non-empty values
+    Object.entries(fields).forEach(([key, value]) => {
+      if (
+        value !== null &&
+        value !== undefined &&
+        String(value).trim() !== ""
+      ) {
+        formData.append(key, String(value));
+      }
+    });
+
     const updateProfileResponse = await updateUserProfileAction(formData);
 
-    // Show toast notification based on API response success or failure
     toast(updateProfileResponse.message, {
       type: updateProfileResponse.status ? "success" : "error",
     });
 
-    // If update successful, close modal and refresh page data
     if (updateProfileResponse.status) {
       setOpen(false);
       router.refresh();

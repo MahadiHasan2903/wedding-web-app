@@ -67,27 +67,47 @@ const PersonalAttributesUpdateForm = ({
   const handleUpdateProfile = async (data: UpdateUserType) => {
     setLoading(true);
 
-    // Prepare form data to send to the API
     const formData = new FormData();
-    formData.append("heightCm", String(data.heightCm));
-    formData.append("weightKg", String(data.weightKg));
-    formData.append("children", String(data.children) ?? "");
-    formData.append("hasPet", String(data.hasPet === "yes"));
-    formData.append("bodyType", data.bodyType ?? "");
-    formData.append("smokingHabit", data.smokingHabit ?? "");
-    formData.append("drinkingHabit", data.drinkingHabit ?? "");
-    formData.append("dietaryPreference", data.dietaryPreference ?? "");
-    formData.append("healthCondition", data.healthCondition ?? "");
 
-    // Call update profile action API
+    // Numeric fields (always append if number is valid)
+    if (data.heightCm !== null && data.heightCm !== undefined) {
+      formData.append("heightCm", String(data.heightCm));
+    }
+    if (data.weightKg !== null && data.weightKg !== undefined) {
+      formData.append("weightKg", String(data.weightKg));
+    }
+    if (data.children !== null && data.children !== undefined) {
+      formData.append("children", String(data.children));
+    }
+
+    // Boolean field (always append)
+    formData.append("hasPet", String(data.hasPet === "yes"));
+
+    // String fields (append only if non-empty)
+    const fields: Partial<UpdateUserType> = {
+      bodyType: data.bodyType,
+      smokingHabit: data.smokingHabit,
+      drinkingHabit: data.drinkingHabit,
+      dietaryPreference: data.dietaryPreference,
+      healthCondition: data.healthCondition,
+    };
+
+    Object.entries(fields).forEach(([key, value]) => {
+      if (
+        value !== null &&
+        value !== undefined &&
+        String(value).trim() !== ""
+      ) {
+        formData.append(key, String(value));
+      }
+    });
+
     const updateProfileResponse = await updateUserProfileAction(formData);
 
-    // Show toast notification based on API response success or failure
     toast(updateProfileResponse.message, {
       type: updateProfileResponse.status ? "success" : "error",
     });
 
-    // If update successful, close modal and refresh page data
     if (updateProfileResponse.status) {
       setOpen(false);
       router.refresh();

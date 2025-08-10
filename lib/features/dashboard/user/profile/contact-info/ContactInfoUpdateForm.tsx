@@ -74,26 +74,38 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
   const handleUpdateProfile = async (data: UpdateUserType) => {
     setLoading(true);
 
-    // Prepare form data to send to the API
     const formData = new FormData();
-    formData.append("phoneNumber", data.phoneNumber ?? "");
-    formData.append("timeZone", data.timeZone ?? "");
-    formData.append(
-      "preferredLanguages",
-      JSON.stringify(
-        (data.preferredLanguages || []).filter((lang) => lang.trim() !== "")
-      )
-    );
 
-    // Call update profile action API
+    // Append only non-empty phoneNumber and timeZone
+    const fields: Partial<UpdateUserType> = {
+      phoneNumber: data.phoneNumber,
+      timeZone: data.timeZone,
+    };
+
+    Object.entries(fields).forEach(([key, value]) => {
+      if (
+        value !== null &&
+        value !== undefined &&
+        String(value).trim() !== ""
+      ) {
+        formData.append(key, String(value));
+      }
+    });
+
+    // Append preferredLanguages only if there's at least one non-empty value
+    const filteredLanguages = (data.preferredLanguages || []).filter(
+      (lang) => lang.trim() !== ""
+    );
+    if (filteredLanguages.length > 0) {
+      formData.append("preferredLanguages", JSON.stringify(filteredLanguages));
+    }
+
     const updateProfileResponse = await updateUserProfileAction(formData);
 
-    // Show toast notification based on API response success or failure
     toast(updateProfileResponse.message, {
       type: updateProfileResponse.status ? "success" : "error",
     });
 
-    // If update successful, close modal and refresh page data
     if (updateProfileResponse.status) {
       setOpen(false);
       router.refresh();

@@ -92,33 +92,53 @@ const RelationshipPreferencesUpdateForm = ({
   const handleUpdateProfile = async (data: UpdateUserType) => {
     setLoading(true);
 
-    // Prepare form data to send to the API
     const formData = new FormData();
-    formData.append("interestedInGender", data.interestedInGender ?? "");
-    formData.append("lookingFor", data.lookingFor ?? "");
-    formData.append("preferredAgeRange", data.preferredAgeRange ?? "");
-    formData.append(
-      "preferredNationality",
-      JSON.stringify(
-        (data.preferredNationality || []).filter((lang) => lang.trim() !== "")
-      )
-    );
-    formData.append(
-      "religionPreference",
-      String(data.religionPreference) ?? ""
-    );
-    formData.append("politicalPreference", data.politicalPreference ?? "");
-    formData.append("partnerExpectations", data.partnerExpectations ?? "");
 
-    // Call update profile action API
+    // Append only non-empty string fields
+    const fields: Partial<UpdateUserType> = {
+      interestedInGender: data.interestedInGender,
+      lookingFor: data.lookingFor,
+      preferredAgeRange: data.preferredAgeRange,
+      politicalPreference: data.politicalPreference,
+      partnerExpectations: data.partnerExpectations,
+    };
+
+    Object.entries(fields).forEach(([key, value]) => {
+      if (
+        value !== null &&
+        value !== undefined &&
+        String(value).trim() !== ""
+      ) {
+        formData.append(key, String(value));
+      }
+    });
+
+    // Append preferredNationality only if it has non-empty values
+    const filteredNationality = (data.preferredNationality || []).filter(
+      (n) => n.trim() !== ""
+    );
+    if (filteredNationality.length > 0) {
+      formData.append(
+        "preferredNationality",
+        JSON.stringify(filteredNationality)
+      );
+    }
+
+    // Append religionPreference only if it's not empty/null
+    if (
+      data.religionPreference !== null &&
+      data.religionPreference !== undefined &&
+      String(data.religionPreference).trim() !== ""
+    ) {
+      formData.append("religionPreference", String(data.religionPreference));
+    }
+
     const updateProfileResponse = await updateUserProfileAction(formData);
 
-    // Show toast notification based on API response success or failure
     toast(updateProfileResponse.message, {
       type: updateProfileResponse.status ? "success" : "error",
     });
 
-    // If update successful, close modal and refresh page data
     if (updateProfileResponse.status) {
       setOpen(false);
       router.refresh();

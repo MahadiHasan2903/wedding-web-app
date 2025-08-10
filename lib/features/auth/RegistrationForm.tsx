@@ -81,6 +81,7 @@ const RegistrationForm = () => {
 
   // Handle OTP verification submission
   const handleConfirmRegistrationSubmit = async () => {
+    setLoading(true);
     // Prepare payload (join otp together before sending)
     const payload = {
       email: email,
@@ -101,6 +102,7 @@ const RegistrationForm = () => {
       reset();
       router.push("/login");
     }
+    setLoading(false);
   };
 
   return (

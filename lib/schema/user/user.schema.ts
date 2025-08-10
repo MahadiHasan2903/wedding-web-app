@@ -86,7 +86,7 @@ export const updateUserResponseSchema = z.object({
     country: z.string().nullable(),
     city: z.string().nullable(),
     maritalStatus: z.string().nullable(),
-    profilePicture: z.union([z.string(), mediaSchema]).optional().nullable(),
+    profilePicture: z.union([z.string(), mediaSchema]).nullable(),
     additionalPhotos: z.array(mediaSchema).nullable().default([]),
     blockedUsers: z.array(z.string()).nullable(),
     likedUsers: z.array(z.string()).nullable(),
@@ -97,7 +97,7 @@ export const updateUserResponseSchema = z.object({
           link: z.string().url().nullable(),
         })
       )
-      .optional(),
+      .nullable(),
     preferredLanguages: z.array(z.string()).default([]).nullable(),
     userRole: z.string(),
     accountStatus: z.string(),

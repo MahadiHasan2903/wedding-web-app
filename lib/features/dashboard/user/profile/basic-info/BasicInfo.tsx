@@ -211,7 +211,9 @@ const BasicInfo = ({
               {userProfile.dateOfBirth
                 ? `${calculateAgeFromDOB(userProfile.dateOfBirth)} Years Old`
                 : "Age Unknown"}
-              {userProfile.gender && `, ${userProfile.gender}`}
+              <span className="capitalize">
+                {userProfile.gender && `, ${userProfile.gender}`}
+              </span>
             </p>
           </div>
           <div>
@@ -240,7 +242,7 @@ const BasicInfo = ({
       </div>
       <div className="w-full flex flex-col items-start gap-[20px]">
         <p className="text-[12px] lg:text-[14px] font-normal text-justify">
-          {userProfile.bio || "My bio ..."}
+          {userProfile.bio || "Your bio goes here ..."}
         </p>
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center gap-[10px]">

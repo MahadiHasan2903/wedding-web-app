@@ -17,7 +17,7 @@ const HeroSection = () => {
                 We help you find the one who’s meant to stay
               </p>
               <CommonButton
-                href="/search"
+                href="/find-match"
                 label="Find Your Match"
                 className="w-fit flex items-center gap-[10px] px-[20px] xl:px-[30px] py-[10px] bg-red text-[10px] sm:text-[16px] xl:text-[24px] font-semibold rounded-full"
               />

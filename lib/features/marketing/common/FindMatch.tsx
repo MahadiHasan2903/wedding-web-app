@@ -16,7 +16,7 @@ const FindMatch = () => {
             </p>
             <div className="flex items-center gap-[12px] sm:gap-[18px] mt-3 xl:mt-[30px]">
               <CommonButton
-                href="/search"
+                href="/find-match"
                 label="Find Your Match"
                 className="w-fit flex items-center gap-[10px] px-[20px] xl:px-[30px] py-[10px] bg-red text-[10px] xl:text-[24px] font-semibold rounded-full"
               />

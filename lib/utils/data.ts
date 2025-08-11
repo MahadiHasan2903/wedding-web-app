@@ -51,7 +51,7 @@ export const footerLinks = [
       { label: "Member Login", href: "/login" },
       { label: "Sign Up", href: "/registration" },
       { label: "VIP Membership", href: "/pricing" },
-      { label: "Featured Profile", href: "/search" },
+      { label: "Featured Profile", href: "/find-match" },
       { label: "Customer Support", href: "#" },
       { label: "Sitemap", href: "#" },
     ],

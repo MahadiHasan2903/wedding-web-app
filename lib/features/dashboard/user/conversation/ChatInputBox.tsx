@@ -20,6 +20,7 @@ interface PropsType {
   otherUser?: User;
   attachments: File[];
   loggedInUser?: SessionUser;
+  isBlockedByOtherUser: boolean;
   updatedMessage: Message | null;
   replayToMessage: Message | null;
   setAttachments: Dispatch<SetStateAction<File[]>>;
@@ -41,6 +42,7 @@ const ChatInputBox = ({
   handleEditMessage,
   setUpdatedMessage,
   setReplayToMessage,
+  isBlockedByOtherUser,
 }: PropsType) => {
   // If editing, start with the original message text, else empty
   const [message, setMessage] = useState(
@@ -206,59 +208,66 @@ const ChatInputBox = ({
         )}
       </div>
 
-      <div className="w-full flex items-center justify-between gap-[18px]  px-[18px]">
-        <div className="flex items-center gap-1">
-          <ImageWithFallback
-            src={attachment}
-            width={30}
-            height={30}
-            alt="attachment"
-            className="cursor-pointer"
-            onClick={handleAttachmentClick}
-          />
-
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*,video/*"
-            multiple
-            hidden
-            onChange={handleFileChange}
-          />
+      {isBlockedByOtherUser ? (
+        <div className="w-full flex items-center justify-center text-red font-bold">
+          {" "}
+          You are blocked by the user. You cannot send messages.
         </div>
-        <div className="w-full relative">
-          <input
-            ref={messageInputRef}
-            name="message"
-            type="text"
-            value={message}
-            placeholder="Type here..."
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSendOrEdit();
-              }
-            }}
-            className="w-full text-[12px] lg:text-[14px] p-[14px] bg-light rounded-full outline-none pr-12"
-          />
-
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 text-xl">
+      ) : (
+        <div className="w-full flex items-center justify-between gap-[18px]  px-[18px]">
+          <div className="flex items-center gap-1">
             <ImageWithFallback
-              src={emoji}
+              src={attachment}
               width={30}
               height={30}
-              alt="emoji"
+              alt="attachment"
               className="cursor-pointer"
+              onClick={handleAttachmentClick}
+            />
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*,video/*"
+              multiple
+              hidden
+              onChange={handleFileChange}
             />
           </div>
+          <div className="w-full relative">
+            <input
+              ref={messageInputRef}
+              name="message"
+              type="text"
+              value={message}
+              placeholder="Type here..."
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendOrEdit();
+                }
+              }}
+              className="w-full text-[12px] lg:text-[14px] p-[14px] bg-light rounded-full outline-none pr-12"
+            />
+
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 text-xl">
+              <ImageWithFallback
+                src={emoji}
+                width={30}
+                height={30}
+                alt="emoji"
+                className="cursor-pointer"
+              />
+            </div>
+          </div>
+          <IoMdSend
+            size={25}
+            className="text-primary cursor-pointer"
+            onClick={handleSendOrEdit}
+          />
         </div>
-        <IoMdSend
-          size={25}
-          className="text-primary cursor-pointer"
-          onClick={handleSendOrEdit}
-        />
-      </div>
+      )}
     </div>
   );
 };

@@ -11,6 +11,7 @@ import { Conversation } from "@/lib/types/chat/conversation.types";
 import { uploadMediaAction } from "@/lib/action/media/media.action";
 
 interface PropsType {
+  isBlockedByOtherUser: boolean;
   conversationDetails: Conversation;
   allMessageData: {
     allMessages: Message[];
@@ -30,6 +31,7 @@ interface PropsType {
 const ConversationDetails = ({
   allMessageData,
   conversationDetails,
+  isBlockedByOtherUser,
 }: PropsType) => {
   const { data: session } = useSession();
   const { socket, isConnected } = useSocket();
@@ -217,6 +219,7 @@ const ConversationDetails = ({
       <ConversationHeader
         isOtherUserOnline={isOtherUserOnline}
         conversationDetails={conversationDetails}
+        isBlockedByOtherUser={isBlockedByOtherUser}
       />
       <AllMessages
         messages={messages}
@@ -228,6 +231,7 @@ const ConversationDetails = ({
         conversationId={conversationDetails.id}
         setReplayToMessage={setReplayToMessage}
         paginationInfo={allMessageData.paginationInfo}
+        isBlockedByOtherUser={isBlockedByOtherUser}
       />
       <ChatInputBox
         loading={loading}
@@ -241,6 +245,7 @@ const ConversationDetails = ({
         handleSendMessage={handleSendMessage}
         handleEditMessage={handleEditMessage}
         setReplayToMessage={setReplayToMessage}
+        isBlockedByOtherUser={isBlockedByOtherUser}
       />
     </div>
   );

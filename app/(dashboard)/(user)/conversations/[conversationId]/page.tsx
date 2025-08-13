@@ -23,7 +23,7 @@ interface PropsType {
 }
 
 const ConversationDetailsPage = async ({ params, searchParams }: PropsType) => {
-  const { accessToken } = await getServerSessionData();
+  const { accessToken, data } = await getServerSessionData();
 
   // Get the current page number as string, then parse to number with fallback
   const page = Number(getQueryParam(searchParams, "page", 1));
@@ -55,6 +55,23 @@ const ConversationDetailsPage = async ({ params, searchParams }: PropsType) => {
     accessToken
   );
 
+  const otherUser =
+    conversationDetails.senderId === data.id
+      ? conversationDetails.receiver
+      : conversationDetails.sender;
+
+  if (!otherUser?.id) {
+    throw new Error("Other user not found in conversation");
+  }
+
+  const getOtherUserDetails = await api.users.getUserDetails(
+    otherUser.id,
+    accessToken
+  );
+
+  const isBlockedByOtherUser =
+    getOtherUserDetails.blockedUsers?.some((user) => user === data.id) ?? false;
+
   return (
     <div className="w-full h-full flex md:gap-[25px] items-start py-0 lg:pt-[45px]">
       <div className="w-full md:max-w-[300px] h-full hidden md:block">
@@ -64,8 +81,9 @@ const ConversationDetailsPage = async ({ params, searchParams }: PropsType) => {
         />
       </div>
       <ConversationDetails
-        conversationDetails={conversationDetails}
         allMessageData={allMessageData}
+        conversationDetails={conversationDetails}
+        isBlockedByOtherUser={isBlockedByOtherUser}
       />
     </div>
   );

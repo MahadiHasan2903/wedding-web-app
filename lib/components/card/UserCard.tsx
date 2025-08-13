@@ -54,7 +54,7 @@ const UserCard = ({ user, returnUrl = "/find-match" }: UserCardProps) => {
         </div>
 
         {isVipUser && (
-          <div className="absolute w-[90px] lg:w-[150px] h-[90px] lg:h-[160px] top-[2px] lg:top-[-3px] z-10">
+          <div className="absolute w-[90px] lg:w-[150px] h-[90px] lg:h-[160px] top-[3px] z-10">
             <ImageWithFallback
               src={vipRing2}
               fill

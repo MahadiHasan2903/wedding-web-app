@@ -116,7 +116,7 @@ const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
                 <tr>
                   <td
                     colSpan={6}
-                    className="text-center py-4 text-sm text-gray"
+                    className="text-center py-10 text-sm text-black/70"
                   >
                     No payment history found.
                   </td>
@@ -168,7 +168,7 @@ const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
         </div>
 
         {/* Pagination with proper spacing */}
-        <div className="w-full flex justify-center py-4">
+        <div className="w-full flex justify-center">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

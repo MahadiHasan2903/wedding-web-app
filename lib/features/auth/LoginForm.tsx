@@ -1,0 +1,220 @@
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { getSession } from "next-auth/react";
+import VerificationModal from "./VerificationModal";
+import { signIn, useSession } from "next-auth/react";
+import { SubHeading } from "@/lib/components/heading";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { google } from "@/lib/components/image/icons";
+import { CommonButton } from "@/lib/components/buttons";
+import { ImageWithFallback } from "@/lib/components/image";
+import ForgetPasswordReqModal from "./ForgetPasswordReqModal";
+import { UnderlineInput } from "@/lib/components/form-elements";
+import { loginSchema, LoginType } from "@/lib/schema/auth/auth.schema";
+import { forgetPasswordConfirmationAction } from "@/lib/action/auth/auth.action";
+
+interface PropsType {
+  callbackUrl?: string;
+}
+
+const LoginForm = ({ callbackUrl }: PropsType) => {
+  const router = useRouter();
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
+  const [openForgetPasswordModal, setOpenForgetPasswordModal] = useState(false);
+  const [openOtpVerificationModal, setOpenOtpVerificationModal] =
+    useState(false);
+
+  // Setup react-hook-form with zod validation
+  const {
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginType>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  // Handle login form submission
+  const handleLoginSubmit = async (data: LoginType) => {
+    try {
+      setLoading(true);
+
+      const response = await signIn("credentials", {
+        ...data,
+        redirect: false,
+      });
+
+      if (response?.ok) {
+        toast.success("Logged in successfully");
+
+        const updatedSession = await getSession();
+
+        const user = updatedSession?.user;
+        const accessToken = user?.accessToken;
+        const isAdmin = user?.data.userRole === "admin";
+
+        if (callbackUrl) {
+          router.push(callbackUrl);
+        } else if (accessToken) {
+          router.push(isAdmin ? "/overview" : "/my-profile");
+        } else {
+          router.push("/");
+        }
+      } else {
+        toast.error("Login failed. Please check your credentials");
+      }
+    } catch {
+      toast.error("An error occurred during login.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle otp verification
+  const handleOtpVerification = async () => {
+    // Prepare payload (join otp together before sending)
+    const payload = {
+      email: email,
+      otp: otp.join(""),
+    };
+
+    // Send OTP confirmation request
+    const forgetPasswordConfirmationResponse =
+      await forgetPasswordConfirmationAction(payload);
+
+    // Show toast notification with confirmation result
+    toast(forgetPasswordConfirmationResponse.message, {
+      type: forgetPasswordConfirmationResponse.status ? "success" : "error",
+    });
+
+    // On successful OTP verification, navigate to password reset page
+    if (forgetPasswordConfirmationResponse.status) {
+      reset();
+      router.push(`/reset-password?email=${payload.email}&otp=${payload.otp}`);
+    }
+  };
+
+  return (
+    <form
+      className="w-full max-w-[600px] flex flex-col items-center gap-[42px]"
+      onSubmit={handleSubmit(handleLoginSubmit)}
+    >
+      <div className="w-full flex flex-col items-center gap-[40px]">
+        <SubHeading title="Sign in to Your Account" />
+        <div className="w-full flex items-center gap-2 border border-primaryBorder px-[20px] py-[12px] rounded-[10px]">
+          <ImageWithFallback src={google} width={16} height={16} alt="google" />
+          <h3 className="w-full text-[14px] text-center font-normal">
+            Continue with Google
+          </h3>
+        </div>
+        <h5 className="text-[14px] font-normal">or, sign in with your email</h5>
+      </div>
+
+      <div className="w-full flex flex-col items-center gap-[24px]">
+        {/* Email input field */}
+        <Controller
+          name="email"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <UnderlineInput
+              {...field}
+              label="Email"
+              type="email"
+              placeholder="Enter your email"
+              error={errors.email?.message}
+            />
+          )}
+        />
+
+        <div className="w-full flex flex-col items-start gap-2">
+          {/* Password input field */}
+          <Controller
+            name="password"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <UnderlineInput
+                {...field}
+                label="Password"
+                type="password"
+                placeholder="Enter your password"
+                error={errors.password?.message}
+              />
+            )}
+          />
+          {/* Forgot password link */}
+          <button
+            type="button"
+            onClick={() => {
+              if (!loading) {
+                setOpenForgetPasswordModal(true);
+              }
+            }}
+            className="text-[12px] font-normal underline"
+          >
+            Forgot your password?
+          </button>
+        </div>
+      </div>
+
+      {/* Submit button, disabled while loading */}
+      <CommonButton
+        label={loading ? "Loading..." : "Sign In"}
+        disabled={loading || openForgetPasswordModal}
+        type="submit"
+        className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"
+      />
+
+      {/* Terms of service and sign up links */}
+      <div className="w-full flex flex-col items-center gap-[30px]">
+        <div className="text-[12px] font-normal flex items-center gap-1">
+          By joining, you agree to our
+          <Link href="/terms-of-services" className="underline">
+            Terms of Service
+          </Link>
+          and
+          <Link href="/terms-of-services" className="underline">
+            Privacy Policy
+          </Link>
+        </div>
+        <div className="text-[14px] font-normal flex items-center gap-1">
+          Don't have an account?
+          <Link href="/registration" className="underline">
+            Sign up
+          </Link>
+        </div>
+      </div>
+      {/* Forget password request sending modal */}
+      {openForgetPasswordModal && (
+        <ForgetPasswordReqModal
+          setEmail={setEmail}
+          open={openForgetPasswordModal}
+          setOpen={setOpenForgetPasswordModal}
+          setOpenOtpVerificationModal={setOpenOtpVerificationModal}
+        />
+      )}
+
+      {/* OTP verification modal shown after registration request */}
+      {openOtpVerificationModal && (
+        <VerificationModal
+          otp={otp}
+          setOtp={setOtp}
+          loading={loading}
+          open={openOtpVerificationModal}
+          onConfirm={handleOtpVerification}
+        />
+      )}
+    </form>
+  );
+};
+
+export default LoginForm;

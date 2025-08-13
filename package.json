@@ -10,26 +10,36 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
+    "@paypal/react-paypal-js": "^8.8.3",
     "@stripe/react-stripe-js": "^3.7.0",
     "@stripe/stripe-js": "^7.4.0",
+    "country-state-city": "^3.2.1",
     "date-fns": "^4.1.0",
+    "flatpickr": "^4.6.13",
     "next": "14.2.24",
     "next-auth": "^4.24.11",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.59.0",
+    "react-icons": "^5.5.0",
+    "react-slick": "^0.30.3",
     "react-toastify": "^11.0.5",
+    "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.8.1",
     "stripe": "^18.2.1",
-    "zod": "^3.25.67"
+    "zod": "^3.25.67",
+    "zustand": "^5.0.7"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-slick": "^0.23.13",
+    "autoprefixer": "^10.4.21",
     "eslint": "^8",
     "eslint-config-next": "14.2.24",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }
 }

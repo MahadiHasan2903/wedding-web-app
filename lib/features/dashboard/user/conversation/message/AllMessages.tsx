@@ -28,8 +28,9 @@ interface PropsType {
     nextPage: number | null;
   };
   otherUser?: User;
-  loggedInUser?: SessionUser;
   conversationId: string;
+  loggedInUser?: SessionUser;
+  isBlockedByOtherUser: boolean;
   setMessages: Dispatch<SetStateAction<Message[]>>;
   setAttachments: Dispatch<SetStateAction<File[]>>;
   setReplayToMessage: (message: Message | null) => void;
@@ -46,6 +47,7 @@ const AllMessages = ({
   paginationInfo,
   setUpdatedMessage,
   setReplayToMessage,
+  isBlockedByOtherUser,
 }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -226,6 +228,7 @@ const AllMessages = ({
             setUpdatedMessage={setUpdatedMessage}
             setReplayToMessage={setReplayToMessage}
             handleDeleteMessage={handleDeleteMessage}
+            isBlockedByOtherUser={isBlockedByOtherUser}
             setOpenMenuMessageId={setOpenMenuMessageId}
             translatedLanguage={translatedLanguages[message.id] || null}
           />

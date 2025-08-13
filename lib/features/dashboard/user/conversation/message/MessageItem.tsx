@@ -16,6 +16,7 @@ interface Props {
   message: Message;
   conversationId: string;
   loggedInUser?: SessionUser;
+  isBlockedByOtherUser: boolean;
   openMenuMessageId: string | null;
   translatedLanguage: "en" | "es" | "fr" | null;
   setAttachments: Dispatch<SetStateAction<File[]>>;
@@ -40,6 +41,7 @@ const MessageItem = ({
   setReplayToMessage,
   translatedLanguage,
   handleDeleteMessage,
+  isBlockedByOtherUser,
   setOpenMenuMessageId,
 }: Props) => {
   const [openReportModal, setOpenReportModal] = useState(false);
@@ -192,12 +194,16 @@ const MessageItem = ({
                 width={12}
                 height={5}
                 alt="dots"
-                className="cursor-pointer rotate-90"
-                onClick={() =>
-                  setOpenMenuMessageId(
-                    openMenuMessageId === message.id ? null : message.id
-                  )
-                }
+                className={`${
+                  isBlockedByOtherUser ? "cursor-not-allowed" : "cursor-pointer"
+                } rotate-90`}
+                onClick={() => {
+                  if (!isBlockedByOtherUser) {
+                    setOpenMenuMessageId(
+                      openMenuMessageId === message.id ? null : message.id
+                    );
+                  }
+                }}
               />
               {openMenuMessageId === message.id && (
                 <div

@@ -35,8 +35,8 @@ interface PropsType {
 }
 
 const ConversationList = ({
-  allMyConversationData,
   conversationId,
+  allMyConversationData,
 }: PropsType) => {
   const { socket } = useSocket();
   const { data: session } = useSession();

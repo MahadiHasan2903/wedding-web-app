@@ -12,13 +12,15 @@ import { Conversation } from "@/lib/types/chat/conversation.types";
 import { updateBlockUnblockStatusAction } from "@/lib/action/user/userInteraction.action";
 
 interface PropsType {
-  conversationDetails: Conversation;
   isOtherUserOnline: boolean;
+  isBlockedByOtherUser: boolean;
+  conversationDetails: Conversation;
 }
 
 const ConversationHeader = ({
-  conversationDetails,
   isOtherUserOnline,
+  conversationDetails,
+  isBlockedByOtherUser,
 }: PropsType) => {
   const router = useRouter();
   const { data: session } = useSession();
@@ -118,8 +120,14 @@ const ConversationHeader = ({
             width={18}
             height={5}
             alt="dots"
-            className="cursor-pointer"
-            onClick={() => setMenuOpen((prev) => !prev)}
+            className={`${
+              isBlockedByOtherUser ? "cursor-not-allowed" : "cursor-pointer"
+            }`}
+            onClick={() => {
+              if (!isBlockedByOtherUser) {
+                setMenuOpen((prev) => !prev);
+              }
+            }}
           />
 
           {/* Dropdown menu */}

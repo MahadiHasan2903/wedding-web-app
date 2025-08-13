@@ -19,7 +19,7 @@ const PlanAndBilling = () => {
   const rawFee = categoryInfo?.sellPrice ?? 0;
   const packageFee = Number(rawFee).toFixed(2);
   const isVipUser = hasActiveVipMembership(session?.user.data);
-  const expiryDate = formatDateString2(membership?.purchasedAt);
+  const expiryDate = formatDateString2(membership?.expiresAt);
 
   //Function to get plan label
   const getPlanLabel = () => {
@@ -103,17 +103,29 @@ const PlanAndBilling = () => {
                   )}
                   <div
                     className={`${
-                      isVipUser
+                      membership?.membershipPackageInfo.id === 1
+                        ? "text-green bg-[#D0FFEF]"
+                        : isVipUser
                         ? "text-green bg-[#D0FFEF]"
                         : "text-primaryBorder bg-gray"
                     } w-fit flex items-center gap-1 text-[10px] font-normal rounded-full px-[10px] py-[5px]`}
                   >
                     <div
                       className={`${
-                        isVipUser ? "bg-green" : "bg-primaryBorder"
+                        membership?.membershipPackageInfo.id === 1
+                          ? "bg-green"
+                          : isVipUser
+                          ? "bg-green"
+                          : "bg-primaryBorder"
                       } w-[5px] h-[5px] rounded-full`}
                     />
-                    <p>{isVipUser ? "Active" : "Inactive"}</p>
+                    <p>
+                      {membership?.membershipPackageInfo.id === 1
+                        ? "Active"
+                        : isVipUser
+                        ? "Active"
+                        : "Inactive"}
+                    </p>
                   </div>
                 </div>
               </div>

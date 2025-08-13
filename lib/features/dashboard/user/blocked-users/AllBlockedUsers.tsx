@@ -170,7 +170,7 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
                 <tr>
                   <td
                     colSpan={2}
-                    className="text-center py-4 text-sm text-gray"
+                    className="text-center py-10 text-sm text-black/70"
                   >
                     No blocked users found.
                   </td>

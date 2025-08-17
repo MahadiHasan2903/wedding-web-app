@@ -5,7 +5,7 @@ import { PaginatedResponse } from "@/lib/types/common/common.types";
 
 type GetConversationMessagesResponse = PaginatedResponse<Message>;
 
-export interface GetMessageDetailsResponse {
+interface GetMessageDetailsResponse {
   success: boolean;
   message: string;
   status: number;

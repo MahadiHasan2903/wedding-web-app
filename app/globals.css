@@ -40,12 +40,12 @@
 
 .flatpickr-months .flatpickr-prev-month:hover svg,
 .flatpickr-months .flatpickr-next-month:hover svg {
-  @apply !fill-primary;
+  @apply !fill-secondary;
 }
 
 .flatpickr-months .flatpickr-prev-month:hover svg,
 .flatpickr-months .flatpickr-next-month:hover svg {
-  @apply !fill-primary;
+  @apply !fill-secondary;
 }
 
 .flatpickr-calendar {
@@ -54,7 +54,7 @@
 
 .flatpickr-months .flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month {
-  @apply !top-7;
+  @apply !top-7 !px-7;
 }
 
 .flatpickr-calendar.static {

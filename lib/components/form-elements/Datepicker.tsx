@@ -1,21 +1,23 @@
 "use client";
 
 import React, {
-  Dispatch,
-  FC,
-  SetStateAction,
-  useEffect,
   useRef,
+  Dispatch,
   useState,
+  useEffect,
+  SetStateAction,
 } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.css";
+import { calender } from "../image/icons";
+import { ImageWithFallback } from "../image";
 import { FieldValues, SetFieldValue } from "react-hook-form";
-import { FaCalendarDays } from "react-icons/fa6";
 
 interface DatePickerProps {
   title: string;
   label?: string;
+  className?: string;
+  value?: string | null;
   defaultDate?: Date | string;
   maxDate?: Date | string;
   minDate?: Date | string;
@@ -36,7 +38,9 @@ interface DatePickerProps {
 
 const DatePicker = ({
   title,
+  value,
   label,
+  className,
   defaultDate,
   maxDate,
   minDate,
@@ -61,7 +65,11 @@ const DatePicker = ({
     if (inputRef.current) {
       const options: flatpickr.Options.Options = {
         mode: "single",
-        defaultDate: defaultDate ? new Date(defaultDate) : undefined,
+        defaultDate: value
+          ? new Date(value)
+          : defaultDate
+          ? new Date(defaultDate)
+          : undefined,
         static: true,
         monthSelectorType: "static",
         enableTime: includeTime,
@@ -132,6 +140,12 @@ const DatePicker = ({
     includeTime,
   ]);
 
+  useEffect(() => {
+    if (inputRef.current && value) {
+      inputRef.current.value = value;
+    }
+  }, [value]);
+
   const handleFocus = () => {
     if (onFocus) onFocus();
   };
@@ -150,16 +164,22 @@ const DatePicker = ({
       <div className="relative w-full">
         <input
           ref={inputRef}
-          className="w-full border-b-[1.5px] border-primaryBorder bg-transparent py-2 font-normal outline-none transition focus:border-primary active:border-primary"
+          className={className}
           type="text"
           placeholder={includeTime ? "mm/dd/yyyy hh:mm" : "mm/dd/yyyy"}
           readOnly={readOnly}
           data-class="flatpickr-right"
           onFocus={handleFocus}
+          value={value || ""}
           onBlur={handleBlur}
         />
-        <div className="pointer-events-none absolute inset-0 left-auto right-2 sm:right-5 flex items-center">
-          <FaCalendarDays className="text-primaryBorder" />
+        <div className="pointer-events-none absolute inset-0 left-auto right-2 flex items-center">
+          <ImageWithFallback
+            src={calender}
+            width={18}
+            height={18}
+            alt="calender"
+          />
         </div>
       </div>
       {error && <p className="text-red m-[5px]">{error}</p>}

@@ -7,6 +7,7 @@ import React, {
   useEffect,
   ChangeEvent,
 } from "react";
+import { IoMdEye } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 import { User } from "@/lib/types/user/user.types";
 import { Pagination } from "@/lib/components/table";
@@ -170,6 +171,9 @@ const UserManagement = ({ allUsersData }: PropsType) => {
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
                   Account Status
                 </th>
+                <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -186,7 +190,10 @@ const UserManagement = ({ allUsersData }: PropsType) => {
                 data.map((user) => (
                   <tr
                     key={user.id}
-                    className="border-b-[1px] lg:border-b-[3px] border-light transition hover:bg-light"
+                    className="border-b-[1px] lg:border-b-[3px] border-light transition hover:bg-light cursor-pointer"
+                    onClick={() => {
+                      router.push(`/user-management/${user.id}`);
+                    }}
                   >
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[150px]">
                       {user.firstName} {user.lastName}
@@ -219,6 +226,9 @@ const UserManagement = ({ allUsersData }: PropsType) => {
                           {user.accountStatus}
                         </p>
                       </div>
+                    </td>
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[120px]">
+                      <IoMdEye size={20} className="text-primary" />
                     </td>
                   </tr>
                 ))

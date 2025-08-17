@@ -90,79 +90,70 @@ const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
       </div>
 
       <div className="w-full h-full">
-        <div className="max-w-[360px] sm:max-w-[640px] md:max-w-[768px] xl:max-w-full overflow-x-auto">
-          <table className="w-full">
+        <div className="flex-1 overflow-x-auto">
+          <table className="w-full text-left table-auto">
             <thead>
               <tr className="border-b-[1px] lg:border-b-[3px] border-light">
-                {[
-                  "Date",
-                  "Subscription Package",
-                  "Payment Method",
-                  "Amount",
-                  "Status",
-                  "",
-                ].map((col) => (
-                  <th
-                    key={col}
-                    className="whitespace-nowrap text-[14px] font-medium px-[17px] lg:px-[36px] py-3 text-left"
-                  >
-                    {col}
-                  </th>
-                ))}
+                <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
+                  Date
+                </th>
+                <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
+                  Subscription Package
+                </th>
+                <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
+                  Payment Method
+                </th>
+                <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
+                  Amount
+                </th>
+                <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
+                  Status
+                </th>
               </tr>
             </thead>
             <tbody>
-              {data.length === 0 ? (
-                <tr>
-                  <td
-                    colSpan={6}
-                    className="text-center py-10 text-sm text-black/70"
+              {data.map((payment) => {
+                const purchase = payment.servicePurchaseId;
+                return (
+                  <tr
+                    key={payment.id}
+                    className="border-b-[1px] lg:border-b-[3px] border-light transition hover:bg-light"
                   >
-                    No payment history found.
-                  </td>
-                </tr>
-              ) : (
-                data.map((payment) => {
-                  const purchase = payment.servicePurchaseId;
-                  return (
-                    <tr
-                      key={payment.id}
-                      className="border-b-[1px] lg:border-b-[3px] border-light hover:bg-light transition"
-                    >
-                      <td className="whitespace-nowrap px-[17px] lg:px-[36px] py-3 text-[14px]">
-                        {formatDateString3(purchase.purchasedAt) || "N/A"}
-                      </td>
-                      <td className="whitespace-nowrap px-[17px] lg:px-[36px] py-3 text-[14px]">
-                        {getPackageLabel(purchase.purchasePackageCategory)}
-                      </td>
-                      <td className="whitespace-nowrap px-[17px] lg:px-[36px] py-3 text-[14px] capitalize">
-                        {payment.gateway}
-                      </td>
-                      <td className="whitespace-nowrap px-[17px] lg:px-[36px] py-3 text-[14px]">
-                        {formatCurrency(Number(payment.payable))}
-                      </td>
-                      <td className="whitespace-nowrap px-[17px] lg:px-[36px] py-3 text-[14px] capitalize">
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[150px]">
+                      {formatDateString3(purchase.purchasedAt) || "N/A"}
+                    </td>
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left capitalize whitespace-nowrap min-w-[100px]">
+                      {getPackageLabel(purchase.purchasePackageCategory)}
+                    </td>
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[100px] capitalize">
+                      {payment.gateway}
+                    </td>
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[120px]">
+                      {formatCurrency(Number(payment.payable))}
+                    </td>
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] capitalize whitespace-nowrap min-w-[140px]">
+                      <div
+                        className={`${
+                          purchase.paymentStatus === "paid"
+                            ? "text-green bg-[#D0FFEF]"
+                            : "text-red bg-[#FFE2E6]"
+                        } w-fit flex items-center gap-1 text-[12px] font-normal rounded-full px-[15px] py-[6px]`}
+                      >
                         <div
                           className={`${
                             purchase.paymentStatus === "paid"
-                              ? "text-green bg-[#D0FFEF]"
-                              : "text-red bg-[#FFE2E6]"
-                          } w-fit flex items-center gap-1 text-[12px] font-normal rounded-full px-[16px] py-[8px]`}
-                        >
-                          <div
-                            className={`${
-                              purchase.paymentStatus === "paid"
-                                ? "bg-green"
-                                : "bg-red"
-                            } w-[5px] h-[5px] rounded-full`}
-                          />
-                          <p>{purchase.paymentStatus}</p>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
+                              ? "bg-green"
+                              : "bg-red"
+                          } w-[5px] h-[5px] rounded-full`}
+                        />
+                        <p className="whitespace-nowrap">
+                          {purchase.paymentStatus}
+                        </p>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

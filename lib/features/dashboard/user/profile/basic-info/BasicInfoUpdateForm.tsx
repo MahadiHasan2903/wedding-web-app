@@ -264,6 +264,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                           {...field}
                           defaultDate={String(field.value)}
                           ref={null}
+                          className="w-full border-b-[1.5px] border-primaryBorder bg-transparent py-2 font-normal outline-none transition focus:border-primary active:border-primary"
                           title="dateOfBirth"
                           label="Date of Birth"
                           setValue={setValue}

@@ -13,12 +13,14 @@ import change from "@/public/icons/change.svg";
 import avatar from "@/public/icons/avatar.svg";
 import logout from "@/public/icons/logout.svg";
 import report from "@/public/icons/report.svg";
+import filter from "@/public/icons/filter.svg";
 import google from "@/public/icons/google.svg";
 import tiktok from "@/public/icons/tiktok.svg";
 import paypal from "@/public/icons/paypal.svg";
 import twitter from "@/public/icons/twitter.svg";
 import message from "@/public/icons/message.svg";
 import polygon from "@/public/icons/polygon.svg";
+import calender from "@/public/icons/calender.svg";
 import overview from "@/public/icons/overview.svg";
 import facebook from "@/public/icons/facebook.svg";
 import linkedin from "@/public/icons/linkedin.svg";
@@ -62,12 +64,14 @@ export {
   avatar,
   logout,
   report,
+  filter,
   google,
   message,
   tiktok,
   paypal,
   twitter,
   polygon,
+  calender,
   whatsapp,
   overview,
   facebook,

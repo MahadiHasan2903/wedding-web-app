@@ -48,7 +48,7 @@ const UserManagement = ({ allUsersData }: PropsType) => {
   const { currentPage, totalPages, prevPage, nextPage } =
     allUsersData.paginationInfo;
 
-  // Memoize the blocked user list to prevent unnecessary re-renders
+  // Memoize the user list to prevent unnecessary re-renders
   const data = useMemo(() => allUsersData.users || [], [allUsersData.users]);
 
   useEffect(() => {

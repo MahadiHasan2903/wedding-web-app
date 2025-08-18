@@ -62,3 +62,9 @@ export interface UserFilterOptions {
   accountType?: string;
   accountStatus?: string;
 }
+
+export interface PaymentFilterOptions {
+  gateway?: string;
+  paymentStatus?: string;
+  dateRange?: string;
+}

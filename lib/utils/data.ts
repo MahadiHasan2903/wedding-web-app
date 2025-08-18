@@ -141,6 +141,11 @@ export const adminSidebarItems = [
     href: "/admin-management",
     icon: manageAdmin,
   },
+  {
+    label: "Password & Security",
+    href: "/password-security",
+    icon: settings,
+  },
 ];
 
 export const socialLinks = [

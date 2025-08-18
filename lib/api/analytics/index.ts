@@ -9,6 +9,7 @@ interface GetUserStatsResponse {
   data: {
     activeCount: number;
     inactiveCount: number;
+    bannedCount: number;
     vipCount: number;
   };
 }
@@ -53,6 +54,24 @@ interface GetGenderDistributionResponse {
   };
 }
 
+//Interface representing the response structure for subscription revenue statistics.
+interface GetSubscriptionRevenueStatsResponse {
+  status: number;
+  success: boolean;
+  message: string;
+  data: {
+    thisWeek: number;
+    thisMonth: number;
+    thisQuarter: number;
+    total: number;
+    monthlyRevenue: Array<{
+      month: string;
+      year: number;
+      totalAmount: number;
+    }>;
+  };
+}
+
 /**
  * Fetches user statistics from the server.
  *
@@ -82,6 +101,7 @@ const getUserStats = async (accessToken?: string) => {
   const userStats = {
     activeCount: response.data.activeCount,
     inactiveCount: response.data.inactiveCount,
+    bannedCount: response.data.bannedCount,
     vipCount: response.data.vipCount,
   };
 
@@ -166,10 +186,53 @@ const getGenderDistribution = async (accessToken?: string) => {
   return genderDistribution;
 };
 
+/**
+ * Fetches subscription revenue statistics from the server.
+ *
+ * @param accessToken - Optional Bearer token used for authentication with the API.
+ * @returns An object containing subscription revenue statistics
+ * @throws Will throw an error if the response does not contain valid data.
+ */
+const getSubscriptionRevenueStats = async (accessToken?: string) => {
+  // Make a GET request to fetch subscription revenue stats
+  const response = await fetchTyped<GetSubscriptionRevenueStatsResponse>(
+    `${BASE_URL}/payment/subscription-revenue`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  // Validate that the server returned proper data
+  if (!response.data) {
+    throw new Error(
+      "Failed to fetch subscription revenue statistics: server returned an empty or malformed response."
+    );
+  }
+
+  // Map the server response to a clean object containing only relevant fields
+  const subscriptionRevenueStats = {
+    thisWeek: response.data.thisWeek,
+    thisMonth: response.data.thisMonth,
+    thisQuarter: response.data.thisQuarter,
+    total: response.data.total,
+    monthlyRevenue: response.data.monthlyRevenue?.map((item) => ({
+      month: item.month,
+      year: item.year,
+      totalAmount: item.totalAmount,
+    })),
+  };
+
+  return subscriptionRevenueStats;
+};
+
 const analytics = {
   getUserStats,
   getGenderDistribution,
   getNewRegistrationStats,
+  getSubscriptionRevenueStats,
 };
 
 export default analytics;

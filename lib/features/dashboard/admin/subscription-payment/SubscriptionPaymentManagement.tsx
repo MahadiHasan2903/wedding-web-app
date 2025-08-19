@@ -3,10 +3,10 @@
 import React, { useRef, useMemo, useState, useEffect } from "react";
 import { Pagination } from "@/lib/components/table";
 import { CardTitle } from "@/lib/components/heading";
-import { filter } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import FilterPaymentDropDown from "./FilterPaymentDropDown";
+import { filter, avatar } from "@/lib/components/image/icons";
 import { formatDateString3 } from "@/lib/utils/date/dateUtils";
 import { PaymentTransaction } from "@/lib/types/payment/payment.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -148,8 +148,25 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
                       className="border-b-[1px] lg:border-b-[3px] border-light transition hover:bg-light"
                     >
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[150px]">
-                        {subscription.user.firstName}{" "}
-                        {subscription.user.lastName}
+                        <div className="flex items-tart gap-4">
+                          <div className="w-[45px] h-[45px] relative rounded-full bg-gray overflow-hidden border border-black">
+                            <ImageWithFallback
+                              src={subscription.user.profilePicture?.url}
+                              fallBackImage={avatar}
+                              alt="user"
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="flex flex-col item-start gap-1">
+                            <p>
+                              {subscription.user.firstName}{" "}
+                              {subscription.user.lastName}
+                            </p>
+                            <p>{subscription.user.email}</p>
+                            <p>{subscription.user.phoneNumber}</p>
+                          </div>
+                        </div>
                       </td>
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left capitalize whitespace-nowrap min-w-[100px]">
                         {subscription.servicePurchaseId

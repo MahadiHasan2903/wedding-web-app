@@ -48,7 +48,7 @@ const UpdateMsPackageForm = ({
   });
 
   // Handle form submission to update the membership package
-  const handleUpdateProfile = async (data: UpdateMsPackageType) => {
+  const handleUpdateMsPackage = async (data: UpdateMsPackageType) => {
     setLoading(true);
 
     const payload = {
@@ -84,7 +84,7 @@ const UpdateMsPackageForm = ({
         <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
           <div className="w-full h-full max-w-[600px] max-h-[500px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
             <form
-              onSubmit={handleSubmit(handleUpdateProfile)}
+              onSubmit={handleSubmit(handleUpdateMsPackage)}
               className="w-full h-full flex flex-col gap-[25px]"
             >
               <CardTitle title="Update Membership Package" />

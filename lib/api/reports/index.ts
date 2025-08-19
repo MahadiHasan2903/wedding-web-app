@@ -48,8 +48,6 @@ const getAllReports = async (
 
   const url = `${BASE_URL}/reports?${params.toString()}`;
 
-  console.log(url);
-
   const response = await fetchTyped<GetReportsListResponse>(url, {
     method: "GET",
     headers: {

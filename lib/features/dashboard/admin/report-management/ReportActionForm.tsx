@@ -37,7 +37,6 @@ const ReportActionForm = ({ open, setOpen, reportDetails }: PropsType) => {
     setLoadingAction(action);
 
     const requestPayload: ReportActionType = { action };
-    console.log("Submitting payload:", JSON.stringify(requestPayload, null, 2));
 
     const reportActionResponse = await applyReportAction(
       reportDetails.id,

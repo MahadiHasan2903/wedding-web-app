@@ -11,6 +11,7 @@ import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { updateUserRoleAction } from "@/lib/action/user/user.action";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import AddAdminForm from "./AddAdminForm";
 
 interface PropsType {
   allAdminData: {
@@ -77,14 +78,14 @@ const AdminManagement = ({ allAdminData }: PropsType) => {
     };
 
     // Submit request
-    const accountStatusUpdateResponse = await updateUserRoleAction(payload);
+    const updateUserRoleResponse = await updateUserRoleAction(payload);
 
     // Show toast notification with confirmation result
-    toast(accountStatusUpdateResponse.message, {
-      type: accountStatusUpdateResponse.status ? "success" : "error",
+    toast(updateUserRoleResponse.message, {
+      type: updateUserRoleResponse.status ? "success" : "error",
     });
 
-    if (accountStatusUpdateResponse.status) {
+    if (updateUserRoleResponse.status) {
       router.refresh();
       setSelectedAdminId(null);
       setOpenRemoveAdminModal(false);
@@ -159,7 +160,7 @@ const AdminManagement = ({ allAdminData }: PropsType) => {
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[100px]">
                       {admin.email}
                     </td>
-                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[200px]">
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[100px]">
                       <CommonButton
                         label="Remove"
                         className="w-fit text-[10px] px-[14px] py-[10px] rounded-[40px] border border-primaryBorder hover:bg-red hover:text-white transition-all"
@@ -188,6 +189,8 @@ const AdminManagement = ({ allAdminData }: PropsType) => {
           />
         </div>
       </div>
+
+      {open && <AddAdminForm open={open} setOpen={setOpen} />}
 
       {openRemoveAdminModal && selectedAdminId && (
         <AlertModal

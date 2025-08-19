@@ -38,12 +38,11 @@ export function fetchZodTyped<T>(
 
       if (!response.ok) {
         // Use server message if available
-        throw new Error(data?.message || `HTTP Error: ${response.status}`);
+        throw new Error(data?.error || `HTTP Error: ${response.status}`);
       }
 
       if (data.success === false || data.status === false) {
-        const serverError =
-          data?.error || data?.message || "Unknown server error";
+        const serverError = data?.error || data?.message;
         throw new Error(serverError);
       }
 

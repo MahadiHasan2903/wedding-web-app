@@ -13,6 +13,8 @@ import {
   deleteAdditionalPhotosResponseSchema,
   UpdateUserRoleType,
   updateUserRoleSchema,
+  AddAdminType,
+  addAdminSchema,
 } from "@/lib/schema/user/user.schema";
 import { BASE_URL } from "@/lib/config/constants";
 import { fetchZodTyped } from "@/lib/action/client";
@@ -378,6 +380,127 @@ const updateAccountStatusAction = async (
 };
 
 /**
+ * Adds a new admin user to the system.
+ *
+ * @param requestPayload - The request payload containing user details for admin creation.
+ * @returns A result object containing the newly added admin's profile or an error message.
+ */
+const addAdminAction = async (requestPayload: AddAdminType) => {
+  // Validate the request payload against the Zod schema
+  const safeParse = addAdminSchema.safeParse(requestPayload);
+  if (!safeParse.success) {
+    throw new Error("Invalid admin details provided.");
+  }
+
+  const { accessToken } = await getServerSessionData();
+
+  try {
+    // Send POST request to backend API for adding an admin
+    const response = await fetchZodTyped(
+      `${BASE_URL}/users/add-admin`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(requestPayload),
+      },
+      updateUserResponseSchema // Validate the response structure with Zod
+    );
+
+    // Map response data into a strongly typed user profile object
+    const newAdminProfile: UpdateUserResponseType = {
+      id: response.data.id,
+      firstName: response.data.firstName,
+      lastName: response.data.lastName,
+      email: response.data.email,
+      phoneNumber: response.data.phoneNumber,
+      bio: response.data.bio,
+      motherTongue: response.data.motherTongue,
+      dateOfBirth: response.data.dateOfBirth,
+      gender: response.data.gender,
+      nationality: response.data.nationality,
+      country: response.data.country,
+      city: response.data.city,
+      maritalStatus: response.data.maritalStatus,
+      profilePicture: response.data.profilePicture ?? null,
+      additionalPhotos: response.data.additionalPhotos ?? [],
+      blockedUsers: response.data.blockedUsers ?? null,
+      likedUsers: response.data.likedUsers ?? null,
+      socialMediaLinks: response.data.socialMediaLinks,
+      preferredLanguages: response.data.preferredLanguages ?? [],
+      userRole: response.data.userRole,
+      accountStatus: response.data.accountStatus,
+      purchasedMembership: response.data.purchasedMembership ?? null,
+      timeZone: response.data.timeZone,
+      highestEducation: response.data.highestEducation,
+      institutionName: response.data.institutionName,
+      profession: response.data.profession,
+      companyName: response.data.companyName,
+      monthlyIncome: response.data.monthlyIncome,
+      incomeCurrency: response.data.incomeCurrency,
+      religion: response.data.religion,
+      politicalView: response.data.politicalView,
+      livingArrangement: response.data.livingArrangement,
+      familyMemberCount: response.data.familyMemberCount ?? null,
+      interestedInGender: response.data.interestedInGender,
+      lookingFor: response.data.lookingFor,
+      preferredAgeRange: response.data.preferredAgeRange,
+      preferredNationality: response.data.preferredNationality,
+      religionPreference: response.data.religionPreference,
+      politicalPreference: response.data.politicalPreference,
+      partnerExpectations: response.data.partnerExpectations,
+      weightKg: response.data.weightKg,
+      heightCm: response.data.heightCm,
+      bodyType: response.data.bodyType,
+      drinkingHabit: response.data.drinkingHabit,
+      smokingHabit: response.data.smokingHabit,
+      healthCondition: response.data.healthCondition,
+      hasPet: response.data.hasPet ?? null,
+      dietaryPreference: response.data.dietaryPreference,
+      children: response.data.children,
+      familyBackground: response.data.familyBackground,
+      culturalPractices: response.data.culturalPractices,
+      astrologicalSign: response.data.astrologicalSign,
+      loveLanguage: response.data.loveLanguage,
+      favoriteQuote: response.data.favoriteQuote,
+      profileVisibility: response.data.profileVisibility,
+      photoVisibility: response.data.photoVisibility,
+      messageAvailability: response.data.messageAvailability,
+      createdAt: response.data.createdAt,
+      updatedAt: response.data.updatedAt,
+    };
+
+    // Return a successful result with informative message
+    const result: Result<UpdateUserResponseType> = {
+      status: true,
+      data: newAdminProfile,
+      message: "Admin user has been added successfully.",
+    };
+
+    return result;
+  } catch (error: any) {
+    console.error("Failed to add admin:", error);
+
+    // Detect timeout error
+    const isTimeout = error.message?.includes("timed out");
+
+    // Return a failure result with descriptive error message
+    const result: Result<UpdateUserResponseType> = {
+      status: false,
+      data: null,
+      message: isTimeout
+        ? "The request timed out. Please check your connection and try again."
+        : error.message ||
+          "Unable to add admin at the moment. Please try again later.",
+    };
+
+    return result;
+  }
+};
+
+/**
  * Updates the role of a user in the system.
  *
  * @param requestPayload - The request payload containing userId and new role.
@@ -500,6 +623,7 @@ const updateUserRoleAction = async (requestPayload: UpdateUserRoleType) => {
 };
 
 export {
+  addAdminAction,
   changePasswordAction,
   updateUserRoleAction,
   updateUserProfileAction,

@@ -37,6 +37,7 @@ export interface Result<T> {
 }
 
 export interface UserFilterOptions {
+  name?: string;
   age?: string;
   height?: string;
   weight?: string;
@@ -54,8 +55,22 @@ export interface UserFilterOptions {
   familyMember?: string;
   hasPet?: boolean;
   dietaryPreference?: string;
+  joined?: string;
   smokingHabit?: string;
   drinkingHabit?: string;
   healthCondition?: string;
   accountType?: string;
+  accountStatus?: string;
+}
+
+export interface PaymentFilterOptions {
+  gateway?: string;
+  paymentStatus?: string;
+  dateRange?: string;
+}
+
+export interface ReportFilterOptions {
+  gateway?: string;
+  paymentStatus?: string;
+  dateRange?: string;
 }

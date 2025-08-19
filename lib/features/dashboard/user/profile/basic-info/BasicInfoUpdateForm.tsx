@@ -189,246 +189,247 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
     setLoading(false);
   };
 
+  if (!open) {
+    return null;
+  }
+
   return (
-    <>
-      {open && (
-        <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
-          <div className="w-full h-full max-w-[600px] max-h-[800px] rounded-[10px] bg-white p-[24px] lg:p-[35px] ">
-            {/* Form */}
-            <form
-              onSubmit={handleSubmit(handleUpdateProfile)}
-              className="w-full h-full flex flex-col gap-[25px]"
-            >
-              {/* Form Title */}
-              <CardTitle title="Basic Info" />
+    <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
+      <div className="w-full h-full max-w-[600px] max-h-[800px] rounded-[10px] bg-white p-[24px] lg:p-[35px] ">
+        {/* Form */}
+        <form
+          onSubmit={handleSubmit(handleUpdateProfile)}
+          className="w-full h-full flex flex-col gap-[25px]"
+        >
+          {/* Form Title */}
+          <CardTitle title="Basic Info" />
 
-              {/* Scrollable content area for the form fields */}
-              <div className="w-full h-full max-h-[700px] overflow-y-auto flex flex-col gap-[22px] ">
-                {/* First and Last Name fields */}
-                <div className="flex flex-col md:flex-row gap-[35px]">
-                  <Controller
-                    name="firstName"
-                    control={control}
-                    defaultValue={userProfile.firstName}
-                    render={({ field }) => (
-                      <UnderlineInput
-                        {...field}
-                        label="First Name"
-                        type="text"
-                        placeholder="Enter your first name"
-                        error={errors.firstName?.message}
-                      />
-                    )}
+          {/* Scrollable content area for the form fields */}
+          <div className="w-full h-full max-h-[700px] overflow-y-auto flex flex-col gap-[22px] ">
+            {/* First and Last Name fields */}
+            <div className="flex flex-col md:flex-row gap-[35px]">
+              <Controller
+                name="firstName"
+                control={control}
+                defaultValue={userProfile.firstName}
+                render={({ field }) => (
+                  <UnderlineInput
+                    {...field}
+                    label="First Name"
+                    type="text"
+                    placeholder="Enter your first name"
+                    error={errors.firstName?.message}
                   />
-                  <Controller
-                    name="lastName"
-                    control={control}
-                    defaultValue={userProfile.lastName}
-                    render={({ field }) => (
-                      <UnderlineInput
-                        {...field}
-                        label="Last Name"
-                        type="text"
-                        placeholder="Enter your last name"
-                        error={errors.lastName?.message}
-                      />
-                    )}
+                )}
+              />
+              <Controller
+                name="lastName"
+                control={control}
+                defaultValue={userProfile.lastName}
+                render={({ field }) => (
+                  <UnderlineInput
+                    {...field}
+                    label="Last Name"
+                    type="text"
+                    placeholder="Enter your last name"
+                    error={errors.lastName?.message}
                   />
-                </div>
+                )}
+              />
+            </div>
 
-                {/* Gender dropdown and Date of Birth picker */}
-                <div className="flex flex-col md:flex-row gap-[35px]">
-                  <div className="flex-1">
-                    <Controller
-                      name="gender"
-                      control={control}
-                      defaultValue={userProfile.gender ?? ""}
-                      render={({ field }) => (
-                        <UnderlineSelectField
-                          {...field}
-                          label="Gender"
-                          name="gender"
-                          options={enumToOptions(Gender)}
-                          placeholder="Select your gender"
-                        />
-                      )}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <Controller
-                      name="dateOfBirth"
-                      control={control}
-                      defaultValue={userProfile.dateOfBirth ?? ""}
-                      render={({ field }) => (
-                        <Datepicker
-                          {...field}
-                          defaultDate={String(field.value)}
-                          ref={null}
-                          title="dateOfBirth"
-                          label="Date of Birth"
-                          setValue={setValue}
-                          error={errors.dateOfBirth?.message}
-                        />
-                      )}
-                    />
-                  </div>
-                </div>
-
-                {/* Country and City/State dropdowns */}
-                <div className="flex flex-col md:flex-row gap-[35px]">
-                  <div className="flex-1">
-                    <Controller
-                      name="country"
-                      control={control}
-                      defaultValue={userProfile.country ?? ""}
-                      render={({ field }) => (
-                        <UnderlineSelectField
-                          {...field}
-                          label="Country"
-                          options={countryOptions}
-                          placeholder="Select your country"
-                        />
-                      )}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <Controller
-                      name="city"
-                      control={control}
-                      defaultValue={userProfile.city ?? ""}
-                      render={({ field }) => (
-                        <UnderlineSelectField
-                          {...field}
-                          label="State/City"
-                          options={statesOptions}
-                          placeholder="Select your city"
-                          disabled={!countryField} // Disable city select if no country selected
-                        />
-                      )}
-                    />
-                  </div>
-                </div>
-
-                {/* Nationality input and Marital Status dropdown */}
-                <div className="flex flex-col md:flex-row gap-[35px]">
-                  <div className="flex-1">
-                    <Controller
-                      name="nationality"
-                      control={control}
-                      defaultValue={userProfile.nationality ?? ""}
-                      render={({ field }) => (
-                        <UnderlineInput
-                          {...field}
-                          label="Nationality"
-                          type="text"
-                          placeholder="Enter your nationality"
-                          error={errors.nationality?.message}
-                        />
-                      )}
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <Controller
-                      name="maritalStatus"
-                      control={control}
-                      defaultValue={userProfile.maritalStatus ?? ""}
-                      render={({ field }) => (
-                        <UnderlineSelectField
-                          {...field}
-                          label="Marital Status"
-                          name="maritalStatus"
-                          options={enumToOptions(MaritalStatus)}
-                          placeholder="Select your marital status"
-                        />
-                      )}
-                    />
-                  </div>
-                </div>
-
-                {/* Short bio textarea */}
+            {/* Gender dropdown and Date of Birth picker */}
+            <div className="flex flex-col md:flex-row gap-[35px]">
+              <div className="flex-1">
                 <Controller
-                  name="bio"
+                  name="gender"
                   control={control}
-                  defaultValue={userProfile.bio ?? ""}
+                  defaultValue={userProfile.gender ?? ""}
                   render={({ field }) => (
-                    <Textarea
+                    <UnderlineSelectField
                       {...field}
-                      label="Short Bio"
-                      rows={6}
-                      placeholder="Enter your bio"
-                      error={errors.bio?.message}
-                      className="!p-[16px] bg-light text-[12px] lg:text-[14px] "
+                      label="Gender"
+                      name="gender"
+                      options={enumToOptions(Gender)}
+                      placeholder="Select your gender"
                     />
                   )}
                 />
+              </div>
+              <div className="flex-1">
+                <Controller
+                  name="dateOfBirth"
+                  control={control}
+                  defaultValue={userProfile.dateOfBirth ?? ""}
+                  render={({ field }) => (
+                    <Datepicker
+                      {...field}
+                      defaultDate={String(field.value)}
+                      ref={null}
+                      className="w-full border-b-[1.5px] border-primaryBorder bg-transparent py-2 font-normal outline-none transition focus:border-primary active:border-primary"
+                      title="dateOfBirth"
+                      label="Date of Birth"
+                      setValue={setValue}
+                      error={errors.dateOfBirth?.message}
+                    />
+                  )}
+                />
+              </div>
+            </div>
 
-                {/* Social Media Links inputs */}
-                <div className="flex flex-col items-start gap-[5px]">
-                  <p className="text-[12px] lg:text-[14px] font-medium">
-                    Social Links
-                  </p>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[25px] gap-y-[10px]">
-                    {socialPlatforms.map((platform, index) => (
-                      <div
-                        key={platform.name}
-                        className="flex items-center gap-[10px]"
-                      >
-                        <ImageWithFallback
-                          src={platform.icon}
-                          width={20}
-                          height={20}
-                          alt={platform.name}
+            {/* Country and City/State dropdowns */}
+            <div className="flex flex-col md:flex-row gap-[35px]">
+              <div className="flex-1">
+                <Controller
+                  name="country"
+                  control={control}
+                  defaultValue={userProfile.country ?? ""}
+                  render={({ field }) => (
+                    <UnderlineSelectField
+                      {...field}
+                      label="Country"
+                      options={countryOptions}
+                      placeholder="Select your country"
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex-1">
+                <Controller
+                  name="city"
+                  control={control}
+                  defaultValue={userProfile.city ?? ""}
+                  render={({ field }) => (
+                    <UnderlineSelectField
+                      {...field}
+                      label="State/City"
+                      options={statesOptions}
+                      placeholder="Select your city"
+                      disabled={!countryField} // Disable city select if no country selected
+                    />
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Nationality input and Marital Status dropdown */}
+            <div className="flex flex-col md:flex-row gap-[35px]">
+              <div className="flex-1">
+                <Controller
+                  name="nationality"
+                  control={control}
+                  defaultValue={userProfile.nationality ?? ""}
+                  render={({ field }) => (
+                    <UnderlineInput
+                      {...field}
+                      label="Nationality"
+                      type="text"
+                      placeholder="Enter your nationality"
+                      error={errors.nationality?.message}
+                    />
+                  )}
+                />
+              </div>
+              <div className="flex-1">
+                <Controller
+                  name="maritalStatus"
+                  control={control}
+                  defaultValue={userProfile.maritalStatus ?? ""}
+                  render={({ field }) => (
+                    <UnderlineSelectField
+                      {...field}
+                      label="Marital Status"
+                      name="maritalStatus"
+                      options={enumToOptions(MaritalStatus)}
+                      placeholder="Select your marital status"
+                    />
+                  )}
+                />
+              </div>
+            </div>
+
+            {/* Short bio textarea */}
+            <Controller
+              name="bio"
+              control={control}
+              defaultValue={userProfile.bio ?? ""}
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  label="Short Bio"
+                  rows={6}
+                  placeholder="Enter your bio"
+                  error={errors.bio?.message}
+                  className="!p-[16px] bg-light text-[12px] lg:text-[14px] "
+                />
+              )}
+            />
+
+            {/* Social Media Links inputs */}
+            <div className="flex flex-col items-start gap-[5px]">
+              <p className="text-[12px] lg:text-[14px] font-medium">
+                Social Links
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[25px] gap-y-[10px]">
+                {socialPlatforms.map((platform, index) => (
+                  <div
+                    key={platform.name}
+                    className="flex items-center gap-[10px]"
+                  >
+                    <ImageWithFallback
+                      src={platform.icon}
+                      width={20}
+                      height={20}
+                      alt={platform.name}
+                    />
+                    <Controller
+                      name={`socialMediaLinks.${index}.link`}
+                      control={control}
+                      render={({ field }) => (
+                        <UnderlineInput
+                          {...field}
+                          type="text"
+                          placeholder={platform.placeholder}
+                          error={
+                            errors.socialMediaLinks?.[index]?.link?.message
+                          }
+                          // Update the socialMediaLinks array on change
+                          onChange={(e) => {
+                            const updatedLinks = [...(socialLinks || [])];
+                            updatedLinks[index] = {
+                              name: platform.name,
+                              link: e.target.value,
+                            };
+                            setValue("socialMediaLinks", updatedLinks, {
+                              shouldValidate: true,
+                            });
+                          }}
                         />
-                        <Controller
-                          name={`socialMediaLinks.${index}.link`}
-                          control={control}
-                          render={({ field }) => (
-                            <UnderlineInput
-                              {...field}
-                              type="text"
-                              placeholder={platform.placeholder}
-                              error={
-                                errors.socialMediaLinks?.[index]?.link?.message
-                              }
-                              // Update the socialMediaLinks array on change
-                              onChange={(e) => {
-                                const updatedLinks = [...(socialLinks || [])];
-                                updatedLinks[index] = {
-                                  name: platform.name,
-                                  link: e.target.value,
-                                };
-                                setValue("socialMediaLinks", updatedLinks, {
-                                  shouldValidate: true,
-                                });
-                              }}
-                            />
-                          )}
-                        />
-                      </div>
-                    ))}
+                      )}
+                    />
                   </div>
-                </div>
+                ))}
               </div>
-
-              {/* Form action buttons */}
-              <div className="flex items-center gap-[30px] text-[14px]">
-                <CommonButton
-                  type="submit"
-                  label={`${loading ? "Saving..." : "Save"}`}
-                  disabled={loading}
-                  className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
-                />
-                <CommonButton
-                  onClick={() => setOpen(false)}
-                  label="Cancel"
-                  className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
-                />
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
-      )}
-    </>
+
+          {/* Form action buttons */}
+          <div className="flex items-center gap-[30px] text-[14px]">
+            <CommonButton
+              type="submit"
+              label={`${loading ? "Saving..." : "Save"}`}
+              disabled={loading}
+              className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
+            />
+            <CommonButton
+              onClick={() => setOpen(false)}
+              label="Cancel"
+              className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 

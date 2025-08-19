@@ -241,3 +241,46 @@ export const updateAccountStatusSchema = z.object({
 
 // Type for update account status request
 export type UpdateAccountStatusType = z.infer<typeof updateAccountStatusSchema>;
+
+// Schema to validate user registration input
+export const addAdminSchema = z.object({
+  firstName: z
+    .string()
+    .min(2, "First name is required")
+    .refine((value) => value.trim().length > 0, "First name is required"),
+
+  lastName: z
+    .string()
+    .min(2, "Last name is required")
+    .refine((value) => value.trim().length > 0, "Last name is required"),
+
+  email: z.string().email("Invalid email address"),
+
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .regex(
+      passwordRegex,
+      "Password must be 6+ characters with uppercase, lowercase, number, and special character."
+    ),
+  retypePassword: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .regex(
+      passwordRegex,
+      "Password must be 6+ characters with uppercase, lowercase, number, and special character."
+    )
+    .optional(),
+});
+
+// Type inferred from addAdminSchema
+export type AddAdminType = z.infer<typeof addAdminSchema>;
+
+// Schema to update user role
+export const updateUserRoleSchema = z.object({
+  userId: z.string(),
+  userRole: z.string(),
+});
+
+// Type for update user role
+export type UpdateUserRoleType = z.infer<typeof updateUserRoleSchema>;

@@ -103,15 +103,17 @@ const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
                   alt="additional photo"
                   className="border border-primaryBorder rounded-[10px] object-cover object-center"
                 />
-                <div
-                  onClick={() => {
-                    setSelectedPhotoId(photo.id);
-                    setOpenAlertModal(true);
-                  }}
-                  className="absolute bottom-1 right-1 w-[20px] h-[20px] flex items-center justify-center rounded-full bg-white shadow-md cursor-pointer p-1"
-                >
-                  <MdDelete size={18} className="text-red" />
-                </div>
+                {editable && (
+                  <div
+                    onClick={() => {
+                      setSelectedPhotoId(photo.id);
+                      setOpenAlertModal(true);
+                    }}
+                    className="absolute bottom-1 right-1 w-[20px] h-[20px] flex items-center justify-center rounded-full bg-white shadow-md cursor-pointer p-1"
+                  >
+                    <MdDelete size={18} className="text-red" />
+                  </div>
+                )}
               </div>
             ))
           ) : (

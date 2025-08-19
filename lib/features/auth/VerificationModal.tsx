@@ -71,47 +71,47 @@ const VerificationModal = ({
   // Check if all digits entered
   const isOtpComplete = otp.every((digit) => digit !== "");
 
+  if (!open) {
+    return null;
+  }
+
   return (
-    <>
-      {open && (
-        <div className="fixed left-0 top-0 z-999 flex h-full min-h-screen w-full items-center justify-center bg-black/80 px-4 py-5">
-          <div className="w-full max-w-[600px] rounded-[10px] bg-white px-[36px] py-[24px] flex flex-col gap-[30px]">
-            <SubHeading title="Verify Email" />
-            <div className="flex flex-col items-start gap-[10px]">
-              <p className="text-[14px] font-semibold">
-                Enter the OTP sent to your email
-              </p>
-              <div className="flex items-center gap-[12px] justify-center">
-                {otp.map((digit, idx) => (
-                  <input
-                    key={idx}
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={1}
-                    className="w-[40px] h-[40px] text-center text-2xl border-b border-primaryBorder focus:border-primary outline-none"
-                    value={digit}
-                    onChange={(e) => handleChange(e, idx)}
-                    onKeyDown={(e) => handleKeyDown(e, idx)}
-                    onPaste={handlePaste}
-                    ref={(el) => {
-                      inputsRef.current[idx] = el;
-                    }}
-                    autoComplete="one-time-code"
-                  />
-                ))}
-              </div>
-            </div>
-            <CommonButton
-              type="button"
-              label={loading ? "Loading..." : "Verify"}
-              disabled={loading || !isOtpComplete}
-              onClick={onConfirm}
-              className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"
-            />
+    <div className="fixed left-0 top-0 z-999 flex h-full min-h-screen w-full items-center justify-center bg-black/80 px-4 py-5">
+      <div className="w-full max-w-[600px] rounded-[10px] bg-white px-[36px] py-[24px] flex flex-col gap-[30px]">
+        <SubHeading title="Verify Email" />
+        <div className="flex flex-col items-start gap-[10px]">
+          <p className="text-[14px] font-semibold">
+            Enter the OTP sent to your email
+          </p>
+          <div className="flex items-center gap-[12px] justify-center">
+            {otp.map((digit, idx) => (
+              <input
+                key={idx}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                className="w-[40px] h-[40px] text-center text-2xl border-b border-primaryBorder focus:border-primary outline-none"
+                value={digit}
+                onChange={(e) => handleChange(e, idx)}
+                onKeyDown={(e) => handleKeyDown(e, idx)}
+                onPaste={handlePaste}
+                ref={(el) => {
+                  inputsRef.current[idx] = el;
+                }}
+                autoComplete="one-time-code"
+              />
+            ))}
           </div>
         </div>
-      )}
-    </>
+        <CommonButton
+          type="button"
+          label={loading ? "Loading..." : "Verify"}
+          disabled={loading || !isOtpComplete}
+          onClick={onConfirm}
+          className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"
+        />
+      </div>
+    </div>
   );
 };
 

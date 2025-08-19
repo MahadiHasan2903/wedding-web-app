@@ -61,6 +61,7 @@ const BasicInfo = ({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
+  const isAdmin = session?.user.data.userRole === "admin";
 
   // Determine if the user is a VIP or not
   const isVipUser = hasActiveVipMembership(session?.user.data);
@@ -161,7 +162,7 @@ const BasicInfo = ({
       <div className="w-auto shrink-0 flex items-center gap-[16px]">
         <label
           className={`${
-            loading ? "cursor-not-allowed" : "cursor-pointer"
+            loading || !editable ? "cursor-not-allowed" : "cursor-pointer"
           } w-[90px] lg:w-[150px] h-[90px] lg:h-[160px] relative flex items-center justify-center`}
           htmlFor={editable ? "profilePictureUpload" : undefined}
         >
@@ -194,10 +195,11 @@ const BasicInfo = ({
               />
             </div>
           )}
-
-          <div className="absolute z-20 w-6 h-6 flex items-center justify-center bg-light rounded-full right-1 lg:right-3 bottom-1 lg:bottom-5 border border-secondary">
-            <IoCamera size={15} className="z-50 text-red" />
-          </div>
+          {editable && (
+            <div className="absolute z-20 w-6 h-6 flex items-center justify-center bg-light rounded-full right-1 lg:right-3 bottom-1 lg:bottom-5 border border-secondary">
+              <IoCamera size={15} className="z-50 text-red" />
+            </div>
+          )}
         </label>
 
         <div className="flex flex-col items-start gap-1 lg:gap-[15px]">
@@ -269,6 +271,7 @@ const BasicInfo = ({
               );
             })}
           </div>
+
           {editable ? (
             <CommonButton
               label="Edit Info"
@@ -284,38 +287,40 @@ const BasicInfo = ({
               }
             />
           ) : (
-            <div className="flex items-center justify-center gap-2 lg:gap-[15px]">
-              <CommonButton
-                label={
-                  loading
-                    ? isLiked
-                      ? "Disliking Profile..."
-                      : "Liking Profile..."
-                    : isLiked
-                    ? "Dislike Profile"
-                    : "Like Profile"
-                }
-                disabled={loading}
-                onClick={handleUpdateLikeStatus}
-                className="w-fit bg-primary border text-white flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full"
-              />
-              {returnUrl && returnUrl === "/liked-profiles" && (
+            !isAdmin && (
+              <div className="flex items-center justify-center gap-2 lg:gap-[15px]">
                 <CommonButton
-                  label={loading ? "Processing..." : "Send Message"}
-                  disabled={loading}
-                  onClick={() => handleSendMessage(userProfile.id)}
-                  className="btn-gold-gradient border-none w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full"
-                  startIcon={
-                    <ImageWithFallback
-                      src={sendMessage}
-                      width={15}
-                      height={15}
-                      alt="red-heart"
-                    />
+                  label={
+                    loading
+                      ? isLiked
+                        ? "Disliking Profile..."
+                        : "Liking Profile..."
+                      : isLiked
+                      ? "Dislike Profile"
+                      : "Like Profile"
                   }
+                  disabled={loading}
+                  onClick={handleUpdateLikeStatus}
+                  className="w-fit bg-primary border text-white flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full"
                 />
-              )}
-            </div>
+                {returnUrl && returnUrl === "/liked-profiles" && (
+                  <CommonButton
+                    label={loading ? "Processing..." : "Send Message"}
+                    disabled={loading}
+                    onClick={() => handleSendMessage(userProfile.id)}
+                    className="btn-gold-gradient border-none w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full"
+                    startIcon={
+                      <ImageWithFallback
+                        src={sendMessage}
+                        width={15}
+                        height={15}
+                        alt="red-heart"
+                      />
+                    }
+                  />
+                )}
+              </div>
+            )
           )}
         </div>
       </div>

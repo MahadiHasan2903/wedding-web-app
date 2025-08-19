@@ -2,7 +2,7 @@
 
 import React, { ChangeEvent } from "react";
 
-export interface PropType {
+interface PropType {
   label?: string;
   name: string;
   placeholder?: string;

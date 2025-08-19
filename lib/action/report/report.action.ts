@@ -6,6 +6,10 @@ import {
   addMessageReportSchema,
   AddMessageReportResponseType,
   addMessageReportResponseSchema,
+  ReportActionType,
+  reportActionSchema,
+  reportActionResponseSchema,
+  ReportActionResponseType,
 } from "@/lib/schema/report/report.schema";
 import { BASE_URL } from "@/lib/config/constants";
 import { Result } from "@/lib/types/common/common.types";
@@ -44,7 +48,7 @@ const createMessageReportAction = async (
     );
 
     // Extract only the relevant fields for the client
-    const submissionResponse: AddMessageReportResponseType = {
+    const updatedResponse: AddMessageReportResponseType = {
       id: response.data.id,
       conversationId: response.data.conversationId,
       messageId: response.data.messageId,
@@ -59,7 +63,7 @@ const createMessageReportAction = async (
     // Return success result
     const result: Result<AddMessageReportResponseType> = {
       status: true,
-      data: submissionResponse,
+      data: updatedResponse,
       message: "Your report has been submitted successfully.",
     };
     return result;
@@ -81,4 +85,77 @@ const createMessageReportAction = async (
   }
 };
 
-export { createMessageReportAction };
+/**
+ * Apply an action (warn, ban, looks fine) on a report
+ *
+ * @param reportId - The ID of the report
+ * @param requestPayload - The action to take on the report
+ * @returns Result<ReportActionResponseType>
+ */
+const applyReportAction = async (
+  reportId: string,
+  requestPayload: ReportActionType
+) => {
+  const safeParse = reportActionSchema.safeParse(requestPayload);
+  if (!safeParse.success) {
+    throw new Error("Invalid report action payload");
+  }
+
+  const { accessToken } = await getServerSessionData();
+
+  try {
+    // Send PATCH request to backend API with typed response parsing
+    const response = await fetchZodTyped(
+      `${BASE_URL}/reports/${reportId}/take-action`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(requestPayload),
+      },
+      reportActionResponseSchema
+    );
+
+    // Extract only the relevant fields for the client
+    const updatedResponse: ReportActionResponseType = {
+      id: response.data.id,
+      conversationId: response.data.conversationId,
+      messageId: response.data.messageId,
+      senderId: response.data.senderId,
+      receiverId: response.data.receiverId,
+      type: response.data.type,
+      description: response.data.description,
+      status: response.data.status,
+      actionTaken: response.data.actionTaken,
+      createdAt: response.data.createdAt,
+      updatedAt: response.data.updatedAt,
+    };
+
+    // Return success result
+    const result: Result<ReportActionResponseType> = {
+      status: true,
+      data: updatedResponse,
+      message: `Action applied successfully.`,
+    };
+    return result;
+  } catch (error: any) {
+    console.error("Report action failed:", error);
+
+    const isTimeout = error.message?.includes("timed out");
+
+    // Return failure result with user-friendly message
+    const result: Result<ReportActionResponseType> = {
+      status: false,
+      data: null,
+      message: isTimeout
+        ? "The request timed out. Please check your internet connection and try again."
+        : error.message ||
+          "Unable to apply action on the report. Please try again later.",
+    };
+    return result;
+  }
+};
+
+export { applyReportAction, createMessageReportAction };

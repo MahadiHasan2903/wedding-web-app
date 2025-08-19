@@ -59,6 +59,7 @@ const getAllUsers = async (
   const params = new URLSearchParams();
   params.append("page", page.toString());
   params.append("pageSize", pageSize.toString());
+  params.append("sort", `createdAt,DESC`);
 
   for (const [key, value] of Object.entries(filters)) {
     if (

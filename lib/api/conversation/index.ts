@@ -1,11 +1,11 @@
 import { fetchTyped } from "../client";
 import { BASE_URL } from "@/lib/config/constants";
-import { PaginatedResponse } from "@/lib/types/common/common.types";
 import { Conversation } from "@/lib/types/chat/conversation.types";
+import { PaginatedResponse } from "@/lib/types/common/common.types";
 
 type GetAllConversationResponse = PaginatedResponse<Conversation>;
 
-export interface GetConversationDetailsResponse {
+interface GetConversationDetailsResponse {
   success: boolean;
   message: string;
   status: number;

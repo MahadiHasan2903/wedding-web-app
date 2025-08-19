@@ -1,4 +1,4 @@
-import { Message } from "postcss";
+import { Message } from "../chat/message.types";
 
 export interface Report {
   id: string;

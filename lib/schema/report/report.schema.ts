@@ -44,3 +44,33 @@ export const addMessageReportResponseSchema = z.object({
 export type AddMessageReportResponseType = z.infer<
   typeof addMessageReportResponseSchema.shape.data
 >;
+
+export const reportActionSchema = z.object({
+  action: z.string(),
+});
+
+export type ReportActionType = z.infer<typeof reportActionSchema>;
+
+export const reportActionResponseSchema = z.object({
+  success: z.boolean(),
+  message: z.string(),
+  error: z.string().optional(),
+  status: z.number(),
+  data: z.object({
+    id: z.string(),
+    conversationId: z.string(),
+    senderId: z.string(),
+    receiverId: z.string(),
+    messageId: z.string(),
+    type: z.string(),
+    description: z.string(),
+    status: z.string(),
+    actionTaken: z.string(),
+    createdAt: z.string(),
+    updatedAt: z.string(),
+  }),
+});
+
+export type ReportActionResponseType = z.infer<
+  typeof reportActionResponseSchema.shape.data
+>;

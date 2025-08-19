@@ -1,7 +1,10 @@
 import { fetchTyped } from "../client";
 import { BASE_URL } from "@/lib/config/constants";
 import { Report } from "@/lib/types/reports/reports.types";
-import { PaginatedResponse } from "@/lib/types/common/common.types";
+import {
+  PaginatedResponse,
+  ReportFilterOptions,
+} from "@/lib/types/common/common.types";
 
 type GetReportsListResponse = PaginatedResponse<Report>;
 
@@ -24,17 +27,35 @@ interface GetReportDetailsResponse {
 const getAllReports = async (
   accessToken?: string,
   page: number = 1,
-  pageSize: number = 10
+  pageSize: number = 10,
+  filters: ReportFilterOptions = {}
 ) => {
-  const response = await fetchTyped<GetReportsListResponse>(
-    `${BASE_URL}/reports?page=${page}&pageSize=${pageSize}&sort=createdAt,DESC`,
-    {
-      method: "GET",
-      headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "",
-      },
+  const params = new URLSearchParams();
+  params.append("page", page.toString());
+  params.append("pageSize", pageSize.toString());
+  params.append("sort", `createdAt,DESC`);
+
+  for (const [key, value] of Object.entries(filters)) {
+    if (
+      value !== undefined &&
+      value !== null &&
+      !(typeof value === "string" && value.trim() === "") &&
+      !(typeof value === "boolean" && value === false)
+    ) {
+      params.append(key, String(value));
     }
-  );
+  }
+
+  const url = `${BASE_URL}/reports?${params.toString()}`;
+
+  console.log(url);
+
+  const response = await fetchTyped<GetReportsListResponse>(url, {
+    method: "GET",
+    headers: {
+      Authorization: accessToken ? `Bearer ${accessToken}` : "",
+    },
+  });
 
   // Validate that response contains data
   if (!response.data) {

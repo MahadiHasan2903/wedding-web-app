@@ -25,7 +25,7 @@ const SubscriptionPaymentPage = async ({ searchParams }: PropsType) => {
   const paymentStatus = getQueryParam(searchParams, "paymentStatus", "");
   const dateRange = getQueryParam(searchParams, "dateRange", "");
 
-  // Get the all user data based on the search parameters
+  // Get the all payment data based on the search parameters
   const allPaymentsData = await api.payment.getAllPayments(
     accessToken,
     page,

@@ -10,7 +10,7 @@ const PricingManagement = dynamic(
 );
 
 const PricingManagementPage = async () => {
-  // Get the all user data based on the search parameters
+  // Get the all membership package data based on the search parameters
   const allMsPackages = await api.msPackage.getAllMsPackages();
 
   return (

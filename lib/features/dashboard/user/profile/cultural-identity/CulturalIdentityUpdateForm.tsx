@@ -84,81 +84,81 @@ const CulturalIdentityUpdateForm = ({
     setLoading(false);
   };
 
+  if (!open) {
+    return null;
+  }
+
   return (
-    <>
-      {open && (
-        <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
-          <div className="w-full h-full max-w-[600px] max-h-[600px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
-            <form
-              onSubmit={handleSubmit(handleUpdateProfile)}
-              className="w-full h-full flex flex-col gap-[25px]"
-            >
-              <CardTitle title="Bio & Cultural Identity" />
-              <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
-                <Controller
-                  name="bio"
-                  control={control}
-                  defaultValue={userProfile.bio ?? ""}
-                  render={({ field }) => (
-                    <Textarea
-                      {...field}
-                      label="About me"
-                      rows={6}
-                      placeholder="Enter your bio"
-                      error={errors.bio?.message}
-                      className="!p-[16px] bg-light text-[12px] lg:text-[14px] "
-                    />
-                  )}
+    <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
+      <div className="w-full h-full max-w-[600px] max-h-[600px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
+        <form
+          onSubmit={handleSubmit(handleUpdateProfile)}
+          className="w-full h-full flex flex-col gap-[25px]"
+        >
+          <CardTitle title="Bio & Cultural Identity" />
+          <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
+            <Controller
+              name="bio"
+              control={control}
+              defaultValue={userProfile.bio ?? ""}
+              render={({ field }) => (
+                <Textarea
+                  {...field}
+                  label="About me"
+                  rows={6}
+                  placeholder="Enter your bio"
+                  error={errors.bio?.message}
+                  className="!p-[16px] bg-light text-[12px] lg:text-[14px] "
                 />
+              )}
+            />
 
-                <Controller
+            <Controller
+              name="familyBackground"
+              control={control}
+              defaultValue={userProfile.familyBackground ?? ""}
+              render={({ field }) => (
+                <UnderlineSelectField
+                  {...field}
+                  label="Family Background"
                   name="familyBackground"
-                  control={control}
-                  defaultValue={userProfile.familyBackground ?? ""}
-                  render={({ field }) => (
-                    <UnderlineSelectField
-                      {...field}
-                      label="Family Background"
-                      name="familyBackground"
-                      options={enumToOptions(FamilyBackground)}
-                    />
-                  )}
+                  options={enumToOptions(FamilyBackground)}
                 />
+              )}
+            />
 
-                <Controller
+            <Controller
+              name="culturalPractices"
+              control={control}
+              defaultValue={userProfile.culturalPractices ?? ""}
+              render={({ field }) => (
+                <UnderlineSelectField
+                  {...field}
+                  label="Cultural Practices"
                   name="culturalPractices"
-                  control={control}
-                  defaultValue={userProfile.culturalPractices ?? ""}
-                  render={({ field }) => (
-                    <UnderlineSelectField
-                      {...field}
-                      label="Cultural Practices"
-                      name="culturalPractices"
-                      options={enumToOptions(CulturalPractices)}
-                    />
-                  )}
+                  options={enumToOptions(CulturalPractices)}
                 />
-              </div>
-
-              {/* Form submit and cancel buttons */}
-              <div className="flex items-center gap-[30px] text-[14px]">
-                <CommonButton
-                  type="submit"
-                  label={`${loading ? "Saving..." : "Save"}`}
-                  disabled={loading}
-                  className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
-                />
-                <CommonButton
-                  onClick={() => setOpen(false)}
-                  label="Cancel"
-                  className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
-                />
-              </div>
-            </form>
+              )}
+            />
           </div>
-        </div>
-      )}
-    </>
+
+          {/* Form submit and cancel buttons */}
+          <div className="flex items-center gap-[30px] text-[14px]">
+            <CommonButton
+              type="submit"
+              label={`${loading ? "Saving..." : "Save"}`}
+              disabled={loading}
+              className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
+            />
+            <CommonButton
+              onClick={() => setOpen(false)}
+              label="Cancel"
+              className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 

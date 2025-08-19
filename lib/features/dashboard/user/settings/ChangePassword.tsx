@@ -21,6 +21,8 @@ const ChangePassword = () => {
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
 
+  const isAdmin = session?.user.data.userRole === "admin";
+
   // Initialize react-hook-form with Zod validation schema and default form values
   const {
     reset,
@@ -98,20 +100,22 @@ const ChangePassword = () => {
             </div>
           </div>
 
-          <div className="w-full flex flex-col xl:flex-row items-start xl:items-center justify-start gap-2 xl:gap-[30px]">
-            <p className="text-[14px] font-semibold w-full lg:w-auto">
-              Phone Number
-            </p>
-            <div className="w-full lg:max-w-[300px]">
-              <OutlinedInput
-                name="currentPassword"
-                type="text"
-                readOnly
-                value={session?.user.data.phoneNumber || ""}
-                className="!px-[10px] !py-[10px] rounded-[5px] w-full"
-              />
+          {!isAdmin && (
+            <div className="w-full flex flex-col xl:flex-row items-start xl:items-center justify-start gap-2 xl:gap-[30px]">
+              <p className="text-[14px] font-semibold w-full lg:w-auto">
+                Phone Number
+              </p>
+              <div className="w-full lg:max-w-[300px]">
+                <OutlinedInput
+                  name="currentPassword"
+                  type="text"
+                  readOnly
+                  value={session?.user.data.phoneNumber || ""}
+                  className="!px-[10px] !py-[10px] rounded-[5px] w-full"
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
         <div className="w-full flex flex-col items-start justify-start gap-2 lg:gap-4">
           <p className="text-[14px] font-semibold mr-[30px] shrink-0">

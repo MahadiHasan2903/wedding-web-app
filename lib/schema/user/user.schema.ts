@@ -241,3 +241,12 @@ export const updateAccountStatusSchema = z.object({
 
 // Type for update account status request
 export type UpdateAccountStatusType = z.infer<typeof updateAccountStatusSchema>;
+
+// Schema to update user role
+export const updateUserRoleSchema = z.object({
+  userId: z.string(),
+  userRole: z.string(),
+});
+
+// Type for update user role
+export type UpdateUserRoleType = z.infer<typeof updateUserRoleSchema>;

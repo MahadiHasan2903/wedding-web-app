@@ -78,83 +78,83 @@ const UpdateMsPackageForm = ({
     setLoading(false);
   };
 
-  return (
-    <>
-      {open && (
-        <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
-          <div className="w-full h-full max-w-[600px] max-h-[500px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
-            <form
-              onSubmit={handleSubmit(handleUpdateMsPackage)}
-              className="w-full h-full flex flex-col gap-[25px]"
-            >
-              <CardTitle title="Update Membership Package" />
-              <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
-                <Controller
-                  name="title"
-                  control={control}
-                  defaultValue={msPackageDetails.title}
-                  render={({ field }) => (
-                    <UnderlineInput
-                      {...field}
-                      label="Package Title"
-                      type="text"
-                      name="title"
-                      placeholder="Enter membership package title"
-                      error={errors.title?.message}
-                    />
-                  )}
-                />
-                <Controller
-                  name="categoryInfo.originalPrice"
-                  control={control}
-                  defaultValue={msPackageDetails.categoryInfo.originalPrice}
-                  render={({ field }) => (
-                    <UnderlineInput
-                      {...field}
-                      label="Original Price"
-                      type="number"
-                      name="categoryInfo.originalPrice"
-                      placeholder="Enter original price"
-                      error={errors.categoryInfo?.originalPrice?.message}
-                    />
-                  )}
-                />
-                <Controller
-                  name="categoryInfo.sellPrice"
-                  control={control}
-                  defaultValue={msPackageDetails.categoryInfo.sellPrice}
-                  render={({ field }) => (
-                    <UnderlineInput
-                      {...field}
-                      label="Selling Price"
-                      type="number"
-                      name="categoryInfo.sellPrice"
-                      placeholder="Enter selling price"
-                      error={errors.categoryInfo?.sellPrice?.message}
-                    />
-                  )}
-                />
-              </div>
+  if (!open) {
+    return null;
+  }
 
-              {/* Form submit and cancel buttons */}
-              <div className="flex items-center gap-[30px] text-[14px]">
-                <CommonButton
-                  type="submit"
-                  label={`${loading ? "Saving..." : "Save"}`}
-                  disabled={loading}
-                  className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
+  return (
+    <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
+      <div className="w-full h-full max-w-[600px] max-h-[500px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
+        <form
+          onSubmit={handleSubmit(handleUpdateMsPackage)}
+          className="w-full h-full flex flex-col gap-[25px]"
+        >
+          <CardTitle title="Update Membership Package" />
+          <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
+            <Controller
+              name="title"
+              control={control}
+              defaultValue={msPackageDetails.title}
+              render={({ field }) => (
+                <UnderlineInput
+                  {...field}
+                  label="Package Title"
+                  type="text"
+                  name="title"
+                  placeholder="Enter membership package title"
+                  error={errors.title?.message}
                 />
-                <CommonButton
-                  onClick={() => setOpen(false)}
-                  label="Cancel"
-                  className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
+              )}
+            />
+            <Controller
+              name="categoryInfo.originalPrice"
+              control={control}
+              defaultValue={msPackageDetails.categoryInfo.originalPrice}
+              render={({ field }) => (
+                <UnderlineInput
+                  {...field}
+                  label="Original Price"
+                  type="number"
+                  name="categoryInfo.originalPrice"
+                  placeholder="Enter original price"
+                  error={errors.categoryInfo?.originalPrice?.message}
                 />
-              </div>
-            </form>
+              )}
+            />
+            <Controller
+              name="categoryInfo.sellPrice"
+              control={control}
+              defaultValue={msPackageDetails.categoryInfo.sellPrice}
+              render={({ field }) => (
+                <UnderlineInput
+                  {...field}
+                  label="Selling Price"
+                  type="number"
+                  name="categoryInfo.sellPrice"
+                  placeholder="Enter selling price"
+                  error={errors.categoryInfo?.sellPrice?.message}
+                />
+              )}
+            />
           </div>
-        </div>
-      )}
-    </>
+
+          {/* Form submit and cancel buttons */}
+          <div className="flex items-center gap-[30px] text-[14px]">
+            <CommonButton
+              type="submit"
+              label={`${loading ? "Saving..." : "Save"}`}
+              disabled={loading}
+              className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
+            />
+            <CommonButton
+              onClick={() => setOpen(false)}
+              label="Cancel"
+              className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
+            />
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 

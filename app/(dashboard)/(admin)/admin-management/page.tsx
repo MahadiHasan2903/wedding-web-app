@@ -20,7 +20,7 @@ const AdminManagementPage = async ({ searchParams }: PropsType) => {
   const page = Number(getQueryParam(searchParams, "page", 1));
   const pageSize = Number(getQueryParam(searchParams, "pageSize", 20));
 
-  // Get the all user data based on the search parameters
+  // Get the all admin data based on the search parameters
   const allAdminData = await api.users.getAllAdmins(
     accessToken,
     page,

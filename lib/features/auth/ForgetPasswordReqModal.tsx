@@ -68,48 +68,48 @@ const ForgetPasswordReqModal = ({
     setLoading(false);
   };
 
-  return (
-    <>
-      {open && (
-        <div
-          className="fixed left-0 top-0 z-999 flex h-full min-h-screen w-full items-center justify-center bg-black/80 px-4 py-5"
-          onClick={() => {
-            if (!loading) {
-              setOpen(false);
-            }
-          }}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-[600px] rounded-[10px] bg-white px-[36px] py-[24px] flex flex-col gap-[30px]"
-          >
-            <SubHeading title="Forget Password" />
+  if (!open) {
+    return null;
+  }
 
-            <Controller
-              name="email"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <UnderlineInput
-                  {...field}
-                  label="Enter your email address"
-                  type="email"
-                  placeholder="Enter your email"
-                  error={errors.email?.message}
-                />
-              )}
+  return (
+    <div
+      className="fixed left-0 top-0 z-999 flex h-full min-h-screen w-full items-center justify-center bg-black/80 px-4 py-5"
+      onClick={() => {
+        if (!loading) {
+          setOpen(false);
+        }
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-[600px] rounded-[10px] bg-white px-[36px] py-[24px] flex flex-col gap-[30px]"
+      >
+        <SubHeading title="Forget Password" />
+
+        <Controller
+          name="email"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <UnderlineInput
+              {...field}
+              label="Enter your email address"
+              type="email"
+              placeholder="Enter your email"
+              error={errors.email?.message}
             />
-            <CommonButton
-              type="button"
-              label={loading ? "Loading..." : "Reset Password"}
-              disabled={loading}
-              onClick={handleSubmit(handleSubmitForgetPasswordRequest)}
-              className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"
-            />
-          </div>
-        </div>
-      )}
-    </>
+          )}
+        />
+        <CommonButton
+          type="button"
+          label={loading ? "Loading..." : "Reset Password"}
+          disabled={loading}
+          onClick={handleSubmit(handleSubmitForgetPasswordRequest)}
+          className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"
+        />
+      </div>
+    </div>
   );
 };
 

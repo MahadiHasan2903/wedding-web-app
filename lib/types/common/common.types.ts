@@ -68,3 +68,9 @@ export interface PaymentFilterOptions {
   paymentStatus?: string;
   dateRange?: string;
 }
+
+export interface ReportFilterOptions {
+  gateway?: string;
+  paymentStatus?: string;
+  dateRange?: string;
+}

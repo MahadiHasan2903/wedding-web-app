@@ -1,19 +1,20 @@
 "use client";
 
-import React, { useRef, useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Pagination } from "@/lib/components/table";
 import { CardTitle } from "@/lib/components/heading";
+import { filter } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
+import FilterReportDropdown from "./FilterReportDropdown";
 import { ImageWithFallback } from "@/lib/components/image";
-import FilterPaymentDropDown from "./FilterPaymentDropDown";
-import { filter, avatar } from "@/lib/components/image/icons";
+import { Report } from "@/lib/types/reports/reports.types";
 import { formatDateString3 } from "@/lib/utils/date/dateUtils";
-import { PaymentTransaction } from "@/lib/types/payment/payment.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import ReportActionForm from "./ReportActionForm";
 
 interface PropsType {
-  allPaymentsData: {
-    payments: PaymentTransaction[];
+  allReportsData: {
+    allReports: Report[];
     paginationInfo: {
       totalItems: number;
       itemsPerPage: number;
@@ -27,19 +28,22 @@ interface PropsType {
   };
 }
 
-const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
+const ReportManagement = ({ allReportsData }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const { currentPage, totalPages, prevPage, nextPage } =
-    allPaymentsData.paginationInfo;
+    allReportsData.paginationInfo;
 
-  // Memoize the payment list to prevent unnecessary re-renders
+  // Memoize the admin list to prevent unnecessary re-renders
   const data = useMemo(
-    () => allPaymentsData.payments || [],
-    [allPaymentsData.payments]
+    () => allReportsData.allReports || [],
+    [allReportsData.allReports]
   );
 
   // Effect to handle clicks outside the dropdown to close it
@@ -81,13 +85,11 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
     <div className="w-full flex flex-col">
       <div className="w-full bg-white rounded-none lg:rounded-[10px]">
         <div className="w-full py-[17px] lg:py-[25px] border-b-[1px] lg:border-b-[3px] border-light">
-          <div className="w-full px-[17px] lg:px-[36px] flex items-center gap-6">
-            <div className="w-full flex items-center gap-6">
-              <CardTitle title="Subscriptions" className="shrink-0" />
-            </div>
+          <div className="w-full px-[17px] lg:px-[36px] flex items-center justify-between gap-6">
+            <CardTitle title="Reports & Abuses" className="shrink-0" />
             <div className="w-fit shrink-0 relative" ref={dropdownRef}>
               <CommonButton
-                label="Filter Payments"
+                label="Filter Reports"
                 className="w-fit flex shrink-0 items-center gap-[5px] hover:bg-light text-[12px] font-normal p-[8px] lg:p-[10px] rounded-full border border-primaryBorder"
                 startIcon={
                   <ImageWithFallback
@@ -101,7 +103,7 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
               />
 
               {isFilterOpen && (
-                <FilterPaymentDropDown setIsFilterOpen={setIsFilterOpen} />
+                <FilterReportDropdown setIsFilterOpen={setIsFilterOpen} />
               )}
             </div>
           </div>
@@ -112,19 +114,19 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
             <thead>
               <tr className="border-b-[1px] lg:border-b-[3px] border-light">
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  User
+                  Reported At
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Package
+                  Reported On
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Purchase Date
+                  Report type
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Method
+                  Status
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Payment Status
+                  Action
                 </th>
               </tr>
             </thead>
@@ -135,76 +137,52 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
                     colSpan={5}
                     className="text-center py-5 text-[14px] text-gray-500"
                   >
-                    No subscription found
+                    No report found
                   </td>
                 </tr>
               ) : (
-                data
-                  .filter(
-                    (subscription) => subscription.paymentStatus !== "pending"
-                  )
-                  .map((subscription) => (
-                    <tr
-                      key={subscription.id}
-                      className="border-b-[1px] lg:border-b-[3px] border-light transition hover:bg-light"
-                    >
-                      <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[150px]">
-                        <div className="flex items-tart gap-4">
-                          <div className="w-[45px] h-[45px] relative rounded-full bg-gray overflow-hidden border border-black">
-                            <ImageWithFallback
-                              src={subscription.user.profilePicture?.url}
-                              fallBackImage={avatar}
-                              alt="user"
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          <div className="flex flex-col item-start gap-1">
-                            <p>
-                              {subscription.user.firstName}{" "}
-                              {subscription.user.lastName}
-                            </p>
-                            <p>{subscription.user.email}</p>
-                            <p>{subscription.user.phoneNumber}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left capitalize whitespace-nowrap min-w-[100px]">
-                        {subscription.servicePurchaseId
-                          .purchasePackageCategory === "monthly"
-                          ? "Monthly Premium"
-                          : " Yearly Premium"}
-                      </td>
-                      <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[200px]">
-                        {formatDateString3(
-                          subscription.servicePurchaseId.purchasedAt
-                        )}
-                      </td>
-                      <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[120px] capitalize">
-                        {subscription.gateway === "stripe" ? "Card" : "Paypal"}
-                      </td>
-                      <td className="px-[17px] lg:px-[36px] py-3 text-[14px] capitalize whitespace-nowrap min-w-[140px]">
+                data.map((report) => (
+                  <tr
+                    key={report.id}
+                    className="border-b-[1px] lg:border-b-[3px] border-light transition hover:bg-light"
+                  >
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[150px]">
+                      {formatDateString3(report.createdAt)}
+                    </td>
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[150px]">
+                      Message
+                    </td>
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] capitalize text-left whitespace-nowrap min-w-[100px]">
+                      {report.type}
+                    </td>
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] capitalize text-left whitespace-nowrap min-w-[100px]">
+                      <div
+                        className={`${
+                          report.status === "resolved"
+                            ? "text-green bg-[#D0FFEF]"
+                            : "text-red bg-[#FFE2E6]"
+                        } w-fit flex items-center gap-1 text-[12px] font-normal rounded-full px-[15px] py-[6px]`}
+                      >
                         <div
                           className={`${
-                            subscription.paymentStatus === "paid"
-                              ? "text-green bg-[#D0FFEF]"
-                              : "text-red bg-[#FFE2E6]"
-                          } w-fit flex items-center gap-1 text-[12px] font-normal rounded-full px-[15px] py-[6px]`}
-                        >
-                          <div
-                            className={`${
-                              subscription.paymentStatus === "paid"
-                                ? "bg-green"
-                                : "bg-red"
-                            } w-[5px] h-[5px] rounded-full`}
-                          />
-                          <p className="whitespace-nowrap">
-                            {subscription.paymentStatus}
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                            report.status === "resolved" ? "bg-green" : "bg-red"
+                          } w-[5px] h-[5px] rounded-full`}
+                        />
+                        <p className="whitespace-nowrap">{report.status}</p>
+                      </div>
+                    </td>
+                    <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[100px]">
+                      <CommonButton
+                        label="View Details"
+                        className="w-fit text-[10px] px-[14px] py-[10px] rounded-[40px] border border-primaryBorder hover:bg-primary hover:text-white transition-all"
+                        onClick={() => {
+                          setSelectedReport(report);
+                          setOpen(true);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>
@@ -222,8 +200,15 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
           />
         </div>
       </div>
+      {open && selectedReport && (
+        <ReportActionForm
+          open={open}
+          setOpen={setOpen}
+          reportDetails={selectedReport}
+        />
+      )}
     </div>
   );
 };
 
-export default SubscriptionPaymentManagement;
+export default ReportManagement;

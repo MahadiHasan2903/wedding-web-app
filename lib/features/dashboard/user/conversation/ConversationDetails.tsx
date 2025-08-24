@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useEffect, useMemo, useState, useCallback } from "react";
-import AllMessages from "./message/AllMessages";
 import ChatInputBox from "./ChatInputBox";
 import { useSession } from "next-auth/react";
+import AllMessages from "./message/AllMessages";
 import ConversationHeader from "./ConversationHeader";
-import { useSocket } from "@/lib/providers/SocketProvider";
 import { Message } from "@/lib/types/chat/message.types";
+import { useSocket } from "@/lib/providers/SocketProvider";
 import { Conversation } from "@/lib/types/chat/conversation.types";
 import { uploadMediaAction } from "@/lib/action/media/media.action";
 
@@ -192,6 +192,7 @@ const ConversationDetails = ({
       conversationId: conversationDetails.id,
       message: text,
       repliedToMessage: replyToMessageId ?? null,
+      needTranslation: true,
       attachmentIds,
     });
 
@@ -210,6 +211,7 @@ const ConversationDetails = ({
       messageId: messageId,
       updatedMessage: text,
       senderId: loggedInUser?.id,
+      needTranslation: true,
       receiverId: otherUser?.id,
     });
   };

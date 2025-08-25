@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://nextjs.org/" target="_blank"><img src="https://nextjs.com/img/logo-small.svg" width="120" alt="Next.js Logo" /></a>
+  <a href="https://nextjs.org/" target="_blank"><img src="https://cdn.worldvectorlogo.com/logos/next-js.svg" width="120" alt="Next.js Logo" /></a>
 </p>
 
 # Wedding Web Application

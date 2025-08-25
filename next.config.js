@@ -7,6 +7,7 @@ const nextConfig = {
       port: "",
     })),
   },
+  output: process.env.BUILD_STANDALONE === "true" ? "standalone" : undefined,
   reactStrictMode: true,
   swcMinify: true,
   cacheHandler: require.resolve("./cache-handler.js"),

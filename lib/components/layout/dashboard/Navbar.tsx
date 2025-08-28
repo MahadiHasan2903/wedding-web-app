@@ -5,6 +5,7 @@ import Link from "next/link";
 import { navItems } from "@/lib/utils/data";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { LanguageDropdown } from "../marketing";
 import { avatar } from "@/lib/components/image/icons";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
@@ -36,32 +37,35 @@ const Navbar = () => {
         ))}
       </div>
 
-      <Link
-        href={`${isAdmin ? "/overview" : "/my-profile"}`}
-        className="w-auto flex items-center justify-end"
-      >
-        <div className="w-12 h-12 relative flex items-center justify-center">
-          <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
-            <ImageWithFallback
-              src={session?.user.data.profilePicture?.url}
-              fallBackImage={avatar}
-              alt="user"
-              fill
-              className="object-cover"
-            />
-          </div>
+      <div className="flex items-center justify-end gap-4">
+        <Link
+          href={`${isAdmin ? "/overview" : "/my-profile"}`}
+          className="w-auto"
+        >
+          <div className="w-12 h-12 relative flex items-center justify-center">
+            <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+              <ImageWithFallback
+                src={session?.user.data.profilePicture?.url}
+                fallBackImage={avatar}
+                alt="user"
+                fill
+                className="object-cover"
+              />
+            </div>
 
-          {isVipUser && (
-            <ImageWithFallback
-              src={vipRing}
-              width={48}
-              height={48}
-              alt="vip ring"
-              className="z-10 absolute"
-            />
-          )}
-        </div>
-      </Link>
+            {isVipUser && (
+              <ImageWithFallback
+                src={vipRing}
+                width={48}
+                height={48}
+                alt="vip ring"
+                className="z-10 absolute"
+              />
+            )}
+          </div>
+        </Link>
+        <LanguageDropdown />
+      </div>
     </div>
   );
 };

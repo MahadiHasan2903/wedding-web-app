@@ -21,29 +21,6 @@ import { RiInstagramFill } from "react-icons/ri";
 import story1 from "@/public/images/landing-page/story-1.jpg";
 import story2 from "@/public/images/landing-page/story-2.jpg";
 
-export const navItems = [
-  {
-    label: "Home",
-    href: "/",
-  },
-  {
-    label: "Pricing",
-    href: "/pricing",
-  },
-  {
-    label: "Find Match",
-    href: "/find-match",
-  },
-  {
-    label: "About",
-    href: "/about",
-  },
-  {
-    label: "Contact",
-    href: "/contact",
-  },
-];
-
 export const footerLinks = [
   {
     title: "Need Help?",

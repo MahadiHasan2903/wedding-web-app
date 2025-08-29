@@ -74,3 +74,5 @@ export interface ReportFilterOptions {
   paymentStatus?: string;
   dateRange?: string;
 }
+
+export type Language = "en" | "fr" | "es";

@@ -13,11 +13,59 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SectionTitle } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { contactFormSubmitAction } from "@/lib/action/contact";
 import { OutlinedInput, Textarea } from "@/lib/components/form-elements";
 
+const translations = {
+  en: {
+    sectionTitle1: "We Are Here To Help",
+    sectionTitle2: "Do You Have Any Questions?",
+    placeholders: {
+      firstName: "First Name *",
+      lastName: "Last Name *",
+      email: "Email Address *",
+      phoneNumber: "Phone Number",
+      subject: "Subject *",
+      message: "Message *",
+    },
+    submitButton: "Submit",
+    submitting: "Submitting...",
+  },
+  fr: {
+    sectionTitle1: "Nous sommes là pour vous aider",
+    sectionTitle2: "Avez-vous des questions ?",
+    placeholders: {
+      firstName: "Prénom *",
+      lastName: "Nom *",
+      email: "Adresse e-mail *",
+      phoneNumber: "Numéro de téléphone",
+      subject: "Objet *",
+      message: "Message *",
+    },
+    submitButton: "Envoyer",
+    submitting: "Envoi en cours...",
+  },
+  es: {
+    sectionTitle1: "Estamos aquí para ayudarte",
+    sectionTitle2: "¿Tienes alguna pregunta?",
+    placeholders: {
+      firstName: "Nombre *",
+      lastName: "Apellido *",
+      email: "Correo electrónico *",
+      phoneNumber: "Número de teléfono",
+      subject: "Asunto *",
+      message: "Mensaje *",
+    },
+    submitButton: "Enviar",
+    submitting: "Enviando...",
+  },
+};
+
 const ContactForm = () => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
 
   const {
@@ -28,11 +76,9 @@ const ContactForm = () => {
     resolver: zodResolver(contactSubmissionFormSchema),
   });
 
-  // function to submit contact request
   const handleContactFormSubmit = async (data: ContactSubmissionFormType) => {
     setLoading(true);
 
-    // Prepare payload
     const payload = {
       email: data.email,
       subject: data.subject,
@@ -42,17 +88,13 @@ const ContactForm = () => {
       phoneNumber: data.phoneNumber,
     };
 
-    // Submit request
-    const contactFormSubmissionResponse = await contactFormSubmitAction(
-      payload
-    );
+    const response = await contactFormSubmitAction(payload);
 
-    // Show toast notification with confirmation result
-    toast(contactFormSubmissionResponse.message, {
-      type: contactFormSubmissionResponse.status ? "success" : "error",
+    toast(response.message, {
+      type: response.status ? "success" : "error",
     });
 
-    if (contactFormSubmissionResponse.status) {
+    if (response.status) {
       router.push("/");
     }
     setLoading(false);
@@ -63,10 +105,7 @@ const ContactForm = () => {
       <div className="flex flex-col gap-[25px] lg:gap-[55px]">
         <div className="flex flex-col gap-[30px] lg:gap-[80px] justify-between">
           <div className="flex flex-col lg:flex-row items-center gap-[16px]">
-            <SectionTitle
-              title="We Are Here To Help"
-              className="max-w-[240px]"
-            />
+            <SectionTitle title={t.sectionTitle1} className="max-w-[240px]" />
 
             <div className="flex items-center gap-[20px] border border-[#B0B1B3] px-[24px] py-[8px] lg:py-[18px] rounded-[10px]">
               <div className="bg-primary flex items-center justify-center w-[36px] h-[36px] rounded-full">
@@ -84,11 +123,12 @@ const ContactForm = () => {
           </div>
           <div className="w-full flex justify-center lg:justify-end">
             <SectionTitle
-              title="Do You Have Any Questions?"
+              title={t.sectionTitle2}
               className="max-w-[350px] text-end"
             />
           </div>
         </div>
+
         <form
           onSubmit={handleSubmit(handleContactFormSubmit)}
           className="w-full flex flex-col gap-[16px] lg:gap-[24px]"
@@ -102,8 +142,8 @@ const ContactForm = () => {
                 <OutlinedInput
                   {...field}
                   type="text"
-                  placeholder="First Name *"
-                  error={errors.firstName && errors.firstName.message}
+                  placeholder={t.placeholders.firstName}
+                  error={errors.firstName?.message}
                 />
               )}
             />
@@ -115,8 +155,8 @@ const ContactForm = () => {
                 <OutlinedInput
                   {...field}
                   type="text"
-                  placeholder="Last Name *"
-                  error={errors.lastName && errors.lastName.message}
+                  placeholder={t.placeholders.lastName}
+                  error={errors.lastName?.message}
                 />
               )}
             />
@@ -131,8 +171,8 @@ const ContactForm = () => {
                 <OutlinedInput
                   {...field}
                   type="email"
-                  placeholder="Email Address *"
-                  error={errors.email && errors.email.message}
+                  placeholder={t.placeholders.email}
+                  error={errors.email?.message}
                 />
               )}
             />
@@ -144,9 +184,8 @@ const ContactForm = () => {
                 <OutlinedInput
                   {...field}
                   type="text"
-                  placeholder="Phone Number"
-                  required={false}
-                  error={errors.phoneNumber && errors.phoneNumber.message}
+                  placeholder={t.placeholders.phoneNumber}
+                  error={errors.phoneNumber?.message}
                 />
               )}
             />
@@ -160,8 +199,8 @@ const ContactForm = () => {
               <OutlinedInput
                 {...field}
                 type="text"
-                placeholder="Subject *"
-                error={errors.subject && errors.subject.message}
+                placeholder={t.placeholders.subject}
+                error={errors.subject?.message}
               />
             )}
           />
@@ -174,14 +213,15 @@ const ContactForm = () => {
               <Textarea
                 {...field}
                 rows={6}
-                placeholder="Message *"
-                error={errors.message && errors.message.message}
+                placeholder={t.placeholders.message}
+                error={errors.message?.message}
               />
             )}
           />
+
           <CommonButton
             type="submit"
-            label={loading ? "Submitting..." : "Submit"}
+            label={loading ? t.submitting : t.submitButton}
             disabled={loading}
             className="w-full p-[12px] lg:p-[20px] bg-red text-white text-[16px] font-semibold rounded-full"
           />

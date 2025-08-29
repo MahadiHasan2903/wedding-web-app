@@ -9,7 +9,7 @@ import { ImageWithFallback } from "@/lib/components/image";
 import { Language } from "@/lib/types/common/common.types";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 
-export const footerLinks = [
+const footerLinks = [
   {
     key: "needHelp",
     links: [

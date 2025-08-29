@@ -29,7 +29,110 @@ import {
 import { CommonButton } from "@/lib/components/buttons";
 import { findMatch } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { enumToOptions, rangeToString } from "@/lib/utils/helpers";
+
+const translations = {
+  en: {
+    refineSearch: "Refine Your Search",
+    searchButton: "Search For Matches",
+    lookingFor: "Looking For",
+    age: "Age",
+    height: "Height",
+    weight: "Weight",
+    haveChildren: "Have Children",
+    havePet: "Have Pet",
+    maritalStatus: "Marital Status",
+    religion: "Religion",
+    politicalView: "Political View",
+    country: "Country",
+    city: "City",
+    education: "Education",
+    profession: "Profession",
+    languageSpoken: "Language Spoken",
+    monthlyIncome: "Monthly Income",
+    dietaryPreference: "Dietary Preference",
+    smokingHabit: "Smoking Habit",
+    drinkingHabit: "Drinking Habit",
+    healthCondition: "Health Condition",
+    livingArrangement: "Living Arrangement",
+    familyMembers: "Family Members",
+    accountType: "Account Type",
+    doesntMatter: "Doesn't Matter",
+    unit: {
+      age: "years",
+      height: "cm",
+      weight: "kg",
+      income: "€",
+    },
+  },
+  fr: {
+    refineSearch: "Affiner votre recherche",
+    searchButton: "Rechercher des correspondances",
+    lookingFor: "Cherche",
+    age: "Âge",
+    height: "Taille",
+    weight: "Poids",
+    haveChildren: "A des enfants",
+    havePet: "A un animal",
+    maritalStatus: "État civil",
+    religion: "Religion",
+    politicalView: "Orientation politique",
+    country: "Pays",
+    city: "Ville",
+    education: "Éducation",
+    profession: "Profession",
+    languageSpoken: "Langue parlée",
+    monthlyIncome: "Revenu mensuel",
+    dietaryPreference: "Préférences alimentaires",
+    smokingHabit: "Habitude de fumer",
+    drinkingHabit: "Habitude de boire",
+    healthCondition: "État de santé",
+    livingArrangement: "Situation de vie",
+    familyMembers: "Membres de la famille",
+    accountType: "Type de compte",
+    doesntMatter: "Peu importe",
+    unit: {
+      age: "ans",
+      height: "cm",
+      weight: "kg",
+      income: "€",
+    },
+  },
+  es: {
+    refineSearch: "Refina tu búsqueda",
+    searchButton: "Buscar coincidencias",
+    lookingFor: "Buscando",
+    age: "Edad",
+    height: "Altura",
+    weight: "Peso",
+    haveChildren: "Tiene hijos",
+    havePet: "Tiene mascota",
+    maritalStatus: "Estado civil",
+    religion: "Religión",
+    politicalView: "Visión política",
+    country: "País",
+    city: "Ciudad",
+    education: "Educación",
+    profession: "Profesión",
+    languageSpoken: "Idioma hablado",
+    monthlyIncome: "Ingresos mensuales",
+    dietaryPreference: "Preferencias alimenticias",
+    smokingHabit: "Hábito de fumar",
+    drinkingHabit: "Hábito de beber",
+    healthCondition: "Condición de salud",
+    livingArrangement: "Arreglo de vivienda",
+    familyMembers: "Miembros de la familia",
+    accountType: "Tipo de cuenta",
+    doesntMatter: "No importa",
+    unit: {
+      age: "años",
+      height: "cm",
+      weight: "kg",
+      income: "€",
+    },
+  },
+};
 
 interface PropsType {
   page: number;
@@ -37,6 +140,8 @@ interface PropsType {
 
 const AdvanceSearch = ({ page }: PropsType) => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   const countryOptions = Country.getAllCountries().map((country) => ({
     label: country.name,
@@ -49,13 +154,13 @@ const AdvanceSearch = ({ page }: PropsType) => {
 
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
-  const [countryIsoCode, setCountryIsoCode] = useState("");
   const [religion, setReligion] = useState("");
   const [education, setEducation] = useState("");
   const [profession, setProfession] = useState("");
   const [smokingHabit, setSmokingHabit] = useState("");
   const [drinkingHabit, setDrinkingHabit] = useState("");
   const [politicalView, setPoliticalView] = useState("");
+  const [countryIsoCode, setCountryIsoCode] = useState("");
   const [languageSpoken, setLanguageSpoken] = useState("");
   const [healthCondition, setHealthCondition] = useState("");
   const [livingArrangement, setLivingArrangement] = useState("");
@@ -129,10 +234,10 @@ const AdvanceSearch = ({ page }: PropsType) => {
   return (
     <div className="w-full bg-white rounded-[10px]">
       <div className="flex items-center justify-between pb-[16px] px-[20px] py-[27px]">
-        <SubHeading title="Refine Your Search" />
+        <SubHeading title={t.refineSearch} />
         <CommonButton
           onClick={handleSearch}
-          label="Search For Matches"
+          label={t.searchButton}
           className="w-fit hidden lg:flex items-center gap-2 px-[24px] py-[12px] bg-primary text-white text-[14px] font-normal rounded-full"
           startIcon={
             <ImageWithFallback
@@ -149,29 +254,29 @@ const AdvanceSearch = ({ page }: PropsType) => {
         {/* Section 1 */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] border-t-[3px] border-light py-[16px] px-[20px]">
           <RadioGroupField
-            label="Looking For"
+            label={t.lookingFor}
             name="lookingFor"
             options={enumToOptions(Gender)}
             value={lookingFor}
             onChange={setLookingFor}
           />
           <NumberRangeField
-            label="Age"
-            unit="years"
+            label={t.age}
+            unit={t.unit.age}
             startValue={ageRange.start}
             endValue={ageRange.end}
             onChange={(start, end) => setAgeRange({ start, end })}
           />
           <NumberRangeField
-            label="Height"
-            unit="cm"
+            label={t.height}
+            unit={t.unit.height}
             startValue={heightRange.start}
             endValue={heightRange.end}
             onChange={(start, end) => setHeightRange({ start, end })}
           />
           <NumberRangeField
-            label="Weight"
-            unit="kg"
+            label={t.weight}
+            unit={t.unit.weight}
             startValue={weightRange.start}
             endValue={weightRange.end}
             onChange={(start, end) => setWeightRange({ start, end })}
@@ -182,14 +287,14 @@ const AdvanceSearch = ({ page }: PropsType) => {
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-[20px] xl:gap-[30px]">
             <RadioGroupField
-              label="Have Children"
+              label={t.haveChildren}
               name="haveChildren"
               options={enumToOptions(BooleanStatus)}
               value={haveChildren}
               onChange={setHaveChildren}
             />
             <RadioGroupField
-              label="Have Pet"
+              label={t.havePet}
               name="has"
               options={enumToOptions(BooleanStatus)}
               value={hasPet}
@@ -197,7 +302,7 @@ const AdvanceSearch = ({ page }: PropsType) => {
             />
           </div>
           <RadioGroupField
-            label="Marital Status"
+            label={t.maritalStatus}
             name="maritalStatus"
             options={enumToOptions(MaritalStatus)}
             value={maritalStatus}
@@ -208,44 +313,41 @@ const AdvanceSearch = ({ page }: PropsType) => {
         {/* Section 3 */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <OutlinedSelectField
-            label="Religion"
+            label={t.religion}
             name="religion"
             options={enumToOptions(Religion)}
             value={religion}
             onChange={setReligion}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
           <OutlinedSelectField
-            label="Political View"
+            label={t.politicalView}
             name="politicalView"
             options={enumToOptions(PoliticalView)}
             value={politicalView}
             onChange={setPoliticalView}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
           <OutlinedSelectField
             name="country"
-            label="Country"
+            label={t.country}
             value={country}
             options={countryOptions}
-            onChange={(selectedCountryName) => {
-              setCountry(selectedCountryName);
-
+            onChange={(selected) => {
+              setCountry(selected);
               const matchedCountry = Country.getAllCountries().find(
-                (c) => c.name === selectedCountryName
+                (c) => c.name === selected
               );
-
               setCountryIsoCode(matchedCountry?.isoCode ?? "");
             }}
           />
-
           <OutlinedSelectField
-            label="City"
+            label={t.city}
             name="city"
             options={statesOptions}
             value={city}
             onChange={setCity}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
             disabled={!country}
           />
         </div>
@@ -253,32 +355,32 @@ const AdvanceSearch = ({ page }: PropsType) => {
         {/* Section 4 */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <OutlinedSelectField
-            label="Education"
+            label={t.education}
             name="education"
             options={enumToOptions(HighestEducation)}
             value={education}
             onChange={setEducation}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
           <OutlinedSelectField
-            label="Profession"
+            label={t.profession}
             name="profession"
             options={enumToOptions(Profession)}
             value={profession}
             onChange={setProfession}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
           <OutlinedSelectField
-            label="Language Spoken"
+            label={t.languageSpoken}
             name="languageSpoken"
             options={enumToOptions(SpokenLanguage)}
             value={languageSpoken}
             onChange={setLanguageSpoken}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
           <NumberRangeField
-            label="Monthly Income"
-            unit="€"
+            label={t.monthlyIncome}
+            unit={t.unit.income}
             startValue={monthlyIncome.start}
             endValue={monthlyIncome.end}
             onChange={(start, end) => setMonthlyIncome({ start, end })}
@@ -288,59 +390,57 @@ const AdvanceSearch = ({ page }: PropsType) => {
         {/* Section 5 */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <OutlinedSelectField
-            label="Dietary Preference"
+            label={t.dietaryPreference}
             name="dietaryPreference"
             options={enumToOptions(DietaryPreference)}
             value={dietaryPreference}
             onChange={setDietaryPreference}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
           <OutlinedSelectField
-            label="Smoking Habit"
+            label={t.smokingHabit}
             name="smokingHabit"
             options={enumToOptions(SmokingHabit)}
             value={smokingHabit}
             onChange={setSmokingHabit}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
           <OutlinedSelectField
-            label="Drinking Habit"
+            label={t.drinkingHabit}
             name="drinkingHabit"
             options={enumToOptions(DrinkingHabit)}
             value={drinkingHabit}
             onChange={setDrinkingHabit}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
           <OutlinedSelectField
-            label="Health Condition"
+            label={t.healthCondition}
             name="healthCondition"
             options={enumToOptions(HealthCondition)}
             value={healthCondition}
             onChange={setHealthCondition}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
         </div>
 
         {/* Section 6 */}
         <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-[20px] xl:gap-[60px] border-t-[3px] border-light py-[16px] px-[20px]">
           <OutlinedSelectField
-            label="Living Arrangement"
+            label={t.livingArrangement}
             name="livingArrangement"
             options={enumToOptions(LivingArrangement)}
             value={livingArrangement}
             onChange={setLivingArrangement}
-            placeholder="Doesn't Matter"
+            placeholder={t.doesntMatter}
           />
-
           <NumberRangeField
-            label="Family Members"
+            label={t.familyMembers}
             startValue={familyMembers.start}
             endValue={familyMembers.end}
             onChange={(start, end) => setFamilyMembers({ start, end })}
           />
-
           <RadioGroupField
-            label="Account Type"
+            label={t.accountType}
             name="accountType"
             options={enumToOptions(AccountType)}
             value={accountType}
@@ -348,10 +448,11 @@ const AdvanceSearch = ({ page }: PropsType) => {
           />
         </div>
       </div>
-      <div className="max-w-[300px] mx-auto my-5  sm:my-8">
+
+      <div className="max-w-[300px] mx-auto my-5 sm:my-8">
         <CommonButton
           onClick={handleSearch}
-          label="Search For Matches"
+          label={t.searchButton}
           className="w-full lg:hidden flex items-center justify-center gap-2 px-[24px] py-[12px] bg-primary text-white text-[14px] font-normal rounded-full"
           startIcon={
             <ImageWithFallback

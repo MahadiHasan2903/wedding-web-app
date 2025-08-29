@@ -10,7 +10,6 @@ import React, {
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
-import { navItems } from "@/lib/utils/data";
 import { usePathname } from "next/navigation";
 import UserMenuDropdown from "./UserMenuDropdown";
 import LanguageDropdown from "./LanguageDropdown";
@@ -19,14 +18,57 @@ import { signOut, useSession } from "next-auth/react";
 import { CommonButton } from "@/lib/components/buttons";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
+import { Language } from "@/lib/types/common/common.types";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import { crown, avatar, hamburger } from "@/lib/components/image/icons";
+
+const navItems = [
+  { key: "home", href: "/" },
+  { key: "pricing", href: "/pricing" },
+  { key: "findMatch", href: "/find-match" },
+  { key: "about", href: "/about" },
+  { key: "contact", href: "/contact" },
+];
+
+const translations: Record<Language, Record<string, string>> = {
+  en: {
+    home: "Home",
+    pricing: "Pricing",
+    findMatch: "Find Match",
+    about: "About",
+    contact: "Contact",
+    joinNow: "Join Now",
+    signIn: "Sign In",
+    managePlan: "Manage Plan",
+  },
+  fr: {
+    home: "Accueil",
+    pricing: "Tarifs",
+    findMatch: "Trouver un Partenaire",
+    about: "À propos",
+    contact: "Contact",
+    joinNow: "S'inscrire",
+    signIn: "Se connecter",
+    managePlan: "Gérer le Plan",
+  },
+  es: {
+    home: "Inicio",
+    pricing: "Precios",
+    findMatch: "Encontrar pareja",
+    about: "Acerca de",
+    contact: "Contacto",
+    joinNow: "Únete ahora",
+    signIn: "Iniciar sesión",
+    managePlan: "Gestionar Plan",
+  },
+};
 
 const Header = () => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const { language } = useLanguageStore();
+  const t = translations[language];
   const menuRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -124,7 +166,7 @@ const Header = () => {
             />
           </Link>
           <nav className="flex items-center gap-12 w-full">
-            {navItems.map(({ href, label }) => (
+            {navItems.map(({ href, key }) => (
               <Link
                 key={href}
                 href={href}
@@ -132,7 +174,7 @@ const Header = () => {
                   pathname === href ? "text-vipHeavy" : ""
                 }`}
               >
-                {label}
+                {t[key]}
               </Link>
             ))}
           </nav>
@@ -143,7 +185,7 @@ const Header = () => {
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-3">
                 <CommonButton
-                  label="Manage Plan"
+                  label={t.managePlan}
                   href="/pricing"
                   className="flex gap-2 items-center bg-transparent border border-vipHeavy text-vipLight px-5 py-3 rounded-lg"
                   startIcon={
@@ -199,12 +241,12 @@ const Header = () => {
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-3">
                 <CommonButton
-                  label="Join Now"
+                  label={t.joinNow}
                   href="/registration"
                   className="bg-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
                 />
                 <CommonButton
-                  label="Sign In"
+                  label={t.signIn}
                   href="/login"
                   className="border border-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
                 />
@@ -273,7 +315,7 @@ const Header = () => {
         ) : (
           <CommonButton
             href="/login"
-            label="Sign In"
+            label={t.signIn}
             className="border border-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
           />
         )}
@@ -307,7 +349,7 @@ const Header = () => {
               />
             </div>
             <nav className="flex flex-col gap-4 mt-5">
-              {navItems.map(({ href, label }) => (
+              {navItems.map(({ href, key }) => (
                 <Link
                   key={href}
                   href={href}
@@ -316,7 +358,7 @@ const Header = () => {
                     pathname === href ? "text-vipHeavy" : ""
                   }`}
                 >
-                  {label}
+                  {t[key]}
                 </Link>
               ))}
               <LanguageDropdown />

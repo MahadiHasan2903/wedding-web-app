@@ -2,21 +2,56 @@
 
 import React from "react";
 import Link from "next/link";
-import { navItems } from "@/lib/utils/data";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { LanguageDropdown } from "../marketing";
 import { avatar } from "@/lib/components/image/icons";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
+import { Language } from "@/lib/types/common/common.types";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { hasActiveVipMembership } from "@/lib/utils/helpers";
+
+const navItems = [
+  { key: "home", href: "/" },
+  { key: "pricing", href: "/pricing" },
+  { key: "findMatch", href: "/find-match" },
+  { key: "about", href: "/about" },
+  { key: "contact", href: "/contact" },
+];
+
+const translations: Record<Language, Record<string, string>> = {
+  en: {
+    home: "Home",
+    pricing: "Pricing",
+    findMatch: "Find Match",
+    about: "About",
+    contact: "Contact",
+  },
+  fr: {
+    home: "Accueil",
+    pricing: "Tarifs",
+    findMatch: "Trouver un partenaire",
+    about: "À propos",
+    contact: "Contact",
+  },
+  es: {
+    home: "Inicio",
+    pricing: "Precios",
+    findMatch: "Buscar pareja",
+    about: "Acerca de",
+    contact: "Contacto",
+  },
+};
 
 const Navbar = () => {
   const pathname = usePathname();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const { data: session } = useSession();
 
   // Extract info
-  const isAdmin = session?.user.data.userRole === "admin" ? true : false;
+  const isAdmin = session?.user.data.userRole === "admin";
 
   // Determine if the user is a VIP or not
   const isVipUser = hasActiveVipMembership(session?.user.data);
@@ -32,16 +67,13 @@ const Navbar = () => {
               pathname === item.href ? "text-vipHeavy" : ""
             } text-[16px] hover:text-vipHeavy font-medium cursor-pointer`}
           >
-            {item.label}
+            {t[item.key]}
           </Link>
         ))}
       </div>
 
       <div className="flex items-center justify-end gap-4">
-        <Link
-          href={`${isAdmin ? "/overview" : "/my-profile"}`}
-          className="w-auto"
-        >
+        <Link href={isAdmin ? "/overview" : "/my-profile"} className="w-auto">
           <div className="w-12 h-12 relative flex items-center justify-center">
             <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
               <ImageWithFallback

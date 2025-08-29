@@ -10,6 +10,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubHeading } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { forgetPasswordRequestAction } from "@/lib/action/auth/auth.action";
 
@@ -20,6 +21,30 @@ interface PropsType {
   setOpenOtpVerificationModal: Dispatch<SetStateAction<boolean>>;
 }
 
+const translations = {
+  en: {
+    title: "Forget Password",
+    emailLabel: "Enter your email address",
+    emailPlaceholder: "Enter your email",
+    resetButton: "Reset Password",
+    loading: "Loading...",
+  },
+  fr: {
+    title: "Mot de passe oublié",
+    emailLabel: "Entrez votre adresse e-mail",
+    emailPlaceholder: "Entrez votre e-mail",
+    resetButton: "Réinitialiser le mot de passe",
+    loading: "Chargement...",
+  },
+  es: {
+    title: "Olvidé mi contraseña",
+    emailLabel: "Introduce tu correo electrónico",
+    emailPlaceholder: "Introduce tu correo",
+    resetButton: "Restablecer contraseña",
+    loading: "Cargando...",
+  },
+};
+
 const ForgetPasswordReqModal = ({
   open,
   setOpen,
@@ -27,8 +52,9 @@ const ForgetPasswordReqModal = ({
   setOpenOtpVerificationModal,
 }: PropsType) => {
   const [loading, setLoading] = useState(false);
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
-  // Setup react-hook-form with zod validation
   const {
     control,
     handleSubmit,
@@ -75,17 +101,13 @@ const ForgetPasswordReqModal = ({
   return (
     <div
       className="fixed left-0 top-0 z-999 flex h-full min-h-screen w-full items-center justify-center bg-black/80 px-4 py-5"
-      onClick={() => {
-        if (!loading) {
-          setOpen(false);
-        }
-      }}
+      onClick={() => !loading && setOpen(false)}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-[600px] rounded-[10px] bg-white px-[36px] py-[24px] flex flex-col gap-[30px]"
       >
-        <SubHeading title="Forget Password" />
+        <SubHeading title={t.title} />
 
         <Controller
           name="email"
@@ -94,16 +116,17 @@ const ForgetPasswordReqModal = ({
           render={({ field }) => (
             <UnderlineInput
               {...field}
-              label="Enter your email address"
+              label={t.emailLabel}
               type="email"
-              placeholder="Enter your email"
+              placeholder={t.emailPlaceholder}
               error={errors.email?.message}
             />
           )}
         />
+
         <CommonButton
           type="button"
-          label={loading ? "Loading..." : "Reset Password"}
+          label={loading ? t.loading : t.resetButton}
           disabled={loading}
           onClick={handleSubmit(handleSubmitForgetPasswordRequest)}
           className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"

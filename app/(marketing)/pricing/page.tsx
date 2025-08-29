@@ -17,7 +17,7 @@ const PricingPage = async () => {
 
   return (
     <div className="w-full bg-white flex flex-col justify-between">
-      <HeroBanner title="Pricing" />
+      <HeroBanner titleKey="pricing" />
       <MembershipPlans
         allMsPackages={allMsPackages}
         PAYPAL_CLIENT_ID={PAYPAL_CLIENT_ID}

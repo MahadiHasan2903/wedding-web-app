@@ -3,13 +3,14 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { HeadingLine } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+import usePurchasePackageStore from "@/lib/store/usePurchaseStore";
 import { tickCircle, crown, star, heart } from "@/lib/components/image/icons";
 import { msPackagePurchaseAction } from "@/lib/action/ms-purchase/msPurchase.action";
-import usePurchasePackageStore from "@/lib/store/usePurchaseStore";
 
 interface PropsType {
   id: number;
@@ -26,6 +27,41 @@ interface PropsType {
   setPaymentFormOpen: Dispatch<SetStateAction<boolean>>;
 }
 
+const translations = {
+  en: {
+    processingPurchase: "Processing Purchase...",
+    currentPlan: "Current Plan",
+    choosePlan: "Choose Plan",
+    loginToPurchase: "Please log in to purchase a new membership plan.",
+    purchaseCompleted:
+      "Purchase Completed. Please log in again to see the updated changes.",
+    whatsIncluded: "What's Included:",
+    save: "Save",
+  },
+  fr: {
+    processingPurchase: "Traitement de l'achat...",
+    currentPlan: "Plan actuel",
+    choosePlan: "Choisir le plan",
+    loginToPurchase:
+      "Veuillez vous connecter pour acheter un nouveau plan d'adhésion.",
+    purchaseCompleted:
+      "Achat terminé. Veuillez vous reconnecter pour voir les mises à jour.",
+    whatsIncluded: "Ce qui est inclus :",
+    save: "Économisez",
+  },
+  es: {
+    processingPurchase: "Procesando compra...",
+    currentPlan: "Plan actual",
+    choosePlan: "Elegir plan",
+    loginToPurchase:
+      "Por favor, inicia sesión para comprar un nuevo plan de membresía.",
+    purchaseCompleted:
+      "Compra completada. Por favor, inicia sesión nuevamente para ver los cambios.",
+    whatsIncluded: "Incluye:",
+    save: "Ahorra",
+  },
+};
+
 const PricingCard = ({
   id,
   title,
@@ -38,6 +74,8 @@ const PricingCard = ({
 }: PropsType) => {
   const router = useRouter();
   const { data: session } = useSession();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const { setMsPackagePurchaseData } = usePurchasePackageStore();
 
   // Extract the current user's purchased package ID from session
@@ -66,7 +104,7 @@ const PricingCard = ({
   // Handler function for initiating package purchase
   const handleMsPackagePurchaseInitialization = async () => {
     if (!session || !session.user.accessToken) {
-      toast.error("Please log in to purchase a new membership plan.");
+      toast.error(t.loginToPurchase);
       router.push("/login");
       return;
     }
@@ -83,7 +121,6 @@ const PricingCard = ({
       purchasePackageCategory: categoryInfo.category,
     };
 
-    // Call purchase action API
     const msPackagePurchaseResponse = await msPackagePurchaseAction(payload);
 
     if (!msPackagePurchaseResponse.status) {
@@ -92,9 +129,7 @@ const PricingCard = ({
 
     if (msPackagePurchaseResponse.status && msPackagePurchaseResponse.data) {
       if (payload.msPackageId === 1) {
-        toast.success(
-          "Purchase Completed. Please log in again to see the updated changes."
-        );
+        toast.success(t.purchaseCompleted);
         router.push("/pricing/payment-success");
       } else {
         setMsPackagePurchaseData({
@@ -106,7 +141,6 @@ const PricingCard = ({
       }
     }
 
-    // Reset loading state
     setLoadingPackageId(null);
   };
 
@@ -114,7 +148,7 @@ const PricingCard = ({
     <div className="w-[300px] xl:w-[380px] h-auto lg:min-h-[650px] relative flex flex-col items-start px-4 pt-4 pb-[50px] lg:pb-0 lg:p-[30px] gap-[25px] border border-[#B0B1B3] rounded-[10px] overflow-hidden">
       {isYearly && (
         <div className="hidden lg:block absolute right-0 top-[-10px] bg-topRectangle bg-no-repeat bg-center bg-contain text-white pl-[56px] pr-[21px] py-[16px]">
-          Save {yearlySavingsPercentage}%
+          {t.save} {yearlySavingsPercentage}%
         </div>
       )}
 
@@ -156,10 +190,10 @@ const PricingCard = ({
       <CommonButton
         label={
           loading
-            ? "Processing Purchase..."
+            ? t.processingPurchase
             : isCurrent
-            ? "Current Plan"
-            : "Choose Plan"
+            ? t.currentPlan
+            : t.choosePlan
         }
         type="button"
         disabled={loading}
@@ -173,7 +207,7 @@ const PricingCard = ({
 
       <div className="w-full flex flex-col items-start gap-[13px]">
         <p className="text-[14px] font-semibold leading-[21px]">
-          What's Included:
+          {t.whatsIncluded}
         </p>
         <div className="flex flex-col items-start gap-1">
           {description.map((desc, idx) => (
@@ -192,7 +226,7 @@ const PricingCard = ({
 
       {isYearly && (
         <div className="lg:hidden block absolute right-0 bottom-[-10px] bg-bottomRectangle bg-no-repeat bg-center bg-contain text-white pl-[56px] pr-[21px] py-[16px]">
-          Save {yearlySavingsPercentage}%
+          {t.save} {yearlySavingsPercentage}%
         </div>
       )}
     </div>

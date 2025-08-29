@@ -2,6 +2,14 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import {
+  registrationRequestSchema,
+  RegistrationRequestType,
+} from "@/lib/schema/auth/auth.schema";
+import {
+  accountRegistrationConfirmationAction,
+  accountRegistrationRequestAction,
+} from "@/lib/action/auth/auth.action";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import VerificationModal from "./VerificationModal";
@@ -11,25 +19,77 @@ import { google } from "@/lib/components/image/icons";
 import { SubHeading } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { UnderlineInput } from "@/lib/components/form-elements";
-import {
-  registrationRequestSchema,
-  RegistrationRequestType,
-} from "@/lib/schema/auth/auth.schema";
-import {
-  accountRegistrationConfirmationAction,
-  accountRegistrationRequestAction,
-} from "@/lib/action/auth/auth.action";
+
+const translations = {
+  en: {
+    title: "Create a New Account",
+    google: "Continue with Google",
+    emailSignUp: "or, sign up with your email",
+    firstName: "First Name",
+    lastName: "Last Name",
+    email: "Email",
+    password: "Password",
+    retypePassword: "Retype Password",
+    passwordMismatch: "Passwords do not match",
+    loading: "Loading...",
+    signUp: "Sign Up",
+    termsText: "By joining, you agree to our",
+    termsLink: "Terms of Service",
+    privacyLink: "Privacy Policy",
+    alreadyAccount: "Already have an account?",
+    signIn: "Sign in",
+  },
+  fr: {
+    title: "Créer un nouveau compte",
+    google: "Continuer avec Google",
+    emailSignUp: "ou, inscrivez-vous avec votre e-mail",
+    firstName: "Prénom",
+    lastName: "Nom",
+    email: "E-mail",
+    password: "Mot de passe",
+    retypePassword: "Retapez le mot de passe",
+    passwordMismatch: "Les mots de passe ne correspondent pas",
+    loading: "Chargement...",
+    signUp: "S'inscrire",
+    termsText: "En rejoignant, vous acceptez nos",
+    termsLink: "Conditions d'utilisation",
+    privacyLink: "Politique de confidentialité",
+    alreadyAccount: "Vous avez déjà un compte ?",
+    signIn: "Connectez-vous",
+  },
+  es: {
+    title: "Crear una nueva cuenta",
+    google: "Continuar con Google",
+    emailSignUp: "o, regístrate con tu correo electrónico",
+    firstName: "Nombre",
+    lastName: "Apellido",
+    email: "Correo electrónico",
+    password: "Contraseña",
+    retypePassword: "Reescriba la contraseña",
+    passwordMismatch: "Las contraseñas no coinciden",
+    loading: "Cargando...",
+    signUp: "Registrarse",
+    termsText: "Al unirse, aceptas nuestros",
+    termsLink: "Términos de servicio",
+    privacyLink: "Política de privacidad",
+    alreadyAccount: "¿Ya tienes una cuenta?",
+    signIn: "Iniciar sesión",
+  },
+};
 
 const RegistrationForm = () => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState<string>("");
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [passwordError, setPasswordError] = useState<string>("");
   const [openVerificationModal, setOpenVerificationModal] = useState(false);
 
-  // Initialize react-hook-form with zod validation schema
   const {
     reset,
     control,
@@ -46,13 +106,12 @@ const RegistrationForm = () => {
     setPasswordError("");
 
     if (data.password !== data.retypePassword) {
-      setPasswordError("Passwords do not match");
+      setPasswordError(t.passwordMismatch);
       return;
     }
 
     setLoading(true);
 
-    // Prepare payload (exclude retypePassword)
     const requestPayload: RegistrationRequestType = {
       firstName: data.firstName,
       lastName: data.lastName,
@@ -60,17 +119,14 @@ const RegistrationForm = () => {
       password: data.password,
     };
 
-    // Send registration request to server
     const registrationRequestResponse = await accountRegistrationRequestAction(
       requestPayload
     );
 
-    // Show toast notification with server response message
     toast(registrationRequestResponse.message, {
       type: registrationRequestResponse.status ? "success" : "error",
     });
 
-    // If registration successful, store email and open OTP modal
     if (registrationRequestResponse.status) {
       setEmail(requestPayload.email);
       setOpenVerificationModal(true);
@@ -111,19 +167,18 @@ const RegistrationForm = () => {
       onSubmit={handleSubmit(handleRegistrationRequestSubmit)}
     >
       <div className="w-full flex flex-col items-center gap-[40px]">
-        <SubHeading title="Create a New Account" />
+        <SubHeading title={t.title} />
         <div className="w-full flex items-center gap-2 border border-primaryBorder px-[20px] py-[12px] rounded-[10px]">
           <ImageWithFallback src={google} width={16} height={16} alt="google" />
           <h3 className="w-full text-[14px] text-center font-normal">
-            Continue with Google
+            {t.google}
           </h3>
         </div>
-        <h5 className="text-[14px] font-normal">or, sign up with your email</h5>
+        <h5 className="text-[14px] font-normal">{t.emailSignUp}</h5>
       </div>
 
       <div className="w-full flex flex-col items-center gap-[24px]">
         <div className="w-full flex items-start gap-[30px]">
-          {/* First Name input */}
           <Controller
             name="firstName"
             control={control}
@@ -131,14 +186,13 @@ const RegistrationForm = () => {
             render={({ field }) => (
               <UnderlineInput
                 {...field}
-                label="First Name"
+                label={t.firstName}
                 type="text"
-                placeholder="Enter your first name"
+                placeholder={t.firstName}
                 error={errors.firstName?.message}
               />
             )}
           />
-          {/* Last Name input */}
           <Controller
             name="lastName"
             control={control}
@@ -146,16 +200,15 @@ const RegistrationForm = () => {
             render={({ field }) => (
               <UnderlineInput
                 {...field}
-                label="Last Name"
+                label={t.lastName}
                 type="text"
-                placeholder="Enter your last name"
+                placeholder={t.lastName}
                 error={errors.lastName?.message}
               />
             )}
           />
         </div>
 
-        {/* Email input */}
         <Controller
           name="email"
           control={control}
@@ -163,15 +216,14 @@ const RegistrationForm = () => {
           render={({ field }) => (
             <UnderlineInput
               {...field}
-              label="Email"
+              label={t.email}
               type="text"
-              placeholder="Enter your email"
+              placeholder={t.email}
               error={errors.email?.message}
             />
           )}
         />
 
-        {/* Password and Retype Password inputs */}
         <div className="w-full flex flex-col gap-3">
           <div className="w-full flex items-start gap-[30px]">
             <Controller
@@ -181,9 +233,9 @@ const RegistrationForm = () => {
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Password"
+                  label={t.password}
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder={t.password}
                   error={errors.password?.message}
                 />
               )}
@@ -195,48 +247,44 @@ const RegistrationForm = () => {
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Retype Password"
+                  label={t.retypePassword}
                   type="password"
-                  placeholder="Retype your password"
+                  placeholder={t.retypePassword}
                   error={errors.retypePassword?.message}
                 />
               )}
             />
           </div>
-          {/* Display password mismatch error */}
           {passwordError && <p className="text-red text-sm">{passwordError}</p>}
         </div>
       </div>
 
-      {/* Submit button disabled during loading or OTP verification */}
       <CommonButton
-        label={loading && !openVerificationModal ? "Loading..." : "Sign Up"}
+        label={loading && !openVerificationModal ? t.loading : t.signUp}
         disabled={loading || openVerificationModal}
         type="submit"
         className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"
       />
 
-      {/* Terms of service and sign-in links */}
       <div className="w-full flex flex-col items-center gap-[30px]">
         <div className="text-[12px] font-normal flex items-center gap-1">
-          By joining, you agree to our
+          {t.termsText}
           <Link href="/terms-of-services" className="underline">
-            Terms of Service
+            {t.termsLink}
           </Link>
           and
           <Link href="/terms-of-services" className="underline">
-            Privacy Policy
+            {t.privacyLink}
           </Link>
         </div>
         <div className="text-[14px] font-normal flex items-center gap-1">
-          Already have an account?
+          {t.alreadyAccount}
           <Link href="/login" className="underline">
-            Sign in
+            {t.signIn}
           </Link>
         </div>
       </div>
 
-      {/* OTP verification modal shown after registration request */}
       {openVerificationModal && (
         <VerificationModal
           otp={otp}

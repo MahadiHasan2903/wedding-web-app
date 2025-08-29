@@ -1,5 +1,6 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
-import Link from "next/link";
+"use client";
+
+import React, { Dispatch, SetStateAction } from "react";
 import {
   americanExpress,
   masterCard,
@@ -8,21 +9,40 @@ import {
 } from "@/lib/components/image/icons";
 import PaypalProvider from "./paypal/PaypalProvider";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import StripeCheckoutProvider from "./stripe/StripeCheckoutProvider";
+
+const translations = {
+  en: {
+    paypal: "Paypal",
+    creditCard: "Credit Card",
+  },
+  fr: {
+    paypal: "Paypal",
+    creditCard: "Carte de Crédit",
+  },
+  es: {
+    paypal: "Paypal",
+    creditCard: "Tarjeta de Crédito",
+  },
+};
 
 interface PropsType {
   selectedMethod: string;
-  setSelectedMethod: Dispatch<SetStateAction<"credit-card" | "paypal">>;
   PAYPAL_CLIENT_ID?: string;
   STRIPE_PUBLISHABLE_KEY?: string;
+  setSelectedMethod: Dispatch<SetStateAction<"credit-card" | "paypal">>;
 }
 
 const PaymentMethod = ({
   selectedMethod,
-  setSelectedMethod,
   PAYPAL_CLIENT_ID,
+  setSelectedMethod,
   STRIPE_PUBLISHABLE_KEY,
 }: PropsType) => {
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   return (
     <div className="w-full flex flex-col gap-[30px]">
       {/* Paypal Option */}
@@ -42,7 +62,7 @@ const PaymentMethod = ({
             onChange={() => setSelectedMethod("paypal")}
             className="accent-primary"
           />
-          <p className="text-[10px] sm:text-[14px]">Paypal</p>
+          <p className="text-[10px] sm:text-[14px]">{t.paypal}</p>
         </div>
         <div className="flex items-center gap-[2px]">
           <ImageWithFallback src={paypal} width={40} height={12} alt="paypal" />
@@ -65,7 +85,7 @@ const PaymentMethod = ({
             onChange={() => setSelectedMethod("credit-card")}
             className="accent-primary"
           />
-          <p className="text-[10px] sm:text-[14px]">Credit Card</p>
+          <p className="text-[10px] sm:text-[14px]">{t.creditCard}</p>
         </div>
         <div className="flex items-center gap-[2px]">
           <ImageWithFallback src={visa} width={27} height={8} alt="visa" />

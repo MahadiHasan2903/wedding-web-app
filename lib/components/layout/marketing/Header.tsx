@@ -150,8 +150,6 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside, true);
   }, [isMenuOpen]);
 
-  console.log(language);
-
   return (
     <header className="w-full bg-primary text-vipLight relative">
       {/* Desktop Navbar */}

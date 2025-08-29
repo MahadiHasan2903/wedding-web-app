@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import ForgetPasswordReqModal from "./ForgetPasswordReqModal";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { loginSchema, LoginType } from "@/lib/schema/auth/auth.schema";
@@ -21,6 +22,63 @@ import { forgetPasswordConfirmationAction } from "@/lib/action/auth/auth.action"
 interface PropsType {
   callbackUrl?: string;
 }
+
+const translations = {
+  en: {
+    signInTitle: "Sign in to Your Account",
+    continueWithGoogle: "Continue with Google",
+    orSignInEmail: "or, sign in with your email",
+    email: "Email",
+    password: "Password",
+    forgotPassword: "Forgot your password?",
+    loading: "Loading...",
+    signIn: "Sign In",
+    termsAgreement: "By joining, you agree to our",
+    termsOfService: "Terms of Service",
+    privacyPolicy: "Privacy Policy",
+    noAccount: "Don't have an account?",
+    signUp: "Sign up",
+    loginSuccess: "Logged in successfully",
+    loginFailed: "Login failed. Please check your credentials",
+    loginError: "An error occurred during login.",
+  },
+  fr: {
+    signInTitle: "Connectez-vous à votre compte",
+    continueWithGoogle: "Continuer avec Google",
+    orSignInEmail: "ou connectez-vous avec votre e-mail",
+    email: "E-mail",
+    password: "Mot de passe",
+    forgotPassword: "Mot de passe oublié ?",
+    loading: "Chargement...",
+    signIn: "Se connecter",
+    termsAgreement: "En rejoignant, vous acceptez nos",
+    termsOfService: "Conditions d'utilisation",
+    privacyPolicy: "Politique de confidentialité",
+    noAccount: "Vous n'avez pas de compte ?",
+    signUp: "Inscription",
+    loginSuccess: "Connecté avec succès",
+    loginFailed: "Échec de la connexion. Vérifiez vos identifiants",
+    loginError: "Une erreur est survenue lors de la connexion.",
+  },
+  es: {
+    signInTitle: "Inicia sesión en tu cuenta",
+    continueWithGoogle: "Continuar con Google",
+    orSignInEmail: "o inicia sesión con tu correo electrónico",
+    email: "Correo electrónico",
+    password: "Contraseña",
+    forgotPassword: "¿Olvidaste tu contraseña?",
+    loading: "Cargando...",
+    signIn: "Iniciar sesión",
+    termsAgreement: "Al unirte, aceptas nuestros",
+    termsOfService: "Términos de servicio",
+    privacyPolicy: "Política de privacidad",
+    noAccount: "¿No tienes una cuenta?",
+    signUp: "Regístrate",
+    loginSuccess: "Inicio de sesión exitoso",
+    loginFailed: "Error al iniciar sesión. Verifica tus credenciales",
+    loginError: "Ocurrió un error durante el inicio de sesión.",
+  },
+};
 
 const LoginForm = ({ callbackUrl }: PropsType) => {
   const router = useRouter();
@@ -32,7 +90,9 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
   const [openOtpVerificationModal, setOpenOtpVerificationModal] =
     useState(false);
 
-  // Setup react-hook-form with zod validation
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const {
     reset,
     control,
@@ -42,60 +102,44 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
     resolver: zodResolver(loginSchema),
   });
 
-  // Handle login form submission
   const handleLoginSubmit = async (data: LoginType) => {
     try {
       setLoading(true);
-
       const response = await signIn("credentials", {
         ...data,
         redirect: false,
       });
 
       if (response?.ok) {
-        toast.success("Logged in successfully");
-
+        toast.success(t.loginSuccess);
         const updatedSession = await getSession();
-
         const user = updatedSession?.user;
         const accessToken = user?.accessToken;
         const isAdmin = user?.data.userRole === "admin";
 
-        if (callbackUrl) {
-          router.push(callbackUrl);
-        } else if (accessToken) {
+        if (callbackUrl) router.push(callbackUrl);
+        else if (accessToken)
           router.push(isAdmin ? "/overview" : "/my-profile");
-        } else {
-          router.push("/");
-        }
+        else router.push("/");
       } else {
-        toast.error("Login failed. Please check your credentials");
+        toast.error(t.loginFailed);
       }
     } catch {
-      toast.error("An error occurred during login.");
+      toast.error(t.loginError);
     } finally {
       setLoading(false);
     }
   };
 
-  // Handle otp verification
   const handleOtpVerification = async () => {
-    // Prepare payload (join otp together before sending)
-    const payload = {
-      email: email,
-      otp: otp.join(""),
-    };
-
-    // Send OTP confirmation request
+    const payload = { email: email, otp: otp.join("") };
     const forgetPasswordConfirmationResponse =
       await forgetPasswordConfirmationAction(payload);
 
-    // Show toast notification with confirmation result
     toast(forgetPasswordConfirmationResponse.message, {
       type: forgetPasswordConfirmationResponse.status ? "success" : "error",
     });
 
-    // On successful OTP verification, navigate to password reset page
     if (forgetPasswordConfirmationResponse.status) {
       reset();
       router.push(`/reset-password?email=${payload.email}&otp=${payload.otp}`);
@@ -108,18 +152,17 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
       onSubmit={handleSubmit(handleLoginSubmit)}
     >
       <div className="w-full flex flex-col items-center gap-[40px]">
-        <SubHeading title="Sign in to Your Account" />
+        <SubHeading title={t.signInTitle} />
         <div className="w-full flex items-center gap-2 border border-primaryBorder px-[20px] py-[12px] rounded-[10px]">
           <ImageWithFallback src={google} width={16} height={16} alt="google" />
           <h3 className="w-full text-[14px] text-center font-normal">
-            Continue with Google
+            {t.continueWithGoogle}
           </h3>
         </div>
-        <h5 className="text-[14px] font-normal">or, sign in with your email</h5>
+        <h5 className="text-[14px] font-normal">{t.orSignInEmail}</h5>
       </div>
 
       <div className="w-full flex flex-col items-center gap-[24px]">
-        {/* Email input field */}
         <Controller
           name="email"
           control={control}
@@ -127,16 +170,15 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
           render={({ field }) => (
             <UnderlineInput
               {...field}
-              label="Email"
+              label={t.email}
               type="email"
-              placeholder="Enter your email"
+              placeholder={t.email}
               error={errors.email?.message}
             />
           )}
         />
 
         <div className="w-full flex flex-col items-start gap-2">
-          {/* Password input field */}
           <Controller
             name="password"
             control={control}
@@ -144,56 +186,49 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
             render={({ field }) => (
               <UnderlineInput
                 {...field}
-                label="Password"
+                label={t.password}
                 type="password"
-                placeholder="Enter your password"
+                placeholder={t.password}
                 error={errors.password?.message}
               />
             )}
           />
-          {/* Forgot password link */}
           <button
             type="button"
-            onClick={() => {
-              if (!loading) {
-                setOpenForgetPasswordModal(true);
-              }
-            }}
+            onClick={() => !loading && setOpenForgetPasswordModal(true)}
             className="text-[12px] font-normal underline"
           >
-            Forgot your password?
+            {t.forgotPassword}
           </button>
         </div>
       </div>
 
-      {/* Submit button, disabled while loading */}
       <CommonButton
-        label={loading ? "Loading..." : "Sign In"}
+        label={loading ? t.loading : t.signIn}
         disabled={loading || openForgetPasswordModal}
         type="submit"
         className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"
       />
 
-      {/* Terms of service and sign up links */}
       <div className="w-full flex flex-col items-center gap-[30px]">
         <div className="text-[12px] font-normal flex items-center gap-1">
-          By joining, you agree to our
+          {t.termsAgreement}
           <Link href="/terms-of-services" className="underline">
-            Terms of Service
+            {t.termsOfService}
           </Link>
           and
           <Link href="/terms-of-services" className="underline">
-            Privacy Policy
+            {t.privacyPolicy}
           </Link>
         </div>
         <div className="text-[14px] font-normal flex items-center gap-1">
-          Don't have an account?
+          {t.noAccount}
           <Link href="/registration" className="underline">
-            Sign up
+            {t.signUp}
           </Link>
         </div>
       </div>
-      {/* Forget password request sending modal */}
+
       {openForgetPasswordModal && (
         <ForgetPasswordReqModal
           setEmail={setEmail}
@@ -203,7 +238,6 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
         />
       )}
 
-      {/* OTP verification modal shown after registration request */}
       {openOtpVerificationModal && (
         <VerificationModal
           otp={otp}

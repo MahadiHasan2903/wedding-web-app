@@ -16,6 +16,7 @@ import { formatRelativeTimeLong } from "@/lib/utils/date/dateUtils";
 const translations: Record<string, Record<string, string>> = {
   en: {
     messageDeleted: "Message deleted",
+    inappropriateMessage: "Message hidden due to inappropriate content",
     reply: "Reply",
     report: "Report",
     edit: "Edit",
@@ -28,6 +29,7 @@ const translations: Record<string, Record<string, string>> = {
   },
   fr: {
     messageDeleted: "Message supprimé",
+    inappropriateMessage: "Message masqué pour contenu inapproprié",
     reply: "Répondre",
     report: "Signaler",
     edit: "Modifier",
@@ -40,6 +42,7 @@ const translations: Record<string, Record<string, string>> = {
   },
   es: {
     messageDeleted: "Mensaje eliminado",
+    inappropriateMessage: "Mensaje oculto por contenido inapropiado",
     reply: "Responder",
     report: "Reportar",
     edit: "Editar",
@@ -127,6 +130,10 @@ const MessageItem = ({
           message.attachments.length <= 0) ? (
           <div className="cursor-not-allowed bg-gray px-4 py-2 rounded-full border border-primaryBorder italic text-sm">
             {t.messageDeleted}
+          </div>
+        ) : message.isInappropriate ? (
+          <div className="cursor-not-allowed bg-red text-white px-4 py-2 rounded-full border border-primaryBorder italic text-sm">
+            {t.inappropriateMessage}
           </div>
         ) : (
           <div

@@ -19,6 +19,7 @@ export interface Message {
   repliedToMessageId?: string;
   attachments: Media[] | null;
   isDeleted: boolean;
+  isInappropriate: boolean;
   createdAt: string;
   updatedAt: string;
 }

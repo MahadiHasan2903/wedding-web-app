@@ -1,10 +1,44 @@
 import React from "react";
 import api from "@/lib/api";
+import dynamic from "next/dynamic";
 import { getServerSessionData } from "@/lib/config/auth";
-import UserStatistics from "@/lib/features/dashboard/admin/overview/UserStatistics";
-import NewRegistrationStats from "@/lib/features/dashboard/admin/overview/new-registration/NewRegistrationStats";
-import SubscriptionRevenueStats from "@/lib/features/dashboard/admin/overview/subscription-revenue/SubscriptionRevenueStats";
-import GenderDistribution from "@/lib/features/dashboard/admin/overview/gender-distribution/GenderDistribution";
+
+const UserStatistics = dynamic(
+  () => import("@/lib/features/dashboard/admin/overview/UserStatistics"),
+  {
+    ssr: false,
+  }
+);
+
+const NewRegistrationStats = dynamic(
+  () =>
+    import(
+      "@/lib/features/dashboard/admin/overview/new-registration/NewRegistrationStats"
+    ),
+  {
+    ssr: false,
+  }
+);
+
+const SubscriptionRevenueStats = dynamic(
+  () =>
+    import(
+      "@/lib/features/dashboard/admin/overview/subscription-revenue/SubscriptionRevenueStats"
+    ),
+  {
+    ssr: false,
+  }
+);
+
+const GenderDistribution = dynamic(
+  () =>
+    import(
+      "@/lib/features/dashboard/admin/overview/gender-distribution/GenderDistribution"
+    ),
+  {
+    ssr: false,
+  }
+);
 
 const page = async () => {
   const { accessToken } = await getServerSessionData();

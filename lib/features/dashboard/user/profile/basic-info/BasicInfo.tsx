@@ -28,12 +28,12 @@ import { CommonButton } from "@/lib/components/buttons";
 import BasicInfoUpdateForm from "./BasicInfoUpdateForm";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
 import { createConversationAction } from "@/lib/action/chat/conversation.action";
 import { updateLikeDisLikeStatusAction } from "@/lib/action/user/userInteraction.action";
-import useLanguageStore from "@/lib/store/useLanguageStore";
 
 // Translations
 const translations: Record<string, Record<string, string>> = {

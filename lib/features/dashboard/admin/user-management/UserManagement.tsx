@@ -16,9 +16,53 @@ import { filter } from "@/lib/components/image/icons";
 import FilterUserDropDown from "./FilterUserDropDown";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { formatDateString3 } from "@/lib/utils/date/dateUtils";
 import { OutlinedInput } from "@/lib/components/form-elements";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    allUsers: "All Users",
+    searchUser: "Search user",
+    filterUser: "Filter User",
+    name: "Name",
+    gender: "Gender",
+    email: "Email",
+    joined: "Joined",
+    accountStatus: "Account Status",
+    action: "Action",
+    noMatchedUsers: "No matched users found",
+    na: "N/A",
+  },
+  fr: {
+    allUsers: "Tous les utilisateurs",
+    searchUser: "Rechercher un utilisateur",
+    filterUser: "Filtrer les utilisateurs",
+    name: "Nom",
+    gender: "Genre",
+    email: "E-mail",
+    joined: "Inscrit le",
+    accountStatus: "Statut du compte",
+    action: "Action",
+    noMatchedUsers: "Aucun utilisateur correspondant trouvé",
+    na: "N/D",
+  },
+  es: {
+    allUsers: "Todos los usuarios",
+    searchUser: "Buscar usuario",
+    filterUser: "Filtrar usuarios",
+    name: "Nombre",
+    gender: "Género",
+    email: "Correo electrónico",
+    joined: "Registrado",
+    accountStatus: "Estado de la cuenta",
+    action: "Acción",
+    noMatchedUsers: "No se encontraron usuarios coincidentes",
+    na: "N/D",
+  },
+};
 
 interface PropsType {
   allUsersData: {
@@ -37,6 +81,9 @@ interface PropsType {
 }
 
 const UserManagement = ({ allUsersData }: PropsType) => {
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -84,7 +131,7 @@ const UserManagement = ({ allUsersData }: PropsType) => {
 
     const params = new URLSearchParams(searchParams.toString());
     params.set("name", newValue);
-    params.set("page", "1"); // Reset to first page on new search
+    params.set("page", "1");
     router.push(`${pathname}?${params.toString()}`);
   };
   //Function to clear search input field
@@ -109,13 +156,13 @@ const UserManagement = ({ allUsersData }: PropsType) => {
         <div className="w-full py-[17px] lg:py-[25px] border-b-[1px] lg:border-b-[3px] border-light">
           <div className="w-full px-[17px] lg:px-[36px] flex items-center gap-6">
             <div className="w-full flex items-center gap-6">
-              <CardTitle title="All Users" className="shrink-0" />
+              <CardTitle title={t.allUsers} className="shrink-0" />
               <div className="w-full sm:w-2/3 md:w-1/2 md:max-w-[800px] flex items-center gap-4">
                 <div className="w-full relative">
                   <OutlinedInput
                     name="name"
                     type="text"
-                    placeholder="Search user"
+                    placeholder={t.searchUser}
                     value={searchName}
                     onChange={handleUserSearch}
                     className="!pl-[10px] !pr-[35px] !py-[10px] rounded-[5px] w-full"
@@ -132,7 +179,7 @@ const UserManagement = ({ allUsersData }: PropsType) => {
             </div>
             <div className="w-fit shrink-0 relative" ref={dropdownRef}>
               <CommonButton
-                label="Filter User"
+                label={t.filterUser}
                 className="w-fit flex shrink-0 items-center gap-[5px] hover:bg-light text-[12px] font-normal p-[8px] lg:p-[10px] rounded-full border border-primaryBorder"
                 startIcon={
                   <ImageWithFallback
@@ -157,22 +204,22 @@ const UserManagement = ({ allUsersData }: PropsType) => {
             <thead>
               <tr className="border-b-[1px] lg:border-b-[3px] border-light">
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Name
+                  {t.name}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Gender
+                  {t.gender}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Email
+                  {t.email}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Joined
+                  {t.joined}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Account Status
+                  {t.accountStatus}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Action
+                  {t.action}
                 </th>
               </tr>
             </thead>
@@ -180,10 +227,10 @@ const UserManagement = ({ allUsersData }: PropsType) => {
               {data.length <= 0 ? (
                 <tr>
                   <td
-                    colSpan={5}
+                    colSpan={6}
                     className="text-center py-5 text-[14px] text-gray-500"
                   >
-                    No matched users found
+                    {t.noMatchedUsers}
                   </td>
                 </tr>
               ) : (
@@ -199,7 +246,7 @@ const UserManagement = ({ allUsersData }: PropsType) => {
                       {user.firstName} {user.lastName}
                     </td>
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left capitalize whitespace-nowrap min-w-[100px]">
-                      {user.gender || "N/A"}
+                      {user.gender || t.na}
                     </td>
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[200px]">
                       {user.email}

@@ -1,8 +1,7 @@
-import api from "@/lib/api";
-import { getServerSessionData } from "@/lib/config/auth";
-import { getQueryParam } from "@/lib/utils/helpers";
-import dynamic from "next/dynamic";
 import React from "react";
+import api from "@/lib/api";
+import dynamic from "next/dynamic";
+import { getQueryParam } from "@/lib/utils/helpers";
 
 const UserManagement = dynamic(
   () => import("@/lib/features/dashboard/admin/user-management/UserManagement"),

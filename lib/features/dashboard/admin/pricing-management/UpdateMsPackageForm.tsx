@@ -11,6 +11,7 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { MembershipPackage } from "@/lib/types/membership/ms-package.types";
 import { updateMsPackageAction } from "@/lib/action/ms-package/msPackage.action";
@@ -21,12 +22,54 @@ interface PropsType {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
+// translations object for multi-language support
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    updatePackage: "Update Membership Package",
+    packageTitle: "Package Title",
+    originalPrice: "Original Price",
+    sellingPrice: "Selling Price",
+    save: "Save",
+    saving: "Saving...",
+    cancel: "Cancel",
+    enterPackageTitle: "Enter membership package title",
+    enterOriginalPrice: "Enter original price",
+    enterSellingPrice: "Enter selling price",
+  },
+  fr: {
+    updatePackage: "Mettre à jour le package d'adhésion",
+    packageTitle: "Titre du package",
+    originalPrice: "Prix original",
+    sellingPrice: "Prix de vente",
+    save: "Enregistrer",
+    saving: "Enregistrement...",
+    cancel: "Annuler",
+    enterPackageTitle: "Entrez le titre du package",
+    enterOriginalPrice: "Entrez le prix original",
+    enterSellingPrice: "Entrez le prix de vente",
+  },
+  es: {
+    updatePackage: "Actualizar paquete de membresía",
+    packageTitle: "Título del paquete",
+    originalPrice: "Precio original",
+    sellingPrice: "Precio de venta",
+    save: "Guardar",
+    saving: "Guardando...",
+    cancel: "Cancelar",
+    enterPackageTitle: "Ingrese el título del paquete",
+    enterOriginalPrice: "Ingrese el precio original",
+    enterSellingPrice: "Ingrese el precio de venta",
+  },
+};
+
 const UpdateMsPackageForm = ({
   open,
   setOpen,
   msPackageDetails,
 }: PropsType) => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
 
   // Setup react-hook-form with Zod validation and initialize default values
@@ -89,7 +132,7 @@ const UpdateMsPackageForm = ({
           onSubmit={handleSubmit(handleUpdateMsPackage)}
           className="w-full h-full flex flex-col gap-[25px]"
         >
-          <CardTitle title="Update Membership Package" />
+          <CardTitle title={t.updatePackage} />
           <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
             <Controller
               name="title"
@@ -98,10 +141,10 @@ const UpdateMsPackageForm = ({
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Package Title"
+                  label={t.packageTitle}
                   type="text"
                   name="title"
-                  placeholder="Enter membership package title"
+                  placeholder={t.enterPackageTitle}
                   error={errors.title?.message}
                 />
               )}
@@ -113,10 +156,10 @@ const UpdateMsPackageForm = ({
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Original Price"
+                  label={t.originalPrice}
                   type="number"
                   name="categoryInfo.originalPrice"
-                  placeholder="Enter original price"
+                  placeholder={t.enterOriginalPrice}
                   error={errors.categoryInfo?.originalPrice?.message}
                 />
               )}
@@ -128,10 +171,10 @@ const UpdateMsPackageForm = ({
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Selling Price"
+                  label={t.sellingPrice}
                   type="number"
                   name="categoryInfo.sellPrice"
-                  placeholder="Enter selling price"
+                  placeholder={t.enterSellingPrice}
                   error={errors.categoryInfo?.sellPrice?.message}
                 />
               )}
@@ -142,13 +185,13 @@ const UpdateMsPackageForm = ({
           <div className="flex items-center gap-[30px] text-[14px]">
             <CommonButton
               type="submit"
-              label={`${loading ? "Saving..." : "Save"}`}
+              label={loading ? t.saving : t.save}
               disabled={loading}
               className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
             <CommonButton
               onClick={() => setOpen(false)}
-              label="Cancel"
+              label={t.cancel}
               className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
           </div>

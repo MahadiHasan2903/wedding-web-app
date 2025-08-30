@@ -5,11 +5,64 @@ import { Pagination } from "@/lib/components/table";
 import { CardTitle } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import FilterPaymentDropDown from "./FilterPaymentDropDown";
 import { filter, avatar } from "@/lib/components/image/icons";
 import { formatDateString3 } from "@/lib/utils/date/dateUtils";
 import { PaymentTransaction } from "@/lib/types/payment/payment.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+// ✅ Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    subscriptions: "Subscriptions",
+    filterPayments: "Filter Payments",
+    user: "User",
+    package: "Package",
+    purchaseDate: "Purchase Date",
+    method: "Method",
+    paymentStatus: "Payment Status",
+    noSubscription: "No subscription found",
+    monthlyPremium: "Monthly Premium",
+    yearlyPremium: "Yearly Premium",
+    card: "Card",
+    paypal: "Paypal",
+    paid: "Paid",
+    failed: "Failed",
+  },
+  fr: {
+    subscriptions: "Abonnements",
+    filterPayments: "Filtrer les paiements",
+    user: "Utilisateur",
+    package: "Forfait",
+    purchaseDate: "Date d'achat",
+    method: "Méthode",
+    paymentStatus: "Statut du paiement",
+    noSubscription: "Aucun abonnement trouvé",
+    monthlyPremium: "Premium mensuel",
+    yearlyPremium: "Premium annuel",
+    card: "Carte",
+    paypal: "Paypal",
+    paid: "Payé",
+    failed: "Échoué",
+  },
+  es: {
+    subscriptions: "Suscripciones",
+    filterPayments: "Filtrar pagos",
+    user: "Usuario",
+    package: "Paquete",
+    purchaseDate: "Fecha de compra",
+    method: "Método",
+    paymentStatus: "Estado del pago",
+    noSubscription: "No se encontró ninguna suscripción",
+    monthlyPremium: "Premium mensual",
+    yearlyPremium: "Premium anual",
+    card: "Tarjeta",
+    paypal: "Paypal",
+    paid: "Pagado",
+    failed: "Fallido",
+  },
+};
 
 interface PropsType {
   allPaymentsData: {
@@ -31,6 +84,8 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { currentPage, totalPages, prevPage, nextPage } =
@@ -83,11 +138,11 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
         <div className="w-full py-[17px] lg:py-[25px] border-b-[1px] lg:border-b-[3px] border-light">
           <div className="w-full px-[17px] lg:px-[36px] flex items-center gap-6">
             <div className="w-full flex items-center gap-6">
-              <CardTitle title="Subscriptions" className="shrink-0" />
+              <CardTitle title={t.subscriptions} className="shrink-0" />
             </div>
             <div className="w-fit shrink-0 relative" ref={dropdownRef}>
               <CommonButton
-                label="Filter Payments"
+                label={t.filterPayments}
                 className="w-fit flex shrink-0 items-center gap-[5px] hover:bg-light text-[12px] font-normal p-[8px] lg:p-[10px] rounded-full border border-primaryBorder"
                 startIcon={
                   <ImageWithFallback
@@ -112,19 +167,19 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
             <thead>
               <tr className="border-b-[1px] lg:border-b-[3px] border-light">
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  User
+                  {t.user}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Package
+                  {t.package}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Purchase Date
+                  {t.purchaseDate}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Method
+                  {t.method}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Payment Status
+                  {t.paymentStatus}
                 </th>
               </tr>
             </thead>
@@ -135,7 +190,7 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
                     colSpan={5}
                     className="text-center py-5 text-[14px] text-gray-500"
                   >
-                    No subscription found
+                    {t.noSubscription}
                   </td>
                 </tr>
               ) : (
@@ -172,8 +227,8 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left capitalize whitespace-nowrap min-w-[100px]">
                         {subscription.servicePurchaseId
                           .purchasePackageCategory === "monthly"
-                          ? "Monthly Premium"
-                          : " Yearly Premium"}
+                          ? t.monthlyPremium
+                          : t.yearlyPremium}
                       </td>
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[200px]">
                         {formatDateString3(
@@ -181,7 +236,7 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
                         )}
                       </td>
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[120px] capitalize">
-                        {subscription.gateway === "stripe" ? "Card" : "Paypal"}
+                        {subscription.gateway === "stripe" ? t.card : t.paypal}
                       </td>
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] capitalize whitespace-nowrap min-w-[140px]">
                         <div
@@ -199,7 +254,9 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
                             } w-[5px] h-[5px] rounded-full`}
                           />
                           <p className="whitespace-nowrap">
-                            {subscription.paymentStatus}
+                            {subscription.paymentStatus === "paid"
+                              ? t.paid
+                              : t.failed}
                           </p>
                         </div>
                       </td>

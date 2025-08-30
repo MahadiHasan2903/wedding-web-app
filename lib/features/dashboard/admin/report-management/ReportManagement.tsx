@@ -9,6 +9,7 @@ import { CommonButton } from "@/lib/components/buttons";
 import FilterReportDropdown from "./FilterReportDropdown";
 import { ImageWithFallback } from "@/lib/components/image";
 import { Report } from "@/lib/types/reports/reports.types";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { formatDateString3 } from "@/lib/utils/date/dateUtils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -28,13 +29,60 @@ interface PropsType {
   };
 }
 
+// translations object for multi-language support
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    reportsAndAbuses: "Reports & Abuses",
+    filterReports: "Filter Reports",
+    reportedAt: "Reported At",
+    reportedOn: "Reported On",
+    reportType: "Report type",
+    status: "Status",
+    action: "Action",
+    noReportFound: "No report found",
+    viewDetails: "View Details",
+    message: "Message",
+    resolved: "resolved",
+    unresolved: "unresolved",
+  },
+  fr: {
+    reportsAndAbuses: "Rapports et Abus",
+    filterReports: "Filtrer les rapports",
+    reportedAt: "Signalé le",
+    reportedOn: "Signalé sur",
+    reportType: "Type de rapport",
+    status: "Statut",
+    action: "Action",
+    noReportFound: "Aucun rapport trouvé",
+    viewDetails: "Voir les détails",
+    message: "Message",
+    resolved: "résolu",
+    unresolved: "non résolu",
+  },
+  es: {
+    reportsAndAbuses: "Informes y Abusos",
+    filterReports: "Filtrar informes",
+    reportedAt: "Reportado en",
+    reportedOn: "Reportado en",
+    reportType: "Tipo de informe",
+    status: "Estado",
+    action: "Acción",
+    noReportFound: "No se encontró ningún informe",
+    viewDetails: "Ver detalles",
+    message: "Mensaje",
+    resolved: "resuelto",
+    unresolved: "no resuelto",
+  },
+};
+
 const ReportManagement = ({ allReportsData }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const { currentPage, totalPages, prevPage, nextPage } =
@@ -86,10 +134,10 @@ const ReportManagement = ({ allReportsData }: PropsType) => {
       <div className="w-full bg-white rounded-none lg:rounded-[10px]">
         <div className="w-full py-[17px] lg:py-[25px] border-b-[1px] lg:border-b-[3px] border-light">
           <div className="w-full px-[17px] lg:px-[36px] flex items-center justify-between gap-6">
-            <CardTitle title="Reports & Abuses" className="shrink-0" />
+            <CardTitle title={t.reportsAndAbuses} className="shrink-0" />
             <div className="w-fit shrink-0 relative" ref={dropdownRef}>
               <CommonButton
-                label="Filter Reports"
+                label={t.filterReports}
                 className="w-fit flex shrink-0 items-center gap-[5px] hover:bg-light text-[12px] font-normal p-[8px] lg:p-[10px] rounded-full border border-primaryBorder"
                 startIcon={
                   <ImageWithFallback
@@ -114,19 +162,19 @@ const ReportManagement = ({ allReportsData }: PropsType) => {
             <thead>
               <tr className="border-b-[1px] lg:border-b-[3px] border-light">
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Reported At
+                  {t.reportedAt}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Reported On
+                  {t.reportedOn}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Report type
+                  {t.reportType}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Status
+                  {t.status}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Action
+                  {t.action}
                 </th>
               </tr>
             </thead>
@@ -137,7 +185,7 @@ const ReportManagement = ({ allReportsData }: PropsType) => {
                     colSpan={5}
                     className="text-center py-5 text-[14px] text-gray-500"
                   >
-                    No report found
+                    {t.noReportFound}
                   </td>
                 </tr>
               ) : (
@@ -150,30 +198,34 @@ const ReportManagement = ({ allReportsData }: PropsType) => {
                       {formatDateString3(report.createdAt)}
                     </td>
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[150px]">
-                      Message
+                      {t.message}
                     </td>
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] capitalize text-left whitespace-nowrap min-w-[100px]">
                       {report.type}
                     </td>
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] capitalize text-left whitespace-nowrap min-w-[100px]">
                       <div
-                        className={`${
+                        className={`$${
                           report.status === "resolved"
                             ? "text-green bg-[#D0FFEF]"
                             : "text-red bg-[#FFE2E6]"
                         } w-fit flex items-center gap-1 text-[12px] font-normal rounded-full px-[15px] py-[6px]`}
                       >
                         <div
-                          className={`${
+                          className={`$${
                             report.status === "resolved" ? "bg-green" : "bg-red"
                           } w-[5px] h-[5px] rounded-full`}
                         />
-                        <p className="whitespace-nowrap">{report.status}</p>
+                        <p className="whitespace-nowrap">
+                          {report.status === "resolved"
+                            ? t.resolved
+                            : t.unresolved}
+                        </p>
                       </div>
                     </td>
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[100px]">
                       <CommonButton
-                        label="View Details"
+                        label={t.viewDetails}
                         className="w-fit text-[10px] px-[14px] py-[10px] rounded-[40px] border border-primaryBorder hover:bg-primary hover:text-white transition-all"
                         onClick={() => {
                           setSelectedReport(report);

@@ -1,38 +1,65 @@
+"use client";
+
 import React from "react";
-import dynamic from "next/dynamic";
 import { CardTitle } from "@/lib/components/heading";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+import SubscriptionRevenueChart from "./SubscriptionRevenueChart";
 import { MonthlyRevenue } from "@/lib/types/analytics/analytics.types";
-const SubscriptionRevenueChart = dynamic(
-  () => import("./SubscriptionRevenueChart"),
-  {
-    ssr: false,
-  }
-);
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    subscriptionRevenue: "Subscription Revenue",
+    thisWeek: "This Week",
+    thisMonth: "This Month",
+    thisQuarter: "This Quarter",
+    total: "Total",
+  },
+  fr: {
+    subscriptionRevenue: "Revenus d'Abonnement",
+    thisWeek: "Cette Semaine",
+    thisMonth: "Ce Mois",
+    thisQuarter: "Ce Trimestre",
+    total: "Total",
+  },
+  es: {
+    subscriptionRevenue: "Ingresos por Suscripción",
+    thisWeek: "Esta Semana",
+    thisMonth: "Este Mes",
+    thisQuarter: "Este Trimestre",
+    total: "Total",
+  },
+};
 
 interface PropsType {
   subscriptionRevenueStats: {
+    total: number;
     thisWeek: number;
     thisMonth: number;
     thisQuarter: number;
-    total: number;
     monthlyRevenue: MonthlyRevenue[];
   };
 }
 
 const SubscriptionRevenueStats = ({ subscriptionRevenueStats }: PropsType) => {
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   return (
     <div className="w-full bg-white rounded-none lg:rounded-[10px]">
+      {/* Header */}
       <div className="w-full py-[17px] lg:py-[25px] border-light border-b-0 lg:border-b-[3px]">
         <div className="w-full px-[17px] lg:px-[36px]">
-          <CardTitle title="Subscription Revenue" />
+          <CardTitle title={t.subscriptionRevenue} />
         </div>
       </div>
 
+      {/* Stats & Chart */}
       <div className="w-full flex flex-col gap-6 lg:gap-10 px-[17px] lg:px-[36px] pb-[17px] lg:py-[25px] ">
         <div className="w-full grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4 gap-[16px] lg:gap-[25px]">
           <div className="flex flex-col items-start">
             <p className="text-[10px] lg:text-[14px] font-semibold">
-              This Week
+              {t.thisWeek}
             </p>
             <h2 className="text-[24px] lg:text-[48px] font-normal">
               ${subscriptionRevenueStats.thisWeek}
@@ -40,7 +67,7 @@ const SubscriptionRevenueStats = ({ subscriptionRevenueStats }: PropsType) => {
           </div>
           <div className="flex flex-col items-start">
             <p className="text-[10px] lg:text-[14px] font-semibold">
-              This Month
+              {t.thisMonth}
             </p>
             <h2 className="text-[24px] lg:text-[48px] font-normal">
               ${subscriptionRevenueStats.thisMonth}
@@ -48,19 +75,23 @@ const SubscriptionRevenueStats = ({ subscriptionRevenueStats }: PropsType) => {
           </div>
           <div className="flex flex-col items-start">
             <p className="text-[10px] lg:text-[14px] font-semibold">
-              This Quarter
+              {t.thisQuarter}
             </p>
             <h2 className="text-[24px] lg:text-[48px] font-normal">
               ${subscriptionRevenueStats.thisQuarter}
             </h2>
           </div>
           <div className="flex flex-col items-start">
-            <p className="text-[10px] lg:text-[14px] font-semibold">Total</p>
+            <p className="text-[10px] lg:text-[14px] font-semibold">
+              {t.total}
+            </p>
             <h2 className="text-[24px] lg:text-[48px] font-normal">
               ${subscriptionRevenueStats.total}
             </h2>
           </div>
         </div>
+
+        {/* Chart */}
         <SubscriptionRevenueChart
           data={subscriptionRevenueStats.monthlyRevenue}
         />

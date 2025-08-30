@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { CommonButton } from "@/lib/components/buttons";
 import { Datepicker } from "@/lib/components/form-elements";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { formatDateString1 } from "@/lib/utils/date/dateUtils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -10,10 +11,37 @@ interface PropsType {
   setIsFilterOpen: (isOpen: boolean) => void;
 }
 
+// translations object for multi-language support
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    date: "Date",
+    reset: "Reset",
+    apply: "Apply",
+    startDate: "Start Date",
+    endDate: "End Date",
+  },
+  fr: {
+    date: "Date",
+    reset: "Réinitialiser",
+    apply: "Appliquer",
+    startDate: "Date de début",
+    endDate: "Date de fin",
+  },
+  es: {
+    date: "Fecha",
+    reset: "Restablecer",
+    apply: "Aplicar",
+    startDate: "Fecha de inicio",
+    endDate: "Fecha de fin",
+  },
+};
+
 const FilterReportDropdown = ({ setIsFilterOpen }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [endDate, setEndDate] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
 
@@ -70,18 +98,18 @@ const FilterReportDropdown = ({ setIsFilterOpen }: PropsType) => {
         <div className="w-full flex flex-col gap-[20px]">
           {/* Date Filter */}
           <div className="w-full">
-            <p className="text-[14px] font-semibold">Date</p>
+            <p className="text-[14px] font-semibold">{t.date}</p>
             <div className="w-full flex items-center gap-2">
               <Datepicker
                 className="w-full cursor-pointer px-0 py-2 text-[12px] font-normal outline-none"
-                title="startDate"
+                title={t.startDate}
                 value={startDate}
                 onChange={(date: string) => setStartDate(date)}
               />
               <p className="mr-1">-</p>
               <Datepicker
                 className="w-full cursor-pointer px-0 py-2 text-[12px] font-normal outline-none"
-                title="endDate"
+                title={t.endDate}
                 value={endDate}
                 onChange={(date: string) => setEndDate(date)}
               />
@@ -92,12 +120,12 @@ const FilterReportDropdown = ({ setIsFilterOpen }: PropsType) => {
         {/* Buttons */}
         <div className="flex items-center gap-2 text-[12px] font-normal text-white">
           <CommonButton
-            label="Reset"
+            label={t.reset}
             className="w-full bg-red hover:bg-opacity-80 p-2 rounded-lg"
             onClick={handleResetFilters}
           />
           <CommonButton
-            label="Apply"
+            label={t.apply}
             className="w-full bg-primary hover:bg-opacity-80 p-2 rounded-lg"
             onClick={handleApplyFilters}
           />

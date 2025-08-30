@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { Datepicker } from "@/lib/components/form-elements";
 import { formatDateString1 } from "@/lib/utils/date/dateUtils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -10,10 +11,49 @@ interface PropsType {
   setIsFilterOpen: (isOpen: boolean) => void;
 }
 
+// Translations
+const translations = {
+  en: {
+    date: "Date",
+    method: "Method",
+    status: "Status",
+    card: "Card",
+    paypal: "Paypal",
+    success: "Success",
+    failed: "Failed",
+    reset: "Reset",
+    apply: "Apply",
+  },
+  fr: {
+    date: "Date",
+    method: "Méthode",
+    status: "Statut",
+    card: "Carte",
+    paypal: "Paypal",
+    success: "Succès",
+    failed: "Échoué",
+    reset: "Réinitialiser",
+    apply: "Appliquer",
+  },
+  es: {
+    date: "Fecha",
+    method: "Método",
+    status: "Estado",
+    card: "Tarjeta",
+    paypal: "Paypal",
+    success: "Éxito",
+    failed: "Fallido",
+    reset: "Restablecer",
+    apply: "Aplicar",
+  },
+};
+
 const FilterPaymentDropDown = ({ setIsFilterOpen }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   const [gateway, setGateway] = useState<string>("");
   const [paymentStatus, setPaymentStatus] = useState<string>("");
@@ -95,7 +135,7 @@ const FilterPaymentDropDown = ({ setIsFilterOpen }: PropsType) => {
         <div className="w-full flex flex-col gap-[20px]">
           {/* Date Filter */}
           <div className="w-full">
-            <p className="text-[14px] font-semibold">Date</p>
+            <p className="text-[14px] font-semibold">{t.date}</p>
             <div className="w-full flex items-center gap-2">
               <Datepicker
                 className="w-full cursor-pointer px-0 py-2 text-[12px] font-normal outline-none"
@@ -115,10 +155,10 @@ const FilterPaymentDropDown = ({ setIsFilterOpen }: PropsType) => {
 
           {/* Method Filter */}
           <div className="w-full flex flex-col gap-2 items-start">
-            <p className="text-[14px] font-semibold">Method</p>
+            <p className="text-[14px] font-semibold">{t.method}</p>
             <div className="w-full flex items-center justify-between gap-4">
               <div className="flex items-center gap-[30px]">
-                <p className="text-[14px] font-normal">Card</p>
+                <p className="text-[14px] font-normal">{t.card}</p>
                 <input
                   type="checkbox"
                   checked={gateway === "stripe"}
@@ -129,7 +169,7 @@ const FilterPaymentDropDown = ({ setIsFilterOpen }: PropsType) => {
                 />
               </div>
               <div className="flex items-center gap-[30px]">
-                <p className="text-[14px] font-normal">Paypal</p>
+                <p className="text-[14px] font-normal">{t.paypal}</p>
                 <input
                   type="checkbox"
                   checked={gateway === "paypal"}
@@ -144,10 +184,10 @@ const FilterPaymentDropDown = ({ setIsFilterOpen }: PropsType) => {
 
           {/* Status Filter */}
           <div className="w-full flex flex-col gap-2 items-start">
-            <p className="text-[14px] font-semibold">Status</p>
+            <p className="text-[14px] font-semibold">{t.status}</p>
             <div className="w-full flex items-center justify-between gap-4">
               <div className="flex items-center gap-[30px]">
-                <p className="text-[14px] font-normal">Success</p>
+                <p className="text-[14px] font-normal">{t.success}</p>
                 <input
                   type="checkbox"
                   checked={paymentStatus === "paid"}
@@ -158,7 +198,7 @@ const FilterPaymentDropDown = ({ setIsFilterOpen }: PropsType) => {
                 />
               </div>
               <div className="flex items-center gap-[30px]">
-                <p className="text-[14px] font-normal">Failed</p>
+                <p className="text-[14px] font-normal">{t.failed}</p>
                 <input
                   type="checkbox"
                   checked={paymentStatus === "failed"}
@@ -175,12 +215,12 @@ const FilterPaymentDropDown = ({ setIsFilterOpen }: PropsType) => {
         {/* Buttons */}
         <div className="flex items-center gap-2 text-[12px] font-normal text-white">
           <CommonButton
-            label="Reset"
+            label={t.reset}
             className="w-full bg-red hover:bg-opacity-80 p-2 rounded-lg"
             onClick={handleResetFilters}
           />
           <CommonButton
-            label="Apply"
+            label={t.apply}
             className="w-full bg-primary hover:bg-opacity-80 p-2 rounded-lg"
             onClick={handleApplyFilters}
           />

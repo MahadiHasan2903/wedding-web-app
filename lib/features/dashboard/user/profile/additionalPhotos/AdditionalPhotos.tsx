@@ -10,9 +10,47 @@ import { CardTitle } from "@/lib/components/heading";
 import { editIcon } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import UpdateAdditionalPhotos from "./UpdateAdditionalPhotos";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
 import { deleteUserAdditionalPhotoAction } from "@/lib/action/user/user.action";
+
+// Translation dictionary
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    title: "Additional Photos",
+    maxLimit:
+      "You’ve reached the maximum limit of 10 photos. Please remove an existing photo to upload a new one.",
+    uploadLimit: "You can upload up to 10 photos.",
+    noPhoto: "No photo available",
+    removePhotoTitle: "Remove Photo",
+    removePhotoDesc:
+      "Are you sure you want to delete this photo from your album?",
+    editInfo: "Edit Info",
+  },
+  fr: {
+    title: "Photos supplémentaires",
+    maxLimit:
+      "Vous avez atteint la limite maximale de 10 photos. Veuillez supprimer une photo existante pour en télécharger une nouvelle.",
+    uploadLimit: "Vous pouvez télécharger jusqu'à 10 photos.",
+    noPhoto: "Aucune photo disponible",
+    removePhotoTitle: "Supprimer la photo",
+    removePhotoDesc:
+      "Voulez-vous vraiment supprimer cette photo de votre album ?",
+    editInfo: "Modifier",
+  },
+  es: {
+    title: "Fotos adicionales",
+    maxLimit:
+      "Ha alcanzado el límite máximo de 10 fotos. Por favor, elimine una foto existente para subir una nueva.",
+    uploadLimit: "Puede subir hasta 10 fotos.",
+    noPhoto: "No hay fotos disponibles",
+    removePhotoTitle: "Eliminar foto",
+    removePhotoDesc:
+      "¿Está seguro de que desea eliminar esta foto de su álbum?",
+    editInfo: "Editar",
+  },
+};
 
 interface PropsType {
   userProfile: User;
@@ -21,6 +59,8 @@ interface PropsType {
 
 const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,7 +69,9 @@ const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
 
   // Function to handle the deletion of a selected photo
   const handleDeleteFile = async () => {
-    if (!selectedPhotoId) return;
+    if (!selectedPhotoId) {
+      return;
+    }
 
     setLoading(true);
     const deletePhotoResponse = await deleteUserAdditionalPhotoAction(
@@ -55,10 +97,10 @@ const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
       {/* Header */}
       <div className="w-full py-[17px] lg:py-[25px] border-light border-b-0 lg:border-b-[3px]">
         <div className="w-full px-[17px] lg:px-[36px] flex items-center justify-between">
-          <CardTitle title="Additional Photos" />
+          <CardTitle title={t.title} />
           {editable && userProfile.additionalPhotos?.length < 10 && (
             <CommonButton
-              label="Edit Info"
+              label={t.editInfo}
               onClick={() => setOpen(true)}
               className="w-fit flex items-center gap-[8px] bg-transparent border border-primaryBorder text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
               startIcon={
@@ -79,12 +121,11 @@ const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
         {editable &&
           (userProfile.additionalPhotos?.length >= 10 ? (
             <p className="text-red text-[12px] sm:text-[14px] font-medium">
-              You’ve reached the maximum limit of 10 photos. Please remove an
-              existing photo to upload a new one.
+              {t.maxLimit}
             </p>
           ) : (
             <p className="text-red text-[12px] sm:text-[14px] font-medium">
-              You can upload up to 10 photos.
+              {t.uploadLimit}
             </p>
           ))}
 
@@ -118,7 +159,7 @@ const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
             ))
           ) : (
             <p className="w-full text-md font-medium text-center">
-              No photo available
+              {t.noPhoto}
             </p>
           )}
         </div>
@@ -140,8 +181,8 @@ const AdditionalPhotos = ({ userProfile, editable = false }: PropsType) => {
           loading={loading}
           setOpen={setOpenAlertModal}
           handleConfirm={handleDeleteFile}
-          title="Remove Photo"
-          description="Are you sure you want to delete this photo from your album?"
+          title={t.removePhotoTitle}
+          description={t.removePhotoDesc}
         />
       )}
     </div>

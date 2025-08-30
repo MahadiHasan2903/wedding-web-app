@@ -8,14 +8,14 @@ import {
   hasActiveVipMembership,
 } from "@/lib/utils/helpers";
 import {
-  editIcon,
-  facebook,
-  instagram,
-  linkedin,
-  sendMessage,
   tiktok,
   twitter,
   whatsapp,
+  editIcon,
+  linkedin,
+  facebook,
+  instagram,
+  sendMessage,
 } from "@/lib/components/image/icons";
 import { toast } from "react-toastify";
 import { IoCamera } from "react-icons/io5";
@@ -31,8 +31,58 @@ import { ImageWithFallback } from "@/lib/components/image";
 import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
-import { updateLikeDisLikeStatusAction } from "@/lib/action/user/userInteraction.action";
 import { createConversationAction } from "@/lib/action/chat/conversation.action";
+import { updateLikeDisLikeStatusAction } from "@/lib/action/user/userInteraction.action";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    ageUnknown: "Age Unknown",
+    yearsOld: "Years Old",
+    location: "Location:",
+    nationality: "Nationality:",
+    maritalStatus: "Marital Status:",
+    bioPlaceholder: "Your bio goes here ...",
+    editInfo: "Edit Info",
+    likingProfile: "Liking Profile...",
+    dislikingProfile: "Disliking Profile...",
+    likeProfile: "Like Profile",
+    dislikeProfile: "Dislike Profile",
+    processing: "Processing...",
+    sendMessage: "Send Message",
+  },
+  fr: {
+    ageUnknown: "Âge inconnu",
+    yearsOld: "Ans",
+    location: "Emplacement :",
+    nationality: "Nationalité :",
+    maritalStatus: "État civil :",
+    bioPlaceholder: "Votre bio ici ...",
+    editInfo: "Modifier les informations",
+    likingProfile: "Ajout du profil en cours...",
+    dislikingProfile: "Suppression du profil en cours...",
+    likeProfile: "Ajouter aux favoris",
+    dislikeProfile: "Retirer des favoris",
+    processing: "Traitement...",
+    sendMessage: "Envoyer un message",
+  },
+  es: {
+    ageUnknown: "Edad desconocida",
+    yearsOld: "Años",
+    location: "Ubicación:",
+    nationality: "Nacionalidad:",
+    maritalStatus: "Estado civil:",
+    bioPlaceholder: "Tu biografía aquí ...",
+    editInfo: "Editar información",
+    likingProfile: "Marcando perfil...",
+    dislikingProfile: "Quitando perfil...",
+    likeProfile: "Me gusta el perfil",
+    dislikeProfile: "No me gusta el perfil",
+    processing: "Procesando...",
+    sendMessage: "Enviar mensaje",
+  },
+};
 
 const iconMap: Record<string, StaticImageData> = {
   facebook,
@@ -58,6 +108,8 @@ const BasicInfo = ({
 }: PropsType) => {
   const router = useRouter();
   const { data: session } = useSession();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewImageUrl, setPreviewImageUrl] = useState<string | null>(null);
@@ -211,8 +263,10 @@ const BasicInfo = ({
             </h2>
             <p className="text-[12px] lg:text-[14px] font-medium">
               {userProfile.dateOfBirth
-                ? `${calculateAgeFromDOB(userProfile.dateOfBirth)} Years Old`
-                : "Age Unknown"}
+                ? `${calculateAgeFromDOB(userProfile.dateOfBirth)} ${
+                    t.yearsOld
+                  }`
+                : t.ageUnknown}
               <span className="capitalize">
                 {userProfile.gender && `, ${userProfile.gender}`}
               </span>
@@ -220,7 +274,7 @@ const BasicInfo = ({
           </div>
           <div>
             <p className="text-[12px] lg:text-[14px] font-normal text-justify">
-              <span className="font-medium">Location:</span>{" "}
+              <span className="font-medium">{t.location}</span>{" "}
               <span className="capitalize">
                 {getStateNameFromIso(userProfile.country, userProfile.city) ||
                   "N/A"}
@@ -228,13 +282,13 @@ const BasicInfo = ({
               </span>
             </p>
             <p className="text-[12px] lg:text-[14px] font-normal capitalize">
-              <span className="font-medium">Nationality:</span>{" "}
+              <span className="font-medium">{t.nationality}</span>{" "}
               <span className="capitalize">
                 {userProfile.nationality || "N/A"}
               </span>
             </p>
             <p className="text-[12px] lg:text-[14px] font-normal capitalize">
-              <span className="font-medium">Marital Status:</span>{" "}
+              <span className="font-medium">{t.maritalStatus}</span>{" "}
               <span className="capitalize">
                 {userProfile.maritalStatus || "N/A"}
               </span>
@@ -244,7 +298,7 @@ const BasicInfo = ({
       </div>
       <div className="w-full flex flex-col items-start gap-[20px]">
         <p className="text-[12px] lg:text-[14px] font-normal text-justify">
-          {userProfile.bio || "Your bio goes here ..."}
+          {userProfile.bio || t.bioPlaceholder}
         </p>
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center gap-[10px]">
@@ -274,7 +328,7 @@ const BasicInfo = ({
 
           {editable ? (
             <CommonButton
-              label="Edit Info"
+              label={t.editInfo}
               onClick={() => setOpen(true)}
               className="w-fit flex items-center gap-[8px] bg-transparent border border-primaryBorder text-black text-[10px] font-normal rounded-full p-[6px] lg:p-[10px]"
               startIcon={
@@ -293,11 +347,11 @@ const BasicInfo = ({
                   label={
                     loading
                       ? isLiked
-                        ? "Disliking Profile..."
-                        : "Liking Profile..."
+                        ? t.dislikingProfile
+                        : t.likingProfile
                       : isLiked
-                      ? "Dislike Profile"
-                      : "Like Profile"
+                      ? t.dislikeProfile
+                      : t.likeProfile
                   }
                   disabled={loading}
                   onClick={handleUpdateLikeStatus}
@@ -305,7 +359,7 @@ const BasicInfo = ({
                 />
                 {returnUrl && returnUrl === "/liked-profiles" && (
                   <CommonButton
-                    label={loading ? "Processing..." : "Send Message"}
+                    label={loading ? t.processing : t.sendMessage}
                     disabled={loading}
                     onClick={() => handleSendMessage(userProfile.id)}
                     className="btn-gold-gradient border-none w-fit flex items-center gap-[5px] text-[10px] lg:text-[14px] font-normal px-[20px] py-[10px] rounded-full"

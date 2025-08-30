@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo } from "react";
 import { Pagination } from "@/lib/components/table";
 import { CardTitle } from "@/lib/components/heading";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { formatDateString3 } from "@/lib/utils/date/dateUtils";
 import { PaymentTransaction } from "@/lib/types/payment/payment.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -24,16 +25,16 @@ interface PropsType {
 }
 
 // Helper function to map package category to a readable label
-const getPackageLabel = (category: string): string => {
+const getPackageLabel = (category: string, t: any): string => {
   switch (category) {
     case "life_time":
-      return "Free Package";
+      return t.freePackage;
     case "monthly":
-      return "Monthly Premium";
+      return t.monthlyPremium;
     case "yearly":
-      return "Yearly Premium";
+      return t.yearlyPremium;
     default:
-      return "Unknown";
+      return t.unknown;
   }
 };
 
@@ -45,10 +46,57 @@ const formatCurrency = (amount: number): string =>
     minimumFractionDigits: 2,
   }).format(amount);
 
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    paymentHistory: "Payment History",
+    date: "Date",
+    subscriptionPackage: "Subscription Package",
+    paymentMethod: "Payment Method",
+    amount: "Amount",
+    status: "Status",
+    freePackage: "Free Package",
+    monthlyPremium: "Monthly Premium",
+    yearlyPremium: "Yearly Premium",
+    unknown: "Unknown",
+    nA: "N/A",
+  },
+  fr: {
+    paymentHistory: "Historique des paiements",
+    date: "Date",
+    subscriptionPackage: "Forfait d'abonnement",
+    paymentMethod: "Méthode de paiement",
+    amount: "Montant",
+    status: "Statut",
+    freePackage: "Forfait gratuit",
+    monthlyPremium: "Premium mensuel",
+    yearlyPremium: "Premium annuel",
+    unknown: "Inconnu",
+    nA: "N/D",
+  },
+  es: {
+    paymentHistory: "Historial de pagos",
+    date: "Fecha",
+    subscriptionPackage: "Paquete de suscripción",
+    paymentMethod: "Método de pago",
+    amount: "Cantidad",
+    status: "Estado",
+    freePackage: "Paquete gratuito",
+    monthlyPremium: "Premium mensual",
+    yearlyPremium: "Premium anual",
+    unknown: "Desconocido",
+    nA: "N/D",
+  },
+};
+
 const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+
+  // Get current language from global store
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   const { currentPage, totalPages, prevPage, nextPage } =
     allPaymentHistoriesData.paginationInfo;
@@ -86,7 +134,7 @@ const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
   return (
     <div className="w-full bg-white rounded-none lg:rounded-[10px]">
       <div className="w-full py-[17px] px-[17px] lg:px-[36px] lg:py-[25px] border-light border-b-0 lg:border-b-[3px]">
-        <CardTitle title="Payment History" />
+        <CardTitle title={t.paymentHistory} />
       </div>
 
       <div className="w-full h-full">
@@ -95,19 +143,19 @@ const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
             <thead>
               <tr className="border-b-[1px] lg:border-b-[3px] border-light">
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Date
+                  {t.date}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Subscription Package
+                  {t.subscriptionPackage}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Payment Method
+                  {t.paymentMethod}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Amount
+                  {t.amount}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Status
+                  {t.status}
                 </th>
               </tr>
             </thead>
@@ -120,10 +168,10 @@ const PaymentHistory = ({ allPaymentHistoriesData }: PropsType) => {
                     className="border-b-[1px] lg:border-b-[3px] border-light transition hover:bg-light"
                   >
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[150px]">
-                      {formatDateString3(purchase.purchasedAt) || "N/A"}
+                      {formatDateString3(purchase.purchasedAt) || t.nA}
                     </td>
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left capitalize whitespace-nowrap min-w-[100px]">
-                      {getPackageLabel(purchase.purchasePackageCategory)}
+                      {getPackageLabel(purchase.purchasePackageCategory, t)}
                     </td>
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[100px] capitalize">
                       {payment.gateway}

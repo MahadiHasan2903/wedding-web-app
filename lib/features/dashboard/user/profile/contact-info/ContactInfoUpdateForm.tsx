@@ -14,9 +14,62 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { getUserUtcOffset } from "@/lib/utils/date/dateUtils";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    contactAccessibility: "Contact & Accessibility",
+    email: "Email",
+    emailPlaceholder: "Enter your email",
+    phoneNumber: "Phone Number",
+    phoneNumberPlaceholder:
+      "Enter your phone number including country code (e.g. +1 1234567890)",
+    timezone: "Timezone",
+    timezonePlaceholder: "Enter your timezone",
+    preferredLanguages: "Preferred Languages",
+    addLanguage: "Add Language",
+    enterLanguage: "Enter your preferred language",
+    save: "Save",
+    saving: "Saving...",
+    cancel: "Cancel",
+  },
+  fr: {
+    contactAccessibility: "Contact & Accessibilité",
+    email: "E-mail",
+    emailPlaceholder: "Entrez votre e-mail",
+    phoneNumber: "Téléphone",
+    phoneNumberPlaceholder:
+      "Entrez votre numéro de téléphone avec l'indicatif du pays (ex. +33 123456789)",
+    timezone: "Fuseau horaire",
+    timezonePlaceholder: "Entrez votre fuseau horaire",
+    preferredLanguages: "Langues préférées",
+    addLanguage: "Ajouter une langue",
+    enterLanguage: "Entrez votre langue préférée",
+    save: "Enregistrer",
+    saving: "Enregistrement...",
+    cancel: "Annuler",
+  },
+  es: {
+    contactAccessibility: "Contacto y Accesibilidad",
+    email: "Correo electrónico",
+    emailPlaceholder: "Ingresa tu correo electrónico",
+    phoneNumber: "Teléfono",
+    phoneNumberPlaceholder:
+      "Ingresa tu número de teléfono con el código de país (ej. +34 123456789)",
+    timezone: "Zona horaria",
+    timezonePlaceholder: "Ingresa tu zona horaria",
+    preferredLanguages: "Idiomas preferidos",
+    addLanguage: "Agregar idioma",
+    enterLanguage: "Ingresa tu idioma preferido",
+    save: "Guardar",
+    saving: "Guardando...",
+    cancel: "Cancelar",
+  },
+};
 
 interface PropsType {
   open: boolean;
@@ -27,6 +80,10 @@ interface PropsType {
 const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  // Get current language from global store
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   // Setup react-hook-form with Zod validation and initialize default values
   const {
@@ -125,7 +182,7 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
           onSubmit={handleSubmit(handleUpdateProfile)}
           className="w-full h-full flex flex-col gap-[25px]"
         >
-          <CardTitle title="Contact & Accessibility" />
+          <CardTitle title={t.contactAccessibility} />
           <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
             {/* Email field (read-only) */}
             <Controller
@@ -135,10 +192,10 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Email"
+                  label={t.email}
                   type="email"
                   name="email"
-                  placeholder="Enter your email"
+                  placeholder={t.emailPlaceholder}
                   readOnly
                   error={errors.email?.message}
                 />
@@ -153,10 +210,10 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Phone Number"
+                  label={t.phoneNumber}
                   type="text"
                   name="phoneNumber"
-                  placeholder="Enter your phone number including country code (e.g. +1 1234567890)"
+                  placeholder={t.phoneNumberPlaceholder}
                   error={errors.phoneNumber?.message}
                 />
               )}
@@ -170,10 +227,10 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Timezone"
+                  label={t.timezone}
                   type="text"
                   name="timeZone"
-                  placeholder="Enter your timezone"
+                  placeholder={t.timezonePlaceholder}
                   error={errors.timeZone?.message}
                 />
               )}
@@ -183,13 +240,13 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
             <div>
               <div className="w-full flex items-center justify-between gap-[10px] mb-2">
                 <p className="text-[12px] lg:text-[14px] font-medium">
-                  Preferred Languages
+                  {t.preferredLanguages}
                 </p>
 
                 {/* Button to add new preferred language input */}
                 <CommonButton
                   type="button"
-                  label="Add Language"
+                  label={t.addLanguage}
                   onClick={addLanguage}
                   className="w-fit flex items-center text-[12px] gap-[8px] bg-primary text-white font-medium px-[20px] py-[10px] rounded-full"
                   startIcon={<FaPlus />}
@@ -208,7 +265,7 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                         <UnderlineInput
                           {...field}
                           type="text"
-                          placeholder="Enter your preferred language"
+                          placeholder={t.enterLanguage}
                           error={errors.preferredLanguages?.[index]?.message}
                           onChange={(e) => {
                             field.onChange(e);
@@ -235,13 +292,13 @@ const ContactInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
           <div className="flex items-center gap-[30px] text-[14px]">
             <CommonButton
               type="submit"
-              label={`${loading ? "Saving..." : "Save"}`}
+              label={`${loading ? t.saving : t.save}`}
               disabled={loading}
               className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
             <CommonButton
               onClick={() => setOpen(false)}
-              label="Cancel"
+              label={t.cancel}
               className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
           </div>

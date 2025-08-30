@@ -3,17 +3,51 @@
 import React, {
   useRef,
   useState,
-  useEffect,
   Dispatch,
+  useEffect,
   SetStateAction,
 } from "react";
 import { IoMdSend } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
-import { ImageWithFallback } from "@/lib/components/image";
-import { SessionUser, User } from "@/lib/types/user/user.types";
-import { Message } from "@/lib/types/chat/message.types";
-import { emoji, attachment } from "@/lib/components/image/icons";
 import { FaPlayCircle } from "react-icons/fa";
+import { Message } from "@/lib/types/chat/message.types";
+import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+import { SessionUser, User } from "@/lib/types/user/user.types";
+import { emoji, attachment } from "@/lib/components/image/icons";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    replyingTo: "Replying to",
+    yourself: "yourself",
+    editMessage: "Edit Message",
+    uploadingAttachments: "Uploading Attachments.....",
+    uploadAttachments: "Upload Attachments",
+    blockedMessage: "You are blocked by the user. You cannot send messages.",
+    typeHere: "Type here...",
+  },
+  fr: {
+    replyingTo: "Répondre à",
+    yourself: "vous-même",
+    editMessage: "Modifier le message",
+    uploadingAttachments: "Téléchargement des pièces jointes.....",
+    uploadAttachments: "Télécharger les pièces jointes",
+    blockedMessage:
+      "Vous êtes bloqué par l'utilisateur. Vous ne pouvez pas envoyer de messages.",
+    typeHere: "Tapez ici...",
+  },
+  es: {
+    replyingTo: "Respondiendo a",
+    yourself: "usted mismo",
+    editMessage: "Editar mensaje",
+    uploadingAttachments: "Subiendo archivos.....",
+    uploadAttachments: "Subir archivos",
+    blockedMessage:
+      "Has sido bloqueado por el usuario. No puedes enviar mensajes.",
+    typeHere: "Escribe aquí...",
+  },
+};
 
 interface PropsType {
   loading: boolean;
@@ -44,6 +78,9 @@ const ChatInputBox = ({
   setReplayToMessage,
   isBlockedByOtherUser,
 }: PropsType) => {
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   // If editing, start with the original message text, else empty
   const [message, setMessage] = useState(
     updatedMessage?.message.originalText || ""
@@ -116,9 +153,9 @@ const ChatInputBox = ({
         <div className="w-full flex flex-col gap-2 px-[18px] bg-black/10 py-3 rounded-[5px]">
           <div className="w-full flex items-center justify-between">
             <div className="text-[12px] lg:text-[14px] text-primary font-semibold">
-              Replying to{" "}
+              {t.replyingTo}{" "}
               {replayToMessage.senderId === loggedInUser?.id
-                ? `yourself`
+                ? t.yourself
                 : `${otherUser?.firstName} ${otherUser?.lastName}`}
             </div>
 
@@ -139,7 +176,7 @@ const ChatInputBox = ({
         <div className="w-full flex flex-col gap-2 px-[18px] bg-black/10 py-3 rounded-[5px]">
           <div className="w-full flex items-center justify-between">
             <div className="text-[12px] lg:text-[14px] text-primary font-semibold">
-              Edit Message
+              {t.editMessage}
             </div>
 
             <RxCross1
@@ -160,7 +197,7 @@ const ChatInputBox = ({
           <div className="w-full flex flex-col gap-2 px-[18px] bg-black/10 py-3 rounded-[5px]">
             <div className="w-full flex items-center justify-between">
               <div className={`text-sm font-semibold ${loading && "italic"}`}>
-                {loading ? "Uploading Attachments....." : "Upload Attachments"}
+                {loading ? t.uploadingAttachments : t.uploadAttachments}
               </div>
               {!loading && (
                 <RxCross1
@@ -210,8 +247,7 @@ const ChatInputBox = ({
 
       {isBlockedByOtherUser ? (
         <div className="w-full flex items-center justify-center text-red font-bold">
-          {" "}
-          You are blocked by the user. You cannot send messages.
+          {t.blockedMessage}
         </div>
       ) : (
         <div className="w-full flex items-center justify-between gap-[18px]  px-[18px]">
@@ -240,7 +276,7 @@ const ChatInputBox = ({
               name="message"
               type="text"
               value={message}
-              placeholder="Type here..."
+              placeholder={t.typeHere}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {

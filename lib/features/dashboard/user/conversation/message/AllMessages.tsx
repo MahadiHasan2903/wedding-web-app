@@ -1,3 +1,5 @@
+"use client";
+
 import React, {
   useRef,
   useMemo,
@@ -11,9 +13,23 @@ import MessageItem from "./MessageItem";
 import { Message } from "@/lib/types/chat/message.types";
 import { useSocket } from "@/lib/providers/SocketProvider";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { User, SessionUser } from "@/lib/types/user/user.types";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import conversationPlaceholder from "@/public/images/common/conversation-placeholder.svg";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    noMessages: "No messages in this conversation",
+  },
+  fr: {
+    noMessages: "Aucun message dans cette conversation",
+  },
+  es: {
+    noMessages: "No hay mensajes en esta conversación",
+  },
+};
 
 interface PropsType {
   messages: Message[];
@@ -49,6 +65,9 @@ const AllMessages = ({
   setReplayToMessage,
   isBlockedByOtherUser,
 }: PropsType) => {
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -244,7 +263,7 @@ const AllMessages = ({
             />
           </div>
           <p className="w-full max-w-[240px] text-[14px] font-semibold text-center text-[#292D32]">
-            No messages in this conversation
+            {t.noMessages}
           </p>
         </div>
       )}

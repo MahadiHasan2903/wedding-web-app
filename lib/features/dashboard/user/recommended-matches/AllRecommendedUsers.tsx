@@ -4,7 +4,24 @@ import React, { useEffect } from "react";
 import { UserCard } from "@/lib/components/card";
 import { User } from "@/lib/types/user/user.types";
 import { Pagination } from "@/lib/components/table";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+// Translation dictionary
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    noProfiles:
+      "No recommended profiles found. Please update your profile to receive better recommendations.",
+  },
+  fr: {
+    noProfiles:
+      "Aucun profil recommandé trouvé. Veuillez mettre à jour votre profil pour recevoir de meilleures recommandations.",
+  },
+  es: {
+    noProfiles:
+      "No se encontraron perfiles recomendados. Por favor, actualice su perfil para recibir mejores recomendaciones.",
+  },
+};
 
 interface PropsType {
   allRecommendedUsersData: {
@@ -28,6 +45,9 @@ const AllRecommendedUsers = ({ allRecommendedUsersData }: PropsType) => {
   const searchParams = useSearchParams();
   const { currentPage, totalPages, prevPage, nextPage } =
     allRecommendedUsersData.paginationInfo;
+
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   // Helper to build URL with updated page param
   const getUrlWithPage = (page: number) => {
@@ -65,8 +85,7 @@ const AllRecommendedUsers = ({ allRecommendedUsersData }: PropsType) => {
           </div>
         ) : (
           <div className="mx-auto max-w-[600px] text-center flex items-center justify-center min-h-[60vh] text-black text-[20px] font-medium py-8">
-            No recommended profiles found. Please update your profile to receive
-            better recommendations.
+            {t.noProfiles}
           </div>
         )}
       </div>

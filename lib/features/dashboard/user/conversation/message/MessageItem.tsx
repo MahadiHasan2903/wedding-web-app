@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, Dispatch, SetStateAction } from "react";
 import { RiTranslate } from "react-icons/ri";
 import MessageAttachment from "./MessageAttachment";
@@ -6,8 +8,49 @@ import { CommonButton } from "@/lib/components/buttons";
 import { Message } from "@/lib/types/chat/message.types";
 import { ImageWithFallback } from "@/lib/components/image";
 import { avatar, dots } from "@/lib/components/image/icons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { User, SessionUser } from "@/lib/types/user/user.types";
 import { formatRelativeTimeLong } from "@/lib/utils/date/dateUtils";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    messageDeleted: "Message deleted",
+    reply: "Reply",
+    report: "Report",
+    edit: "Edit",
+    delete: "Delete",
+    translateTo: "Translate to",
+    you: "You",
+    english: "English",
+    spanish: "Spanish",
+    french: "French",
+  },
+  fr: {
+    messageDeleted: "Message supprimé",
+    reply: "Répondre",
+    report: "Signaler",
+    edit: "Modifier",
+    delete: "Supprimer",
+    translateTo: "Traduire en",
+    you: "Vous",
+    english: "Anglais",
+    spanish: "Espagnol",
+    french: "Français",
+  },
+  es: {
+    messageDeleted: "Mensaje eliminado",
+    reply: "Responder",
+    report: "Reportar",
+    edit: "Editar",
+    delete: "Eliminar",
+    translateTo: "Traducir a",
+    you: "Tú",
+    english: "Inglés",
+    spanish: "Español",
+    french: "Francés",
+  },
+};
 
 interface Props {
   index: number;
@@ -45,6 +88,8 @@ const MessageItem = ({
   setOpenMenuMessageId,
 }: Props) => {
   const [openReportModal, setOpenReportModal] = useState(false);
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   const isSentByLoggedInUser = message.senderId === loggedInUser?.id;
   const isFirstInGroup =
@@ -81,7 +126,7 @@ const MessageItem = ({
           message.attachments &&
           message.attachments.length <= 0) ? (
           <div className="cursor-not-allowed bg-gray px-4 py-2 rounded-full border border-primaryBorder italic text-sm">
-            Message deleted
+            {t.messageDeleted}
           </div>
         ) : (
           <div
@@ -126,7 +171,7 @@ const MessageItem = ({
                         <p className="text-[13px] font-medium">
                           {message.repliedToMessage.senderId ===
                           loggedInUser?.id
-                            ? "You"
+                            ? t.you
                             : `${otherUser?.firstName} ${otherUser?.lastName}`}
                         </p>
                         <p className="text-[12px] font-normal">
@@ -152,26 +197,26 @@ const MessageItem = ({
                       <div className="flex items-start gap-1 italic">
                         <RiTranslate className="mt-1" />
                         <p className="font-bold text-[10px]">
-                          Translate to{" "}
+                          {t.translateTo}{" "}
                           <span
                             className="underline cursor-pointer"
                             onClick={() => handleTranslation(message.id, "en")}
                           >
-                            English
+                            {t.english}
                           </span>{" "}
                           /{" "}
                           <span
                             className="underline cursor-pointer"
                             onClick={() => handleTranslation(message.id, "es")}
                           >
-                            Spanish
+                            {t.spanish}
                           </span>{" "}
                           /{" "}
                           <span
                             className="underline cursor-pointer"
                             onClick={() => handleTranslation(message.id, "fr")}
                           >
-                            French
+                            {t.french}
                           </span>
                         </p>
                       </div>
@@ -219,7 +264,7 @@ const MessageItem = ({
                   />
                   <div className="w-full flex flex-col items-start text-[14px]">
                     <CommonButton
-                      label="Replay"
+                      label={t.reply}
                       className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
                       onClick={() => {
                         setUpdatedMessage(null);
@@ -230,7 +275,7 @@ const MessageItem = ({
                     />
                     {!isSentByLoggedInUser && (
                       <CommonButton
-                        label="Report"
+                        label={t.report}
                         className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
                         onClick={() => {
                           setUpdatedMessage(null);
@@ -245,7 +290,7 @@ const MessageItem = ({
                         {Date.now() - new Date(message.createdAt).getTime() <
                           5 * 60 * 1000 && (
                           <CommonButton
-                            label="Edit"
+                            label={t.edit}
                             className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
                             onClick={() => {
                               setReplayToMessage(null);
@@ -256,7 +301,7 @@ const MessageItem = ({
                           />
                         )}
                         <CommonButton
-                          label="Delete"
+                          label={t.delete}
                           className="w-full text-left hover:bg-light px-[14px] py-[10px] rounded-[5px]"
                           onClick={() => {
                             setAttachments([]);

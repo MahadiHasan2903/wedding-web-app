@@ -5,10 +5,33 @@ import { toast } from "react-toastify";
 import { MdDelete } from "react-icons/md";
 import { ImDownload } from "react-icons/im";
 import { AlertModal } from "@/lib/components/modal";
-import { Media } from "@/lib/types/common/common.types";
 import { RiCollapseDiagonalLine } from "react-icons/ri";
+import { Media } from "@/lib/types/common/common.types";
 import { ImageWithFallback } from "@/lib/components/image";
 import { useSocket } from "@/lib/providers/SocketProvider";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+
+// Translation object
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    removeAttachmentTitle: "Remove Attachment",
+    removeAttachmentDesc:
+      "Are you sure you want to permanently delete this attachment?",
+    downloadError: "Failed to download attachment",
+  },
+  fr: {
+    removeAttachmentTitle: "Supprimer la pièce jointe",
+    removeAttachmentDesc:
+      "Êtes-vous sûr de vouloir supprimer définitivement cette pièce jointe ?",
+    downloadError: "Échec du téléchargement de la pièce jointe",
+  },
+  es: {
+    removeAttachmentTitle: "Eliminar archivo adjunto",
+    removeAttachmentDesc:
+      "¿Está seguro de que desea eliminar permanentemente este archivo adjunto?",
+    downloadError: "Error al descargar el archivo adjunto",
+  },
+};
 
 interface PropsType {
   open: boolean;
@@ -26,6 +49,9 @@ const AttachmentPreview = ({
   isSentByLoggedInUser,
 }: PropsType) => {
   const { socket, isConnected } = useSocket();
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const [openAlertModal, setOpenAlertModal] = useState(false);
 
   // Function to handle the deletion of a attachment
@@ -92,6 +118,7 @@ const AttachmentPreview = ({
             onClick={() => setOpen(false)}
           />
         </div>
+
         {attachment.mimetype.startsWith("video") ? (
           <div className="relative w-full max-w-[700px] h-[250px] sm:h-[400px] overflow-hidden">
             <video
@@ -111,13 +138,14 @@ const AttachmentPreview = ({
           </div>
         )}
       </div>
+
       {openAlertModal && (
         <AlertModal
           open={openAlertModal}
           setOpen={setOpenAlertModal}
           handleConfirm={handleDeleteAttachment}
-          title="Remove Attachment"
-          description="Are you sure you want to permanently delete this attachment"
+          title={t.removeAttachmentTitle}
+          description={t.removeAttachmentDesc}
         />
       )}
     </div>

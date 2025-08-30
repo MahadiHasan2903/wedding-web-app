@@ -10,8 +10,46 @@ import { AlertModal } from "@/lib/components/modal";
 import { CardTitle } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { OutlinedInput } from "@/lib/components/form-elements";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { updateBlockUnblockStatusAction } from "@/lib/action/user/userInteraction.action";
+
+// Translation object
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    blockedUsersTitle: "Blocked Users",
+    searchPlaceholder: "Search blocked user",
+    noUsersFound: "No blocked users found.",
+    unblockConfirmTitle: "Unblock User",
+    unblockConfirmDesc: "Are you sure that you want to unblock this user?",
+    confirm: "Confirm",
+    search: "Search",
+    unblock: "Unblock",
+    nameColumn: "Name", // <-- added
+  },
+  fr: {
+    blockedUsersTitle: "Utilisateurs bloqués",
+    searchPlaceholder: "Rechercher un utilisateur bloqué",
+    noUsersFound: "Aucun utilisateur bloqué trouvé.",
+    unblockConfirmTitle: "Débloquer l'utilisateur",
+    unblockConfirmDesc: "Êtes-vous sûr de vouloir débloquer cet utilisateur ?",
+    confirm: "Confirmer",
+    search: "Rechercher",
+    unblock: "Débloquer",
+    nameColumn: "Nom", // <-- added
+  },
+  es: {
+    blockedUsersTitle: "Usuarios bloqueados",
+    searchPlaceholder: "Buscar usuario bloqueado",
+    noUsersFound: "No se encontraron usuarios bloqueados.",
+    unblockConfirmTitle: "Desbloquear usuario",
+    unblockConfirmDesc: "¿Está seguro de que desea desbloquear a este usuario?",
+    confirm: "Confirmar",
+    search: "Buscar",
+    unblock: "Desbloquear",
+    nameColumn: "Nombre", // <-- added
+  },
+};
 
 interface PropsType {
   allBlockedUsersData: {
@@ -33,6 +71,9 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState("");
@@ -41,7 +82,6 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
   );
   const { currentPage, totalPages, prevPage, nextPage } =
     allBlockedUsersData.paginationInfo;
-
   // Memoize the blocked user list to prevent unnecessary re-renders
   const data = useMemo(
     () => allBlockedUsersData.blockedUsers || [],
@@ -119,17 +159,15 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
   return (
     <div className="w-full flex flex-col">
       <div className="w-full bg-white rounded-none lg:rounded-[10px]">
-        {/* Page header with title and search input */}
         <div className="w-full py-[17px] lg:py-[25px] border-b-[1px] lg:border-b-[3px] border-light">
           <div className="w-full px-[17px] lg:px-[36px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
-            <CardTitle title="Blocked Users" />
+            <CardTitle title={t.blockedUsersTitle} />
             <div className="w-full sm:w-2/3 md:w-1/2 md:max-w-[800px] flex items-center gap-4">
-              {/* Name search input */}
               <div className="w-full relative">
                 <OutlinedInput
                   name="name"
                   type="text"
-                  placeholder="Search blocked user"
+                  placeholder={t.searchPlaceholder}
                   value={searchName}
                   onChange={(e) => setSearchName(e.target.value)}
                   className="!pl-[10px] !pr-[35px] !py-[10px] rounded-[5px] w-full"
@@ -142,9 +180,8 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
                   />
                 )}
               </div>
-              {/* Search button */}
               <CommonButton
-                label="Search"
+                label={t.search}
                 className="w-fit flex items-center gap-[8px] bg-primary border border-primaryBorder text-white text-[14px] font-normal rounded-full px-[20px] py-[10px]"
                 endIcon={<IoSearchOutline size={20} />}
                 onClick={handleUserSearch}
@@ -153,18 +190,16 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
           </div>
         </div>
 
-        {/* Blocked users table */}
         <div className="flex-1 overflow-x-auto">
           <table className="w-full text-left">
             <thead>
               <tr className="border-b-[1px] lg:border-b-[3px] border-light">
                 <th className="text-[14px] font-medium px-[17px] lg:px-[36px] py-3 text-left">
-                  Name
+                  {t.nameColumn}
                 </th>
                 <th className="text-[14px] font-medium px-[17px] lg:px-[36px] py-3 text-right"></th>
               </tr>
             </thead>
-
             <tbody>
               {data.length === 0 ? (
                 <tr>
@@ -172,7 +207,7 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
                     colSpan={2}
                     className="text-center py-10 text-sm text-black/70"
                   >
-                    No blocked users found.
+                    {t.noUsersFound}
                   </td>
                 </tr>
               ) : (
@@ -184,7 +219,6 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left">
                       {user.firstName} {user.lastName}
                     </td>
-
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-right">
                       <button
                         className="px-[15px] py-[5px] border border-primaryBorder rounded-full hover:bg-primary hover:text-white"
@@ -193,7 +227,7 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
                           setSelectedUserId(user.id);
                         }}
                       >
-                        Unblock
+                        {t.unblock}
                       </button>
                     </td>
                   </tr>
@@ -203,7 +237,6 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
           </table>
         </div>
 
-        {/* Pagination controls */}
         <div className="w-full flex items-center justify-center">
           <Pagination
             currentPage={currentPage}
@@ -216,15 +249,16 @@ const AllBlockedUsers = ({ allBlockedUsersData }: PropsType) => {
           />
         </div>
       </div>
+
       {open && (
         <AlertModal
           open={open}
           loading={loading}
           setOpen={setOpen}
           handleConfirm={handleUnblockUser}
-          confirmButtonText="Confirm"
-          title="Unblock User"
-          description="Are you sure that you want to unblock this user"
+          confirmButtonText={t.confirm}
+          title={t.unblockConfirmTitle}
+          description={t.unblockConfirmDesc}
         />
       )}
     </div>

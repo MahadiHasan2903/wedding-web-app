@@ -1,25 +1,51 @@
 "use client";
 
 import React, { Dispatch, SetStateAction, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { User } from "@/lib/types/user/user.types";
-import { CardTitle } from "@/lib/components/heading";
-import { CommonButton } from "@/lib/components/buttons";
-import { MdDelete } from "react-icons/md";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   UpdateUserType,
   updateUserSchema,
 } from "@/lib/schema/user/user.schema";
-import { updateUserProfileAction } from "@/lib/action/user/user.action";
 import { toast } from "react-toastify";
+import { MdDelete } from "react-icons/md";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { User } from "@/lib/types/user/user.types";
+import { CardTitle } from "@/lib/components/heading";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+import { updateUserProfileAction } from "@/lib/action/user/user.action";
+
+// Translation dictionary
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    title: "Additional Photos",
+    uploadPhoto: "Upload Photo",
+    save: "Save",
+    cancel: "Cancel",
+    noSelectedPhoto: "No photo selected",
+  },
+  fr: {
+    title: "Photos supplémentaires",
+    uploadPhoto: "Télécharger une photo",
+    save: "Enregistrer",
+    cancel: "Annuler",
+    noSelectedPhoto: "Aucune photo sélectionnée",
+  },
+  es: {
+    title: "Fotos adicionales",
+    uploadPhoto: "Subir foto",
+    save: "Guardar",
+    cancel: "Cancelar",
+    noSelectedPhoto: "No se ha seleccionado ninguna foto",
+  },
+};
 
 interface PropsType {
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
   userProfile: User;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const UpdateAdditionalPhotos = ({ open, setOpen, userProfile }: PropsType) => {
@@ -27,6 +53,8 @@ const UpdateAdditionalPhotos = ({ open, setOpen, userProfile }: PropsType) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   // Initialize React Hook Form with Zod schema and default values
   const {
@@ -111,7 +139,7 @@ const UpdateAdditionalPhotos = ({ open, setOpen, userProfile }: PropsType) => {
             onSubmit={handleSubmit(handleUpdateProfile)}
             className="w-full h-full flex flex-col gap-[25px]"
           >
-            <CardTitle title="Additional Photos" />
+            <CardTitle title={t.title} />
 
             <div
               className={`${
@@ -141,14 +169,14 @@ const UpdateAdditionalPhotos = ({ open, setOpen, userProfile }: PropsType) => {
                   ))
                 ) : (
                   <p className="w-full text-md font-medium text-center col-span-3">
-                    No photo selected
+                    {t.noSelectedPhoto}
                   </p>
                 )}
               </div>
 
               <CommonButton
                 type="button"
-                label="Upload Photo"
+                label={t.uploadPhoto}
                 onClick={handleUploadClick}
                 className="w-full bg-transparent text-black font-semibold border border-primaryBorder text-[12px] p-[10px] rounded-full"
               />
@@ -165,13 +193,13 @@ const UpdateAdditionalPhotos = ({ open, setOpen, userProfile }: PropsType) => {
             <div className="flex items-center gap-[30px] text-[14px]">
               <CommonButton
                 type="submit"
-                label={loading ? "Saving..." : "Save"}
+                label={loading ? `${t.save}...` : t.save}
                 disabled={loading}
                 className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
               />
               <CommonButton
                 onClick={() => setOpen(false)}
-                label="Cancel"
+                label={t.cancel}
                 className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
               />
             </div>

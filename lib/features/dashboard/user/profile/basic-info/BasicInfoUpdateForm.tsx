@@ -1,12 +1,12 @@
 "use client";
 import React, { Dispatch, SetStateAction, useState, useEffect } from "react";
 import {
-  facebook,
-  instagram,
-  linkedin,
   tiktok,
   twitter,
   whatsapp,
+  linkedin,
+  facebook,
+  instagram,
 } from "@/lib/components/image/icons";
 import {
   UpdateUserType,
@@ -27,34 +27,136 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
-import { formatDateString1 } from "@/lib/utils/date/dateUtils";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+import { formatDateString1 } from "@/lib/utils/date/dateUtils";
 import { Gender, MaritalStatus } from "@/lib/enums/users.enum";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 
 // Props type for the BasicInfoUpdateForm component
 interface PropsType {
-  open: boolean; // Whether the modal is open
-  setOpen: Dispatch<SetStateAction<boolean>>; // Setter to control modal open state
-  userProfile: User; // The current user profile data to populate the form
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  userProfile: User;
 }
 
-// List of supported social platforms with their icons and input placeholders
-const socialPlatforms = [
-  { name: "facebook", icon: facebook, placeholder: "Enter your Facebook link" },
-  {
-    name: "instagram",
-    icon: instagram,
-    placeholder: "Enter your Instagram link",
+// Translations
+const translations: Record<string, any> = {
+  en: {
+    title: "Basic Info",
+    firstName: "First Name",
+    lastName: "Last Name",
+    gender: "Gender",
+    dob: "Date of Birth",
+    country: "Country",
+    city: "State/City",
+    nationality: "Nationality",
+    maritalStatus: "Marital Status",
+    bio: "Short Bio",
+    socialLinks: "Social Links",
+    placeholders: {
+      firstName: "Enter your first name",
+      lastName: "Enter your last name",
+      gender: "Select your gender",
+      dob: "Select your date of birth",
+      country: "Select your country",
+      city: "Select your city",
+      nationality: "Enter your nationality",
+      maritalStatus: "Select your marital status",
+      bio: "Enter your bio",
+      facebook: "Enter your Facebook link",
+      instagram: "Enter your Instagram link",
+      linkedin: "Enter your LinkedIn link",
+      whatsapp: "Enter your WhatsApp link",
+      twitter: "Enter your Twitter link",
+      tiktok: "Enter your TikTok link",
+    },
+    save: "Save",
+    saving: "Saving...",
+    cancel: "Cancel",
   },
-  { name: "linkedin", icon: linkedin, placeholder: "Enter your LinkedIn link" },
-  { name: "whatsapp", icon: whatsapp, placeholder: "Enter your WhatsApp link" },
-  { name: "twitter", icon: twitter, placeholder: "Enter your Twitter link" },
-  { name: "tiktok", icon: tiktok, placeholder: "Enter your TikTok link" }, // fixed "tikTok" => "tiktok"
+  fr: {
+    title: "Informations de base",
+    firstName: "Prénom",
+    lastName: "Nom",
+    gender: "Sexe",
+    dob: "Date de naissance",
+    country: "Pays",
+    city: "État/Ville",
+    nationality: "Nationalité",
+    maritalStatus: "État civil",
+    bio: "Courte biographie",
+    socialLinks: "Liens sociaux",
+    placeholders: {
+      firstName: "Entrez votre prénom",
+      lastName: "Entrez votre nom",
+      gender: "Sélectionnez votre sexe",
+      dob: "Sélectionnez votre date de naissance",
+      country: "Sélectionnez votre pays",
+      city: "Sélectionnez votre ville",
+      nationality: "Entrez votre nationalité",
+      maritalStatus: "Sélectionnez votre état civil",
+      bio: "Entrez votre biographie",
+      facebook: "Entrez votre lien Facebook",
+      instagram: "Entrez votre lien Instagram",
+      linkedin: "Entrez votre lien LinkedIn",
+      whatsapp: "Entrez votre lien WhatsApp",
+      twitter: "Entrez votre lien Twitter",
+      tiktok: "Entrez votre lien TikTok",
+    },
+    save: "Enregistrer",
+    saving: "Enregistrement...",
+    cancel: "Annuler",
+  },
+  es: {
+    title: "Información básica",
+    firstName: "Nombre",
+    lastName: "Apellido",
+    gender: "Género",
+    dob: "Fecha de nacimiento",
+    country: "País",
+    city: "Estado/Ciudad",
+    nationality: "Nacionalidad",
+    maritalStatus: "Estado civil",
+    bio: "Biografía corta",
+    socialLinks: "Enlaces sociales",
+    placeholders: {
+      firstName: "Ingresa tu nombre",
+      lastName: "Ingresa tu apellido",
+      gender: "Selecciona tu género",
+      dob: "Selecciona tu fecha de nacimiento",
+      country: "Selecciona tu país",
+      city: "Selecciona tu ciudad",
+      nationality: "Ingresa tu nacionalidad",
+      maritalStatus: "Selecciona tu estado civil",
+      bio: "Ingresa tu biografía",
+      facebook: "Ingresa tu enlace de Facebook",
+      instagram: "Ingresa tu enlace de Instagram",
+      linkedin: "Ingresa tu enlace de LinkedIn",
+      whatsapp: "Ingresa tu enlace de WhatsApp",
+      twitter: "Ingresa tu enlace de Twitter",
+      tiktok: "Ingresa tu enlace de TikTok",
+    },
+    save: "Guardar",
+    saving: "Guardando...",
+    cancel: "Cancelar",
+  },
+};
+
+// List of supported social platforms
+const socialPlatforms = [
+  { name: "facebook", icon: facebook },
+  { name: "instagram", icon: instagram },
+  { name: "linkedin", icon: linkedin },
+  { name: "whatsapp", icon: whatsapp },
+  { name: "twitter", icon: twitter },
+  { name: "tiktok", icon: tiktok },
 ];
 
 const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
 
   // Get all countries for country select options
@@ -196,28 +298,24 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
   return (
     <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
       <div className="w-full h-full max-w-[600px] max-h-[800px] rounded-[10px] bg-white p-[24px] lg:p-[35px] ">
-        {/* Form */}
         <form
           onSubmit={handleSubmit(handleUpdateProfile)}
           className="w-full h-full flex flex-col gap-[25px]"
         >
-          {/* Form Title */}
-          <CardTitle title="Basic Info" />
+          <CardTitle title={t.title} />
 
-          {/* Scrollable content area for the form fields */}
           <div className="w-full h-full max-h-[700px] overflow-y-auto flex flex-col gap-[22px] ">
-            {/* First and Last Name fields */}
+            {/* First and Last Name */}
             <div className="flex flex-col md:flex-row gap-[35px]">
               <Controller
                 name="firstName"
                 control={control}
-                defaultValue={userProfile.firstName}
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="First Name"
+                    label={t.firstName}
                     type="text"
-                    placeholder="Enter your first name"
+                    placeholder={t.placeholders.firstName}
                     error={errors.firstName?.message}
                   />
                 )}
@@ -225,33 +323,30 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
               <Controller
                 name="lastName"
                 control={control}
-                defaultValue={userProfile.lastName}
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Last Name"
+                    label={t.lastName}
                     type="text"
-                    placeholder="Enter your last name"
+                    placeholder={t.placeholders.lastName}
                     error={errors.lastName?.message}
                   />
                 )}
               />
             </div>
 
-            {/* Gender dropdown and Date of Birth picker */}
+            {/* Gender + DOB */}
             <div className="flex flex-col md:flex-row gap-[35px]">
               <div className="flex-1">
                 <Controller
                   name="gender"
                   control={control}
-                  defaultValue={userProfile.gender ?? ""}
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Gender"
-                      name="gender"
+                      label={t.gender}
                       options={enumToOptions(Gender)}
-                      placeholder="Select your gender"
+                      placeholder={t.placeholders.gender}
                     />
                   )}
                 />
@@ -260,7 +355,6 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                 <Controller
                   name="dateOfBirth"
                   control={control}
-                  defaultValue={userProfile.dateOfBirth ?? ""}
                   render={({ field }) => (
                     <Datepicker
                       {...field}
@@ -268,7 +362,7 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                       ref={null}
                       className="w-full border-b-[1.5px] border-primaryBorder bg-transparent py-2 font-normal outline-none transition focus:border-primary active:border-primary"
                       title="dateOfBirth"
-                      label="Date of Birth"
+                      label={t.dob}
                       setValue={setValue}
                       error={errors.dateOfBirth?.message}
                     />
@@ -277,19 +371,18 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
               </div>
             </div>
 
-            {/* Country and City/State dropdowns */}
+            {/* Country + City */}
             <div className="flex flex-col md:flex-row gap-[35px]">
               <div className="flex-1">
                 <Controller
                   name="country"
                   control={control}
-                  defaultValue={userProfile.country ?? ""}
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Country"
+                      label={t.country}
                       options={countryOptions}
-                      placeholder="Select your country"
+                      placeholder={t.placeholders.country}
                     />
                   )}
                 />
@@ -298,33 +391,31 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                 <Controller
                   name="city"
                   control={control}
-                  defaultValue={userProfile.city ?? ""}
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="State/City"
+                      label={t.city}
                       options={statesOptions}
-                      placeholder="Select your city"
-                      disabled={!countryField} // Disable city select if no country selected
+                      placeholder={t.placeholders.city}
+                      disabled={!countryField}
                     />
                   )}
                 />
               </div>
             </div>
 
-            {/* Nationality input and Marital Status dropdown */}
+            {/* Nationality + Marital Status */}
             <div className="flex flex-col md:flex-row gap-[35px]">
               <div className="flex-1">
                 <Controller
                   name="nationality"
                   control={control}
-                  defaultValue={userProfile.nationality ?? ""}
                   render={({ field }) => (
                     <UnderlineInput
                       {...field}
-                      label="Nationality"
+                      label={t.nationality}
                       type="text"
-                      placeholder="Enter your nationality"
+                      placeholder={t.placeholders.nationality}
                       error={errors.nationality?.message}
                     />
                   )}
@@ -334,41 +425,38 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                 <Controller
                   name="maritalStatus"
                   control={control}
-                  defaultValue={userProfile.maritalStatus ?? ""}
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Marital Status"
-                      name="maritalStatus"
+                      label={t.maritalStatus}
                       options={enumToOptions(MaritalStatus)}
-                      placeholder="Select your marital status"
+                      placeholder={t.placeholders.maritalStatus}
                     />
                   )}
                 />
               </div>
             </div>
 
-            {/* Short bio textarea */}
+            {/* Bio */}
             <Controller
               name="bio"
               control={control}
-              defaultValue={userProfile.bio ?? ""}
               render={({ field }) => (
                 <Textarea
                   {...field}
-                  label="Short Bio"
+                  label={t.bio}
                   rows={6}
-                  placeholder="Enter your bio"
+                  placeholder={t.placeholders.bio}
                   error={errors.bio?.message}
-                  className="!p-[16px] bg-light text-[12px] lg:text-[14px] "
+                  className="!p-[16px] bg-light text-[12px] lg:text-[14px]"
                 />
               )}
             />
 
-            {/* Social Media Links inputs */}
+            {/* Social Links */}
             <div className="flex flex-col items-start gap-[5px]">
               <p className="text-[12px] lg:text-[14px] font-medium">
-                Social Links
+                {t.socialLinks}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-[25px] gap-y-[10px]">
                 {socialPlatforms.map((platform, index) => (
@@ -389,11 +477,10 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
                         <UnderlineInput
                           {...field}
                           type="text"
-                          placeholder={platform.placeholder}
+                          placeholder={t.placeholders[platform.name]}
                           error={
                             errors.socialMediaLinks?.[index]?.link?.message
                           }
-                          // Update the socialMediaLinks array on change
                           onChange={(e) => {
                             const updatedLinks = [...(socialLinks || [])];
                             updatedLinks[index] = {
@@ -413,17 +500,17 @@ const BasicInfoUpdateForm = ({ open, setOpen, userProfile }: PropsType) => {
             </div>
           </div>
 
-          {/* Form action buttons */}
+          {/* Buttons */}
           <div className="flex items-center gap-[30px] text-[14px]">
             <CommonButton
               type="submit"
-              label={`${loading ? "Saving..." : "Save"}`}
+              label={loading ? t.saving : t.save}
               disabled={loading}
               className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
             <CommonButton
               onClick={() => setOpen(false)}
-              label="Cancel"
+              label={t.cancel}
               className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
           </div>

@@ -6,8 +6,58 @@ import { CardTitle } from "@/lib/components/heading";
 import { change } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import { formatDateString2 } from "@/lib/utils/date/dateUtils";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    passwordAndSecurity: "Password & Security",
+    changePlan: "Change Plan",
+    premium: "Premium",
+    active: "Active",
+    inactive: "Inactive",
+    renewAt: "Renew at",
+    forever: "Forever",
+    monthly: "Monthly",
+    yearly: "Yearly",
+    custom: "Custom",
+    perMonth: "/month",
+    perYear: "/year",
+    nA: "N/A",
+  },
+  fr: {
+    passwordAndSecurity: "Mot de passe et sécurité",
+    changePlan: "Changer de forfait",
+    premium: "Premium",
+    active: "Actif",
+    inactive: "Inactif",
+    renewAt: "Renouveler le",
+    forever: "À vie",
+    monthly: "Mensuel",
+    yearly: "Annuel",
+    custom: "Personnalisé",
+    perMonth: "/mois",
+    perYear: "/an",
+    nA: "N/D",
+  },
+  es: {
+    passwordAndSecurity: "Contraseña y seguridad",
+    changePlan: "Cambiar plan",
+    premium: "Premium",
+    active: "Activo",
+    inactive: "Inactivo",
+    renewAt: "Renovar en",
+    forever: "Para siempre",
+    monthly: "Mensual",
+    yearly: "Anual",
+    custom: "Personalizado",
+    perMonth: "/mes",
+    perYear: "/año",
+    nA: "N/D",
+  },
+};
 
 const PlanAndBilling = () => {
   const { data: session } = useSession();
@@ -21,27 +71,31 @@ const PlanAndBilling = () => {
   const isVipUser = hasActiveVipMembership(session?.user.data);
   const expiryDate = formatDateString2(membership?.expiresAt);
 
+  // Get current language from global store
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   //Function to get plan label
   const getPlanLabel = () => {
     switch (planType) {
       case "life_time":
-        return "Forever";
+        return t.forever;
       case "monthly":
-        return "Monthly";
+        return t.monthly;
       case "yearly":
-        return "Yearly";
+        return t.yearly;
       default:
-        return "Custom";
+        return t.custom;
     }
   };
 
-  //Function to get price prefix
+  //Function to get price suffix
   const getPriceSuffix = () => {
     switch (planType) {
       case "monthly":
-        return "/month";
+        return t.perMonth;
       case "yearly":
-        return "/year";
+        return t.perYear;
       default:
         return "";
     }
@@ -51,11 +105,11 @@ const PlanAndBilling = () => {
     <div className="w-full bg-white rounded-none lg:rounded-[10px]">
       <div className="w-full py-[17px] lg:py-[25px] border-light border-b-0 lg:border-b-[3px]">
         <div className="w-full px-[17px] lg:px-[36px] flex items-center justify-between">
-          <CardTitle title="Password & Security" />
+          <CardTitle title={t.passwordAndSecurity} />
           <CommonButton
-            label="Change Plan"
+            label={t.changePlan}
             href="/pricing"
-            className="w-fit hidden  md:flex items-center gap-[10px] bg-primary border border-primaryBorder text-white text-[14px] font-normal rounded-full px-[20px] py-[10px]"
+            className="w-fit hidden md:flex items-center gap-[10px] bg-primary border border-primaryBorder text-white text-[14px] font-normal rounded-full px-[20px] py-[10px]"
             startIcon={
               <ImageWithFallback
                 src={change}
@@ -72,9 +126,9 @@ const PlanAndBilling = () => {
       <div className="w-full py-[17px] lg:py-[25px] px-[17px] lg:px-[36px] border-light border-b-0 lg:border-b-[3px]">
         <div className="w-full flex flex-col item-start gap-[10px] md:gap-[25px]">
           <div className="w-full flex items-center gap-4 justify-between">
-            <h3 className="text-[14px] font-semibold">Change Plan</h3>
+            <h3 className="text-[14px] font-semibold">{t.changePlan}</h3>
             <CommonButton
-              label="Change Plan"
+              label={t.changePlan}
               href="/pricing"
               className="w-fit md:hidden flex items-center gap-[10px] bg-primary border border-primaryBorder text-white text-[14px] font-normal rounded-full px-[20px] py-[10px]"
               startIcon={
@@ -92,12 +146,12 @@ const PlanAndBilling = () => {
             <div className="w-full md:w-auto md:min-w-[300px] flex flex-col gap-[10px] rounded-[5px] px-[20px] py-[17px] lg:p-[20px] border border-primaryBorder">
               <div className="w-full flex items-center gap-[10px] md:gap-[40px]">
                 <p className="text-[14px] font-normal text-primaryBorder shrink-0">
-                  {getPlanLabel()} Plan
+                  {getPlanLabel()} {t.changePlan}
                 </p>
                 <div className="w-full flex items-center justify-end gap-[6px]">
                   {isVipUser && (
                     <CommonButton
-                      label="Premium"
+                      label={t.premium}
                       className="w-fit bg-vipHeavy text-white text-[10px] font-normal rounded-full px-[10px] py-[5px]"
                     />
                   )}
@@ -121,10 +175,10 @@ const PlanAndBilling = () => {
                     />
                     <p>
                       {membership?.membershipPackageInfo.id === 1
-                        ? "Active"
+                        ? t.active
                         : isVipUser
-                        ? "Active"
-                        : "Inactive"}
+                        ? t.active
+                        : t.inactive}
                     </p>
                   </div>
                 </div>
@@ -138,10 +192,10 @@ const PlanAndBilling = () => {
             {/* Expiry Card */}
             <div className="w-full md:w-auto md:min-w-[300px] flex flex-col gap-[13px] rounded-[5px] p-[20px] border border-primaryBorder">
               <p className="text-[14px] font-normal text-primaryBorder">
-                Renew at
+                {t.renewAt}
               </p>
               <h3 className="text-[14px] md:text-[20px] font-medium text-primary">
-                {expiryDate || "N/A"}
+                {expiryDate || t.nA}
               </h3>
             </div>
           </div>

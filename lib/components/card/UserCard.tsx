@@ -8,10 +8,30 @@ import { User } from "@/lib/types/user/user.types";
 import { CommonButton } from "@/lib/components/buttons";
 import { redHeart } from "@/lib/components/image/icons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
+
+// Translation dictionary
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    ageUnknown: "Age Unknown",
+    viewProfile: "View Profile",
+    yearsOld: "Years Old",
+  },
+  fr: {
+    ageUnknown: "Âge inconnu",
+    viewProfile: "Voir le profil",
+    yearsOld: "ans",
+  },
+  es: {
+    ageUnknown: "Edad desconocida",
+    viewProfile: "Ver perfil",
+    yearsOld: "años",
+  },
+};
 
 interface UserCardProps {
   user: User;
@@ -22,6 +42,9 @@ const UserCard = ({ user, returnUrl = "/find-match" }: UserCardProps) => {
   const router = useRouter();
   const { data: session } = useSession();
   const accessToken = session?.user.accessToken;
+
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   // Determine if the user is a VIP or not
   const isVipUser = hasActiveVipMembership(user);
@@ -75,14 +98,14 @@ const UserCard = ({ user, returnUrl = "/find-match" }: UserCardProps) => {
         </h2>
         <p className="text-[12px] lg:text-[14px] font-medium">
           {user.dateOfBirth
-            ? `${calculateAgeFromDOB(user.dateOfBirth)} Years Old`
-            : "Age Unknown"}
+            ? `${calculateAgeFromDOB(user.dateOfBirth)} ${t.yearsOld}`
+            : t.ageUnknown}
           , {user.gender ?? "N/A"}
         </p>
       </div>
 
       <CommonButton
-        label="View Profile"
+        label={t.viewProfile}
         className={`${
           isVipUser
             ? "btn-gold-gradient border-none"

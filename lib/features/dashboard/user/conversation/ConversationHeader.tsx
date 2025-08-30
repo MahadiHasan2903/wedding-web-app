@@ -7,9 +7,42 @@ import { useSession } from "next-auth/react";
 import { AlertModal } from "@/lib/components/modal";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { avatar, dots } from "@/lib/components/image/icons";
 import { Conversation } from "@/lib/types/chat/conversation.types";
 import { updateBlockUnblockStatusAction } from "@/lib/action/user/userInteraction.action";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    activeNow: "Active Now",
+    blockProfile: "Block Profile",
+    blockUser: "Block User",
+    block: "Block",
+    blockUserConfirmation: "Are you sure you want to block this user",
+    userAvatarAlt: "user avatar",
+    menuIconAlt: "menu icon",
+  },
+  fr: {
+    activeNow: "Actif maintenant",
+    blockProfile: "Bloquer le profil",
+    blockUser: "Bloquer l'utilisateur",
+    block: "Bloquer",
+    blockUserConfirmation: "Êtes-vous sûr de vouloir bloquer cet utilisateur",
+    userAvatarAlt: "avatar de l'utilisateur",
+    menuIconAlt: "icône du menu",
+  },
+  es: {
+    activeNow: "Activo ahora",
+    blockProfile: "Bloquear perfil",
+    blockUser: "Bloquear usuario",
+    block: "Bloquear",
+    blockUserConfirmation:
+      "¿Estás seguro de que deseas bloquear a este usuario?",
+    userAvatarAlt: "avatar del usuario",
+    menuIconAlt: "icono del menú",
+  },
+};
 
 interface PropsType {
   isOtherUserOnline: boolean;
@@ -22,6 +55,9 @@ const ConversationHeader = ({
   conversationDetails,
   isBlockedByOtherUser,
 }: PropsType) => {
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const router = useRouter();
   const { data: session } = useSession();
   const loggedInUserId = session?.user?.data?.id;
@@ -93,7 +129,7 @@ const ConversationHeader = ({
               <ImageWithFallback
                 src={otherUser?.profilePicture?.url}
                 fallBackImage={avatar}
-                alt="user"
+                alt={t.userAvatarAlt}
                 fill
                 className="object-cover"
               />
@@ -108,7 +144,7 @@ const ConversationHeader = ({
               {otherUser?.firstName} {otherUser?.lastName}
             </p>
             {isOtherUserOnline && (
-              <p className="text-[10px] font-normal">Active Now</p>
+              <p className="text-[10px] font-normal">{t.activeNow}</p>
             )}
           </div>
         </div>
@@ -119,7 +155,7 @@ const ConversationHeader = ({
             src={dots}
             width={18}
             height={5}
-            alt="dots"
+            alt={t.menuIconAlt}
             className={`${
               isBlockedByOtherUser ? "cursor-not-allowed" : "cursor-pointer"
             }`}
@@ -136,7 +172,7 @@ const ConversationHeader = ({
               <div className="absolute shadow-lg w-2 h-2 bg-white border-t border-l border-light rotate-45 top-[-5px] right-3 z-0" />
               <CommonButton
                 onClick={() => setOpenModal(true)}
-                label="Block Profile"
+                label={t.blockProfile}
                 className="text-[14px]"
               />
             </div>
@@ -148,10 +184,10 @@ const ConversationHeader = ({
           open={openModal}
           setOpen={setOpenModal}
           handleConfirm={handleBlockUser}
-          title="Block User"
+          title={t.blockUser}
           loading={loading}
-          confirmButtonText="Block"
-          description="Are you sure you want to block this user"
+          confirmButtonText={t.block}
+          description={t.blockUserConfirmation}
         />
       )}
     </div>

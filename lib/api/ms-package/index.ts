@@ -49,6 +49,7 @@ const getAllMsPackages = async (): Promise<MembershipPackage[]> => {
     `${BASE_URL}/membership-package`,
     {
       method: "GET",
+      cache: "no-store",
     }
   );
 

@@ -2,17 +2,22 @@
 
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
+import {
+  UnderlineInput,
+  UnderlineSelectField,
+} from "@/lib/components/form-elements";
 import { useRouter } from "next/navigation";
 import {
   updateMsPackageSchema,
   UpdateMsPackageType,
 } from "@/lib/schema/ms-package/msPackage.types";
+import { enumToOptions } from "@/lib/utils/helpers";
 import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PackageStatus } from "@/lib/enums/ms-package";
 import { CommonButton } from "@/lib/components/buttons";
 import useLanguageStore from "@/lib/store/useLanguageStore";
-import { UnderlineInput } from "@/lib/components/form-elements";
 import { MembershipPackage } from "@/lib/types/membership/ms-package.types";
 import { updateMsPackageAction } from "@/lib/action/ms-package/msPackage.action";
 
@@ -29,6 +34,8 @@ const translations: Record<string, Record<string, string>> = {
     packageTitle: "Package Title",
     originalPrice: "Original Price",
     sellingPrice: "Selling Price",
+    msPackageStatus: "Package Status",
+    msPackageStatusPlaceholder: "Select package status",
     save: "Save",
     saving: "Saving...",
     cancel: "Cancel",
@@ -41,6 +48,8 @@ const translations: Record<string, Record<string, string>> = {
     packageTitle: "Titre du package",
     originalPrice: "Prix original",
     sellingPrice: "Prix de vente",
+    msPackageStatus: "Statut du colis",
+    msPackageStatusPlaceholder: "Sélectionnez le statut du colis",
     save: "Enregistrer",
     saving: "Enregistrement...",
     cancel: "Annuler",
@@ -53,6 +62,8 @@ const translations: Record<string, Record<string, string>> = {
     packageTitle: "Título del paquete",
     originalPrice: "Precio original",
     sellingPrice: "Precio de venta",
+    msPackageStatus: "Estado del paquete",
+    msPackageStatusPlaceholder: "Seleccione el estado del paquete",
     save: "Guardar",
     saving: "Guardando...",
     cancel: "Cancelar",
@@ -97,6 +108,7 @@ const UpdateMsPackageForm = ({
     const payload = {
       title: data.title,
       description: data.description,
+      status: data.status,
       categoryInfo: {
         category: data.categoryInfo.category,
         originalPrice: data.categoryInfo.originalPrice,
@@ -114,8 +126,8 @@ const UpdateMsPackageForm = ({
     });
 
     if (updateMsPackageResponse.status) {
-      setOpen(false);
       router.refresh();
+      setOpen(false);
     }
 
     setLoading(false);
@@ -127,7 +139,7 @@ const UpdateMsPackageForm = ({
 
   return (
     <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
-      <div className="w-full h-full max-w-[600px] max-h-[500px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
+      <div className="w-full h-full max-w-[600px] max-h-[600px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
         <form
           onSubmit={handleSubmit(handleUpdateMsPackage)}
           className="w-full h-full flex flex-col gap-[25px]"
@@ -176,6 +188,19 @@ const UpdateMsPackageForm = ({
                   name="categoryInfo.sellPrice"
                   placeholder={t.enterSellingPrice}
                   error={errors.categoryInfo?.sellPrice?.message}
+                />
+              )}
+            />
+            <Controller
+              name="status"
+              control={control}
+              defaultValue={msPackageDetails.status}
+              render={({ field }) => (
+                <UnderlineSelectField
+                  {...field}
+                  label={t.msPackageStatus}
+                  options={enumToOptions(PackageStatus)}
+                  placeholder={t.msPackageStatusPlaceholder}
                 />
               )}
             />

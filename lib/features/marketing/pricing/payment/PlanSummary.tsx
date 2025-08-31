@@ -3,28 +3,41 @@
 import React from "react";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import usePurchasePackageStore from "@/lib/store/usePurchaseStore";
+import { MsPackageCategory } from "@/lib/enums/ms-package";
 
 const translations = {
   en: {
     subscribePremium: "Subscribe to Premium Plan",
-    yearlyPremium: "Yearly Premium Subscription",
-    billedAnnually: "Billed annually",
+    premiumSubscription: "Premium Subscription",
+    billType: {
+      [MsPackageCategory.MONTHLY_PREMIUM]: "Billed monthly",
+      [MsPackageCategory.LIFETIME_PREMIUM]: "One-time payment",
+      [MsPackageCategory.LIFETIME_FREE]: "Free forever",
+    },
     subtotal: "Subtotal",
     tax: "Tax",
     total: "Total",
   },
   fr: {
     subscribePremium: "Abonnez-vous au plan Premium",
-    yearlyPremium: "Abonnement Premium Annuel",
-    billedAnnually: "Facturé annuellement",
+    premiumSubscription: "Abonnement Premium",
+    billType: {
+      [MsPackageCategory.MONTHLY_PREMIUM]: "Facturé mensuellement",
+      [MsPackageCategory.LIFETIME_PREMIUM]: "Paiement unique",
+      [MsPackageCategory.LIFETIME_FREE]: "Gratuit pour toujours",
+    },
     subtotal: "Sous-total",
     tax: "Taxe",
     total: "Total",
   },
   es: {
     subscribePremium: "Suscribirse al plan Premium",
-    yearlyPremium: "Suscripción Premium Anual",
-    billedAnnually: "Facturado anualmente",
+    premiumSubscription: "Suscripción Premium",
+    billType: {
+      [MsPackageCategory.MONTHLY_PREMIUM]: "Facturado mensualmente",
+      [MsPackageCategory.LIFETIME_PREMIUM]: "Pago único",
+      [MsPackageCategory.LIFETIME_FREE]: "Gratis para siempre",
+    },
     subtotal: "Subtotal",
     tax: "Impuesto",
     total: "Total",
@@ -38,8 +51,8 @@ const PlanSummary = () => {
 
   const sellPrice =
     msPackagePurchaseData?.membershipPackage.categoryInfo.sellPrice ?? 0;
-  const category =
-    msPackagePurchaseData?.membershipPackage.categoryInfo.category ?? "";
+  const category = msPackagePurchaseData?.membershipPackage.categoryInfo
+    .category as MsPackageCategory;
 
   return (
     <div className="w-full">
@@ -51,17 +64,18 @@ const PlanSummary = () => {
           ${sellPrice.toFixed(2)}
         </p>
         <p className="text-[10px] md:text-[14px] font-normal leading-[21px]">
-          &nbsp;/ {category}
+          {category === MsPackageCategory.MONTHLY_PREMIUM ? "/ month" : ""}
         </p>
       </div>
-
       <div className="w-full flex flex-col items-start">
         <div className="w-full flex flex-col gap-[12px] py-[20px] lg:py-[24px] border-b border-[#E0E0E0]">
           <div className="w-full flex items-center justify-between gap-2 text-[14px] font-semibold">
-            <p>{t.yearlyPremium}</p>
+            <p>{t.premiumSubscription}</p>
             <p>${sellPrice.toFixed(2)}</p>
           </div>
-          <p className="text-[10px] font-normal">{t.billedAnnually}</p>
+          <p className="text-[10px] font-normal">
+            {category ? t.billType[category] : ""}
+          </p>
         </div>
 
         <div className="w-full flex flex-col gap-[12px] py-[20px] lg:py-[24px] border-b border-[#E0E0E0]">

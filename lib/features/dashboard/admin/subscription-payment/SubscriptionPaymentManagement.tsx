@@ -5,6 +5,7 @@ import { Pagination } from "@/lib/components/table";
 import { CardTitle } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import { MsPackageCategory } from "@/lib/enums/ms-package";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import FilterPaymentDropDown from "./FilterPaymentDropDown";
 import { filter, avatar } from "@/lib/components/image/icons";
@@ -24,7 +25,7 @@ const translations: Record<string, Record<string, string>> = {
     paymentStatus: "Payment Status",
     noSubscription: "No subscription found",
     monthlyPremium: "Monthly Premium",
-    yearlyPremium: "Yearly Premium",
+    lifetimePremium: "Yearly Premium",
     card: "Card",
     paypal: "Paypal",
     paid: "Paid",
@@ -40,7 +41,7 @@ const translations: Record<string, Record<string, string>> = {
     paymentStatus: "Statut du paiement",
     noSubscription: "Aucun abonnement trouvé",
     monthlyPremium: "Premium mensuel",
-    yearlyPremium: "Premium annuel",
+    lifetimePremium: "Prime à vie",
     card: "Carte",
     paypal: "Paypal",
     paid: "Payé",
@@ -56,7 +57,7 @@ const translations: Record<string, Record<string, string>> = {
     paymentStatus: "Estado del pago",
     noSubscription: "No se encontró ninguna suscripción",
     monthlyPremium: "Premium mensual",
-    yearlyPremium: "Premium anual",
+    lifetimePremium: "Prima de por vida",
     card: "Tarjeta",
     paypal: "Paypal",
     paid: "Pagado",
@@ -226,9 +227,10 @@ const SubscriptionPaymentManagement = ({ allPaymentsData }: PropsType) => {
                       </td>
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left capitalize whitespace-nowrap min-w-[100px]">
                         {subscription.servicePurchaseId
-                          .purchasePackageCategory === "monthly"
+                          .purchasePackageCategory ===
+                        MsPackageCategory.MONTHLY_PREMIUM
                           ? t.monthlyPremium
-                          : t.yearlyPremium}
+                          : t.lifetimePremium}
                       </td>
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[200px]">
                         {formatDateString3(

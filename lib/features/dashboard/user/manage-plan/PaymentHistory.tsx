@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo } from "react";
 import { Pagination } from "@/lib/components/table";
 import { CardTitle } from "@/lib/components/heading";
+import { MsPackageCategory } from "@/lib/enums/ms-package";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import { formatDateString3 } from "@/lib/utils/date/dateUtils";
 import { PaymentTransaction } from "@/lib/types/payment/payment.types";
@@ -27,12 +28,12 @@ interface PropsType {
 // Helper function to map package category to a readable label
 const getPackageLabel = (category: string, t: any): string => {
   switch (category) {
-    case "life_time":
+    case MsPackageCategory.LIFETIME_FREE:
       return t.freePackage;
-    case "monthly":
+    case MsPackageCategory.MONTHLY_PREMIUM:
       return t.monthlyPremium;
-    case "yearly":
-      return t.yearlyPremium;
+    case MsPackageCategory.LIFETIME_PREMIUM:
+      return t.lifetimePremium;
     default:
       return t.unknown;
   }
@@ -57,7 +58,7 @@ const translations: Record<string, Record<string, string>> = {
     status: "Status",
     freePackage: "Free Package",
     monthlyPremium: "Monthly Premium",
-    yearlyPremium: "Yearly Premium",
+    lifetimePremium: "Lifetime Premium",
     unknown: "Unknown",
     nA: "N/A",
   },
@@ -70,7 +71,7 @@ const translations: Record<string, Record<string, string>> = {
     status: "Statut",
     freePackage: "Forfait gratuit",
     monthlyPremium: "Premium mensuel",
-    yearlyPremium: "Premium annuel",
+    lifetimePremium: "Prime à vie",
     unknown: "Inconnu",
     nA: "N/D",
   },
@@ -83,7 +84,7 @@ const translations: Record<string, Record<string, string>> = {
     status: "Estado",
     freePackage: "Paquete gratuito",
     monthlyPremium: "Premium mensual",
-    yearlyPremium: "Premium anual",
+    lifetimePremium: "Prima de por vida",
     unknown: "Desconocido",
     nA: "N/D",
   },

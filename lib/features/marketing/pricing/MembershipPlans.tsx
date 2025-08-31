@@ -45,26 +45,6 @@ const MembershipPlans = ({
   const t = translations[language];
   const [loadingPackageId, setLoadingPackageId] = useState<number | null>(null);
 
-  // Calculate the percentage savings if the user buys the yearly plan
-  const getYearlySavingsPercentage = (): number | null => {
-    const monthly = allMsPackages.find(
-      (pkg) => pkg.categoryInfo.category === "monthly"
-    );
-    const yearly = allMsPackages.find(
-      (pkg) => pkg.categoryInfo.category === "yearly"
-    );
-
-    if (!monthly || !yearly) {
-      return null;
-    }
-
-    const monthlyCostPerYear = monthly.categoryInfo.sellPrice * 12;
-    const yearlyCost = yearly.categoryInfo.sellPrice;
-    const savings = monthlyCostPerYear - yearlyCost;
-    const percentage = (savings / monthlyCostPerYear) * 100;
-    return Math.round(percentage);
-  };
-
   return (
     <div className="w-full p-[18px] sm:px-[60px] sm:pt-[32px] xl:px-[120px] xl:pt-[80px]">
       <div className="w-full flex flex-col items-center lg:items-start gap-[14px] lg:gap-[48px]">
@@ -80,6 +60,7 @@ const MembershipPlans = ({
 
       <div className="w-full flex flex-wrap gap-[18px] lg:gap-[24px] my-[30px] lg:my-[50px] mx-auto">
         {allMsPackages
+          // .filter((plan) => plan.status === "active")
           .slice()
           .sort((a, b) => a.id - b.id)
           .map((plan) => (
@@ -92,7 +73,6 @@ const MembershipPlans = ({
               categoryInfo={plan.categoryInfo}
               loading={loadingPackageId === plan.id}
               setLoadingPackageId={setLoadingPackageId}
-              yearlySavingsPercentage={getYearlySavingsPercentage()}
             />
           ))}
       </div>

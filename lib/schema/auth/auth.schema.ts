@@ -154,27 +154,29 @@ export const loginResponseSchema = z.object({
           updatedAt: z.string().datetime(),
         })
         .nullable(),
-      purchasedMembership: z.object({
-        id: z.string(),
-        user: z.string(),
-        amount: z.string(),
-        discount: z.string(),
-        payable: z.string(),
-        status: z.string(),
-        paymentStatus: z.string(),
-        purchasedAt: z.string().datetime(),
-        expiresAt: z.string().datetime().nullable(),
-        membershipPackageInfo: z.object({
-          id: z.number(),
-          title: z.string(),
-          description: z.array(z.string()),
-          categoryInfo: z.object({
-            category: z.string(),
-            originalPrice: z.number(),
-            sellPrice: z.number(),
+      purchasedMembership: z
+        .object({
+          id: z.string(),
+          user: z.string(),
+          amount: z.string(),
+          discount: z.string(),
+          payable: z.string(),
+          status: z.string(),
+          paymentStatus: z.string(),
+          purchasedAt: z.string().datetime(),
+          expiresAt: z.string().datetime().nullable(),
+          membershipPackageInfo: z.object({
+            id: z.number(),
+            title: z.string(),
+            description: z.array(z.string()),
+            categoryInfo: z.object({
+              category: z.string(),
+              originalPrice: z.number(),
+              sellPrice: z.number(),
+            }),
           }),
-        }),
-      }),
+        })
+        .nullable(),
     }),
     accessToken: z.string(),
   }),

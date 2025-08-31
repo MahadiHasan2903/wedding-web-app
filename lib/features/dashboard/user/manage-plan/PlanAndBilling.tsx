@@ -6,6 +6,7 @@ import { CardTitle } from "@/lib/components/heading";
 import { change } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import { MsPackageCategory } from "@/lib/enums/ms-package";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import { formatDateString2 } from "@/lib/utils/date/dateUtils";
@@ -21,11 +22,12 @@ const translations: Record<string, Record<string, string>> = {
     renewAt: "Renew at",
     forever: "Forever",
     monthly: "Monthly",
-    yearly: "Yearly",
+    lifetimePremium: "Lifetime",
     custom: "Custom",
     perMonth: "/month",
-    perYear: "/year",
+    perLife: "",
     nA: "N/A",
+    onceInALifetime: "Once in a lifetime",
   },
   fr: {
     passwordAndSecurity: "Mot de passe et sécurité",
@@ -36,11 +38,12 @@ const translations: Record<string, Record<string, string>> = {
     renewAt: "Renouveler le",
     forever: "À vie",
     monthly: "Mensuel",
-    yearly: "Annuel",
+    lifetimePremium: "Durée de vie",
     custom: "Personnalisé",
     perMonth: "/mois",
-    perYear: "/an",
+    perLife: "",
     nA: "N/D",
+    onceInALifetime: "Une fois dans une vie",
   },
   es: {
     passwordAndSecurity: "Contraseña y seguridad",
@@ -51,11 +54,12 @@ const translations: Record<string, Record<string, string>> = {
     renewAt: "Renovar en",
     forever: "Para siempre",
     monthly: "Mensual",
-    yearly: "Anual",
+    lifetimePremium: "Vida",
     custom: "Personalizado",
     perMonth: "/mes",
-    perYear: "/año",
+    perLife: "",
     nA: "N/D",
+    onceInALifetime: "Una vez en la vida",
   },
 };
 
@@ -78,12 +82,12 @@ const PlanAndBilling = () => {
   //Function to get plan label
   const getPlanLabel = () => {
     switch (planType) {
-      case "life_time":
+      case MsPackageCategory.LIFETIME_FREE:
         return t.forever;
-      case "monthly":
+      case MsPackageCategory.MONTHLY_PREMIUM:
         return t.monthly;
-      case "yearly":
-        return t.yearly;
+      case MsPackageCategory.LIFETIME_PREMIUM:
+        return t.lifetimePremium;
       default:
         return t.custom;
     }
@@ -92,10 +96,10 @@ const PlanAndBilling = () => {
   //Function to get price suffix
   const getPriceSuffix = () => {
     switch (planType) {
-      case "monthly":
+      case MsPackageCategory.MONTHLY_PREMIUM:
         return t.perMonth;
-      case "yearly":
-        return t.perYear;
+      case "lifetimePremium":
+        return t.perLife;
       default:
         return "";
     }
@@ -195,7 +199,9 @@ const PlanAndBilling = () => {
                 {t.renewAt}
               </p>
               <h3 className="text-[14px] md:text-[20px] font-medium text-primary">
-                {expiryDate || t.nA}
+                {planType === MsPackageCategory.LIFETIME_PREMIUM
+                  ? t.onceInALifetime
+                  : expiryDate || t.nA}
               </h3>
             </div>
           </div>

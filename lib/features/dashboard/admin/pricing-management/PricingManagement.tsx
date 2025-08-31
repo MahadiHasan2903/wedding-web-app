@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { CardTitle } from "@/lib/components/heading";
 import { editIcon } from "@/lib/components/image/icons";
 import UpdateMsPackageForm from "./UpdateMsPackageForm";
+import { MsPackageCategory } from "@/lib/enums/ms-package";
 import { ImageWithFallback } from "@/lib/components/image";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import { MembershipPackage } from "@/lib/types/membership/ms-package.types";
@@ -24,7 +25,7 @@ const translations: Record<string, Record<string, string>> = {
     action: "Action",
     noPlanFound: "No plan found",
     days30: "30 Days",
-    days365: "365 Days",
+    lifetime: "Lifetime",
   },
   fr: {
     vipPlan: "Plan VIP",
@@ -36,7 +37,7 @@ const translations: Record<string, Record<string, string>> = {
     action: "Action",
     noPlanFound: "Aucun plan trouvé",
     days30: "30 jours",
-    days365: "365 jours",
+    lifetime: "Durée de vie",
   },
   es: {
     vipPlan: "Plan VIP",
@@ -48,7 +49,7 @@ const translations: Record<string, Record<string, string>> = {
     action: "Acción",
     noPlanFound: "No se encontró ningún plan",
     days30: "30 días",
-    days365: "365 días",
+    lifetime: "Vida",
   },
 };
 
@@ -107,7 +108,11 @@ const PricingManagement = ({ allMsPackages }: PropsType) => {
                 </tr>
               ) : (
                 data
-                  .filter((pack) => pack.categoryInfo.category !== "life_time")
+                  .filter(
+                    (pack) =>
+                      pack.categoryInfo.category !==
+                      MsPackageCategory.LIFETIME_FREE
+                  )
                   .map((pack) => (
                     <tr
                       key={pack.id}
@@ -117,9 +122,10 @@ const PricingManagement = ({ allMsPackages }: PropsType) => {
                         {pack.title}
                       </td>
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left capitalize whitespace-nowrap min-w-[100px]">
-                        {pack.categoryInfo.category === "monthly"
+                        {pack.categoryInfo.category ===
+                        MsPackageCategory.MONTHLY_PREMIUM
                           ? t.days30
-                          : t.days365}
+                          : t.lifetime}
                       </td>
                       <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[200px]">
                         ${pack.categoryInfo.originalPrice}

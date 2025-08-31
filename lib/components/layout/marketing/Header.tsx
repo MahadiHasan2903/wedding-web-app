@@ -202,7 +202,7 @@ const Header = () => {
                     aria-haspopup="true"
                     aria-expanded={isMenuOpen}
                   >
-                    <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+                    <div className="w-[48px] h-[48px] relative rounded-full overflow-hidden border border-black">
                       <ImageWithFallback
                         src={session?.user.data.profilePicture?.url}
                         fallBackImage={avatar}
@@ -281,7 +281,7 @@ const Header = () => {
               aria-haspopup="true"
               aria-expanded={isMenuOpen}
             >
-              <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+              <div className="w-[48px] h-[48px] relative rounded-full overflow-hidden border border-black">
                 <ImageWithFallback
                   src={session?.user.data.profilePicture?.url}
                   fallBackImage={avatar}

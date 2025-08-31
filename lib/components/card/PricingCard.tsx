@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { HeadingLine } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
+import { MsPackageCategory } from "@/lib/enums/ms-package";
 import { ImageWithFallback } from "@/lib/components/image";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import usePurchasePackageStore from "@/lib/store/usePurchaseStore";
@@ -22,7 +23,6 @@ interface PropsType {
     sellPrice: number;
   };
   loading: boolean;
-  yearlySavingsPercentage: number | null;
   setLoadingPackageId: (id: number | null) => void;
   setPaymentFormOpen: Dispatch<SetStateAction<boolean>>;
 }
@@ -70,7 +70,6 @@ const PricingCard = ({
   categoryInfo,
   setPaymentFormOpen,
   setLoadingPackageId,
-  yearlySavingsPercentage,
 }: PropsType) => {
   const router = useRouter();
   const { data: session } = useSession();
@@ -85,12 +84,13 @@ const PricingCard = ({
   // Check if this card represents the user's current purchased package
   const isCurrent = currentPackageId === id;
 
-  // Determine package category flags for conditional rendering
-  const isYearly = categoryInfo.category === "yearly";
-  const isLifeTime = categoryInfo.category === "life_time";
+  const isLifeTime = categoryInfo.category === MsPackageCategory.LIFETIME_FREE;
 
-  // Determine unit of price display (monthly or yearly)
-  const priceUnit = categoryInfo.category === "monthly" ? "month" : "year";
+  // Determine unit of price display (monthly or lifetime)
+  const priceUnit =
+    categoryInfo.category === MsPackageCategory.MONTHLY_PREMIUM
+      ? "/ month"
+      : "";
 
   // Define button and icon colors based on package ID (custom logic)
   const packageColor = id === 1 ? "black" : id === 2 ? "primary" : "red";
@@ -146,12 +146,6 @@ const PricingCard = ({
 
   return (
     <div className="w-[300px] xl:w-[380px] h-auto lg:min-h-[650px] relative flex flex-col items-start px-4 pt-4 pb-[50px] lg:pb-0 lg:p-[30px] gap-[25px] border border-[#B0B1B3] rounded-[10px] overflow-hidden">
-      {isYearly && (
-        <div className="hidden lg:block absolute right-0 top-[-10px] bg-topRectangle bg-no-repeat bg-center bg-contain text-white pl-[56px] pr-[21px] py-[16px]">
-          {t.save} {yearlySavingsPercentage}%
-        </div>
-      )}
-
       <div className="w-full flex flex-row lg:flex-col items-center lg:items-start justify-between gap-[10px] lg:gap-[25px]">
         <div className="w-full flex flex-col items-start gap-[10px] lg:gap-[25px]">
           <div
@@ -181,7 +175,7 @@ const PricingCard = ({
           </p>
           {!isLifeTime && (
             <p className="text-[10px] md:text-[14px] font-normal leading-[21px]">
-              &nbsp;/ {priceUnit}
+              &nbsp; {priceUnit}
             </p>
           )}
         </div>
@@ -196,7 +190,7 @@ const PricingCard = ({
             : t.choosePlan
         }
         type="button"
-        disabled={loading}
+        disabled={id === 1 || loading}
         onClick={handleMsPackagePurchaseInitialization}
         className={`w-full rounded-[5px] overflow-hidden border border-primaryBorder p-[12px] text-[14px] font-semibold ${
           isCurrent
@@ -223,12 +217,6 @@ const PricingCard = ({
           ))}
         </div>
       </div>
-
-      {isYearly && (
-        <div className="lg:hidden block absolute right-0 bottom-[-10px] bg-bottomRectangle bg-no-repeat bg-center bg-contain text-white pl-[56px] pr-[21px] py-[16px]">
-          {t.save} {yearlySavingsPercentage}%
-        </div>
-      )}
     </div>
   );
 };

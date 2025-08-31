@@ -75,7 +75,7 @@ const Navbar = () => {
       <div className="flex items-center justify-end gap-4">
         <Link href={isAdmin ? "/overview" : "/my-profile"} className="w-auto">
           <div className="w-12 h-12 relative flex items-center justify-center">
-            <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+            <div className="w-[48px] h-[48px] relative rounded-full overflow-hidden border border-black">
               <ImageWithFallback
                 src={session?.user.data.profilePicture?.url}
                 fallBackImage={avatar}

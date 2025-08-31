@@ -5,6 +5,7 @@ export const updateMsPackageSchema = z.object({
     .string()
     .min(2, "Package Title is required")
     .refine((value) => value.trim().length > 0, "Package Title is required"),
+  status: z.string(),
   description: z.array(z.string()).optional(),
   categoryInfo: z.object({
     category: z.string().optional(),

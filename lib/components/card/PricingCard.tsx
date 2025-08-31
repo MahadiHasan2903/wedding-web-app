@@ -79,7 +79,7 @@ const PricingCard = ({
 
   // Extract the current user's purchased package ID from session
   const currentPackageId =
-    session?.user.data.purchasedMembership.membershipPackageInfo.id;
+    session?.user.data.purchasedMembership?.membershipPackageInfo?.id;
 
   // Check if this card represents the user's current purchased package
   const isCurrent = currentPackageId === id;

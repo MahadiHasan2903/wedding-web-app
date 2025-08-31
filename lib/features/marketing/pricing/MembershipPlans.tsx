@@ -60,7 +60,7 @@ const MembershipPlans = ({
 
       <div className="w-full flex flex-wrap gap-[18px] lg:gap-[24px] my-[30px] lg:my-[50px] mx-auto">
         {allMsPackages
-          // .filter((plan) => plan.status === "active")
+          .filter((plan) => plan.status === "active")
           .slice()
           .sort((a, b) => a.id - b.id)
           .map((plan) => (

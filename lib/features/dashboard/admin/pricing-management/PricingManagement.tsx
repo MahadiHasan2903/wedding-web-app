@@ -61,7 +61,11 @@ const PricingManagement = ({ allMsPackages }: PropsType) => {
     useState<MembershipPackage | null>(null);
 
   // Memoized data to prevent unnecessary re-renders
-  const data = useMemo(() => allMsPackages || [], [allMsPackages]);
+  const data = useMemo(() => {
+    return (allMsPackages || []).filter(
+      (pkg: MembershipPackage) => pkg.status?.toLowerCase() === "active"
+    );
+  }, [allMsPackages]);
 
   return (
     <div className="w-full flex flex-col">

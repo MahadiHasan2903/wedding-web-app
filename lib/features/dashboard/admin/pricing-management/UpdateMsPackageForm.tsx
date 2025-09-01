@@ -8,8 +8,8 @@ import {
 } from "@/lib/components/form-elements";
 import { useRouter } from "next/navigation";
 import {
-  updateMsPackageSchema,
   UpdateMsPackageType,
+  updateMsPackageSchema,
 } from "@/lib/schema/ms-package/msPackage.types";
 import { enumToOptions } from "@/lib/utils/helpers";
 import { CardTitle } from "@/lib/components/heading";
@@ -139,7 +139,7 @@ const UpdateMsPackageForm = ({
 
   return (
     <div className="fixed left-0 top-0 z-[99] flex h-full min-h-screen w-full items-center justify-center bg-black/60 px-4 py-5">
-      <div className="w-full h-full max-w-[600px] max-h-[600px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
+      <div className="w-full h-full max-w-[600px] max-h-[500px] rounded-[10px] bg-white p-[24px] lg:p-[35px]">
         <form
           onSubmit={handleSubmit(handleUpdateMsPackage)}
           className="w-full h-full flex flex-col gap-[25px]"
@@ -191,7 +191,7 @@ const UpdateMsPackageForm = ({
                 />
               )}
             />
-            <Controller
+            {/* <Controller
               name="status"
               control={control}
               defaultValue={msPackageDetails.status}
@@ -203,7 +203,7 @@ const UpdateMsPackageForm = ({
                   placeholder={t.msPackageStatusPlaceholder}
                 />
               )}
-            />
+            /> */}
           </div>
 
           {/* Form submit and cancel buttons */}

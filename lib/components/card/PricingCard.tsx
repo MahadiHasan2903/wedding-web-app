@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -74,6 +74,7 @@ const PricingCard = ({
   const router = useRouter();
   const { data: session } = useSession();
   const { language } = useLanguageStore();
+  const [open, setOpen] = useState(false);
   const t = translations[language];
   const { setMsPackagePurchaseData } = usePurchasePackageStore();
 
@@ -190,7 +191,7 @@ const PricingCard = ({
             : t.choosePlan
         }
         type="button"
-        disabled={id === 1 || loading}
+        disabled={loading}
         onClick={handleMsPackagePurchaseInitialization}
         className={`w-full rounded-[5px] overflow-hidden border border-primaryBorder p-[12px] text-[14px] font-semibold ${
           isCurrent

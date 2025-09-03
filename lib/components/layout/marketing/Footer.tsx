@@ -66,7 +66,7 @@ const translations: Record<Language, Record<string, string>> = {
     subscribeNewsletter: "Subscribe to Our Newsletter",
     newsletterInfo: "We do not share or sell your information",
     emailPlaceholder: "Your Email Address",
-    copyright: "© 2025 FrenchCubaWedding.com",
+    copyright: "© 2025 FranceCubaWedding.com",
     allRightsReserved: "All Rights Reserved",
   },
   fr: {
@@ -92,7 +92,7 @@ const translations: Record<Language, Record<string, string>> = {
     subscribeNewsletter: "Abonnez-vous à notre newsletter",
     newsletterInfo: "Nous ne partageons ni ne vendons vos informations",
     emailPlaceholder: "Votre adresse e-mail",
-    copyright: "© 2025 FrenchCubaWedding.com",
+    copyright: "© 2025 FranceCubaWedding.com",
     allRightsReserved: "Tous droits réservés",
   },
   es: {
@@ -118,7 +118,7 @@ const translations: Record<Language, Record<string, string>> = {
     subscribeNewsletter: "Suscríbete a nuestro boletín",
     newsletterInfo: "No compartimos ni vendemos tu información",
     emailPlaceholder: "Tu dirección de correo",
-    copyright: "© 2025 FrenchCubaWedding.com",
+    copyright: "© 2025 FranceCubaWedding.com",
     allRightsReserved: "Todos los derechos reservados",
   },
 };

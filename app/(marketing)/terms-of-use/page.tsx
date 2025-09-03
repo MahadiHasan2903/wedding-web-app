@@ -10,14 +10,14 @@ const textClass = "text-[12px] sm:text-[14px] text-justify leading-[21px]";
 const translations = {
   en: {
     pageTitle: "Terms of Use / Service Agreement",
-    effectiveDate: "Effective Date: 13 July 2025 Welcome to FrenchCubaWedding.",
+    effectiveDate: "Effective Date: 13 July 2025 Welcome to FranceCubaWedding.",
     intro: `These Terms of Use ("Terms") govern your access to and use of our website and services ("Platform"). By creating an account or using any part of the Platform, you agree to be legally bound by these Terms. If you do not agree to these Terms, please do not use our services.`,
     sections: [
       {
         title: "1. Purpose of the Platform",
         content: (
           <p className={textClass}>
-            FrenchCubaWedding is an online matchmaking service designed to help
+            FranceCubaWedding is an online matchmaking service designed to help
             adults build serious and committed relationships. While account
             registration is free, access to premium features is reserved for
             users with a premium subscription.
@@ -68,7 +68,7 @@ const translations = {
         title: "4. Premium Membership",
         content: (
           <div className={textClass}>
-            FrenchCubaWedding offers a premium membership, which provides access
+            FranceCubaWedding offers a premium membership, which provides access
             to enhanced features such as:
             <ol type="a" className="list-[lower-alpha] list-inside ml-4">
               <li>Unlimited browsing and communication tools</li>
@@ -133,7 +133,7 @@ const translations = {
         title: "7. Privacy and Data Protection",
         content: (
           <p className={textClass}>
-            FrenchCubaWedding is fully committed to GDPR compliance. Your
+            FranceCubaWedding is fully committed to GDPR compliance. Your
             personal data is collected, stored, and processed in accordance with
             our{" "}
             <Link href="/privacy-policy" className="underline">
@@ -148,7 +148,7 @@ const translations = {
         title: "8. Limitation of Liability",
         content: (
           <div className={textClass}>
-            FrenchCubaWedding is a matchmaking platform and does not:
+            FranceCubaWedding is a matchmaking platform and does not:
             <ol type="a" className="list-[lower-alpha] list-inside ml-4">
               <li>Guarantee relationship outcomes or success</li>
               <li>Verify the identity or intentions of users</li>
@@ -204,8 +204,8 @@ const translations = {
           <p className={textClass}>
             If you have any questions or concerns regarding these Terms, please
             contact us at{" "}
-            <Link href="mailto:support@frenchcubawedding.com">
-              support@frenchcubawedding.com
+            <Link href="mailto:support@FranceCubawedding.com">
+              support@FranceCubawedding.com
             </Link>
             .
           </p>
@@ -217,14 +217,14 @@ const translations = {
   fr: {
     pageTitle: "Conditions d'utilisation / Accord de service",
     effectiveDate:
-      "Date d'entrée en vigueur : 13 juillet 2025 Bienvenue sur FrenchCubaWedding.",
+      "Date d'entrée en vigueur : 13 juillet 2025 Bienvenue sur FranceCubaWedding.",
     intro: `Ces Conditions d'utilisation ("Conditions") régissent votre accès et votre utilisation de notre site Web et de nos services ("Plateforme"). En créant un compte ou en utilisant une partie de la Plateforme, vous acceptez d'être légalement lié par ces Conditions. Si vous n'acceptez pas ces Conditions, veuillez ne pas utiliser nos services.`,
     sections: [
       {
         title: "1. Objet de la Plateforme",
         content: (
           <p className={textClass}>
-            FrenchCubaWedding est un service de rencontres en ligne conçu pour
+            FranceCubaWedding est un service de rencontres en ligne conçu pour
             aider les adultes à établir des relations sérieuses et engagées.
             Bien que l'inscription soit gratuite, l'accès aux fonctionnalités
             premium est réservé aux utilisateurs disposant d'un abonnement
@@ -284,7 +284,7 @@ const translations = {
         title: "4. Abonnement Premium",
         content: (
           <div className={textClass}>
-            FrenchCubaWedding propose un abonnement premium, qui permet
+            FranceCubaWedding propose un abonnement premium, qui permet
             d'accéder à des fonctionnalités améliorées telles que :
             <ol type="a" className="list-[lower-alpha] list-inside ml-4">
               <li>Navigation et outils de communication illimités</li>
@@ -350,7 +350,7 @@ const translations = {
         title: "7. Vie privée et protection des données",
         content: (
           <p className={textClass}>
-            FrenchCubaWedding respecte pleinement le RGPD. Vos données
+            FranceCubaWedding respecte pleinement le RGPD. Vos données
             personnelles sont collectées, stockées et traitées conformément à
             notre{" "}
             <Link href="/privacy-policy" className="underline">
@@ -365,7 +365,7 @@ const translations = {
         title: "8. Limitation de responsabilité",
         content: (
           <div className={textClass}>
-            FrenchCubaWedding est une plateforme de rencontres et ne :
+            FranceCubaWedding est une plateforme de rencontres et ne :
             <ol type="a" className="list-[lower-alpha] list-inside ml-4">
               <li>Ne garantit pas les résultats ou le succès des relations</li>
               <li>
@@ -427,8 +427,8 @@ const translations = {
           <p className={textClass}>
             Si vous avez des questions ou des préoccupations concernant ces
             Conditions, veuillez nous contacter à{" "}
-            <Link href="mailto:support@frenchcubawedding.com">
-              support@frenchcubawedding.com
+            <Link href="mailto:support@FranceCubawedding.com">
+              support@FranceCubawedding.com
             </Link>
             .
           </p>
@@ -440,14 +440,14 @@ const translations = {
   es: {
     pageTitle: "Términos de uso / Acuerdo de servicio",
     effectiveDate:
-      "Fecha de vigencia: 13 de julio de 2025 Bienvenido a FrenchCubaWedding.",
+      "Fecha de vigencia: 13 de julio de 2025 Bienvenido a FranceCubaWedding.",
     intro: `Estos Términos de Uso ("Términos") rigen su acceso y uso de nuestro sitio web y servicios ("Plataforma"). Al crear una cuenta o utilizar cualquier parte de la Plataforma, usted acepta estar legalmente sujeto a estos Términos. Si no está de acuerdo con estos Términos, por favor no utilice nuestros servicios.`,
     sections: [
       {
         title: "1. Propósito de la Plataforma",
         content: (
           <p className={textClass}>
-            FrenchCubaWedding es un servicio de citas en línea diseñado para
+            FranceCubaWedding es un servicio de citas en línea diseñado para
             ayudar a los adultos a construir relaciones serias y comprometidas.
             Aunque el registro es gratuito, el acceso a funciones premium está
             reservado para usuarios con suscripción premium.
@@ -496,7 +496,7 @@ const translations = {
         title: "4. Membresía Premium",
         content: (
           <div className={textClass}>
-            FrenchCubaWedding ofrece una membresía premium, que brinda acceso a
+            FranceCubaWedding ofrece una membresía premium, que brinda acceso a
             funciones mejoradas como:
             <ol type="a" className="list-[lower-alpha] list-inside ml-4">
               <li>Navegación y herramientas de comunicación ilimitadas</li>
@@ -558,7 +558,7 @@ const translations = {
         title: "7. Privacidad y protección de datos",
         content: (
           <p className={textClass}>
-            FrenchCubaWedding cumple plenamente con el RGPD. Sus datos
+            FranceCubaWedding cumple plenamente con el RGPD. Sus datos
             personales se recopilan, almacenan y procesan de acuerdo con nuestra{" "}
             <Link href="/privacy-policy" className="underline">
               Política de Privacidad
@@ -572,7 +572,7 @@ const translations = {
         title: "8. Limitación de responsabilidad",
         content: (
           <div className={textClass}>
-            FrenchCubaWedding es una plataforma de citas y no:
+            FranceCubaWedding es una plataforma de citas y no:
             <ol type="a" className="list-[lower-alpha] list-inside ml-4">
               <li>Garantiza resultados o éxito en las relaciones</li>
               <li>Verifica la identidad o las intenciones de los usuarios</li>
@@ -628,8 +628,8 @@ const translations = {
           <p className={textClass}>
             Si tiene alguna pregunta o inquietud sobre estos Términos,
             comuníquese con nosotros a{" "}
-            <Link href="mailto:support@frenchcubawedding.com">
-              support@frenchcubawedding.com
+            <Link href="mailto:support@FranceCubawedding.com">
+              support@FranceCubawedding.com
             </Link>
             .
           </p>

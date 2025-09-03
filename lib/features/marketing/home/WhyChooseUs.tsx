@@ -8,7 +8,7 @@ import { star, heart, crown } from "@/lib/components/image/icons";
 
 const translations = {
   en: {
-    sectionTitle: "Why Choose FrenchCubaWedding?",
+    sectionTitle: "Why Choose FranceCubaWedding?",
     cards: [
       {
         secondaryLine: "Featured Profiles for",
@@ -26,12 +26,12 @@ const translations = {
         secondaryLine: "Focused on",
         primaryLine: "Serious Relationships",
         description:
-          "No distractions. No games. FrenchCubaWedding is built for those who are ready to commit and looking for genuine, lasting connections.",
+          "No distractions. No games. FranceCubaWedding is built for those who are ready to commit and looking for genuine, lasting connections.",
       },
     ],
   },
   fr: {
-    sectionTitle: "Pourquoi choisir FrenchCubaWedding ?",
+    sectionTitle: "Pourquoi choisir FranceCubaWedding ?",
     cards: [
       {
         secondaryLine: "Profils en vedette pour",
@@ -49,12 +49,12 @@ const translations = {
         secondaryLine: "Axé sur",
         primaryLine: "Des relations sérieuses",
         description:
-          "Pas de distractions. Pas de jeux. FrenchCubaWedding est conçu pour ceux qui sont prêts à s'engager et cherchent des relations authentiques et durables.",
+          "Pas de distractions. Pas de jeux. FranceCubaWedding est conçu pour ceux qui sont prêts à s'engager et cherchent des relations authentiques et durables.",
       },
     ],
   },
   es: {
-    sectionTitle: "¿Por qué elegir FrenchCubaWedding?",
+    sectionTitle: "¿Por qué elegir FranceCubaWedding?",
     cards: [
       {
         secondaryLine: "Perfiles destacados para",
@@ -72,7 +72,7 @@ const translations = {
         secondaryLine: "Enfocado en",
         primaryLine: "Relaciones serias",
         description:
-          "Sin distracciones. Sin juegos. FrenchCubaWedding está construido para aquellos que están listos para comprometerse y buscan conexiones genuinas y duraderas.",
+          "Sin distracciones. Sin juegos. FranceCubaWedding está construido para aquellos que están listos para comprometerse y buscan conexiones genuinas y duraderas.",
       },
     ],
   },

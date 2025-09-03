@@ -117,10 +117,13 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
         const accessToken = user?.accessToken;
         const isAdmin = user?.data.userRole === "admin";
 
-        if (callbackUrl) router.push(callbackUrl);
-        else if (accessToken)
+        if (callbackUrl) {
+          router.push(callbackUrl);
+        } else if (accessToken) {
           router.push(isAdmin ? "/overview" : "/my-profile");
-        else router.push("/");
+        } else {
+          router.push("/");
+        }
       } else {
         toast.error(t.loginFailed);
       }

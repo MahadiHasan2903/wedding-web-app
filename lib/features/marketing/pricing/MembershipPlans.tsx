@@ -18,20 +18,20 @@ const translations = {
     membershipPlans: "Membership Plans",
     taglineBold: "Find real connections. Stand out with confidence.",
     tagline:
-      "At FrenchCubaWedding, we believe in meaningful, long-term relationships. Our Premium Membership is designed to help serious individuals like you connect with genuine, like-minded partners — faster and with more confidence.",
+      "At FranceCubaWedding, we believe in meaningful, long-term relationships. Our Premium Membership is designed to help serious individuals like you connect with genuine, like-minded partners — faster and with more confidence.",
   },
   fr: {
     membershipPlans: "Plans d'adhésion",
     taglineBold:
       "Trouvez de vraies connexions. Démarquez-vous en toute confiance.",
     tagline:
-      "Chez FrenchCubaWedding, nous croyons aux relations significatives et durables. Notre adhésion Premium est conçue pour aider les personnes sérieuses comme vous à se connecter avec des partenaires authentiques et partageant les mêmes valeurs — plus rapidement et en toute confiance.",
+      "Chez FranceCubaWedding, nous croyons aux relations significatives et durables. Notre adhésion Premium est conçue pour aider les personnes sérieuses comme vous à se connecter avec des partenaires authentiques et partageant les mêmes valeurs — plus rapidement et en toute confiance.",
   },
   es: {
     membershipPlans: "Planes de membresía",
     taglineBold: "Encuentra conexiones reales. Destaca con confianza.",
     tagline:
-      "En FrenchCubaWedding creemos en relaciones significativas y a largo plazo. Nuestra Membresía Premium está diseñada para ayudar a personas serias como tú a conectarse con parejas genuinas y afines — más rápido y con mayor confianza.",
+      "En FranceCubaWedding creemos en relaciones significativas y a largo plazo. Nuestra Membresía Premium está diseñada para ayudar a personas serias como tú a conectarse con parejas genuinas y afines — más rápido y con mayor confianza.",
   },
 };
 

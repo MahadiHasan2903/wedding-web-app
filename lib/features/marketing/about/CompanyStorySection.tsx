@@ -10,9 +10,9 @@ const translations = {
   en: {
     storyTitle: "Our Story",
     storyParagraph1:
-      "At FrenchCubaWedding, we believe that love has no borders. Born from a passion for cultural connection and meaningful relationships, we created a platform that blends elegance, sincerity, and modern matchmaking — with a special touch inspired by the warmth of Cuban spirit and the romance of French charm.",
+      "At FranceCubaWedding, we believe that love has no borders. Born from a passion for cultural connection and meaningful relationships, we created a platform that blends elegance, sincerity, and modern matchmaking — with a special touch inspired by the warmth of Cuban spirit and the romance of French charm.",
     storyParagraph2:
-      "Whether you're in Paris, Havana, or anywhere in between, FrenchCubaWedding is a space where genuine people come together to build something real.",
+      "Whether you're in Paris, Havana, or anywhere in between, FranceCubaWedding is a space where genuine people come together to build something real.",
     missionTitle: "Our Mission",
     missionParagraph:
       "To connect sincere individuals from all backgrounds in a safe, respectful, and culturally rich environment helping them find lasting companionship built on trust, compatibility, and intent.",
@@ -20,9 +20,9 @@ const translations = {
   fr: {
     storyTitle: "Notre Histoire",
     storyParagraph1:
-      "Chez FrenchCubaWedding, nous croyons que l'amour n'a pas de frontières. Née d'une passion pour la connexion culturelle et les relations significatives, nous avons créé une plateforme qui allie élégance, sincérité et rencontres modernes — avec une touche spéciale inspirée par la chaleur de l'esprit cubain et le romantisme du charme français.",
+      "Chez FranceCubaWedding, nous croyons que l'amour n'a pas de frontières. Née d'une passion pour la connexion culturelle et les relations significatives, nous avons créé une plateforme qui allie élégance, sincérité et rencontres modernes — avec une touche spéciale inspirée par la chaleur de l'esprit cubain et le romantisme du charme français.",
     storyParagraph2:
-      "Que vous soyez à Paris, La Havane ou ailleurs, FrenchCubaWedding est un espace où des personnes sincères se rencontrent pour construire quelque chose de réel.",
+      "Que vous soyez à Paris, La Havane ou ailleurs, FranceCubaWedding est un espace où des personnes sincères se rencontrent pour construire quelque chose de réel.",
     missionTitle: "Notre Mission",
     missionParagraph:
       "Connecter des individus sincères de tous horizons dans un environnement sûr, respectueux et culturellement riche, les aidant à trouver une relation durable basée sur la confiance, la compatibilité et l'intention.",
@@ -30,9 +30,9 @@ const translations = {
   es: {
     storyTitle: "Nuestra Historia",
     storyParagraph1:
-      "En FrenchCubaWedding, creemos que el amor no tiene fronteras. Nacida de una pasión por la conexión cultural y las relaciones significativas, creamos una plataforma que combina elegancia, sinceridad y encuentros modernos — con un toque especial inspirado en la calidez del espíritu cubano y el romanticismo del encanto francés.",
+      "En FranceCubaWedding, creemos que el amor no tiene fronteras. Nacida de una pasión por la conexión cultural y las relaciones significativas, creamos una plataforma que combina elegancia, sinceridad y encuentros modernos — con un toque especial inspirado en la calidez del espíritu cubano y el romanticismo del encanto francés.",
     storyParagraph2:
-      "Ya sea que estés en París, La Habana o en cualquier otro lugar, FrenchCubaWedding es un espacio donde personas genuinas se unen para construir algo real.",
+      "Ya sea que estés en París, La Habana o en cualquier otro lugar, FranceCubaWedding es un espacio donde personas genuinas se unen para construir algo real.",
     missionTitle: "Nuestra Misión",
     missionParagraph:
       "Conectar a individuos sinceros de todos los orígenes en un entorno seguro, respetuoso y culturalmente enriquecido, ayudándolos a encontrar compañía duradera basada en la confianza, la compatibilidad y la intención.",

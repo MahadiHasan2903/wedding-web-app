@@ -11,13 +11,13 @@ const translations = {
   en: {
     pageTitle: "Privacy Policy",
     effectiveDate: "Effective Date: 13 July 2025",
-    intro: `At FrenchCubaWedding, we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains what data we collect, why we collect it, how we use it, and what rights you have under applicable laws, including the General Data Protection Regulation (GDPR). By using our website or mobile app, you agree to the practices outlined below.`,
+    intro: `At FranceCubaWedding, we respect your privacy and are committed to protecting your personal information. This Privacy Policy explains what data we collect, why we collect it, how we use it, and what rights you have under applicable laws, including the General Data Protection Regulation (GDPR). By using our website or mobile app, you agree to the practices outlined below.`,
     sections: [
       {
         title: "1. Who We Are",
         content: (
           <p className={textClass}>
-            FrenchCubaWedding is a digital matchmaking platform focused on
+            FranceCubaWedding is a digital matchmaking platform focused on
             serious relationships. We act as the data controller for the
             personal information you provide when using our services.
           </p>
@@ -97,7 +97,7 @@ const translations = {
             As a user, you have the right to access, correct, delete, or
             restrict the use of your data. You can also request a copy of your
             data or object to certain uses. If you wish to exercise any of these
-            rights, email us at support@frenchcubawedding.com. If you believe
+            rights, email us at support@FranceCubawedding.com. If you believe
             your rights have been violated, you can lodge a complaint with your
             local data protection authority (e.g., CNIL in France).
           </p>
@@ -132,7 +132,7 @@ const translations = {
             We may update this Privacy Policy to reflect changes in law or how
             we operate. You will be notified of significant changes through the
             platform or by email. The latest version is always available at
-            www.frenchcubawedding.com/privacy.
+            www.FranceCubawedding.com/privacy.
           </p>
         ),
       },
@@ -142,8 +142,8 @@ const translations = {
           <p className={textClass}>
             If you have questions or concerns about this Privacy Policy or how
             we handle your data, please contact at{" "}
-            <Link href="mailto:support@frenchcubawedding.com">
-              support@frenchcubawedding.com
+            <Link href="mailto:support@FranceCubawedding.com">
+              support@FranceCubawedding.com
             </Link>
             .
           </p>
@@ -155,13 +155,13 @@ const translations = {
   fr: {
     pageTitle: "Politique de confidentialité",
     effectiveDate: "Date d'entrée en vigueur : 13 juillet 2025",
-    intro: `Chez FrenchCubaWedding, nous respectons votre vie privée et nous engageons à protéger vos informations personnelles. Cette politique de confidentialité explique quelles données nous collectons, pourquoi nous les collectons, comment nous les utilisons et quels droits vous avez conformément aux lois applicables, y compris le Règlement général sur la protection des données (RGPD). En utilisant notre site Web ou notre application mobile, vous acceptez les pratiques décrites ci-dessous.`,
+    intro: `Chez FranceCubaWedding, nous respectons votre vie privée et nous engageons à protéger vos informations personnelles. Cette politique de confidentialité explique quelles données nous collectons, pourquoi nous les collectons, comment nous les utilisons et quels droits vous avez conformément aux lois applicables, y compris le Règlement général sur la protection des données (RGPD). En utilisant notre site Web ou notre application mobile, vous acceptez les pratiques décrites ci-dessous.`,
     sections: [
       {
         title: "1. Qui nous sommes",
         content: (
           <p className={textClass}>
-            FrenchCubaWedding est une plateforme de rencontres en ligne axée sur
+            FranceCubaWedding est une plateforme de rencontres en ligne axée sur
             les relations sérieuses. Nous agissons en tant que responsable du
             traitement des informations personnelles que vous fournissez lors de
             l'utilisation de nos services.
@@ -247,7 +247,7 @@ const translations = {
             de supprimer ou de restreindre l'utilisation de vos données. Vous
             pouvez également demander une copie de vos données ou vous opposer à
             certaines utilisations. Pour exercer ces droits, envoyez un email à
-            support@frenchcubawedding.com. Si vous estimez que vos droits ont
+            support@FranceCubawedding.com. Si vous estimez que vos droits ont
             été violés, vous pouvez déposer une plainte auprès de l'autorité
             locale de protection des données (ex : CNIL).
           </p>
@@ -285,7 +285,7 @@ const translations = {
             refléter les changements législatifs ou dans nos pratiques. Vous
             serez informé des changements importants via la plateforme ou par
             email. La dernière version est toujours disponible sur
-            www.frenchcubawedding.com/privacy.
+            www.FranceCubawedding.com/privacy.
           </p>
         ),
       },
@@ -296,8 +296,8 @@ const translations = {
             Pour toute question ou préoccupation concernant cette politique de
             confidentialité ou la manière dont nous traitons vos données,
             veuillez contacter{" "}
-            <Link href="mailto:support@frenchcubawedding.com">
-              support@frenchcubawedding.com
+            <Link href="mailto:support@FranceCubawedding.com">
+              support@FranceCubawedding.com
             </Link>
             .
           </p>
@@ -309,13 +309,13 @@ const translations = {
   es: {
     pageTitle: "Política de privacidad",
     effectiveDate: "Fecha de vigencia: 13 de julio de 2025",
-    intro: `En FrenchCubaWedding, respetamos su privacidad y nos comprometemos a proteger su información personal. Esta Política de privacidad explica qué datos recopilamos, por qué los recopilamos, cómo los usamos y qué derechos tiene según las leyes aplicables, incluido el Reglamento General de Protección de Datos (RGPD). Al usar nuestro sitio web o aplicación móvil, acepta las prácticas descritas a continuación.`,
+    intro: `En FranceCubaWedding, respetamos su privacidad y nos comprometemos a proteger su información personal. Esta Política de privacidad explica qué datos recopilamos, por qué los recopilamos, cómo los usamos y qué derechos tiene según las leyes aplicables, incluido el Reglamento General de Protección de Datos (RGPD). Al usar nuestro sitio web o aplicación móvil, acepta las prácticas descritas a continuación.`,
     sections: [
       {
         title: "1. Quiénes somos",
         content: (
           <p className={textClass}>
-            FrenchCubaWedding es una plataforma de citas en línea centrada en
+            FranceCubaWedding es una plataforma de citas en línea centrada en
             relaciones serias. Actuamos como el responsable del tratamiento de
             los datos personales que proporcione al usar nuestros servicios.
           </p>
@@ -397,7 +397,7 @@ const translations = {
             Como usuario, tiene derecho a acceder, corregir, eliminar o
             restringir el uso de sus datos. También puede solicitar una copia de
             sus datos o oponerse a ciertos usos. Para ejercer estos derechos,
-            envíe un correo a support@frenchcubawedding.com. Si cree que sus
+            envíe un correo a support@FranceCubawedding.com. Si cree que sus
             derechos han sido violados, puede presentar una queja ante la
             autoridad local de protección de datos.
           </p>
@@ -433,7 +433,7 @@ const translations = {
             en la legislación o en nuestra forma de operar. Se le notificará
             sobre cambios significativos a través de la plataforma o por correo
             electrónico. La última versión siempre está disponible en
-            www.frenchcubawedding.com/privacy.
+            www.FranceCubawedding.com/privacy.
           </p>
         ),
       },
@@ -443,8 +443,8 @@ const translations = {
           <p className={textClass}>
             Si tiene preguntas o inquietudes sobre esta Política de privacidad o
             cómo manejamos sus datos, comuníquese con{" "}
-            <Link href="mailto:support@frenchcubawedding.com">
-              support@frenchcubawedding.com
+            <Link href="mailto:support@FranceCubawedding.com">
+              support@FranceCubawedding.com
             </Link>
             .
           </p>

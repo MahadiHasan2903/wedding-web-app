@@ -10,21 +10,21 @@ const translations = {
   en: {
     title: "Ready to Meet Someone Who Matters?",
     subtitle:
-      "Thousands have found meaningful connections through FrenchCubaWedding. Now it’s your turn.",
+      "Thousands have found meaningful connections through FranceCubaWedding. Now it’s your turn.",
     findMatch: "Find Your Match",
     getVerified: "Get Verified",
   },
   fr: {
     title: "Prêt à rencontrer quelqu’un qui compte ?",
     subtitle:
-      "Des milliers de personnes ont trouvé des relations significatives grâce à FrenchCubaWedding. Maintenant, c’est votre tour.",
+      "Des milliers de personnes ont trouvé des relations significatives grâce à FranceCubaWedding. Maintenant, c’est votre tour.",
     findMatch: "Trouvez votre match",
     getVerified: "Vérifiez votre profil",
   },
   es: {
     title: "¿Listo para conocer a alguien que importa?",
     subtitle:
-      "Miles han encontrado conexiones significativas a través de FrenchCubaWedding. Ahora es tu turno.",
+      "Miles han encontrado conexiones significativas a través de FranceCubaWedding. Ahora es tu turno.",
     findMatch: "Encuentra tu pareja",
     getVerified: "Verifícate",
   },

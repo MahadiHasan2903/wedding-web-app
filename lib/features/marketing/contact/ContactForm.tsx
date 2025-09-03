@@ -117,7 +117,7 @@ const ContactForm = () => {
                 />
               </div>
               <p className="text-[14px] leading-[21px]">
-                contact@frenchcubaweddings.com
+                contact@franceCubaweddings.com
               </p>
             </div>
           </div>

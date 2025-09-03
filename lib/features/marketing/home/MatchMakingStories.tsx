@@ -150,17 +150,17 @@ const sectionTranslations = {
   en: {
     title: "Where Matches Turn Into Marriages",
     description:
-      "Discover how FrenchCubaWedding is creating beautiful beginnings for couples across cultures",
+      "Discover how FranceCubaWedding is creating beautiful beginnings for couples across cultures",
   },
   fr: {
     title: "Là où les rencontres deviennent des mariages",
     description:
-      "Découvrez comment FrenchCubaWedding crée de beaux débuts pour les couples de différentes cultures",
+      "Découvrez comment FranceCubaWedding crée de beaux débuts pour les couples de différentes cultures",
   },
   es: {
     title: "Donde las coincidencias se convierten en matrimonios",
     description:
-      "Descubre cómo FrenchCubaWedding está creando hermosos comienzos para parejas de diferentes culturas",
+      "Descubre cómo FranceCubaWedding está creando hermosos comienzos para parejas de diferentes culturas",
   },
 };
 

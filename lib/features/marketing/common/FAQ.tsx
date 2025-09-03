@@ -8,9 +8,9 @@ import useLanguageStore from "@/lib/store/useLanguageStore";
 const translations = {
   en: [
     {
-      question: "Is FrenchCubaWedding only for French or Cuban users?",
+      question: "Is FranceCubaWedding only for French or Cuban users?",
       answer:
-        "No, FrenchCubaWedding is open to everyone, regardless of nationality. While the platform celebrates French and Cuban cultural values, we welcome users from all backgrounds who are seeking meaningful, committed relationships.",
+        "No, FranceCubaWedding is open to everyone, regardless of nationality. While the platform celebrates French and Cuban cultural values, we welcome users from all backgrounds who are seeking meaningful, committed relationships.",
     },
     {
       question: "What is a Featured Profile?",
@@ -23,9 +23,9 @@ const translations = {
         "A Verified Profile means the user's identity has been confirmed through our verification process. It adds trust and credibility, helping you feel more confident about who you're interacting with.",
     },
     {
-      question: "Is FrenchCubaWedding free to use?",
+      question: "Is FranceCubaWedding free to use?",
       answer:
-        "Yes, you can join and use FrenchCubaWedding for free. We also offer premium features that enhance your experience, such as boosting your profile visibility and accessing advanced filters.",
+        "Yes, you can join and use FranceCubaWedding for free. We also offer premium features that enhance your experience, such as boosting your profile visibility and accessing advanced filters.",
     },
     {
       question: "What’s the difference between Featured and Verified Profiles?",
@@ -41,9 +41,9 @@ const translations = {
   fr: [
     {
       question:
-        "FrenchCubaWedding est-il réservé aux utilisateurs français ou cubains ?",
+        "FranceCubaWedding est-il réservé aux utilisateurs français ou cubains ?",
       answer:
-        "Non, FrenchCubaWedding est ouvert à tous, quelle que soit la nationalité. Bien que la plateforme célèbre les valeurs culturelles françaises et cubaines, nous accueillons des utilisateurs de tous horizons recherchant des relations sérieuses et engagées.",
+        "Non, FranceCubaWedding est ouvert à tous, quelle que soit la nationalité. Bien que la plateforme célèbre les valeurs culturelles françaises et cubaines, nous accueillons des utilisateurs de tous horizons recherchant des relations sérieuses et engagées.",
     },
     {
       question: "Qu'est-ce qu'un profil en vedette ?",
@@ -56,9 +56,9 @@ const translations = {
         "Un profil vérifié signifie que l'identité de l'utilisateur a été confirmée via notre processus de vérification. Cela ajoute confiance et crédibilité, vous aidant à interagir en toute sécurité.",
     },
     {
-      question: "FrenchCubaWedding est-il gratuit ?",
+      question: "FranceCubaWedding est-il gratuit ?",
       answer:
-        "Oui, vous pouvez rejoindre et utiliser FrenchCubaWedding gratuitement. Nous proposons également des fonctionnalités premium qui améliorent votre expérience, comme la visibilité du profil et des filtres avancés.",
+        "Oui, vous pouvez rejoindre et utiliser FranceCubaWedding gratuitement. Nous proposons également des fonctionnalités premium qui améliorent votre expérience, comme la visibilité du profil et des filtres avancés.",
     },
     {
       question:
@@ -74,9 +74,9 @@ const translations = {
   ],
   es: [
     {
-      question: "¿FrenchCubaWedding es solo para usuarios franceses o cubanos?",
+      question: "¿FranceCubaWedding es solo para usuarios franceses o cubanos?",
       answer:
-        "No, FrenchCubaWedding está abierto a todos, sin importar la nacionalidad. Aunque la plataforma celebra los valores culturales franceses y cubanos, damos la bienvenida a usuarios de todos los orígenes que buscan relaciones significativas y comprometidas.",
+        "No, FranceCubaWedding está abierto a todos, sin importar la nacionalidad. Aunque la plataforma celebra los valores culturales franceses y cubanos, damos la bienvenida a usuarios de todos los orígenes que buscan relaciones significativas y comprometidas.",
     },
     {
       question: "¿Qué es un Perfil Destacado?",
@@ -89,9 +89,9 @@ const translations = {
         "Un Perfil Verificado significa que la identidad del usuario ha sido confirmada a través de nuestro proceso de verificación. Esto añade confianza y credibilidad, ayudándote a interactuar con seguridad.",
     },
     {
-      question: "¿FrenchCubaWedding es gratis?",
+      question: "¿FranceCubaWedding es gratis?",
       answer:
-        "Sí, puedes unirte y usar FrenchCubaWedding de forma gratuita. También ofrecemos funciones premium que mejoran tu experiencia, como aumentar la visibilidad del perfil y acceder a filtros avanzados.",
+        "Sí, puedes unirte y usar FranceCubaWedding de forma gratuita. También ofrecemos funciones premium que mejoran tu experiencia, como aumentar la visibilidad del perfil y acceder a filtros avanzados.",
     },
     {
       question:

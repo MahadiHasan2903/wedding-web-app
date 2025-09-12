@@ -20,6 +20,7 @@ import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
 import { Language } from "@/lib/types/common/common.types";
 import useLanguageStore from "@/lib/store/useLanguageStore";
+import useLocationStore from "@/lib/store/useLocationStore";
 import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import { crown, avatar, hamburger } from "@/lib/components/image/icons";
 
@@ -64,17 +65,33 @@ const translations: Record<Language, Record<string, string>> = {
   },
 };
 
-const Header = () => {
+interface PropsType {
+  userLocationDetails: {
+    ip: string;
+    country: string;
+    countryCode: string;
+  };
+}
+
+const Header = ({ userLocationDetails }: PropsType) => {
   const pathname = usePathname();
   const { data: session } = useSession();
   const { language } = useLanguageStore();
   const t = translations[language];
+  const { setLocation } = useLocationStore();
   const menuRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const accessToken = session?.user.accessToken ?? null;
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+
+  // Set user location in store on mount
+  useEffect(() => {
+    if (userLocationDetails) {
+      setLocation(userLocationDetails);
+    }
+  }, [userLocationDetails, setLocation]);
 
   // Determine if the current user is an admin by checking userRole from session data
   const isAdmin = useMemo(

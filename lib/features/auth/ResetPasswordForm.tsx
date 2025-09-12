@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  resetPasswordSchema,
   ResetPasswordType,
+  resetPasswordSchema,
 } from "@/lib/schema/auth/auth.schema";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,7 @@ import { google } from "@/lib/components/image/icons";
 import { SubHeading } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLocationStore from "@/lib/store/useLocationStore";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { resetPasswordAction } from "@/lib/action/auth/auth.action";
@@ -70,15 +71,27 @@ const translations = {
 interface PropsType {
   email: string;
   otp: string;
+  userLocationDetails: {
+    ip: string;
+    country: string;
+    countryCode: string;
+  };
 }
 
-const ResetPasswordForm = ({ email, otp }: PropsType) => {
+const ResetPasswordForm = ({ email, otp, userLocationDetails }: PropsType) => {
   const router = useRouter();
   const { language } = useLanguageStore();
   const t = translations[language];
-
+  const { setLocation } = useLocationStore();
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState<string>("");
+
+  // Set user location in store on mount
+  useEffect(() => {
+    if (userLocationDetails) {
+      setLocation(userLocationDetails);
+    }
+  }, [userLocationDetails, setLocation]);
 
   // Setup react-hook-form with zod validation
   const {

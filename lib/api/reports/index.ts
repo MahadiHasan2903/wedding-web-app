@@ -1,10 +1,10 @@
 import { fetchTyped } from "../client";
-import { BASE_URL } from "@/lib/config/constants";
-import { Report } from "@/lib/types/reports/reports.types";
 import {
   PaginatedResponse,
   ReportFilterOptions,
 } from "@/lib/types/common/common.types";
+import { BASE_URL } from "@/lib/config/constants";
+import { Report } from "@/lib/types/reports/reports.types";
 
 type GetReportsListResponse = PaginatedResponse<Report>;
 
@@ -51,7 +51,7 @@ const getAllReports = async (
   const response = await fetchTyped<GetReportsListResponse>(url, {
     method: "GET",
     headers: {
-      Authorization: accessToken ? `Bearer ${accessToken}` : "",
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 
@@ -107,7 +107,7 @@ const getReportDetails = async (reportId: string, accessToken?: string) => {
     {
       method: "GET",
       headers: {
-        Authorization: accessToken ? `Bearer ${accessToken}` : "",
+        Authorization: `Bearer ${accessToken}`,
       },
     }
   );

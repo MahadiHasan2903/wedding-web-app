@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   registrationRequestSchema,
   RegistrationRequestType,
 } from "@/lib/schema/auth/auth.schema";
 import {
-  accountRegistrationConfirmationAction,
   accountRegistrationRequestAction,
+  accountRegistrationConfirmationAction,
 } from "@/lib/action/auth/auth.action";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,7 @@ import { SubHeading } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import useLanguageStore from "@/lib/store/useLanguageStore";
+import useLocationStore from "@/lib/store/useLocationStore";
 import { UnderlineInput } from "@/lib/components/form-elements";
 
 const translations = {
@@ -79,16 +80,31 @@ const translations = {
   },
 };
 
-const RegistrationForm = () => {
+interface PropsType {
+  userLocationDetails: {
+    ip: string;
+    country: string;
+    countryCode: string;
+  };
+}
+
+const RegistrationForm = ({ userLocationDetails }: PropsType) => {
   const router = useRouter();
   const { language } = useLanguageStore();
   const t = translations[language];
-
+  const { setLocation } = useLocationStore();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState<string>("");
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [passwordError, setPasswordError] = useState<string>("");
   const [openVerificationModal, setOpenVerificationModal] = useState(false);
+
+  // Set user location in store on mount
+  useEffect(() => {
+    if (userLocationDetails) {
+      setLocation(userLocationDetails);
+    }
+  }, [userLocationDetails, setLocation]);
 
   const {
     reset,

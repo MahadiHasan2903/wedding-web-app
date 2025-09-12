@@ -6,6 +6,7 @@ import PaymentFormModal from "./payment/PaymentFormModal";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import { SectionTitle, HeadingLine } from "@/lib/components/heading";
 import { MembershipPackage } from "@/lib/types/membership/ms-package.types";
+import useLocationStore from "@/lib/store/useLocationStore";
 
 interface PropsType {
   PAYPAL_CLIENT_ID?: string;
@@ -43,6 +44,8 @@ const MembershipPlans = ({
   const [open, setOpen] = useState(false);
   const { language } = useLanguageStore();
   const t = translations[language];
+  const { getLocation } = useLocationStore();
+  const userLocation = getLocation();
   const [loadingPackageId, setLoadingPackageId] = useState<number | null>(null);
 
   return (
@@ -61,6 +64,13 @@ const MembershipPlans = ({
       <div className="w-full flex flex-wrap gap-[18px] lg:gap-[24px] my-[30px] lg:my-[50px] mx-auto">
         {allMsPackages
           .filter((plan) => plan.status === "active")
+          .filter((plan) => {
+            // Hide id=1 if user is not from Cuba
+            if (plan.id === 1 && userLocation?.country !== "CU") {
+              return false;
+            }
+            return true;
+          })
           .slice()
           .sort((a, b) => a.id - b.id)
           .map((plan) => (
@@ -76,6 +86,7 @@ const MembershipPlans = ({
             />
           ))}
       </div>
+
       {open && (
         <PaymentFormModal
           open={open}

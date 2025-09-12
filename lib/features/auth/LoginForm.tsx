@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
 import VerificationModal from "./VerificationModal";
-import { signIn, useSession } from "next-auth/react";
 import { SubHeading } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,12 +14,19 @@ import { google } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import useLanguageStore from "@/lib/store/useLanguageStore";
+import useLocationStore from "@/lib/store/useLocationStore";
 import ForgetPasswordReqModal from "./ForgetPasswordReqModal";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { loginSchema, LoginType } from "@/lib/schema/auth/auth.schema";
 import { forgetPasswordConfirmationAction } from "@/lib/action/auth/auth.action";
+import { hasActiveVipMembership } from "@/lib/utils/helpers";
 
 interface PropsType {
+  userLocationDetails: {
+    ip: string;
+    country: string;
+    countryCode: string;
+  };
   callbackUrl?: string;
 }
 
@@ -80,18 +87,24 @@ const translations = {
   },
 };
 
-const LoginForm = ({ callbackUrl }: PropsType) => {
+const LoginForm = ({ callbackUrl, userLocationDetails }: PropsType) => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState<string>("");
+  const { getLocation, setLocation } = useLocationStore();
   const [otp, setOtp] = useState<string[]>(Array(6).fill(""));
   const [openForgetPasswordModal, setOpenForgetPasswordModal] = useState(false);
   const [openOtpVerificationModal, setOpenOtpVerificationModal] =
     useState(false);
 
-  const { language } = useLanguageStore();
-  const t = translations[language];
+  // Set user location in store on mount
+  useEffect(() => {
+    if (userLocationDetails) {
+      setLocation(userLocationDetails);
+    }
+  }, [userLocationDetails, setLocation]);
 
   const {
     reset,
@@ -102,6 +115,7 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
     resolver: zodResolver(loginSchema),
   });
 
+  // Handle login form submission
   const handleLoginSubmit = async (data: LoginType) => {
     try {
       setLoading(true);
@@ -110,22 +124,25 @@ const LoginForm = ({ callbackUrl }: PropsType) => {
         redirect: false,
       });
 
-      if (response?.ok) {
-        toast.success(t.loginSuccess);
-        const updatedSession = await getSession();
-        const user = updatedSession?.user;
-        const accessToken = user?.accessToken;
-        const isAdmin = user?.data.userRole === "admin";
-
-        if (callbackUrl) {
-          router.push(callbackUrl);
-        } else if (accessToken) {
-          router.push(isAdmin ? "/overview" : "/my-profile");
-        } else {
-          router.push("/");
-        }
-      } else {
+      if (!response?.ok) {
         toast.error(t.loginFailed);
+        return;
+      }
+
+      toast.success(t.loginSuccess);
+
+      const updatedSession = await getSession();
+      const user = updatedSession?.user;
+      const isAdmin = user?.data.userRole === "admin";
+      const userLocation = getLocation();
+      const isVipUser = hasActiveVipMembership(user?.data);
+
+      if (callbackUrl) {
+        router.push(callbackUrl);
+      } else if (userLocation?.country !== "CU" && !isVipUser) {
+        router.push("/pricing");
+      } else {
+        router.push(isAdmin ? "/overview" : "/my-profile");
       }
     } catch {
       toast.error(t.loginError);

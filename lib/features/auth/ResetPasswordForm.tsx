@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
 import { SubHeading } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
+import { Location } from "@/lib/types/common/common.types";
 import { ImageWithFallback } from "@/lib/components/image";
 import useLocationStore from "@/lib/store/useLocationStore";
 import useLanguageStore from "@/lib/store/useLanguageStore";
@@ -71,11 +72,7 @@ const translations = {
 interface PropsType {
   email: string;
   otp: string;
-  userLocationDetails: {
-    ip: string;
-    country: string;
-    countryCode: string;
-  };
+  userLocationDetails: Location;
 }
 
 const ResetPasswordForm = ({ email, otp, userLocationDetails }: PropsType) => {

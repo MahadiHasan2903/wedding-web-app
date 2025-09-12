@@ -13,20 +13,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { google } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import { Location } from "@/lib/types/common/common.types";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import useLocationStore from "@/lib/store/useLocationStore";
+import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import ForgetPasswordReqModal from "./ForgetPasswordReqModal";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { loginSchema, LoginType } from "@/lib/schema/auth/auth.schema";
 import { forgetPasswordConfirmationAction } from "@/lib/action/auth/auth.action";
-import { hasActiveVipMembership } from "@/lib/utils/helpers";
 
 interface PropsType {
-  userLocationDetails: {
-    ip: string;
-    country: string;
-    countryCode: string;
-  };
+  userLocationDetails: Location;
   callbackUrl?: string;
 }
 

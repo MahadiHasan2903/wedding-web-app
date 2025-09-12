@@ -18,10 +18,10 @@ import { signOut, useSession } from "next-auth/react";
 import { CommonButton } from "@/lib/components/buttons";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
-import { Language } from "@/lib/types/common/common.types";
 import useLanguageStore from "@/lib/store/useLanguageStore";
 import useLocationStore from "@/lib/store/useLocationStore";
 import { hasActiveVipMembership } from "@/lib/utils/helpers";
+import { Language, Location } from "@/lib/types/common/common.types";
 import { crown, avatar, hamburger } from "@/lib/components/image/icons";
 
 const navItems = [
@@ -66,11 +66,7 @@ const translations: Record<Language, Record<string, string>> = {
 };
 
 interface PropsType {
-  userLocationDetails: {
-    ip: string;
-    country: string;
-    countryCode: string;
-  };
+  userLocationDetails: Location;
 }
 
 const Header = ({ userLocationDetails }: PropsType) => {

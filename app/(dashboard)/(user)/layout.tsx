@@ -17,7 +17,7 @@ const UserDashboardLayout = async ({ children }: Readonly<PropsType>) => {
     redirect("/");
   }
 
-  if (!isVipUser && userLocationDetails?.countryCode !== "CU") {
+  if (!isVipUser && userLocationDetails?.country !== "CU") {
     redirect("/pricing");
   }
 

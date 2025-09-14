@@ -13,9 +13,38 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 import { AstrologicalSign, LoveLanguage } from "@/lib/enums/users.enum";
 import { Textarea, UnderlineSelectField } from "@/lib/components/form-elements";
+
+// Translation dictionary
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    title: "Other Information",
+    astrologicalSign: "Astrological Sign",
+    loveLanguage: "Love Language",
+    favoriteQuote: "Favorite Quote",
+    save: "Save",
+    cancel: "Cancel",
+  },
+  fr: {
+    title: "Autres informations",
+    astrologicalSign: "Signe astrologique",
+    loveLanguage: "Langage de l'amour",
+    favoriteQuote: "Citation préférée",
+    save: "Enregistrer",
+    cancel: "Annuler",
+  },
+  es: {
+    title: "Otra información",
+    astrologicalSign: "Signo astrológico",
+    loveLanguage: "Lenguaje del amor",
+    favoriteQuote: "Frase favorita",
+    save: "Guardar",
+    cancel: "Cancelar",
+  },
+};
 
 interface PropsType {
   open: boolean;
@@ -29,6 +58,9 @@ const OtherInformationUpdateForm = ({
   userProfile,
 }: PropsType) => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const [loading, setLoading] = useState(false);
 
   // Setup react-hook-form with Zod validation and initialize default values
@@ -91,8 +123,11 @@ const OtherInformationUpdateForm = ({
           onSubmit={handleSubmit(handleUpdateProfile)}
           className="w-full h-full flex flex-col gap-[25px]"
         >
-          <CardTitle title="Other Information" />
+          {/* Form title */}
+          <CardTitle title={t.title} />
+
           <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
+            {/* Astrological Sign select field */}
             <Controller
               name="astrologicalSign"
               control={control}
@@ -100,13 +135,14 @@ const OtherInformationUpdateForm = ({
               render={({ field }) => (
                 <UnderlineSelectField
                   {...field}
-                  label="Astrological Sign"
+                  label={t.astrologicalSign}
                   name="astrologicalSign"
                   options={enumToOptions(AstrologicalSign)}
                 />
               )}
             />
 
+            {/* Love Language select field */}
             <Controller
               name="loveLanguage"
               control={control}
@@ -114,13 +150,14 @@ const OtherInformationUpdateForm = ({
               render={({ field }) => (
                 <UnderlineSelectField
                   {...field}
-                  label="Love Language"
+                  label={t.loveLanguage}
                   name="loveLanguage"
                   options={enumToOptions(LoveLanguage)}
                 />
               )}
             />
 
+            {/* Favorite Quote textarea */}
             <Controller
               name="favoriteQuote"
               control={control}
@@ -128,9 +165,9 @@ const OtherInformationUpdateForm = ({
               render={({ field }) => (
                 <Textarea
                   {...field}
-                  label="Favorite Quote"
+                  label={t.favoriteQuote}
                   rows={6}
-                  placeholder="Enter your favorite quote"
+                  placeholder={`Enter your ${t.favoriteQuote.toLowerCase()}`}
                   error={errors.favoriteQuote?.message}
                   className="!p-[16px] bg-light text-[12px] lg:text-[14px] "
                 />
@@ -142,13 +179,13 @@ const OtherInformationUpdateForm = ({
           <div className="flex items-center gap-[30px] text-[14px]">
             <CommonButton
               type="submit"
-              label={`${loading ? "Saving..." : "Save"}`}
+              label={`${loading ? "Saving..." : t.save}`}
               disabled={loading}
               className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
             <CommonButton
               onClick={() => setOpen(false)}
-              label="Cancel"
+              label={t.cancel}
               className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
           </div>

@@ -4,10 +4,10 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   BodyType,
   HasPet,
-  DietaryPreference,
+  SmokingHabit,
   DrinkingHabit,
   HealthCondition,
-  SmokingHabit,
+  DietaryPreference,
 } from "@/lib/enums/users.enum";
 import {
   UpdateUserType,
@@ -25,12 +25,68 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
+
+// Translation dictionary
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    title: "Personal Attributes & Habits",
+    height: "Height (cm)",
+    weight: "Weight (kg)",
+    bodyType: "Body Type",
+    drinkingHabit: "Drinking Habit",
+    smokingHabit: "Smoking Habit",
+    dietaryPreference: "Dietary Preference",
+    children: "Children",
+    pets: "Pets",
+    healthCondition: "Health Condition",
+    save: "Save",
+    cancel: "Cancel",
+    placeholderHeight: "Enter your height",
+    placeholderWeight: "Enter your weight",
+    placeholderChildren: "Enter number of children",
+  },
+  fr: {
+    title: "Caractéristiques personnelles et habitudes",
+    height: "Taille (cm)",
+    weight: "Poids (kg)",
+    bodyType: "Type de corps",
+    drinkingHabit: "Habitude de boire",
+    smokingHabit: "Habitude de fumer",
+    dietaryPreference: "Préférence alimentaire",
+    children: "Enfants",
+    pets: "Animaux domestiques",
+    healthCondition: "État de santé",
+    save: "Enregistrer",
+    cancel: "Annuler",
+    placeholderHeight: "Entrez votre taille",
+    placeholderWeight: "Entrez votre poids",
+    placeholderChildren: "Entrez le nombre d'enfants",
+  },
+  es: {
+    title: "Atributos personales y hábitos",
+    height: "Altura (cm)",
+    weight: "Peso (kg)",
+    bodyType: "Tipo de cuerpo",
+    drinkingHabit: "Hábito de beber",
+    smokingHabit: "Hábito de fumar",
+    dietaryPreference: "Preferencia alimentaria",
+    children: "Niños",
+    pets: "Mascotas",
+    healthCondition: "Condición de salud",
+    save: "Guardar",
+    cancel: "Cancelar",
+    placeholderHeight: "Ingrese su altura",
+    placeholderWeight: "Ingrese su peso",
+    placeholderChildren: "Ingrese número de niños",
+  },
+};
 
 interface PropsType {
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
   userProfile: User;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const PersonalAttributesUpdateForm = ({
@@ -39,6 +95,8 @@ const PersonalAttributesUpdateForm = ({
   userProfile,
 }: PropsType) => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
 
   // Setup react-hook-form with Zod validation and initialize default values
@@ -69,21 +127,18 @@ const PersonalAttributesUpdateForm = ({
 
     const formData = new FormData();
 
-    // Numeric fields (always append if number is valid)
-    if (data.heightCm !== null && data.heightCm !== undefined) {
+    // Numeric fields
+    if (data.heightCm != null)
       formData.append("heightCm", String(data.heightCm));
-    }
-    if (data.weightKg !== null && data.weightKg !== undefined) {
+    if (data.weightKg != null)
       formData.append("weightKg", String(data.weightKg));
-    }
-    if (data.children !== null && data.children !== undefined) {
+    if (data.children != null)
       formData.append("children", String(data.children));
-    }
 
-    // Boolean field (always append)
+    // Boolean field
     formData.append("hasPet", String(data.hasPet === "yes"));
 
-    // String fields (append only if non-empty)
+    // String fields
     const fields: Partial<UpdateUserType> = {
       bodyType: data.bodyType,
       smokingHabit: data.smokingHabit,
@@ -93,13 +148,8 @@ const PersonalAttributesUpdateForm = ({
     };
 
     Object.entries(fields).forEach(([key, value]) => {
-      if (
-        value !== null &&
-        value !== undefined &&
-        String(value).trim() !== ""
-      ) {
+      if (value != null && String(value).trim() !== "")
         formData.append(key, String(value));
-      }
     });
 
     const updateProfileResponse = await updateUserProfileAction(formData);
@@ -127,7 +177,7 @@ const PersonalAttributesUpdateForm = ({
           onSubmit={handleSubmit(handleUpdateProfile)}
           className="w-full h-full flex flex-col gap-[25px]"
         >
-          <CardTitle title="Personal Attributes & Habits" />
+          <CardTitle title={t.title} />
           <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
             <div className="w-full flex flex-col md:flex-row gap-[35px]">
               <Controller
@@ -137,11 +187,10 @@ const PersonalAttributesUpdateForm = ({
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Height (cm)"
+                    label={t.height}
                     type="number"
-                    name="heightCm"
                     value={field.value === 0 ? "" : field.value}
-                    placeholder="Enter your height"
+                    placeholder={t.placeholderHeight}
                     error={errors.heightCm?.message}
                   />
                 )}
@@ -153,11 +202,10 @@ const PersonalAttributesUpdateForm = ({
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Weight (kg)"
+                    label={t.weight}
                     type="number"
-                    name="weightKg"
                     value={field.value === 0 ? "" : field.value}
-                    placeholder="Enter your weight"
+                    placeholder={t.placeholderWeight}
                     error={errors.weightKg?.message}
                   />
                 )}
@@ -173,10 +221,9 @@ const PersonalAttributesUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Body Type"
-                      name="bodyType"
+                      label={t.bodyType}
                       options={enumToOptions(BodyType)}
-                      placeholder="Select body type"
+                      placeholder={t.bodyType}
                     />
                   )}
                 />
@@ -190,14 +237,15 @@ const PersonalAttributesUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Health Condition"
-                      name="healthCondition"
+                      label={t.healthCondition}
                       options={enumToOptions(HealthCondition)}
+                      placeholder={t.healthCondition}
                     />
                   )}
                 />
               </div>
             </div>
+
             <div className="w-full flex flex-col md:flex-row gap-[35px]">
               <div className="w-full md:w-1/2">
                 <Controller
@@ -207,10 +255,9 @@ const PersonalAttributesUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Drinking Habit"
-                      name="drinkingHabit"
+                      label={t.drinkingHabit}
                       options={enumToOptions(DrinkingHabit)}
-                      placeholder="Select drinking habit"
+                      placeholder={t.drinkingHabit}
                     />
                   )}
                 />
@@ -224,15 +271,15 @@ const PersonalAttributesUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Smoking Habit"
-                      name="smokingHabit"
+                      label={t.smokingHabit}
                       options={enumToOptions(SmokingHabit)}
-                      placeholder="Select smoking habit"
+                      placeholder={t.smokingHabit}
                     />
                   )}
                 />
               </div>
             </div>
+
             <div className="w-full flex flex-col md:flex-row gap-[35px]">
               <div className="w-full md:w-1/2">
                 <Controller
@@ -242,10 +289,9 @@ const PersonalAttributesUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Dietary Preference"
-                      name="dietaryPreference"
+                      label={t.dietaryPreference}
                       options={enumToOptions(DietaryPreference)}
-                      placeholder="Select dietary preference"
+                      placeholder={t.dietaryPreference}
                     />
                   )}
                 />
@@ -259,14 +305,15 @@ const PersonalAttributesUpdateForm = ({
                     <UnderlineSelectField
                       {...field}
                       value={String(field.value ?? "")}
-                      label="Pets"
-                      name="hasPet"
+                      label={t.pets}
                       options={enumToOptions(HasPet)}
+                      placeholder={t.pets}
                     />
                   )}
                 />
               </div>
             </div>
+
             <Controller
               name="children"
               control={control}
@@ -274,28 +321,27 @@ const PersonalAttributesUpdateForm = ({
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Children"
+                  label={t.children}
                   type="text"
-                  name="children"
-                  placeholder="Enter how many children do you have"
                   value={field.value === 0 ? "" : field.value}
+                  placeholder={t.placeholderChildren}
                   error={errors.children?.message}
                 />
               )}
             />
           </div>
 
-          {/* Form submit and cancel buttons */}
+          {/* Submit & Cancel */}
           <div className="flex items-center gap-[30px] text-[14px]">
             <CommonButton
               type="submit"
-              label={`${loading ? "Saving..." : "Save"}`}
+              label={`${loading ? "Saving..." : t.save}`}
               disabled={loading}
               className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
             <CommonButton
               onClick={() => setOpen(false)}
-              label="Cancel"
+              label={t.cancel}
               className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
           </div>

@@ -23,6 +23,77 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    lifestyleBackground: "Lifestyle & Background",
+    education: "Education",
+    institution: "Institution Name",
+    profession: "Profession",
+    company: "Company Name",
+    monthlyIncome: "Monthly Income ($)",
+    religion: "Religion / Beliefs",
+    politicalView: "Political View",
+    livingArrangement: "Living Arrangements",
+    placeholderEducation: "Enter education qualification",
+    placeholderInstitution: "Enter institution name",
+    placeholderProfession: "Enter your profession",
+    placeholderCompany: "Enter company name",
+    placeholderMonthlyIncome: "Enter monthly income (USD)",
+    placeholderReligion: "Select religion",
+    placeholderPoliticalView: "Select political view",
+    placeholderLivingArrangement: "Select living arrangement",
+    save: "Save",
+    saving: "Saving...",
+    cancel: "Cancel",
+  },
+  fr: {
+    lifestyleBackground: "Mode de vie & Contexte",
+    education: "Éducation",
+    institution: "Établissement",
+    profession: "Profession",
+    company: "Entreprise",
+    monthlyIncome: "Revenu mensuel ($)",
+    religion: "Religion / Croyances",
+    politicalView: "Orientation politique",
+    livingArrangement: "Situation de vie",
+    placeholderEducation: "Entrez le niveau d'éducation",
+    placeholderInstitution: "Entrez le nom de l'établissement",
+    placeholderProfession: "Entrez votre profession",
+    placeholderCompany: "Entrez le nom de l'entreprise",
+    placeholderMonthlyIncome: "Entrez le revenu mensuel (USD)",
+    placeholderReligion: "Sélectionnez la religion",
+    placeholderPoliticalView: "Sélectionnez l'orientation politique",
+    placeholderLivingArrangement: "Sélectionnez la situation de vie",
+    save: "Enregistrer",
+    saving: "Enregistrement...",
+    cancel: "Annuler",
+  },
+  es: {
+    lifestyleBackground: "Estilo de vida y antecedentes",
+    education: "Educación",
+    institution: "Institución",
+    profession: "Profesión",
+    company: "Empresa",
+    monthlyIncome: "Ingreso mensual ($)",
+    religion: "Religión / Creencias",
+    politicalView: "Ideología política",
+    livingArrangement: "Situación de vivienda",
+    placeholderEducation: "Ingrese la educación",
+    placeholderInstitution: "Ingrese el nombre de la institución",
+    placeholderProfession: "Ingrese su profesión",
+    placeholderCompany: "Ingrese el nombre de la empresa",
+    placeholderMonthlyIncome: "Ingrese el ingreso mensual (USD)",
+    placeholderReligion: "Seleccione la religión",
+    placeholderPoliticalView: "Seleccione la ideología política",
+    placeholderLivingArrangement: "Seleccione la situación de vivienda",
+    save: "Guardar",
+    saving: "Guardando...",
+    cancel: "Cancelar",
+  },
+};
 
 interface PropsType {
   open: boolean;
@@ -37,6 +108,10 @@ const BackgroundInfoUpdateForm = ({
 }: PropsType) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+
+  // Current language
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   // Setup react-hook-form with Zod validation and initialize default values
   const {
@@ -65,7 +140,6 @@ const BackgroundInfoUpdateForm = ({
 
     const formData = new FormData();
 
-    // Map the fields
     const fields: Partial<UpdateUserType> = {
       highestEducation: data.highestEducation,
       institutionName: data.institutionName,
@@ -113,7 +187,7 @@ const BackgroundInfoUpdateForm = ({
           onSubmit={handleSubmit(handleUpdateProfile)}
           className="w-full h-full flex flex-col gap-[25px]"
         >
-          <CardTitle title="Lifestyle & Background" />
+          <CardTitle title={t.lifestyleBackground} />
           <div className="w-full h-full max-h-[400px] overflow-y-auto flex flex-col gap-[22px]">
             <div className="w-full flex flex-col md:flex-row gap-[35px]">
               <Controller
@@ -123,10 +197,10 @@ const BackgroundInfoUpdateForm = ({
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Education"
+                    label={t.education}
                     type="text"
                     name="highestEducation"
-                    placeholder="Enter education qualification"
+                    placeholder={t.placeholderEducation}
                     error={errors.highestEducation?.message}
                   />
                 )}
@@ -138,10 +212,10 @@ const BackgroundInfoUpdateForm = ({
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Institution Name"
+                    label={t.institution}
                     type="text"
                     name="institutionName"
-                    placeholder="Enter institution name"
+                    placeholder={t.placeholderInstitution}
                     error={errors.institutionName?.message}
                   />
                 )}
@@ -156,10 +230,10 @@ const BackgroundInfoUpdateForm = ({
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Profession"
+                    label={t.profession}
                     type="text"
                     name="profession"
-                    placeholder="Enter your profession"
+                    placeholder={t.placeholderProfession}
                     error={errors.profession?.message}
                   />
                 )}
@@ -171,15 +245,16 @@ const BackgroundInfoUpdateForm = ({
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Company Name"
+                    label={t.company}
                     type="text"
                     name="companyName"
-                    placeholder="Enter company name"
+                    placeholder={t.placeholderCompany}
                     error={errors.companyName?.message}
                   />
                 )}
               />
             </div>
+
             <div className="w-full flex flex-col md:flex-row gap-[35px]">
               <div className="w-full md:w-1/2">
                 <Controller
@@ -189,11 +264,11 @@ const BackgroundInfoUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineInput
                       {...field}
-                      label="Monthly Income ($)"
+                      label={t.monthlyIncome}
                       type="number"
                       name="monthlyIncome"
                       value={field.value === 0 ? "" : field.value}
-                      placeholder="Enter monthly income (USD)"
+                      placeholder={t.placeholderMonthlyIncome}
                       error={errors.monthlyIncome?.message}
                     />
                   )}
@@ -208,15 +283,16 @@ const BackgroundInfoUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Religion / Beliefs"
+                      label={t.religion}
                       name="religion"
                       options={enumToOptions(ReligionPreference)}
-                      placeholder="Select religion"
+                      placeholder={t.placeholderReligion}
                     />
                   )}
                 />
               </div>
             </div>
+
             <div className="w-full flex flex-col md:flex-row gap-[35px]">
               <div className="w-full md:w-1/2">
                 <Controller
@@ -226,10 +302,10 @@ const BackgroundInfoUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Political View"
+                      label={t.politicalView}
                       name="politicalView"
                       options={enumToOptions(PoliticalView)}
-                      placeholder="Select political view"
+                      placeholder={t.placeholderPoliticalView}
                     />
                   )}
                 />
@@ -243,10 +319,10 @@ const BackgroundInfoUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Living Arrangements"
+                      label={t.livingArrangement}
                       name="livingArrangement"
                       options={enumToOptions(LivingArrangement)}
-                      placeholder="Select living arrangement"
+                      placeholder={t.placeholderLivingArrangement}
                     />
                   )}
                 />
@@ -258,13 +334,13 @@ const BackgroundInfoUpdateForm = ({
           <div className="flex items-center gap-[30px] text-[14px]">
             <CommonButton
               type="submit"
-              label={`${loading ? "Saving..." : "Save"}`}
+              label={`${loading ? t.saving : t.save}`}
               disabled={loading}
               className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
             <CommonButton
               onClick={() => setOpen(false)}
-              label="Cancel"
+              label={t.cancel}
               className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
           </div>

@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick.css";
 import { Inter } from "next/font/google";
 import "slick-carousel/slick/slick-theme.css";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { Bounce, ToastContainer } from "react-toastify";
 import AuthProvider from "@/lib/providers/AuthProvider";
 import { APPLICATION_NAME } from "@/lib/config/constants";
 
@@ -31,13 +31,15 @@ export default function RootLayout({
             <div className="w-full">{children}</div>
             <ToastContainer
               position="top-right"
-              autoClose={2000}
+              autoClose={3000}
               hideProgressBar={false}
               newestOnTop={false}
-              closeOnClick
+              closeOnClick={false}
               rtl={false}
               draggable
-              theme="light"
+              pauseOnHover
+              theme="colored"
+              transition={Bounce}
               style={{
                 zIndex: 9999999,
               }}

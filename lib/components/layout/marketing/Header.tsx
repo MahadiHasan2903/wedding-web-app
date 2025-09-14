@@ -10,26 +10,84 @@ import React, {
 import Link from "next/link";
 import { toast } from "react-toastify";
 import { RxCross1 } from "react-icons/rx";
-import { navItems } from "@/lib/utils/data";
 import { usePathname } from "next/navigation";
 import UserMenuDropdown from "./UserMenuDropdown";
+import LanguageDropdown from "./LanguageDropdown";
 import { LIGHT_LOGO } from "@/lib/config/constants";
 import { signOut, useSession } from "next-auth/react";
 import { CommonButton } from "@/lib/components/buttons";
 import vipRing from "@/public/images/common/vip-ring.png";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+import useLocationStore from "@/lib/store/useLocationStore";
 import { hasActiveVipMembership } from "@/lib/utils/helpers";
+import { Language, Location } from "@/lib/types/common/common.types";
 import { crown, avatar, hamburger } from "@/lib/components/image/icons";
 
-const Header = () => {
+const navItems = [
+  { key: "home", href: "/" },
+  { key: "pricing", href: "/pricing" },
+  { key: "findMatch", href: "/find-match" },
+  { key: "about", href: "/about" },
+  { key: "contact", href: "/contact" },
+];
+
+const translations: Record<Language, Record<string, string>> = {
+  en: {
+    home: "Home",
+    pricing: "Pricing",
+    findMatch: "Find Match",
+    about: "About",
+    contact: "Contact",
+    joinNow: "Join Now",
+    signIn: "Sign In",
+    managePlan: "Manage Plan",
+  },
+  fr: {
+    home: "Accueil",
+    pricing: "Tarifs",
+    findMatch: "Trouver un Partenaire",
+    about: "À propos",
+    contact: "Contact",
+    joinNow: "S'inscrire",
+    signIn: "Se connecter",
+    managePlan: "Gérer le Plan",
+  },
+  es: {
+    home: "Inicio",
+    pricing: "Precios",
+    findMatch: "Encontrar pareja",
+    about: "Acerca de",
+    contact: "Contacto",
+    joinNow: "Únete ahora",
+    signIn: "Iniciar sesión",
+    managePlan: "Gestionar Plan",
+  },
+};
+
+interface PropsType {
+  userLocationDetails: Location;
+}
+
+const Header = ({ userLocationDetails }: PropsType) => {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const accessToken = session?.user.accessToken ?? null;
+  const { language } = useLanguageStore();
+  const t = translations[language];
+  const { setLocation } = useLocationStore();
   const menuRef = useRef<HTMLDivElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const accessToken = session?.user.accessToken ?? null;
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
+
+  // Set user location in store on mount
+  useEffect(() => {
+    if (userLocationDetails) {
+      setLocation(userLocationDetails);
+    }
+  }, [userLocationDetails, setLocation]);
 
   // Determine if the current user is an admin by checking userRole from session data
   const isAdmin = useMemo(
@@ -119,7 +177,7 @@ const Header = () => {
             />
           </Link>
           <nav className="flex items-center gap-12 w-full">
-            {navItems.map(({ href, label }) => (
+            {navItems.map(({ href, key }) => (
               <Link
                 key={href}
                 href={href}
@@ -127,7 +185,7 @@ const Header = () => {
                   pathname === href ? "text-vipHeavy" : ""
                 }`}
               >
-                {label}
+                {t[key]}
               </Link>
             ))}
           </nav>
@@ -136,69 +194,75 @@ const Header = () => {
         <div className="flex justify-end relative">
           {accessToken ? (
             <div className="flex items-center gap-6">
-              <CommonButton
-                label="Manage Plan"
-                href="/pricing"
-                className="flex gap-2 items-center bg-transparent border border-vipHeavy text-vipLight px-5 py-3 rounded-lg"
-                startIcon={
-                  <ImageWithFallback
-                    src={crown}
-                    width={15}
-                    height={15}
-                    alt="crown"
-                  />
-                }
-              />
-              <div className="relative">
-                <button
-                  onClick={toggleMenu}
-                  className="w-12 h-12 relative flex items-center justify-center"
-                  aria-haspopup="true"
-                  aria-expanded={isMenuOpen}
-                >
-                  <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+              <div className="flex items-center gap-3">
+                <CommonButton
+                  label={t.managePlan}
+                  href="/pricing"
+                  className="flex gap-2 items-center bg-transparent border border-vipHeavy text-vipLight px-5 py-3 rounded-lg"
+                  startIcon={
                     <ImageWithFallback
-                      src={session?.user.data.profilePicture?.url}
-                      fallBackImage={avatar}
-                      alt="user"
-                      fill
-                      className="object-cover"
+                      src={crown}
+                      width={15}
+                      height={15}
+                      alt="crown"
                     />
-                  </div>
+                  }
+                />
+                <div className="relative">
+                  <button
+                    onClick={toggleMenu}
+                    className="w-12 h-12 relative flex items-center justify-center"
+                    aria-haspopup="true"
+                    aria-expanded={isMenuOpen}
+                  >
+                    <div className="w-[48px] h-[48px] relative rounded-full overflow-hidden border border-black">
+                      <ImageWithFallback
+                        src={session?.user.data.profilePicture?.url}
+                        fallBackImage={avatar}
+                        alt="user"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
 
-                  {isVipUser && (
-                    <ImageWithFallback
-                      src={vipRing}
-                      width={48}
-                      height={48}
-                      alt="vip ring"
-                      className="z-10 absolute"
+                    {isVipUser && (
+                      <ImageWithFallback
+                        src={vipRing}
+                        width={48}
+                        height={48}
+                        alt="vip ring"
+                        className="z-10 absolute"
+                      />
+                    )}
+                  </button>
+
+                  {isMenuOpen && (
+                    <UserMenuDropdown
+                      isAdmin={isAdmin}
+                      onClose={closeMenu}
+                      menuRef={menuRef}
+                      handleLogout={handleLogout}
                     />
                   )}
-                </button>
-
-                {isMenuOpen && (
-                  <UserMenuDropdown
-                    isAdmin={isAdmin}
-                    onClose={closeMenu}
-                    menuRef={menuRef}
-                    handleLogout={handleLogout}
-                  />
-                )}
+                </div>
               </div>
+              <LanguageDropdown />
             </div>
           ) : (
             <div className="flex items-center gap-6">
-              <CommonButton
-                label="Join Now"
-                href="/registration"
-                className="bg-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
-              />
-              <CommonButton
-                label="Sign In"
-                href="/login"
-                className="border border-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
-              />
+              <div className="flex items-center gap-3">
+                <CommonButton
+                  label={t.joinNow}
+                  href="/registration"
+                  className="bg-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
+                />
+                <CommonButton
+                  label={t.signIn}
+                  href="/login"
+                  className="border border-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
+                />
+              </div>
+              <LanguageDropdown />
             </div>
           )}
         </div>
@@ -230,7 +294,7 @@ const Header = () => {
               aria-haspopup="true"
               aria-expanded={isMenuOpen}
             >
-              <div className="w-[45px] h-[45px] relative rounded-full overflow-hidden border border-black">
+              <div className="w-[48px] h-[48px] relative rounded-full overflow-hidden border border-black">
                 <ImageWithFallback
                   src={session?.user.data.profilePicture?.url}
                   fallBackImage={avatar}
@@ -262,7 +326,7 @@ const Header = () => {
         ) : (
           <CommonButton
             href="/login"
-            label="Sign In"
+            label={t.signIn}
             className="border border-vipHeavy text-vipLight font-bold px-5 py-2.5 rounded-lg"
           />
         )}
@@ -296,7 +360,7 @@ const Header = () => {
               />
             </div>
             <nav className="flex flex-col gap-4 mt-5">
-              {navItems.map(({ href, label }) => (
+              {navItems.map(({ href, key }) => (
                 <Link
                   key={href}
                   href={href}
@@ -305,9 +369,10 @@ const Header = () => {
                     pathname === href ? "text-vipHeavy" : ""
                   }`}
                 >
-                  {label}
+                  {t[key]}
                 </Link>
               ))}
+              <LanguageDropdown />
             </nav>
           </div>
         </div>

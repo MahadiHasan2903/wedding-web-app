@@ -5,6 +5,7 @@ import PlanSummary from "./PlanSummary";
 import { RxCross1 } from "react-icons/rx";
 import PaymentMethod from "./PaymentMethod";
 import BillingDetails from "./BillingDetails";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 
 interface PropsType {
   open: boolean;
@@ -12,6 +13,21 @@ interface PropsType {
   PAYPAL_CLIENT_ID?: string;
   STRIPE_PUBLISHABLE_KEY?: string;
 }
+
+const translations = {
+  en: {
+    billingDetails: "Billing Details",
+    paymentMethod: "Payment Method",
+  },
+  fr: {
+    billingDetails: "Détails de facturation",
+    paymentMethod: "Méthode de paiement",
+  },
+  es: {
+    billingDetails: "Detalles de facturación",
+    paymentMethod: "Método de pago",
+  },
+};
 
 const PaymentFormModal = ({
   open,
@@ -22,6 +38,8 @@ const PaymentFormModal = ({
   const [selectedMethod, setSelectedMethod] = useState<
     "credit-card" | "paypal"
   >("paypal");
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   if (!open) {
     return null;
@@ -40,7 +58,7 @@ const PaymentFormModal = ({
           <div className="w-full lg:pl-[35px] lg:border-l border-[#E0E0E0] flex flex-col gap-[30px] lg:gap-[40px]">
             <div className="flex flex-col gap-[24px]">
               <h3 className="text-[12px] lg:text-[20px] text-primary font-normal">
-                Billing Details
+                {t.billingDetails}
               </h3>
               <BillingDetails
                 selectedMethod={selectedMethod}
@@ -49,7 +67,7 @@ const PaymentFormModal = ({
             </div>
             <div className="flex flex-col gap-[24px]">
               <h3 className="text-[12px] lg:text-[20px] text-primary font-normal">
-                Payment Method
+                {t.paymentMethod}
               </h3>
               <PaymentMethod
                 selectedMethod={selectedMethod}

@@ -1,5 +1,27 @@
+"use client";
+
 import React from "react";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import GenderDistributionChart from "./GenderDistributionChart";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    userTypeByGender: "User Type By Gender",
+    activeByGender: "Active By Gender",
+    inactiveByGender: "Inactive By Gender",
+  },
+  fr: {
+    userTypeByGender: "Type d'utilisateur par sexe",
+    activeByGender: "Actifs par sexe",
+    inactiveByGender: "Inactifs par sexe",
+  },
+  es: {
+    userTypeByGender: "Tipo de usuario por género",
+    activeByGender: "Activos por género",
+    inactiveByGender: "Inactivos por género",
+  },
+};
 
 interface PropsType {
   genderDistributionStats: {
@@ -20,13 +42,16 @@ interface PropsType {
 }
 
 const GenderDistribution = ({ genderDistributionStats }: PropsType) => {
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   return (
     <div className="w-full bg-white rounded-none lg:rounded-[10px]">
       <div className="w-full flex flex-wrap justify-between gap-16 px-[17px] lg:px-[36px] py-[25px]">
         {/* User Type By Gender */}
         <div className="w-full flex flex-col items-center justify-center gap-4 flex-1">
           <p className="w-full text-[14px] font-semibold text-center">
-            User Type By Gender
+            {t.userTypeByGender}
           </p>
 
           <GenderDistributionChart
@@ -39,7 +64,7 @@ const GenderDistribution = ({ genderDistributionStats }: PropsType) => {
         {/* Active By Gender */}
         <div className="w-full flex flex-col items-center justify-center gap-4 flex-1">
           <p className="w-full text-[14px] font-semibold text-center">
-            Active By Gender
+            {t.activeByGender}
           </p>
 
           <GenderDistributionChart
@@ -52,7 +77,7 @@ const GenderDistribution = ({ genderDistributionStats }: PropsType) => {
         {/* Inactive By Gender */}
         <div className="w-full flex flex-col items-center justify-center gap-4 flex-1">
           <p className="w-full text-[14px] font-semibold text-center">
-            Inactive By Gender
+            {t.inactiveByGender}
           </p>
 
           <GenderDistributionChart

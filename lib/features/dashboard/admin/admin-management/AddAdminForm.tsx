@@ -7,6 +7,7 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { addAdminAction } from "@/lib/action/user/user.action";
 import { UnderlineInput } from "@/lib/components/form-elements";
 import { addAdminSchema, AddAdminType } from "@/lib/schema/user/user.schema";
@@ -16,8 +17,62 @@ interface PropsType {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
+// translations object for multi-language support
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    addAdmin: "Add Admin",
+    firstName: "First Name",
+    lastName: "Last Name",
+    email: "Email",
+    password: "Password",
+    retypePassword: "Re-type Password",
+    enterFirstName: "Enter first name",
+    enterLastName: "Enter last name",
+    enterEmail: "Enter email",
+    enterPassword: "Enter password",
+    enterRetypePassword: "Enter re-type password",
+    add: "Add",
+    adding: "Adding...",
+    cancel: "Cancel",
+  },
+  fr: {
+    addAdmin: "Ajouter un administrateur",
+    firstName: "Prénom",
+    lastName: "Nom de famille",
+    email: "Email",
+    password: "Mot de passe",
+    retypePassword: "Retaper le mot de passe",
+    enterFirstName: "Entrez le prénom",
+    enterLastName: "Entrez le nom de famille",
+    enterEmail: "Entrez l'email",
+    enterPassword: "Entrez le mot de passe",
+    enterRetypePassword: "Retapez le mot de passe",
+    add: "Ajouter",
+    adding: "Ajout...",
+    cancel: "Annuler",
+  },
+  es: {
+    addAdmin: "Agregar administrador",
+    firstName: "Nombre",
+    lastName: "Apellido",
+    email: "Correo electrónico",
+    password: "Contraseña",
+    retypePassword: "Reingrese la contraseña",
+    enterFirstName: "Ingrese el nombre",
+    enterLastName: "Ingrese el apellido",
+    enterEmail: "Ingrese el correo electrónico",
+    enterPassword: "Ingrese la contraseña",
+    enterRetypePassword: "Reingrese la contraseña",
+    add: "Agregar",
+    adding: "Agregando...",
+    cancel: "Cancelar",
+  },
+};
+
 const AddAdminForm = ({ open, setOpen }: PropsType) => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState<string>("");
 
@@ -74,7 +129,7 @@ const AddAdminForm = ({ open, setOpen }: PropsType) => {
           onSubmit={handleSubmit(handleAddAdmin)}
           className="w-full h-full flex flex-col gap-[25px]"
         >
-          <CardTitle title="Add Admin" />
+          <CardTitle title={t.addAdmin} />
           <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
             <div className="w-full flex flex-col md:flex-row items-start gap-4 justify-between">
               <Controller
@@ -84,10 +139,10 @@ const AddAdminForm = ({ open, setOpen }: PropsType) => {
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="First Name"
+                    label={t.firstName}
                     type="text"
                     name="firstName"
-                    placeholder="Enter first name"
+                    placeholder={t.enterFirstName}
                     error={errors.firstName?.message}
                   />
                 )}
@@ -99,10 +154,10 @@ const AddAdminForm = ({ open, setOpen }: PropsType) => {
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Last Name"
+                    label={t.lastName}
                     type="text"
                     name="lastName"
-                    placeholder="Enter first name"
+                    placeholder={t.enterLastName}
                     error={errors.lastName?.message}
                   />
                 )}
@@ -115,10 +170,10 @@ const AddAdminForm = ({ open, setOpen }: PropsType) => {
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Email"
+                  label={t.email}
                   type="email"
                   name="email"
-                  placeholder="Enter email"
+                  placeholder={t.enterEmail}
                   error={errors.email?.message}
                 />
               )}
@@ -131,10 +186,10 @@ const AddAdminForm = ({ open, setOpen }: PropsType) => {
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Password"
+                    label={t.password}
                     type="password"
                     name="password"
-                    placeholder="Enter password"
+                    placeholder={t.enterPassword}
                     error={errors.password?.message}
                   />
                 )}
@@ -146,10 +201,10 @@ const AddAdminForm = ({ open, setOpen }: PropsType) => {
                 render={({ field }) => (
                   <UnderlineInput
                     {...field}
-                    label="Re-type Password"
+                    label={t.retypePassword}
                     type="password"
                     name="retypePassword"
-                    placeholder="Enter retypePassword"
+                    placeholder={t.enterRetypePassword}
                     error={errors.retypePassword?.message}
                   />
                 )}
@@ -164,13 +219,13 @@ const AddAdminForm = ({ open, setOpen }: PropsType) => {
           <div className="flex items-center gap-[30px] text-[14px]">
             <CommonButton
               type="submit"
-              label={`${loading ? "Adding..." : "Add"}`}
+              label={loading ? t.adding : t.add}
               disabled={loading}
               className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
             <CommonButton
               onClick={() => setOpen(false)}
-              label="Cancel"
+              label={t.cancel}
               className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
           </div>

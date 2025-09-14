@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import AddAdminForm from "./AddAdminForm";
 import { User } from "@/lib/types/user/user.types";
 import { Pagination } from "@/lib/components/table";
 import { AlertModal } from "@/lib/components/modal";
@@ -9,9 +10,9 @@ import { CardTitle } from "@/lib/components/heading";
 import { editIcon } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { updateUserRoleAction } from "@/lib/action/user/user.action";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import AddAdminForm from "./AddAdminForm";
 
 interface PropsType {
   allAdminData: {
@@ -29,10 +30,55 @@ interface PropsType {
   };
 }
 
+// Add these to your translations object
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    allAdmins: "All Admins",
+    addAdmin: "Add Admin",
+    remove: "Remove",
+    noAdminFound: "No admin found",
+    removeAdminTitle: "Remove Admin",
+    removeAdminDesc:
+      "Are you sure you want to remove this user's admin privileges permanently? Once removed, they cannot be added as an admin again.",
+    columnID: "ID",
+    columnName: "Name",
+    columnEmail: "Email",
+    columnAction: "Action",
+  },
+  fr: {
+    allAdmins: "Tous les administrateurs",
+    addAdmin: "Ajouter un administrateur",
+    remove: "Supprimer",
+    noAdminFound: "Aucun administrateur trouvé",
+    removeAdminTitle: "Supprimer l'administrateur",
+    removeAdminDesc:
+      "Êtes-vous sûr de vouloir supprimer définitivement les privilèges d'administrateur de cet utilisateur ? Une fois supprimé, il ne pourra plus être ajouté comme administrateur.",
+    columnID: "ID",
+    columnName: "Nom",
+    columnEmail: "Email",
+    columnAction: "Action",
+  },
+  es: {
+    allAdmins: "Todos los administradores",
+    addAdmin: "Agregar administrador",
+    remove: "Eliminar",
+    noAdminFound: "No se encontró ningún administrador",
+    removeAdminTitle: "Eliminar administrador",
+    removeAdminDesc:
+      "¿Está seguro de que desea eliminar permanentemente los privilegios de administrador de este usuario? Una vez eliminado, no se puede volver a agregar como administrador.",
+    columnID: "ID",
+    columnName: "Nombre",
+    columnEmail: "Correo electrónico",
+    columnAction: "Acción",
+  },
+};
+
 const AdminManagement = ({ allAdminData }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openRemoveAdminModal, setOpenRemoveAdminModal] = useState(false);
@@ -98,10 +144,10 @@ const AdminManagement = ({ allAdminData }: PropsType) => {
       <div className="w-full bg-white rounded-none lg:rounded-[10px]">
         <div className="w-full py-[17px] lg:py-[25px] border-b-[1px] lg:border-b-[3px] border-light">
           <div className="w-full px-[17px] lg:px-[36px] flex items-center justify-between gap-6">
-            <CardTitle title="All Admins" className="shrink-0" />
+            <CardTitle title={t.allAdmins} className="shrink-0" />
             <div className="w-fit shrink-0 relative">
               <CommonButton
-                label="Add Admin"
+                label={t.addAdmin}
                 className="w-fit flex shrink-0 items-center gap-[5px] hover:bg-light text-[12px] font-normal p-[8px] lg:px-[14px] lg:py-[10px] rounded-full border border-primaryBorder"
                 startIcon={
                   <ImageWithFallback
@@ -122,16 +168,16 @@ const AdminManagement = ({ allAdminData }: PropsType) => {
             <thead>
               <tr className="border-b-[1px] lg:border-b-[3px] border-light">
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  ID
+                  {t.columnID}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Name
+                  {t.columnName}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Email
+                  {t.columnEmail}
                 </th>
                 <th className="px-[17px] lg:px-[36px] py-3 text-[14px] font-medium text-left whitespace-nowrap">
-                  Action
+                  {t.columnAction}
                 </th>
               </tr>
             </thead>
@@ -142,7 +188,7 @@ const AdminManagement = ({ allAdminData }: PropsType) => {
                     colSpan={5}
                     className="text-center py-5 text-[14px] text-gray-500"
                   >
-                    No admin found
+                    {t.noAdminFound}
                   </td>
                 </tr>
               ) : (
@@ -162,7 +208,7 @@ const AdminManagement = ({ allAdminData }: PropsType) => {
                     </td>
                     <td className="px-[17px] lg:px-[36px] py-3 text-[14px] text-left whitespace-nowrap min-w-[100px]">
                       <CommonButton
-                        label="Remove"
+                        label={t.remove}
                         className="w-fit text-[10px] px-[14px] py-[10px] rounded-[40px] border border-primaryBorder hover:bg-red hover:text-white transition-all"
                         onClick={() => {
                           setSelectedAdminId(admin.id);
@@ -195,11 +241,11 @@ const AdminManagement = ({ allAdminData }: PropsType) => {
       {openRemoveAdminModal && selectedAdminId && (
         <AlertModal
           loading={loading}
-          title="Remove Admin"
+          title={t.removeAdminTitle}
           open={openRemoveAdminModal}
           setOpen={setOpenRemoveAdminModal}
           handleConfirm={handleRemoveAdmin}
-          description="Are you sure you want to remove this user's admin privileges permanently? Once removed, they cannot be added as an admin again."
+          description={t.removeAdminDesc}
         />
       )}
     </div>

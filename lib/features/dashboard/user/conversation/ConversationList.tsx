@@ -13,9 +13,38 @@ import { avatar } from "@/lib/components/image/icons";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
 import { useSocket } from "@/lib/providers/SocketProvider";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { Conversation } from "@/lib/types/chat/conversation.types";
 import { formatRelativeTimeShort } from "@/lib/utils/date/dateUtils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+// Translation strings
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    inbox: "Inbox",
+    noConversations: "No conversations found",
+    you: "You: ",
+    messageDeleted: "Message deleted",
+    sentAttachment: "Sent attachment",
+    noMessageContent: "No message content",
+  },
+  fr: {
+    inbox: "Boîte de réception",
+    noConversations: "Aucune conversation trouvée",
+    you: "Vous : ",
+    messageDeleted: "Message supprimé",
+    sentAttachment: "Pièce jointe envoyée",
+    noMessageContent: "Pas de contenu de message",
+  },
+  es: {
+    inbox: "Bandeja de entrada",
+    noConversations: "No se encontraron conversaciones",
+    you: "Tú: ",
+    messageDeleted: "Mensaje eliminado",
+    sentAttachment: "Adjunto enviado",
+    noMessageContent: "Sin contenido de mensaje",
+  },
+};
 
 interface PropsType {
   allMyConversationData: {
@@ -38,6 +67,9 @@ const ConversationList = ({
   conversationId,
   allMyConversationData,
 }: PropsType) => {
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   const { socket } = useSocket();
   const { data: session } = useSession();
   const userId = session?.user?.data?.id;
@@ -153,14 +185,14 @@ const ConversationList = ({
     >
       <div className="w-full px-[18px]">
         <CommonButton
-          label="Inbox"
+          label={t.inbox}
           className="w-full bg-primary text-white font-semibold px-[14px] py-[10px] text-[14px] rounded-[5px] mb-4 "
         />
       </div>
 
       <div className="w-full flex flex-col gap-2">
         {allMyConversationData.allConversations.length === 0 ? (
-          <p className="text-sm text-center">No conversations found</p>
+          <p className="text-sm text-center">{t.noConversations}</p>
         ) : (
           conversationsToShow.map((conversation, index) => {
             const isCurrentUserSender = conversation.senderId === userId;
@@ -200,15 +232,15 @@ const ConversationList = ({
                   {conversation.lastMessageId && conversation.lastMessage && (
                     <div className="w-full flex items-center justify-between">
                       <p className="text-[12px] font-normal truncate">
-                        {conversation.senderId === userId && <span>You: </span>}
+                        {conversation.senderId === userId && t.you}
                         {conversation.lastMessage.isDeleted
-                          ? "Message deleted"
+                          ? t.messageDeleted
                           : conversation.lastMessage.message
                           ? conversation.lastMessage.message.originalText
                           : conversation.lastMessage.attachments &&
                             conversation.lastMessage.attachments.length > 0
-                          ? "Sent attachment"
-                          : "No message content"}
+                          ? t.sentAttachment
+                          : t.noMessageContent}
                       </p>
                       <p className="text-[12px] font-normal">
                         {formatRelativeTimeShort(conversation.updatedAt)}

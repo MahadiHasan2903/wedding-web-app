@@ -11,6 +11,29 @@ import React, {
 } from "react";
 import { SubHeading } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
+
+// Translation object
+const translations = {
+  en: {
+    title: "Verify Email",
+    enterOtp: "Enter the OTP sent to your email",
+    verifyButton: "Verify",
+    loading: "Loading...",
+  },
+  fr: {
+    title: "Vérifier l'email",
+    enterOtp: "Entrez le code OTP envoyé à votre email",
+    verifyButton: "Vérifier",
+    loading: "Chargement...",
+  },
+  es: {
+    title: "Verificar correo electrónico",
+    enterOtp: "Ingrese el OTP enviado a su correo electrónico",
+    verifyButton: "Verificar",
+    loading: "Cargando...",
+  },
+};
 
 interface PropsType {
   otp: string[];
@@ -27,6 +50,9 @@ const VerificationModal = ({
   loading,
   onConfirm,
 }: PropsType) => {
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
   // Input refs for focus control
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
@@ -78,11 +104,9 @@ const VerificationModal = ({
   return (
     <div className="fixed left-0 top-0 z-999 flex h-full min-h-screen w-full items-center justify-center bg-black/80 px-4 py-5">
       <div className="w-full max-w-[600px] rounded-[10px] bg-white px-[36px] py-[24px] flex flex-col gap-[30px]">
-        <SubHeading title="Verify Email" />
+        <SubHeading title={t.title} />
         <div className="flex flex-col items-start gap-[10px]">
-          <p className="text-[14px] font-semibold">
-            Enter the OTP sent to your email
-          </p>
+          <p className="text-[14px] font-semibold">{t.enterOtp}</p>
           <div className="flex items-center gap-[12px] justify-center">
             {otp.map((digit, idx) => (
               <input
@@ -105,7 +129,7 @@ const VerificationModal = ({
         </div>
         <CommonButton
           type="button"
-          label={loading ? "Loading..." : "Verify"}
+          label={loading ? t.loading : t.verifyButton}
           disabled={loading || !isOtpComplete}
           onClick={onConfirm}
           className="w-full bg-green text-white text-[14px] font-semibold rounded-full px-[20px] py-[10px]"

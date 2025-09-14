@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { CardTitle } from "@/lib/components/heading";
 import { CommonButton } from "@/lib/components/buttons";
 import { Report } from "@/lib/types/reports/reports.types";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { ReportActionType } from "@/lib/schema/report/report.schema";
 import { applyReportAction } from "@/lib/action/report/report.action";
 
@@ -16,21 +17,67 @@ interface PropsType {
   reportDetails: Report;
 }
 
-const actions: {
-  key: ReportActionType["action"];
-  label: string;
-  color: string;
-}[] = [
-  { key: "warned_user", label: "Warn User", color: "bg-vipHeavy" },
-  { key: "banned_user", label: "Ban User", color: "bg-red" },
-  { key: "looks_fine", label: "Looks Fine", color: "bg-green" },
-];
+// translations object for multi-language support
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    reportAction: "Report Action",
+    reportCategory: "Report Category",
+    reason: "Reason",
+    reportedMessage: "Reported Message",
+    takeAction: "Take Action",
+    noDescription: "No description provided",
+    noMessage: "No message content available",
+    processing: "Processing...",
+    warnUser: "Warn User",
+    banUser: "Ban User",
+    looksFine: "Looks Fine",
+  },
+  fr: {
+    reportAction: "Action sur le rapport",
+    reportCategory: "Catégorie de rapport",
+    reason: "Raison",
+    reportedMessage: "Message signalé",
+    takeAction: "Prendre une action",
+    noDescription: "Aucune description fournie",
+    noMessage: "Aucun contenu de message disponible",
+    processing: "En cours...",
+    warnUser: "Avertir l'utilisateur",
+    banUser: "Bannir l'utilisateur",
+    looksFine: "Tout est correct",
+  },
+  es: {
+    reportAction: "Acción de informe",
+    reportCategory: "Categoría de informe",
+    reason: "Motivo",
+    reportedMessage: "Mensaje reportado",
+    takeAction: "Tomar acción",
+    noDescription: "No se proporcionó descripción",
+    noMessage: "No hay contenido de mensaje disponible",
+    processing: "Procesando...",
+    warnUser: "Advertir al usuario",
+    banUser: "Prohibir al usuario",
+    looksFine: "Todo bien",
+  },
+};
 
 const ReportActionForm = ({ open, setOpen, reportDetails }: PropsType) => {
   const router = useRouter();
   const [loadingAction, setLoadingAction] = useState<
     ReportActionType["action"] | null
   >(null);
+
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
+  const actions: {
+    key: ReportActionType["action"];
+    label: string;
+    color: string;
+  }[] = [
+    { key: "warned_user", label: t.warnUser, color: "bg-vipHeavy" },
+    { key: "banned_user", label: t.banUser, color: "bg-red" },
+    { key: "looks_fine", label: t.looksFine, color: "bg-green" },
+  ];
 
   // Handle form submission to update the report
   const handleReportAction = async (action: ReportActionType["action"]) => {
@@ -68,41 +115,40 @@ const ReportActionForm = ({ open, setOpen, reportDetails }: PropsType) => {
           onClick={() => setOpen(false)}
         />
         <div className="flex h-full flex-col gap-[25px]">
-          <CardTitle title="Report Action" />
+          <CardTitle title={t.reportAction} />
 
           {/* Report Details */}
           <div className="flex flex-col gap-[20px] max-h-[400px] overflow-y-auto">
             <div className="flex flex-col items-start gap-2">
-              <h4 className="text-[16px] font-semibold">Report Category</h4>
+              <h4 className="text-[16px] font-semibold">{t.reportCategory}</h4>
               <p className="text-[14px] font-medium capitalize">
                 {reportDetails.type}
               </p>
             </div>
 
             <div className="flex flex-col items-start gap-2">
-              <h4 className="text-[16px] font-semibold">Reason</h4>
+              <h4 className="text-[16px] font-semibold">{t.reason}</h4>
               <p className="text-[14px] font-medium">
-                {reportDetails.description || "No description provided"}
+                {reportDetails.description || t.noDescription}
               </p>
             </div>
 
             <div className="flex flex-col items-start gap-2">
-              <h4 className="text-[16px] font-semibold">Reported Message</h4>
+              <h4 className="text-[16px] font-semibold">{t.reportedMessage}</h4>
               <p className="w-full bg-light p-[15px] rounded-full text-[14px] font-medium">
-                {reportDetails.messageId?.message?.originalText ||
-                  "No message content available"}
+                {reportDetails.messageId?.message?.originalText || t.noMessage}
               </p>
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex flex-col gap-5">
-            <p className="text-[14px] font-semibold">Take Action</p>
+            <p className="text-[14px] font-semibold">{t.takeAction}</p>
             <div className="flex items-center gap-5">
               {actions.map(({ key, label, color }) => (
                 <CommonButton
                   key={key}
-                  label={loadingAction === key ? "Processing..." : label}
+                  label={loadingAction === key ? t.processing : label}
                   disabled={!!loadingAction}
                   onClick={() => handleReportAction(key)}
                   className={`w-fit border border-primaryBorder ${color} text-white font-medium text-[12px] px-[16px] py-[10px] rounded-full`}

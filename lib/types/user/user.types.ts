@@ -10,7 +10,7 @@ export interface SessionUser {
   userRole: string;
   accountStatus: string;
   profilePicture: Media | null;
-  purchasedMembership: PurchasedMembership;
+  purchasedMembership: PurchasedMembership | null;
 }
 
 export interface User {

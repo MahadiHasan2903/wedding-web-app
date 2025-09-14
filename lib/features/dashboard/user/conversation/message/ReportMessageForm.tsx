@@ -3,8 +3,8 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-toastify";
 import {
-  addMessageReportSchema,
   AddMessageReportType,
+  addMessageReportSchema,
 } from "@/lib/schema/report/report.schema";
 import { CardTitle } from "@/lib/components/heading";
 import { ReportType } from "@/lib/enums/report.enum";
@@ -12,7 +12,54 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { CommonButton } from "@/lib/components/buttons";
 import { Textarea } from "@/lib/components/form-elements";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { createMessageReportAction } from "@/lib/action/report/report.action";
+
+// Translation object
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    reportTitle: "Report",
+    reportPrompt: "Let us know what’s going on",
+    cancel: "Cancel",
+    report: "Report",
+    processing: "Processing...",
+    reasonLabel: "Why do you want to report this profile?",
+    violent: "Violent or threatening",
+    scam: "Scam or fraud",
+    spam: "Spam or unwanted messages",
+    harassment: "Harassment or bullying",
+    inappropriate: "Inappropriate content",
+    other: "Other reason",
+  },
+  fr: {
+    reportTitle: "Signaler",
+    reportPrompt: "Dites-nous ce qui se passe",
+    cancel: "Annuler",
+    report: "Signaler",
+    processing: "Traitement...",
+    reasonLabel: "Pourquoi voulez-vous signaler ce profil ?",
+    violent: "Violent ou menaçant",
+    scam: "Arnaque ou fraude",
+    spam: "Spam ou messages indésirables",
+    harassment: "Harcèlement ou intimidation",
+    inappropriate: "Contenu inapproprié",
+    other: "Autre raison",
+  },
+  es: {
+    reportTitle: "Reportar",
+    reportPrompt: "Cuéntanos qué está pasando",
+    cancel: "Cancelar",
+    report: "Reportar",
+    processing: "Procesando...",
+    reasonLabel: "¿Por qué quieres reportar este perfil?",
+    violent: "Violento o amenazante",
+    scam: "Estafa o fraude",
+    spam: "Spam o mensajes no deseados",
+    harassment: "Acoso o intimidación",
+    inappropriate: "Contenido inapropiado",
+    other: "Otra razón",
+  },
+};
 
 interface PropsType {
   open: boolean;
@@ -23,15 +70,6 @@ interface PropsType {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const REPORT_OPTIONS = [
-  { label: "Violent or threatening", value: ReportType.VIOLENT },
-  { label: "Scam or fraud", value: ReportType.SCAM },
-  { label: "Spam or unwanted messages", value: ReportType.SPAM },
-  { label: "Harassment or bullying", value: ReportType.HARASSMENT },
-  { label: "Inappropriate content", value: ReportType.INAPPROPRIATE },
-  { label: "Other reason", value: ReportType.OTHER },
-];
-
 const ReportMessage = ({
   open,
   setOpen,
@@ -41,6 +79,17 @@ const ReportMessage = ({
   conversationId,
 }: PropsType) => {
   const [loading, setLoading] = useState(false);
+  const { language } = useLanguageStore();
+  const t = translations[language];
+
+  const REPORT_OPTIONS = [
+    { label: t.violent, value: ReportType.VIOLENT },
+    { label: t.scam, value: ReportType.SCAM },
+    { label: t.spam, value: ReportType.SPAM },
+    { label: t.harassment, value: ReportType.HARASSMENT },
+    { label: t.inappropriate, value: ReportType.INAPPROPRIATE },
+    { label: t.other, value: ReportType.OTHER },
+  ];
 
   const {
     control,
@@ -99,7 +148,9 @@ const ReportMessage = ({
     setLoading(false);
   };
 
-  if (!open) return null;
+  if (!open) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 z-[99] flex items-center justify-center bg-black/60 px-4 py-5">
@@ -107,10 +158,9 @@ const ReportMessage = ({
         onSubmit={handleSubmit(handleSubmitReport)}
         className="w-full max-w-[520px] rounded-[10px] bg-white p-[24px] lg:p-[35px] flex flex-col gap-[18px]"
       >
-        <CardTitle title="Report" className="mb-[10px] md:mb-[18px]" />
-        <p className="text-[14px] font-semibold">Let us know what’s going on</p>
+        <CardTitle title={t.reportTitle} className="mb-[10px] md:mb-[18px]" />
+        <p className="text-[14px] font-semibold">{t.reportPrompt}</p>
 
-        {/* Report reason buttons */}
         <div className="flex flex-wrap items-center gap-[10px] py-2">
           {REPORT_OPTIONS.map((option) => (
             <CommonButton
@@ -130,14 +180,13 @@ const ReportMessage = ({
           <span className="text-red-500 text-sm">{errors.type.message}</span>
         )}
 
-        {/* Description */}
         <Controller
           name="description"
           control={control}
           render={({ field }) => (
             <Textarea
               {...field}
-              label="Why do you want to report this profile?"
+              label={t.reasonLabel}
               rows={4}
               className="!p-[16px] bg-light text-[12px] lg:text-[14px]"
               error={errors.description?.message}
@@ -145,17 +194,16 @@ const ReportMessage = ({
           )}
         />
 
-        {/* Actions */}
         <div className="w-full flex items-center gap-[30px] text-[14px] mt-4">
           <CommonButton
             type="button"
             onClick={() => setOpen(false)}
-            label="Cancel"
+            label={t.cancel}
             className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
           />
           <CommonButton
             type="submit"
-            label={loading ? "Processing..." : "Report"}
+            label={loading ? t.processing : t.report}
             disabled={loading}
             className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
           />

@@ -13,9 +13,41 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 import { CulturalPractices, FamilyBackground } from "@/lib/enums/users.enum";
 import { Textarea, UnderlineSelectField } from "@/lib/components/form-elements";
+
+// Translation dictionary
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    title: "Bio & Cultural Identity",
+    aboutMe: "About me",
+    familyBackground: "Family Background",
+    culturalPractices: "Cultural Practices",
+    save: "Save",
+    cancel: "Cancel",
+    placeholderBio: "Enter your bio",
+  },
+  fr: {
+    title: "Bio et identité culturelle",
+    aboutMe: "À propos de moi",
+    familyBackground: "Contexte familial",
+    culturalPractices: "Pratiques culturelles",
+    save: "Enregistrer",
+    cancel: "Annuler",
+    placeholderBio: "Entrez votre bio",
+  },
+  es: {
+    title: "Bio e identidad cultural",
+    aboutMe: "Sobre mí",
+    familyBackground: "Antecedentes familiares",
+    culturalPractices: "Prácticas culturales",
+    save: "Guardar",
+    cancel: "Cancelar",
+    placeholderBio: "Ingresa tu biografía",
+  },
+};
 
 interface PropsType {
   open: boolean;
@@ -29,6 +61,8 @@ const CulturalIdentityUpdateForm = ({
   userProfile,
 }: PropsType) => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
 
   // Setup react-hook-form with Zod validation and initialize default values
@@ -95,7 +129,7 @@ const CulturalIdentityUpdateForm = ({
           onSubmit={handleSubmit(handleUpdateProfile)}
           className="w-full h-full flex flex-col gap-[25px]"
         >
-          <CardTitle title="Bio & Cultural Identity" />
+          <CardTitle title={t.title} />
           <div className="w-full h-full max-h-[500px] overflow-y-auto flex flex-col gap-[22px]">
             <Controller
               name="bio"
@@ -104,11 +138,11 @@ const CulturalIdentityUpdateForm = ({
               render={({ field }) => (
                 <Textarea
                   {...field}
-                  label="About me"
+                  label={t.aboutMe}
                   rows={6}
-                  placeholder="Enter your bio"
+                  placeholder={t.placeholderBio}
                   error={errors.bio?.message}
-                  className="!p-[16px] bg-light text-[12px] lg:text-[14px] "
+                  className="!p-[16px] bg-light text-[12px] lg:text-[14px]"
                 />
               )}
             />
@@ -120,7 +154,7 @@ const CulturalIdentityUpdateForm = ({
               render={({ field }) => (
                 <UnderlineSelectField
                   {...field}
-                  label="Family Background"
+                  label={t.familyBackground}
                   name="familyBackground"
                   options={enumToOptions(FamilyBackground)}
                 />
@@ -134,7 +168,7 @@ const CulturalIdentityUpdateForm = ({
               render={({ field }) => (
                 <UnderlineSelectField
                   {...field}
-                  label="Cultural Practices"
+                  label={t.culturalPractices}
                   name="culturalPractices"
                   options={enumToOptions(CulturalPractices)}
                 />
@@ -142,17 +176,16 @@ const CulturalIdentityUpdateForm = ({
             />
           </div>
 
-          {/* Form submit and cancel buttons */}
           <div className="flex items-center gap-[30px] text-[14px]">
             <CommonButton
               type="submit"
-              label={`${loading ? "Saving..." : "Save"}`}
+              label={`${loading ? "Saving..." : t.save}`}
               disabled={loading}
               className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
             <CommonButton
               onClick={() => setOpen(false)}
-              label="Cancel"
+              label={t.cancel}
               className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
           </div>

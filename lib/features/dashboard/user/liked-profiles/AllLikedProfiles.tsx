@@ -4,7 +4,24 @@ import React, { useEffect } from "react";
 import { User } from "@/lib/types/user/user.types";
 import { Pagination } from "@/lib/components/table";
 import { LikedProfileCard } from "@/lib/components/card";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    noProfiles:
+      "No liked profiles found. Start liking profiles to see them listed here.",
+  },
+  fr: {
+    noProfiles:
+      "Aucun profil aimé trouvé. Commencez à aimer des profils pour les voir listés ici.",
+  },
+  es: {
+    noProfiles:
+      "No se encontraron perfiles marcados. Comienza a dar me gusta a los perfiles para verlos aquí.",
+  },
+};
 
 interface PropsType {
   allLikedProfilesData: {
@@ -28,6 +45,9 @@ const AllLikedProfiles = ({ allLikedProfilesData }: PropsType) => {
   const searchParams = useSearchParams();
   const { currentPage, totalPages, prevPage, nextPage } =
     allLikedProfilesData.paginationInfo;
+
+  const { language } = useLanguageStore();
+  const t = translations[language];
 
   // Helper to build URL with updated page param
   const getUrlWithPage = (page: number) => {
@@ -61,8 +81,7 @@ const AllLikedProfiles = ({ allLikedProfilesData }: PropsType) => {
           </div>
         ) : (
           <div className="mx-auto max-w-[500px] text-center flex items-center justify-center min-h-[60vh] text-black text-[20px] font-medium py-8">
-            No liked profiles found. Start liking profiles to see them listed
-            here.
+            {t.noProfiles}
           </div>
         )}
       </div>

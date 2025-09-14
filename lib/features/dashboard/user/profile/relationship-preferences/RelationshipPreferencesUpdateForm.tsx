@@ -3,9 +3,9 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import {
   Gender,
+  Religion,
   LookingFor,
   PoliticalView,
-  Religion,
 } from "@/lib/enums/users.enum";
 import {
   UpdateUserType,
@@ -26,13 +26,63 @@ import { CardTitle } from "@/lib/components/heading";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CommonButton } from "@/lib/components/buttons";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { updateUserProfileAction } from "@/lib/action/user/user.action";
 
 interface PropsType {
   open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
   userProfile: User;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
+
+// Translation dictionary
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    title: "Relationship Preferences",
+    interestedIn: "Interested In",
+    lookingFor: "Looking For",
+    ageRange: "Age Range Preference",
+    politicalPreference: "Political Preference",
+    religiousPreference: "Religious Preference",
+    partnerExpectations: "Partner Expectations",
+    preferredNationalities: "Preferred Nationalities",
+    addNationality: "Add Nationality",
+    save: "Save",
+    saving: "Saving...",
+    cancel: "Cancel",
+    nationalityPlaceholder: "e.g. Spanish",
+  },
+  fr: {
+    title: "Préférences relationnelles",
+    interestedIn: "Intéressé(e) par",
+    lookingFor: "Recherche",
+    ageRange: "Préférence d'âge",
+    politicalPreference: "Préférence politique",
+    religiousPreference: "Préférence religieuse",
+    partnerExpectations: "Attentes envers le partenaire",
+    preferredNationalities: "Nationalités préférées",
+    addNationality: "Ajouter une nationalité",
+    save: "Enregistrer",
+    saving: "Enregistrement...",
+    cancel: "Annuler",
+    nationalityPlaceholder: "ex. Espagnol",
+  },
+  es: {
+    title: "Preferencias de relación",
+    interestedIn: "Interesado en",
+    lookingFor: "Buscando",
+    ageRange: "Preferencia de rango de edad",
+    politicalPreference: "Preferencia política",
+    religiousPreference: "Preferencia religiosa",
+    partnerExpectations: "Expectativas de pareja",
+    preferredNationalities: "Nacionalidades preferidas",
+    addNationality: "Agregar nacionalidad",
+    save: "Guardar",
+    saving: "Guardando...",
+    cancel: "Cancelar",
+    nationalityPlaceholder: "p.ej. Español",
+  },
+};
 
 const RelationshipPreferencesUpdateForm = ({
   open,
@@ -40,6 +90,8 @@ const RelationshipPreferencesUpdateForm = ({
   userProfile,
 }: PropsType) => {
   const router = useRouter();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
 
   // Setup react-hook-form with Zod validation and initialize default values
@@ -66,7 +118,7 @@ const RelationshipPreferencesUpdateForm = ({
     },
   });
 
-  // Watch the preferredNationality array so that UI updates when nationality change
+  // Watch the preferredNationality array so that UI updates when nationality changes
   const preferredNationality = watch("preferredNationality");
 
   // Adds a new empty nationality input field
@@ -104,11 +156,7 @@ const RelationshipPreferencesUpdateForm = ({
     };
 
     Object.entries(fields).forEach(([key, value]) => {
-      if (
-        value !== null &&
-        value !== undefined &&
-        String(value).trim() !== ""
-      ) {
+      if (value?.toString().trim()) {
         formData.append(key, String(value));
       }
     });
@@ -125,11 +173,7 @@ const RelationshipPreferencesUpdateForm = ({
     }
 
     // Append religionPreference only if it's not empty/null
-    if (
-      data.religionPreference !== null &&
-      data.religionPreference !== undefined &&
-      String(data.religionPreference).trim() !== ""
-    ) {
+    if (data.religionPreference?.toString().trim()) {
       formData.append("religionPreference", String(data.religionPreference));
     }
 
@@ -158,7 +202,7 @@ const RelationshipPreferencesUpdateForm = ({
           onSubmit={handleSubmit(handleUpdateProfile)}
           className="w-full h-full flex flex-col gap-[25px]"
         >
-          <CardTitle title="Relationship Preference" />
+          <CardTitle title={t.title} />
           <div className="w-full h-full max-h-[700px] overflow-y-auto flex flex-col gap-[22px]">
             <div className="w-full flex flex-col md:flex-row gap-[35px]">
               <Controller
@@ -168,7 +212,7 @@ const RelationshipPreferencesUpdateForm = ({
                 render={({ field }) => (
                   <UnderlineSelectField
                     {...field}
-                    label="Interested in"
+                    label={t.interestedIn}
                     name="interestedInGender"
                     options={enumToOptions(Gender)}
                   />
@@ -181,7 +225,7 @@ const RelationshipPreferencesUpdateForm = ({
                 render={({ field }) => (
                   <UnderlineSelectField
                     {...field}
-                    label="Looking For"
+                    label={t.lookingFor}
                     name="lookingFor"
                     options={enumToOptions(LookingFor)}
                   />
@@ -196,7 +240,7 @@ const RelationshipPreferencesUpdateForm = ({
               render={({ field }) => (
                 <UnderlineInput
                   {...field}
-                  label="Age Range Preference"
+                  label={t.ageRange}
                   type="text"
                   name="preferredAgeRange"
                   placeholder="e.g. 20–30"
@@ -214,7 +258,7 @@ const RelationshipPreferencesUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Political Preference"
+                      label={t.politicalPreference}
                       name="politicalPreference"
                       options={enumToOptions(PoliticalView)}
                       placeholder="Select political preference"
@@ -231,7 +275,7 @@ const RelationshipPreferencesUpdateForm = ({
                   render={({ field }) => (
                     <UnderlineSelectField
                       {...field}
-                      label="Religious Preference"
+                      label={t.religiousPreference}
                       name="religionPreference"
                       options={enumToOptions(Religion)}
                     />
@@ -247,11 +291,11 @@ const RelationshipPreferencesUpdateForm = ({
               render={({ field }) => (
                 <Textarea
                   {...field}
-                  label="Partner Expectations"
+                  label={t.partnerExpectations}
                   rows={6}
                   placeholder="Enter your expectations"
                   error={errors.partnerExpectations?.message}
-                  className="!p-[16px] bg-light text-[12px] lg:text-[14px] "
+                  className="!p-[16px] bg-light text-[12px] lg:text-[14px]"
                 />
               )}
             />
@@ -259,20 +303,18 @@ const RelationshipPreferencesUpdateForm = ({
             <div>
               <div className="w-full flex items-center justify-between gap-[10px] mb-2">
                 <p className="text-[12px] lg:text-[14px] font-medium">
-                  Preferred Nationalities
+                  {t.preferredNationalities}
                 </p>
 
-                {/* Button to add new preferred nationality input */}
                 <CommonButton
                   type="button"
-                  label="Add Nationality"
+                  label={t.addNationality}
                   onClick={addNationality}
                   className="w-fit flex items-center text-[12px] gap-[8px] bg-primary text-white font-medium px-[20px] py-[10px] rounded-full"
                   startIcon={<FaPlus />}
                 />
               </div>
 
-              {/* Render list of preferred nationality input fields */}
               <div className="w-full flex flex-col gap-2">
                 {preferredNationality?.map((lang, index) => (
                   <div key={index} className="flex items-end gap-2">
@@ -284,7 +326,7 @@ const RelationshipPreferencesUpdateForm = ({
                         <UnderlineInput
                           {...field}
                           type="text"
-                          placeholder="e.g. spanish"
+                          placeholder={t.nationalityPlaceholder}
                           error={errors.preferredNationality?.[index]?.message}
                           onChange={(e) => {
                             field.onChange(e);
@@ -293,7 +335,6 @@ const RelationshipPreferencesUpdateForm = ({
                         />
                       )}
                     />
-                    {/* Button to remove nationality input */}
                     <button
                       type="button"
                       onClick={() => removeNationality(index)}
@@ -307,17 +348,16 @@ const RelationshipPreferencesUpdateForm = ({
             </div>
           </div>
 
-          {/* Form submit and cancel buttons */}
           <div className="flex items-center gap-[30px] text-[14px]">
             <CommonButton
               type="submit"
-              label={`${loading ? "Saving..." : "Save"}`}
+              label={loading ? t.saving : t.save}
               disabled={loading}
               className="w-full bg-green text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
             <CommonButton
               onClick={() => setOpen(false)}
-              label="Cancel"
+              label={t.cancel}
               className="w-full bg-red text-white font-bold text-[12px] lg:text-[14px] p-[10px] rounded-full"
             />
           </div>

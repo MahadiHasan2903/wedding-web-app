@@ -1,12 +1,12 @@
 import React from "react";
-import { FAQ, FindMatch } from "@/lib/features/marketing/common";
 import {
   HeroSection,
   WhyChooseUs,
   MatchMakingStories,
 } from "@/lib/features/marketing/home";
+import { FAQ, FindMatch } from "@/lib/features/marketing/common";
 
-const HomePage = () => {
+const HomePage = async () => {
   return (
     <div className="w-full bg-white flex flex-col justify-between">
       <HeroSection />

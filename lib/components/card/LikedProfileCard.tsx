@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { User } from "@/lib/types/user/user.types";
 import { CommonButton } from "@/lib/components/buttons";
 import { ImageWithFallback } from "@/lib/components/image";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
@@ -18,9 +19,36 @@ interface LikedProfileCardProps {
   user: User;
 }
 
+// translations object
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    liked: "Liked",
+    sendMessage: "Send Message",
+    processing: "Processing...",
+    ageUnknown: "Age Unknown",
+    nA: "N/A",
+  },
+  fr: {
+    liked: "Aimé",
+    sendMessage: "Envoyer un message",
+    processing: "Traitement...",
+    ageUnknown: "Âge inconnu",
+    nA: "N/A",
+  },
+  es: {
+    liked: "Me gusta",
+    sendMessage: "Enviar mensaje",
+    processing: "Procesando...",
+    ageUnknown: "Edad desconocida",
+    nA: "N/A",
+  },
+};
+
 const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
   const router = useRouter();
   const { data: session } = useSession();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [loading, setLoading] = useState(false);
 
   // Determine if the user is a VIP or not
@@ -100,14 +128,14 @@ const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
         <p className="text-[12px] lg:text-[14px] font-medium">
           {user.dateOfBirth
             ? `${calculateAgeFromDOB(user.dateOfBirth)} Years Old`
-            : "Age Unknown"}
-          , {user.gender ?? "N/A"}
+            : t.ageUnknown}
+          , {user.gender ?? t.nA}
         </p>
       </div>
 
       <div className="w-full flex items-center justify-center gap-2 lg:gap-[15px]">
         <CommonButton
-          label="Liked"
+          label={t.liked}
           className={`${
             isVipUser
               ? "btn-gold-gradient border-none"
@@ -124,7 +152,7 @@ const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
           }
         />
         <CommonButton
-          label={loading ? "Processing..." : "Send Message"}
+          label={loading ? t.processing : t.sendMessage}
           disabled={loading}
           onClick={() => handleSendMessage(user.id)}
           className={`${
@@ -137,7 +165,7 @@ const LikedProfileCard = ({ user }: LikedProfileCardProps) => {
               src={sendMessage}
               width={13}
               height={12}
-              alt="red-heart"
+              alt="send-message"
             />
           }
         />

@@ -1,3 +1,10 @@
+export interface Location {
+  ip: string;
+  country: string;
+  region: string;
+  city: string;
+}
+
 export interface Media {
   id: string;
   collectionName: string;
@@ -74,3 +81,5 @@ export interface ReportFilterOptions {
   paymentStatus?: string;
   dateRange?: string;
 }
+
+export type Language = "en" | "fr" | "es";

@@ -4,18 +4,12 @@ import dynamic from "next/dynamic";
 import { getQueryParam } from "@/lib/utils/helpers";
 
 const AdvanceSearch = dynamic(
-  () =>
-    import("@/lib/features/marketing/find-match").then(
-      (mod) => mod.AdvanceSearch
-    ),
+  () => import("@/lib/features/marketing/find-match/AdvanceSearch"),
   { ssr: false }
 );
 
 const MatchedProfilesList = dynamic(
-  () =>
-    import("@/lib/features/marketing/find-match").then(
-      (mod) => mod.MatchedProfilesList
-    ),
+  () => import("@/lib/features/marketing/find-match/MatchedProfilesList"),
   { ssr: false }
 );
 

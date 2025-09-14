@@ -7,7 +7,7 @@
   WORKDIR /app
   
   # Add compatibility packages (needed by sharp/next/image)
-  RUN apk add --no-cache libc6-compat
+  RUN apk add --no-cache gcompat
   
   # -------------------------------
   # Dependencies stage
@@ -16,6 +16,8 @@
   
   # Copy lockfiles (supporting yarn, npm, pnpm)
   COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
+  
+  # Install dependencies
   RUN yarn install --frozen-lockfile --verbose
   
   # -------------------------------
@@ -28,12 +30,12 @@
   COPY --from=deps /app/node_modules ./node_modules
   COPY . .
   
-  # Set environment variables for Next.js build
+  # Disable Next.js telemetry and set sharp path
   ENV NEXT_TELEMETRY_DISABLED=1
   ENV NEXT_SHARP_PATH=/app/node_modules/sharp
   ENV BUILD_STANDALONE=true  
   
-  # Run build
+  # Build Next.js app
   RUN yarn build
   
   # -------------------------------
@@ -51,7 +53,7 @@
   # Copy public assets
   COPY --from=builder /app/public ./public
   
-  # Copy standalone output (server.js + minimal node_modules)
+  # Copy standalone Next.js build output
   COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
   COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
   
@@ -60,5 +62,6 @@
   
   EXPOSE 3000
   
+  # Start the app
   CMD ["node", "server.js"]
   

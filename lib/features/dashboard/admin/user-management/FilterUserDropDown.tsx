@@ -1,8 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { CommonButton } from "@/lib/components/buttons";
 import { Datepicker } from "@/lib/components/form-elements";
+import useLanguageStore from "@/lib/store/useLanguageStore";
 import { formatDateString1 } from "@/lib/utils/date/dateUtils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+// Translations
+const translations: Record<string, Record<string, string>> = {
+  en: {
+    joined: "Joined",
+    vipProfile: "VIP Profile",
+    bannedProfile: "Banned Profile",
+    reset: "Reset",
+    apply: "Apply",
+  },
+  fr: {
+    joined: "Inscrit le",
+    vipProfile: "Profil VIP",
+    bannedProfile: "Profil banni",
+    reset: "Réinitialiser",
+    apply: "Appliquer",
+  },
+  es: {
+    joined: "Registrado",
+    vipProfile: "Perfil VIP",
+    bannedProfile: "Perfil prohibido",
+    reset: "Restablecer",
+    apply: "Aplicar",
+  },
+};
 
 interface PropsType {
   setIsFilterOpen: (isOpen: boolean) => void;
@@ -12,6 +38,8 @@ const FilterUserDropDown = ({ setIsFilterOpen }: PropsType) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { language } = useLanguageStore();
+  const t = translations[language];
   const [isPremium, setIsPremium] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
   const [endDate, setEndDate] = useState<string>("");
@@ -92,7 +120,7 @@ const FilterUserDropDown = ({ setIsFilterOpen }: PropsType) => {
       <div className="w-full flex flex-col gap-[30px] p-[20px]">
         <div className="w-full flex flex-col gap-[20px]">
           <div className="w-full">
-            <p className="text-[14px] font-semibold">Joined</p>
+            <p className="text-[14px] font-semibold">{t.joined}</p>
             <div className="w-full flex items-center gap-2">
               <Datepicker
                 className="w-full cursor-pointer px-0 py-2 text-[12px] font-normal outline-none"
@@ -110,7 +138,7 @@ const FilterUserDropDown = ({ setIsFilterOpen }: PropsType) => {
             </div>
           </div>
           <div className="w-full flex items-center justify-between">
-            <p className="text-[14px] font-semibold">VIP Profile</p>
+            <p className="text-[14px] font-semibold">{t.vipProfile}</p>
             <input
               type="checkbox"
               checked={isPremium}
@@ -119,7 +147,7 @@ const FilterUserDropDown = ({ setIsFilterOpen }: PropsType) => {
             />
           </div>
           <div className="w-full flex items-center justify-between">
-            <p className="text-[14px] font-semibold">Banned Profile</p>
+            <p className="text-[14px] font-semibold">{t.bannedProfile}</p>
             <input
               type="checkbox"
               checked={isBanned}
@@ -130,12 +158,12 @@ const FilterUserDropDown = ({ setIsFilterOpen }: PropsType) => {
         </div>
         <div className="flex items-center gap-2 text-[12px] font-normal text-white">
           <CommonButton
-            label="Reset"
+            label={t.reset}
             className="w-full bg-red hover:bg-opacity-80 p-2 rounded-lg"
             onClick={handleResetFilters}
           />
           <CommonButton
-            label="Apply"
+            label={t.apply}
             className="w-full bg-primary hover:bg-opacity-80 p-2 rounded-lg"
             onClick={handleApplyFilters}
           />

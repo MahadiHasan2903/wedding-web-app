@@ -59,6 +59,7 @@ const getMessagesByConversationId = async (
     repliedToMessage: message.repliedToMessage,
     attachments: message.attachments,
     isDeleted: message.isDeleted,
+    isInappropriate: message.isInappropriate,
     createdAt: message.createdAt,
     updatedAt: message.updatedAt,
   }));
@@ -118,6 +119,7 @@ const getMessageDetails = async (messageId: string, accessToken?: string) => {
     repliedToMessage: response.data.repliedToMessage,
     attachments: response.data.attachments,
     isDeleted: response.data.isDeleted,
+    isInappropriate: response.data.isInappropriate,
     createdAt: response.data.createdAt,
     updatedAt: response.data.updatedAt,
   };

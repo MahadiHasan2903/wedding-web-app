@@ -3,15 +3,14 @@ import dynamic from "next/dynamic";
 import { FAQ, FindMatch, HeroBanner } from "@/lib/features/marketing/common";
 
 const ContactForm = dynamic(
-  () =>
-    import("@/lib/features/marketing/contact").then((mod) => mod.ContactForm),
+  () => import("@/lib/features/marketing/contact/ContactForm"),
   { ssr: false }
 );
 
 const ContactPage = () => {
   return (
     <div className="w-full bg-white flex flex-col justify-between">
-      <HeroBanner title="Contact" />
+      <HeroBanner titleKey="contact" />
       <ContactForm />
       <FindMatch />
       <FAQ />

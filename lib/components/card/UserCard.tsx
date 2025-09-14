@@ -13,6 +13,7 @@ import { hasActiveVipMembership } from "@/lib/utils/helpers";
 import vipRing2 from "@/public/images/common/vip-ring-2.png";
 import { calculateAgeFromDOB } from "@/lib/utils/date/dateUtils";
 import userPlaceholder from "@/public/images/common/user-placeholder.png";
+import useLocationStore from "@/lib/store/useLocationStore";
 
 // Translation dictionary
 const translations: Record<string, Record<string, string>> = {
@@ -41,18 +42,22 @@ interface UserCardProps {
 const UserCard = ({ user, returnUrl = "/find-match" }: UserCardProps) => {
   const router = useRouter();
   const { data: session } = useSession();
-  const accessToken = session?.user.accessToken;
-
   const { language } = useLanguageStore();
   const t = translations[language];
-
-  // Determine if the user is a VIP or not
+  const { getLocation } = useLocationStore();
+  const userLocation = getLocation();
+  const accessToken = session?.user.accessToken;
   const isVipUser = hasActiveVipMembership(user);
+
+  // Determine redirect path & text
+  const needsPricing = !isVipUser && userLocation?.country !== "CU";
 
   // Function to redirect user based on token
   const handleRedirection = () => {
     if (accessToken) {
       router.push(`${returnUrl}/${user.id}`);
+    } else if (needsPricing) {
+      toast.error("Please purchase a VIP membership to view the user profile");
     } else {
       toast.error("Please login first to view the user profile");
     }
